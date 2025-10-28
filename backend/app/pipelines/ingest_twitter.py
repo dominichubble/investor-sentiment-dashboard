@@ -198,12 +198,7 @@ def filter_spam_and_bots(tweets: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             continue
 
         # Detect suspicious uniform engagement (bot networks)
-        if (
-            tweet["like_count"]
-            == tweet["retweet_count"]
-            == tweet["reply_count"]
-            > 0
-        ):
+        if tweet["like_count"] == tweet["retweet_count"] == tweet["reply_count"] > 0:
             continue  # Likely bot network with fake engagement
 
         # Skip if too many emojis (often spam)
@@ -349,9 +344,7 @@ def fetch_tweets(
         raise
 
 
-def export_to_csv(
-    tweets: List[Dict[str, Any]], output_dir: str, run_id: str
-) -> str:
+def export_to_csv(tweets: List[Dict[str, Any]], output_dir: str, run_id: str) -> str:
     """
     Export tweets to CSV file.
 

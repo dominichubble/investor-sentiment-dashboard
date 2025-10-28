@@ -179,9 +179,7 @@ class TestNormalizeTweet:
 class TestFilterSpamAndBots:
     """Test the filter_spam_and_bots function."""
 
-    def create_tweet(
-        self, text, raw_text=None, likes=0, retweets=0, replies=0
-    ) -> dict:
+    def create_tweet(self, text, raw_text=None, likes=0, retweets=0, replies=0) -> dict:
         """Helper to create mock tweet dict."""
         return {
             "id": 123,
@@ -229,7 +227,9 @@ class TestFilterSpamAndBots:
     def test_filter_removes_uniform_engagement_bots(self):
         """Should remove tweets with uniform engagement (9,9,9 pattern)."""
         tweets = [
-            self.create_tweet("Real market discussion", likes=10, retweets=5, replies=3),
+            self.create_tweet(
+                "Real market discussion", likes=10, retweets=5, replies=3
+            ),
             self.create_tweet("Bot spam", likes=9, retweets=9, replies=9),
         ]
         result = filter_spam_and_bots(tweets)
@@ -240,7 +240,9 @@ class TestFilterSpamAndBots:
         """Should remove tweets with too many emojis."""
         tweets = [
             self.create_tweet("TSLA stock analysis is positive today"),
-            self.create_tweet("🚀🌙💎🙌🔥🎯 Buy now!", raw_text="🚀🌙💎🙌🔥🎯 Buy now!"),
+            self.create_tweet(
+                "🚀🌙💎🙌🔥🎯 Buy now!", raw_text="🚀🌙💎🙌🔥🎯 Buy now!"
+            ),
         ]
         result = filter_spam_and_bots(tweets)
         assert len(result) == 1
