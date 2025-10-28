@@ -1,0 +1,50 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  pr-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check PR title format
+        run: |
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          # Check if title follows conventional commits format: type: description
+          if ! echo "$PR_TITLE" | grep -qE "^(feat|fix|docs|style|refactor|test|chore|perf|ci|build|revert)(\(.+\))?: .+"; then
+            echo "❌ PR title does not follow conventional commits format"
+            echo "Expected format: type(scope): description"
+            echo "Examples:"
+            echo "  - feat: add new feature"
+            echo "  - fix(api): correct endpoint bug"
+            echo "  - docs: update README"
+            exit 1
+          fi
+          echo "✅ PR title follows conventional commits format"
+
+      - name: Check PR has description
+        run: |
+          PR_BODY="${{ github.event.pull_request.body }}"
+          if [ -z "$PR_BODY" ] || [ ${#PR_BODY} -lt 20 ]; then
+            echo "❌ PR must have a meaningful description (at least 20 characters)"
+            exit 1
+          fi
+          echo "✅ PR has description"
+
+      - name: Check branch naming
+        run: |
+          BRANCH_NAME="${{ github.head_ref }}"
+          # Allow feature branches like FYP-146-description or feat/description
+          if ! echo "$BRANCH_NAME" | grep -qE "^(FYP-[0-9]+|feat|fix|docs|refactor|test|chore)"; then
+            echo "⚠️  Branch name doesn't follow convention (FYP-XXX-description or type/description)"
+            echo "This is a warning, not a failure"
+          else
+            echo "✅ Branch name follows convention"
+          fi
