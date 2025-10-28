@@ -55,12 +55,12 @@ DEFAULT_TIME_FILTER = 'week'
 DEFAULT_LIMIT_PER_SUBREDDIT = 400
 
 
-def clean_text(txt: str) -> str:
+def clean_text(txt: Optional[str]) -> str:
     """
     Remove URLs and collapse whitespace from text.
     
     Args:
-        txt: Input text string
+        txt: Input text string (can be None)
         
     Returns:
         Cleaned text with URLs removed and whitespace normalized
