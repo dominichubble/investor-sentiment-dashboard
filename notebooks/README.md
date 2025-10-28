@@ -1,17 +1,30 @@
 # Notebooks
 
-This directory contains Jupyter notebooks for data collection, exploration, and model experimentation.
+This directory contains Jupyter notebooks for data exploration, analysis, and experimentation.
+
+> **⚠️ Note:** For production data collection, use the Python scripts in `backend/app/pipelines/` instead of notebooks. Notebooks here are for exploration and documentation only.
 
 ## 📓 Notebooks
 
 ### `01-reddit-ingest.ipynb`
-**Purpose:** Collect finance-related posts from Reddit using the PRAW API.
+**Purpose:** Documentation and prototyping for Reddit data collection.
 
-**What it does:**
-- Searches specified subreddits for posts containing finance keywords
-- Cleans text (removes URLs, normalizes whitespace)
-- Deduplicates posts and exports to JSON
-- Outputs to `../data/processed/reddit/{date}/reddit_finance_{date}.json`
+**Status:** ✅ Production script available at `backend/app/pipelines/ingest_reddit.py`
+
+**What this notebook demonstrates:**
+- How to connect to Reddit API using PRAW
+- Text cleaning and normalization techniques
+- Post deduplication logic
+- Data structure and output format
+
+**For production use:**
+Use the production script instead:
+```bash
+cd backend/app/pipelines
+python ingest_reddit.py --help
+```
+
+See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for full documentation.
 
 **Requirements:**
 ```bash

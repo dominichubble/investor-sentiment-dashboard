@@ -1,0 +1,19 @@
+# Backend Dependencies
+
+# Reddit API
+praw>=7.7.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Web framework (for future API)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Data processing (for future use)
+pandas>=2.1.0
+numpy>=1.26.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
