@@ -231,7 +231,7 @@ Total tweets: 28
 
 ---
 
-## � News API Ingestion Pipeline
+## 📰 News API Ingestion Pipeline
 
 ### Prerequisites
 
