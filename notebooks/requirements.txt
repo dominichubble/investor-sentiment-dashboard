@@ -1,2 +1,4 @@
 praw>=7.7
+tweepy>=4.14.0
+newsapi-python>=0.2.7
 python-dotenv>=1.0

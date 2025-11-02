@@ -6,6 +6,9 @@ praw>=7.7.0
 # Twitter/X API
 tweepy>=4.14.0
 
+# News API
+newsapi-python>=0.2.7
+
 # Environment variables
 python-dotenv>=1.0.0
 
