@@ -25,6 +25,7 @@ try:
 
     load_dotenv()
 except ImportError:
+    # If python-dotenv is not installed, skip loading environment variables from .env file.
     pass
 
 from newsapi import NewsApiClient
