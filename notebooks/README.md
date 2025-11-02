@@ -129,18 +129,6 @@ NEWS_API_KEY=your_newsapi_key
 3. Copy your API key from dashboard
 4. Free tier: 100 requests/day, 1-month history
 
-**Reddit:**
-1. Go to https://www.reddit.com/prefs/apps
-2. Click "Create App" or "Create Another App"
-3. Select "script" as the app type
-4. Copy the client ID and secret
-
-**Twitter/X:**
-1. Apply for developer account at https://developer.twitter.com/
-2. Create an app
-3. Get your Bearer Token (for read-only access)
-4. Free tier: 1,500 tweets/month
-
 **Usage:**
 1. Open the notebook in Jupyter or VS Code
 2. Adjust parameters in cell 2 if needed (subreddits, keywords, time filter)
