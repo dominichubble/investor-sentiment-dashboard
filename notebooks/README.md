@@ -57,6 +57,36 @@ See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for fu
 
 ---
 
+### `03-news-ingest.ipynb`
+**Purpose:** Documentation and prototyping for News API data collection.
+
+**Status:** ✅ Production script available at `backend/app/pipelines/ingest_news.py`
+
+**What this notebook demonstrates:**
+- How to connect to NewsAPI.org
+- Article search by keywords and sources
+- Text cleaning (HTML tags, URLs, NewsAPI artifacts)
+- Quality filtering (paywalled, removed content)
+- Deduplication by URL and title
+- JSON export format
+
+**For production use:**
+Use the production script instead:
+```bash
+cd backend/app/pipelines
+python ingest_news.py --help
+```
+
+**Quality Filters:**
+- Removes short titles (< 10 chars)
+- Filters [Removed] and paywalled articles (< 100 chars content)
+- Removes duplicates by URL and title
+- Only keeps articles with meaningful content
+
+See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for full documentation.
+
+---
+
 ## 🔧 Setup
 
 **Requirements:**
@@ -74,6 +104,9 @@ REDDIT_USER_AGENT=investor-sentiment-dashboard/0.1 by your_username
 
 # Twitter API
 TWITTER_BEARER_TOKEN=your_bearer_token
+
+# News API
+NEWS_API_KEY=your_newsapi_key
 ```
 
 ### Getting API Credentials
@@ -89,6 +122,12 @@ TWITTER_BEARER_TOKEN=your_bearer_token
 2. Create an app
 3. Get your Bearer Token (for read-only access)
 4. Free tier: 1,500 tweets/month
+
+**NewsAPI.org:**
+1. Register at https://newsapi.org/register
+2. Choose "Developer" plan (FREE)
+3. Copy your API key from dashboard
+4. Free tier: 100 requests/day, 1-month history
 
 **Usage:**
 1. Open the notebook in Jupyter or VS Code
