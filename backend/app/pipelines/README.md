@@ -385,7 +385,7 @@ Full list: https://newsapi.org/sources?category=business
 
 ---
 
-## �🔄 Adding New Pipelines
+## 🔄 Adding New Pipelines
 
 1. Create new script (e.g., `ingest_financial_data.py`)
 2. Follow the same structure:
