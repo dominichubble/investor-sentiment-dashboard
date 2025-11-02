@@ -324,9 +324,7 @@ def fetch_articles(
         raise
 
 
-def export_to_json(
-    articles: List[Dict[str, Any]], output_dir: str, run_id: str
-) -> str:
+def export_to_json(articles: List[Dict[str, Any]], output_dir: str, run_id: str) -> str:
     """
     Export articles to JSON file.
 
