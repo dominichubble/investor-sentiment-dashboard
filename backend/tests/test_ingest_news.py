@@ -235,7 +235,6 @@ class TestFilterQualityArticles:
         result = filter_quality_articles(articles)
         assert len(result) == 1
         assert "Good article" in result[0]["clean_title"]
-        assert "Good article" in result[0]["clean_title"]
 
     def test_filter_removes_short_content(self):
         """Should remove articles with content < 100 chars (paywalled)."""
