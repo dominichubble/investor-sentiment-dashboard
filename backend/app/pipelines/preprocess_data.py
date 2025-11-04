@@ -322,13 +322,13 @@ def run_preprocessing(
     Returns:
         Dictionary with processing summary
     """
-    logger.info("="*60)
+    logger.info("=" * 60)
     logger.info("Text Preprocessing Pipeline")
-    logger.info("="*60)
+    logger.info("=" * 60)
     logger.info(f"Input: {input_path}")
     logger.info(f"Output: {output_path}")
     logger.info(f"Config: {config_name}")
-    logger.info("="*60)
+    logger.info("=" * 60)
 
     # Get configuration
     config = CONFIGS.get(config_name, CONFIGS["standard"]).copy()
@@ -340,8 +340,11 @@ def run_preprocessing(
 
     # Filter config to only include valid TextProcessor parameters
     valid_params = {
-        'lowercase', 'remove_urls', 'remove_stopwords',
-        'lemmatize', 'preserve_financial'
+        "lowercase",
+        "remove_urls",
+        "remove_stopwords",
+        "lemmatize",
+        "preserve_financial",
     }
     processor_config = {k: v for k, v in config.items() if k in valid_params}
 
@@ -383,7 +386,9 @@ def run_preprocessing(
     logger.info(f"Files processed: {len(results)}")
     logger.info(f"Total records: {total_records}")
     logger.info(f"Total tokens: {total_tokens:,}")
-    logger.info(f"Avg tokens/record: {total_tokens/total_records if total_records else 0:.1f}")
+    logger.info(
+        f"Avg tokens/record: {total_tokens/total_records if total_records else 0:.1f}"
+    )
     if errors:
         logger.warning(f"Errors: {errors}")
 

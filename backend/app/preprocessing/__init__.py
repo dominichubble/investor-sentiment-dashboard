@@ -2,14 +2,14 @@
 
 from .text_processor import (
     TextProcessor,
-    preprocess_text,
-    tokenize,
-    remove_stopwords,
+    calculate_preprocessing_quality,
+    detect_stock_movements,
+    extract_tickers,
     lemmatize_tokens,
     normalize_text,
-    extract_tickers,
-    detect_stock_movements,
-    calculate_preprocessing_quality,
+    preprocess_text,
+    remove_stopwords,
+    tokenize,
 )
 
 __all__ = [

@@ -28,8 +28,7 @@ try:
     from nltk.tokenize import word_tokenize
 except ImportError:
     raise ImportError(
-        "NLTK is required for text preprocessing. "
-        "Install it with: pip install nltk"
+        "NLTK is required for text preprocessing. " "Install it with: pip install nltk"
     )
 
 # Download required NLTK data
@@ -63,10 +62,15 @@ _MENTION_PATTERN = re.compile(r"@\w+")
 _HASHTAG_PATTERN = re.compile(r"#(\w+)")
 _NUMBER_PATTERN = re.compile(r"\b\d+\.?\d*[kKmMbB]?\b")
 _WHITESPACE_PATTERN = re.compile(r"\s+")
-_NEGATION_PATTERN = re.compile(r"\b(not|no|never|neither|nobody|nothing|nowhere|n't)\b", re.IGNORECASE)
-_TICKER_PATTERN = re.compile(r'\$[A-Z]{1,5}\b')  # $AAPL, $TSLA, etc.
-_STOCK_MOVEMENT_PATTERN = re.compile(r'\b(up|down|gained?|lost|rose|fell|increased?|decreased?)\s+[\d.]+\s*[%$]|[\$][\d.]+', re.IGNORECASE)
-_CASHTAG_PATTERN = re.compile(r'\$[A-Z]{1,5}')  # Standalone cashtags
+_NEGATION_PATTERN = re.compile(
+    r"\b(not|no|never|neither|nobody|nothing|nowhere|n't)\b", re.IGNORECASE
+)
+_TICKER_PATTERN = re.compile(r"\$[A-Z]{1,5}\b")  # $AAPL, $TSLA, etc.
+_STOCK_MOVEMENT_PATTERN = re.compile(
+    r"\b(up|down|gained?|lost|rose|fell|increased?|decreased?)\s+[\d.]+\s*[%$]|[\$][\d.]+",
+    re.IGNORECASE,
+)
+_CASHTAG_PATTERN = re.compile(r"\$[A-Z]{1,5}")  # Standalone cashtags
 
 # Financial domain stopwords to preserve
 FINANCIAL_TERMS = {
@@ -143,22 +147,22 @@ INTENSITY_MODIFIERS = {
 def extract_tickers(text: str) -> Set[str]:
     """
     Extract stock ticker symbols from text.
-    
+
     Recognizes patterns like $AAPL, $TSLA, $MSFT
-    
+
     Args:
         text: Input text string
-        
+
     Returns:
         Set of ticker symbols (without $ prefix)
-        
+
     Examples:
         >>> extract_tickers("$AAPL is up 5%, $TSLA down 3%")
         {'AAPL', 'TSLA'}
     """
     if not text or not isinstance(text, str):
         return set()
-    
+
     matches = _TICKER_PATTERN.findall(text)
     # Remove $ prefix and return unique tickers
     return {ticker[1:] for ticker in matches}
@@ -167,41 +171,43 @@ def extract_tickers(text: str) -> Set[str]:
 def detect_stock_movements(text: str) -> List[Dict[str, str]]:
     """
     Detect stock price movement patterns in text.
-    
+
     Recognizes patterns like "up 5%", "down $2.50", "gained 10%"
-    
+
     Args:
         text: Input text string
-        
+
     Returns:
         List of dictionaries with movement information
-        
+
     Examples:
         >>> detect_stock_movements("Stock up 25% today")
         [{'movement': 'up 25%', 'direction': 'up', 'value': '25%'}]
     """
     if not text or not isinstance(text, str):
         return []
-    
+
     matches = _STOCK_MOVEMENT_PATTERN.findall(text)
     movements = []
-    
+
     for match in _STOCK_MOVEMENT_PATTERN.finditer(text):
         movement_text = match.group(0)
         direction = match.group(1).lower()
-        
+
         # Normalize direction
-        if direction in ['gained', 'gain', 'rose', 'increased', 'increase', 'up']:
-            normalized_direction = 'positive'
+        if direction in ["gained", "gain", "rose", "increased", "increase", "up"]:
+            normalized_direction = "positive"
         else:
-            normalized_direction = 'negative'
-        
-        movements.append({
-            'movement': movement_text,
-            'direction': normalized_direction,
-            'raw_direction': direction
-        })
-    
+            normalized_direction = "negative"
+
+        movements.append(
+            {
+                "movement": movement_text,
+                "direction": normalized_direction,
+                "raw_direction": direction,
+            }
+        )
+
     return movements
 
 
@@ -288,7 +294,12 @@ def normalize_text(
     if preserve_financial_punctuation:
         # Keep % $ and decimal points, remove others (keep underscore for negations)
         # Create translation table that keeps %, $, ., _
-        punct_to_remove = string.punctuation.replace("%", "").replace("$", "").replace(".", "").replace("_", "")
+        punct_to_remove = (
+            string.punctuation.replace("%", "")
+            .replace("$", "")
+            .replace(".", "")
+            .replace("_", "")
+        )
         text = text.translate(str.maketrans("", "", punct_to_remove))
     elif handle_negations:
         # Keep underscores for negations
@@ -381,7 +392,9 @@ def remove_stopwords(
     # Preserve financial terms
     if preserve_financial:
         stop_words = stop_words - FINANCIAL_TERMS
-        stop_words = stop_words - INTENSITY_MODIFIERS  # Also preserve intensity modifiers
+        stop_words = (
+            stop_words - INTENSITY_MODIFIERS
+        )  # Also preserve intensity modifiers
 
     # Add custom stopwords
     if custom_stopwords:
@@ -419,11 +432,11 @@ def lemmatize_tokens(tokens: List[str]) -> List[str]:
 def _cached_lemmatize(word: str, lemmatizer: WordNetLemmatizer) -> str:
     """
     Cached lemmatization for performance.
-    
+
     Args:
         word: Word to lemmatize
         lemmatizer: WordNetLemmatizer instance
-        
+
     Returns:
         Lemmatized word
     """
@@ -431,20 +444,18 @@ def _cached_lemmatize(word: str, lemmatizer: WordNetLemmatizer) -> str:
 
 
 def calculate_preprocessing_quality(
-    original: str,
-    processed: str,
-    tokens: Optional[List[str]] = None
+    original: str, processed: str, tokens: Optional[List[str]] = None
 ) -> Dict[str, float]:
     """
     Calculate quality metrics for preprocessing.
-    
+
     Helps assess information retention and preprocessing impact.
-    
+
     Args:
         original: Original text before preprocessing
         processed: Processed text after preprocessing
         tokens: Optional list of tokens (will tokenize if not provided)
-        
+
     Returns:
         Dictionary with quality metrics:
         - retention_rate: Ratio of tokens kept (0-1)
@@ -453,7 +464,7 @@ def calculate_preprocessing_quality(
         - avg_token_length: Average character length of tokens
         - ticker_count: Number of stock tickers detected
         - has_negations: Whether negations are present
-        
+
     Examples:
         >>> original = "The stock market is very bullish! $AAPL up 25%"
         >>> processed = "stock market very bullish $AAPL up 25%"
@@ -463,54 +474,52 @@ def calculate_preprocessing_quality(
     """
     if not original or not processed:
         return {
-            'retention_rate': 0.0,
-            'unique_token_ratio': 0.0,
-            'financial_term_density': 0.0,
-            'avg_token_length': 0.0,
-            'ticker_count': 0,
-            'has_negations': False,
+            "retention_rate": 0.0,
+            "unique_token_ratio": 0.0,
+            "financial_term_density": 0.0,
+            "avg_token_length": 0.0,
+            "ticker_count": 0,
+            "has_negations": False,
         }
-    
+
     # Get tokens
     if tokens is None:
         tokens = processed.split()
-    
+
     orig_tokens = original.split()
     proc_tokens = tokens if tokens else processed.split()
-    
+
     # Calculate metrics
     retention_rate = len(proc_tokens) / len(orig_tokens) if orig_tokens else 0.0
-    
+
     unique_token_ratio = (
         len(set(proc_tokens)) / len(proc_tokens) if proc_tokens else 0.0
     )
-    
+
     financial_count = sum(
-        1 for token in proc_tokens 
-        if token.lower() in FINANCIAL_TERMS
+        1 for token in proc_tokens if token.lower() in FINANCIAL_TERMS
     )
-    financial_term_density = (
-        financial_count / len(proc_tokens) if proc_tokens else 0.0
-    )
-    
+    financial_term_density = financial_count / len(proc_tokens) if proc_tokens else 0.0
+
     avg_token_length = (
         sum(len(token) for token in proc_tokens) / len(proc_tokens)
-        if proc_tokens else 0.0
+        if proc_tokens
+        else 0.0
     )
-    
+
     # Detect tickers and negations
     tickers = extract_tickers(processed)
-    has_negations = '_' in processed or any(
-        word in processed.lower() for word in ['not', 'no', 'never', 'neither']
+    has_negations = "_" in processed or any(
+        word in processed.lower() for word in ["not", "no", "never", "neither"]
     )
-    
+
     return {
-        'retention_rate': round(retention_rate, 3),
-        'unique_token_ratio': round(unique_token_ratio, 3),
-        'financial_term_density': round(financial_term_density, 3),
-        'avg_token_length': round(avg_token_length, 2),
-        'ticker_count': len(tickers),
-        'has_negations': has_negations,
+        "retention_rate": round(retention_rate, 3),
+        "unique_token_ratio": round(unique_token_ratio, 3),
+        "financial_term_density": round(financial_term_density, 3),
+        "avg_token_length": round(avg_token_length, 2),
+        "ticker_count": len(tickers),
+        "has_negations": has_negations,
     }
 
 
@@ -553,10 +562,10 @@ def preprocess_text(
 
         >>> preprocess_text("Markets crashed", remove_stopwords_flag=True, return_string=False)
         ['markets', 'crashed']
-        
+
         >>> preprocess_text("Stock up 25%", preserve_financial_punctuation=True)
         'stock up 25%'
-        
+
         >>> preprocess_text("not profitable", handle_negations=True)
         'not_profitable'
     """
@@ -623,7 +632,7 @@ class TextProcessor:
 
         >>> processor.process_batch(["Stock rising", "Market falling"])
         [['stock', 'rising'], ['market', 'falling']]
-        
+
         >>> # FinBERT-optimized processor
         >>> finbert_processor = TextProcessor(
         ...     lowercase=False,
@@ -668,7 +677,7 @@ class TextProcessor:
         self.preserve_financial_punctuation = preserve_financial_punctuation
         self.handle_negations = handle_negations
         self.custom_stopwords = custom_stopwords or set()
-        
+
         # Cache NLTK resources for better performance
         self._stopwords_cache: Optional[Set[str]] = None
         self._lemmatizer_cache: Optional[WordNetLemmatizer] = None
@@ -681,7 +690,7 @@ class TextProcessor:
             except Exception:
                 self._stopwords_cache = set()
         return self._stopwords_cache
-    
+
     def _get_lemmatizer(self) -> WordNetLemmatizer:
         """Get cached lemmatizer."""
         if self._lemmatizer_cache is None:

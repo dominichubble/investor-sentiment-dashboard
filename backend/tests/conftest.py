@@ -1,7 +1,8 @@
 """Test configuration and shared fixtures for pytest."""
 
-import pytest
 from pathlib import Path
+
+import pytest
 
 
 @pytest.fixture
