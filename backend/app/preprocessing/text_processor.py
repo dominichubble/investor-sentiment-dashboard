@@ -55,7 +55,7 @@ _ensure_nltk_data()
 
 # Compile regex patterns for efficiency
 _URL_PATTERN = re.compile(
-    r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
+    r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*(),\\]|(?:%[0-9a-fA-F][0-9a-fA-F]))+"
 )
 _EMAIL_PATTERN = re.compile(r"\S+@\S+")
 _MENTION_PATTERN = re.compile(r"@\w+")
