@@ -62,8 +62,7 @@ _MENTION_PATTERN = re.compile(r"@\w+")
 _HASHTAG_PATTERN = re.compile(r"#(\w+)")
 _NUMBER_PATTERN = re.compile(r"\b\d+\.?\d*[kKmMbB]?\b")
 _WHITESPACE_PATTERN = re.compile(r"\s+")
-
-# Financial domain stopwords to preserve
+_NEGATION_PATTERN = re.compile(r"\b(not|no|never|neither|nobody|nothing|nowhere|n't)\b", re.IGNORECASE)# Financial domain stopwords to preserve
 FINANCIAL_TERMS = {
     "stock",
     "stocks",
@@ -114,6 +113,26 @@ FINANCIAL_TERMS = {
     "indices",
 }
 
+# Intensity modifiers that affect sentiment strength
+INTENSITY_MODIFIERS = {
+    "very",
+    "extremely",
+    "highly",
+    "significantly",
+    "strongly",
+    "moderately",
+    "slightly",
+    "barely",
+    "somewhat",
+    "quite",
+    "rather",
+    "absolutely",
+    "completely",
+    "totally",
+    "exceptionally",
+    "remarkably",
+}
+
 
 def normalize_text(
     text: str,
@@ -123,6 +142,8 @@ def normalize_text(
     expand_hashtags: bool = True,
     remove_numbers: bool = False,
     lowercase: bool = True,
+    preserve_financial_punctuation: bool = False,
+    handle_negations: bool = False,
 ) -> str:
     """
     Normalize text by removing/replacing various patterns.
@@ -135,12 +156,35 @@ def normalize_text(
         expand_hashtags: Convert #HashTag to "Hash Tag"
         remove_numbers: Remove numeric values
         lowercase: Convert to lowercase
+        preserve_financial_punctuation: Keep %, $, and decimal points (for FinBERT)
+        handle_negations: Mark negations to preserve sentiment context (for FinBERT)
 
     Returns:
         Normalized text string
     """
     if not text or not isinstance(text, str):
         return ""
+
+    # Handle negations before processing (for FinBERT)
+    if handle_negations:
+        # Mark negations: "not good" -> "not_good", "isn't profitable" -> "isnt_profitable"
+        words = text.split()
+        processed_words = []
+        i = 0
+        while i < len(words):
+            word = words[i]
+            # Check if current word is a negation
+            if _NEGATION_PATTERN.match(word) and i + 1 < len(words):
+                # Combine negation with next word
+                next_word = words[i + 1]
+                # Remove punctuation from negation word only
+                clean_neg = word.rstrip(".,!?;:")
+                processed_words.append(f"{clean_neg}_{next_word}")
+                i += 2  # Skip next word as it's now combined
+            else:
+                processed_words.append(word)
+                i += 1
+        text = " ".join(processed_words)
 
     # Remove URLs
     if remove_urls:
@@ -169,8 +213,18 @@ def normalize_text(
     if remove_numbers:
         text = _NUMBER_PATTERN.sub("", text)
 
-    # Remove punctuation
-    text = text.translate(str.maketrans("", "", string.punctuation))
+    # Remove punctuation (but preserve financial punctuation and underscores if requested)
+    if preserve_financial_punctuation:
+        # Keep % $ and decimal points, remove others (keep underscore for negations)
+        # Create translation table that keeps %, $, ., _
+        punct_to_remove = string.punctuation.replace("%", "").replace("$", "").replace(".", "").replace("_", "")
+        text = text.translate(str.maketrans("", "", punct_to_remove))
+    elif handle_negations:
+        # Keep underscores for negations
+        punct_to_remove = string.punctuation.replace("_", "")
+        text = text.translate(str.maketrans("", "", punct_to_remove))
+    else:
+        text = text.translate(str.maketrans("", "", string.punctuation))
 
     # Normalize whitespace
     text = _WHITESPACE_PATTERN.sub(" ", text)
@@ -256,6 +310,7 @@ def remove_stopwords(
     # Preserve financial terms
     if preserve_financial:
         stop_words = stop_words - FINANCIAL_TERMS
+        stop_words = stop_words - INTENSITY_MODIFIERS  # Also preserve intensity modifiers
 
     # Add custom stopwords
     if custom_stopwords:
@@ -297,6 +352,8 @@ def preprocess_text(
     lemmatize: bool = False,
     return_string: bool = True,
     preserve_financial: bool = True,
+    preserve_financial_punctuation: bool = False,
+    handle_negations: bool = False,
     custom_stopwords: Optional[Set[str]] = None,
 ) -> Union[str, List[str]]:
     """
@@ -313,6 +370,8 @@ def preprocess_text(
         lemmatize: Apply lemmatization
         return_string: Return processed text as string (vs list of tokens)
         preserve_financial: Preserve financial domain terms when removing stopwords
+        preserve_financial_punctuation: Keep %, $, and decimal points (for FinBERT)
+        handle_negations: Mark negations to preserve sentiment context (for FinBERT)
         custom_stopwords: Additional stopwords to remove
 
     Returns:
@@ -324,6 +383,12 @@ def preprocess_text(
 
         >>> preprocess_text("Markets crashed", remove_stopwords_flag=True, return_string=False)
         ['markets', 'crashed']
+        
+        >>> preprocess_text("Stock up 25%", preserve_financial_punctuation=True)
+        'stock up 25%'
+        
+        >>> preprocess_text("not profitable", handle_negations=True)
+        'not_profitable'
     """
     if not text or not isinstance(text, str):
         return "" if return_string else []
@@ -337,6 +402,8 @@ def preprocess_text(
         expand_hashtags=True,
         remove_numbers=False,
         lowercase=lowercase,
+        preserve_financial_punctuation=preserve_financial_punctuation,
+        handle_negations=handle_negations,
     )
 
     # Step 2: Tokenize
@@ -375,6 +442,8 @@ class TextProcessor:
         remove_stopwords: Remove stopwords
         lemmatize: Apply lemmatization
         preserve_financial: Keep financial domain terms
+        preserve_financial_punctuation: Keep %, $, and decimal points (for FinBERT)
+        handle_negations: Mark negations to preserve sentiment context (for FinBERT)
         custom_stopwords: Additional stopwords to remove
 
     Examples:
@@ -384,6 +453,17 @@ class TextProcessor:
 
         >>> processor.process_batch(["Stock rising", "Market falling"])
         [['stock', 'rising'], ['market', 'falling']]
+        
+        >>> # FinBERT-optimized processor
+        >>> finbert_processor = TextProcessor(
+        ...     lowercase=False,
+        ...     remove_stopwords=False,
+        ...     lemmatize=False,
+        ...     preserve_financial_punctuation=True,
+        ...     handle_negations=True
+        ... )
+        >>> finbert_processor.process("Stock up 25%, not declining", return_string=True)
+        'Stock up 25% not_declining'
     """
 
     def __init__(
@@ -393,6 +473,8 @@ class TextProcessor:
         remove_stopwords: bool = False,
         lemmatize: bool = False,
         preserve_financial: bool = True,
+        preserve_financial_punctuation: bool = False,
+        handle_negations: bool = False,
         custom_stopwords: Optional[Set[str]] = None,
     ):
         """
@@ -404,6 +486,8 @@ class TextProcessor:
             remove_stopwords: Remove stopwords
             lemmatize: Apply lemmatization
             preserve_financial: Keep financial domain terms
+            preserve_financial_punctuation: Keep %, $, and decimal points (for FinBERT)
+            handle_negations: Mark negations to preserve sentiment context (for FinBERT)
             custom_stopwords: Additional stopwords to remove
         """
         self.lowercase = lowercase
@@ -411,6 +495,8 @@ class TextProcessor:
         self.remove_stopwords = remove_stopwords
         self.lemmatize = lemmatize
         self.preserve_financial = preserve_financial
+        self.preserve_financial_punctuation = preserve_financial_punctuation
+        self.handle_negations = handle_negations
         self.custom_stopwords = custom_stopwords or set()
 
     def process(self, text: str, return_string: bool = False) -> Union[List[str], str]:
@@ -432,6 +518,8 @@ class TextProcessor:
             lemmatize=self.lemmatize,
             return_string=return_string,
             preserve_financial=self.preserve_financial,
+            preserve_financial_punctuation=self.preserve_financial_punctuation,
+            handle_negations=self.handle_negations,
             custom_stopwords=self.custom_stopwords,
         )
 

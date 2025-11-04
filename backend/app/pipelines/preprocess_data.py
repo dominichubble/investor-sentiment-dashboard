@@ -48,6 +48,8 @@ CONFIGS = {
         "remove_stopwords": False,
         "lemmatize": False,
         "preserve_financial": True,
+        "preserve_financial_punctuation": False,
+        "handle_negations": False,
     },
     "standard": {
         "lowercase": True,
@@ -55,6 +57,8 @@ CONFIGS = {
         "remove_stopwords": True,
         "lemmatize": False,
         "preserve_financial": True,
+        "preserve_financial_punctuation": False,
+        "handle_negations": False,
     },
     "full": {
         "lowercase": True,
@@ -62,6 +66,17 @@ CONFIGS = {
         "remove_stopwords": True,
         "lemmatize": True,
         "preserve_financial": True,
+        "preserve_financial_punctuation": False,
+        "handle_negations": False,
+    },
+    "finbert": {
+        "lowercase": False,  # Preserve case for FinBERT
+        "remove_urls": True,
+        "remove_stopwords": False,  # Keep all words
+        "lemmatize": False,  # No lemmatization for transformers
+        "preserve_financial": True,
+        "preserve_financial_punctuation": True,  # Keep %, $, decimals
+        "handle_negations": True,  # Critical for sentiment
     },
 }
 
