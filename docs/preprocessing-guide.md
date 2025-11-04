@@ -164,7 +164,7 @@ results = processor.process_batch(texts, return_strings=True)
 python backend/app/pipelines/preprocess_data.py \
     --source reddit \
     --config finbert \
-    --output data/preprocessed/reddit
+    --output data/processed/reddit
 
 # Process all sources
 python backend/app/pipelines/preprocess_data.py \

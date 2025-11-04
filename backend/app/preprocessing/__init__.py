@@ -7,6 +7,9 @@ from .text_processor import (
     remove_stopwords,
     lemmatize_tokens,
     normalize_text,
+    extract_tickers,
+    detect_stock_movements,
+    calculate_preprocessing_quality,
 )
 
 __all__ = [
@@ -16,4 +19,7 @@ __all__ = [
     "remove_stopwords",
     "lemmatize_tokens",
     "normalize_text",
+    "extract_tickers",
+    "detect_stock_movements",
+    "calculate_preprocessing_quality",
 ]

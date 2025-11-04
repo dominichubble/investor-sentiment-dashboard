@@ -347,8 +347,8 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/processed/reddit",
-        help="Output directory (default: data/processed/reddit)",
+        default="data/raw/reddit",
+        help="Output directory (default: data/raw/reddit)",
     )
 
     parser.add_argument(

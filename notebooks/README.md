@@ -91,7 +91,8 @@ See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for fu
 
 **Requirements:**
 ```bash
-pip install -r requirements.txt
+# Install dependencies from the backend directory
+pip install -r ../backend/requirements.txt
 ```
 
 **Environment Variables:**
@@ -139,15 +140,7 @@ NEWS_API_KEY=your_newsapi_key
 
 ---
 
-## 🔧 Setup
-
-Install dependencies for all notebooks:
-```bash
-cd notebooks
-pip install -r requirements.txt
-```
-
-## 📁 Data Output
+##  Data Output
 
 All notebooks write output to `../data/` (project-level data directory), not within the notebooks folder. This keeps the repository clean and separates code from data.
 

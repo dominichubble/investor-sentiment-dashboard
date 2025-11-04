@@ -13,17 +13,17 @@ Data is collected from three primary sources:
 #### Reddit (`backend/app/ingestion/reddit_ingest.py`)
 - Collects posts and comments from financial subreddits
 - Filters by keywords: stocks, investing, trading, market, bull, bear, etc.
-- Stores raw data in `data/processed/reddit/YYYY-MM-DD/`
+- Stores raw data in `data/raw/reddit/YYYY-MM-DD/`
 
 #### Twitter (`backend/app/ingestion/twitter_ingest.py`)
 - Collects tweets about financial markets and specific stocks
 - Uses keywords and hashtags for filtering
-- Stores raw data in `data/processed/twitter/YYYY-MM-DD/`
+- Stores raw data in `data/raw/twitter/YYYY-MM-DD/`
 
 #### News (`backend/app/ingestion/news_ingest.py`)
 - Collects financial news articles from News API
 - Searches for market-related news and company-specific articles
-- Stores raw data in `data/processed/news/YYYY-MM-DD/`
+- Stores raw data in `data/raw/news/YYYY-MM-DD/`
 
 ### 2. Text Preprocessing
 
@@ -51,10 +51,10 @@ python backend/app/pipelines/preprocess_data.py --source all --config finbert
 python backend/app/pipelines/preprocess_data.py --source reddit --config finbert
 
 # Process specific directory
-python backend/app/pipelines/preprocess_data.py --input data/processed/reddit/2025-11-04 --config finbert
+python backend/app/pipelines/preprocess_data.py --input data/raw/reddit/2025-11-04 --config finbert
 ```
 
-**Output:** Preprocessed data in `data/preprocessed/{source}/YYYY-MM-DD/`
+**Output:** Preprocessed data in `data/processed/{source}/YYYY-MM-DD/`
 
 #### Preprocessing Module (`backend/app/preprocessing/text_processor.py`)
 
@@ -87,7 +87,7 @@ python backend/app/pipelines/preprocess_data.py --input data/processed/reddit/20
 ┌─────────────────┐
 │  Raw Ingestion  │
 │  (JSON files)   │
-│  data/processed/│
+│    data/raw/    │
 └────────┬────────┘
          │
          ▼
@@ -103,7 +103,7 @@ python backend/app/pipelines/preprocess_data.py --input data/processed/reddit/20
 ┌─────────────────┐
 │  Preprocessed   │
 │  (JSON files)   │
-│data/preprocessed│
+│ data/processed/ │
 └────────┬────────┘
          │
          ▼
@@ -123,14 +123,14 @@ python backend/app/pipelines/preprocess_data.py --input data/processed/reddit/20
 
 ```
 data/
-├── processed/           # Raw ingested data
+├── raw/                 # Raw ingested data
 │   ├── reddit/
 │   │   └── YYYY-MM-DD/
 │   ├── twitter/
 │   │   └── YYYY-MM-DD/
 │   └── news/
 │       └── YYYY-MM-DD/
-└── preprocessed/        # Preprocessed data
+└── processed/           # Preprocessed data ready for ML
     ├── reddit/
     ├── twitter/
     ├── news/

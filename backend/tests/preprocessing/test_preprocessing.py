@@ -8,6 +8,9 @@ from app.preprocessing import (
     remove_stopwords,
     lemmatize_tokens,
     normalize_text,
+    extract_tickers,
+    detect_stock_movements,
+    calculate_preprocessing_quality,
 )
 
 
@@ -538,4 +541,160 @@ class TestFinBERTConfig:
         # FinBERT should preserve more information
         assert len(finbert_result) >= len(standard_result)
         assert "25%" in finbert_result or "25" in finbert_result
+
+
+class TestTickerExtraction:
+    """Test stock ticker symbol extraction."""
+
+    def test_extract_single_ticker(self):
+        text = "$AAPL is up today"
+        tickers = extract_tickers(text)
+        assert "AAPL" in tickers
+        assert len(tickers) == 1
+
+    def test_extract_multiple_tickers(self):
+        text = "$AAPL and $TSLA are rising, $MSFT stable"
+        tickers = extract_tickers(text)
+        assert "AAPL" in tickers
+        assert "TSLA" in tickers
+        assert "MSFT" in tickers
+        assert len(tickers) == 3
+
+    def test_extract_no_tickers(self):
+        text = "The market is bullish today"
+        tickers = extract_tickers(text)
+        assert len(tickers) == 0
+
+    def test_ticker_case_sensitivity(self):
+        text = "$aapl is not a valid ticker"  # Tickers must be uppercase
+        tickers = extract_tickers(text)
+        assert len(tickers) == 0
+
+    def test_ticker_length_validation(self):
+        text = "$TOOLONG is not valid, $AAPL is valid"
+        tickers = extract_tickers(text)
+        assert "AAPL" in tickers
+        assert "TOOLONG" not in tickers  # Too long (6 chars)
+
+
+class TestStockMovementDetection:
+    """Test stock price movement detection."""
+
+    def test_detect_positive_movement(self):
+        text = "Stock up 25% today"
+        movements = detect_stock_movements(text)
+        assert len(movements) > 0
+        assert movements[0]['direction'] == 'positive'
+
+    def test_detect_negative_movement(self):
+        text = "Price down 5.5%"  # Use percentage instead
+        movements = detect_stock_movements(text)
+        assert len(movements) > 0
+        assert movements[0]['direction'] == 'negative'
+
+    def test_detect_multiple_movements(self):
+        text = "AAPL up 5%, TSLA down 3%"
+        movements = detect_stock_movements(text)
+        assert len(movements) == 2
+
+    def test_detect_various_verbs(self):
+        text = "Stock gained 10%, another fell 5%, third increased 2%"
+        movements = detect_stock_movements(text)
+        assert len(movements) == 3
+        assert movements[0]['direction'] == 'positive'  # gained
+        assert movements[1]['direction'] == 'negative'  # fell
+        assert movements[2]['direction'] == 'positive'  # increased
+
+    def test_no_movements(self):
+        text = "The market is stable"
+        movements = detect_stock_movements(text)
+        assert len(movements) == 0
+
+
+class TestQualityMetrics:
+    """Test preprocessing quality metrics."""
+
+    def test_basic_quality_metrics(self):
+        original = "The stock market is very bullish"
+        processed = "stock market very bullish"
+        metrics = calculate_preprocessing_quality(original, processed)
+        
+        assert 'retention_rate' in metrics
+        assert 'unique_token_ratio' in metrics
+        assert 'financial_term_density' in metrics
+        assert 'avg_token_length' in metrics
+
+    def test_retention_rate(self):
+        original = "The stock market is bullish today"
+        processed = "stock market bullish"  # 3 out of 6 words
+        metrics = calculate_preprocessing_quality(original, processed)
+        
+        assert metrics['retention_rate'] == 0.5
+
+    def test_financial_term_density(self):
+        original = "The stock market is bullish"
+        processed = "stock market bullish"  # 3 financial terms out of 3
+        metrics = calculate_preprocessing_quality(original, processed)
+        
+        assert metrics['financial_term_density'] == 1.0
+
+    def test_ticker_detection_in_metrics(self):
+        original = "$AAPL and $TSLA stocks rising"
+        processed = "$AAPL $TSLA stocks rising"
+        metrics = calculate_preprocessing_quality(original, processed)
+        
+        assert metrics['ticker_count'] == 2
+
+    def test_negation_detection_in_metrics(self):
+        original = "Stock is not profitable"
+        processed = "stock not_profitable"
+        metrics = calculate_preprocessing_quality(original, processed)
+        
+        assert metrics['has_negations'] is True
+
+    def test_empty_text_metrics(self):
+        metrics = calculate_preprocessing_quality("", "")
+        
+        assert metrics['retention_rate'] == 0.0
+        assert metrics['ticker_count'] == 0
+        assert metrics['has_negations'] is False
+
+
+class TestPerformanceOptimizations:
+    """Test caching and performance features."""
+
+    def test_lemmatizer_caching(self):
+        # Test that repeated lemmatization uses cache
+        processor = TextProcessor(lemmatize=True)
+        
+        text = "stocks are rising rapidly"
+        result1 = processor.process(text, return_string=True)
+        result2 = processor.process(text, return_string=True)
+        
+        # Should produce same results
+        assert result1 == result2
+
+    def test_stopwords_caching(self):
+        # Test that stopwords are cached in processor
+        processor = TextProcessor(remove_stopwords=True)
+        
+        # Access cached stopwords
+        stopwords = processor._get_stopwords()
+        assert isinstance(stopwords, set)
+        assert len(stopwords) > 0
+
+    def test_batch_processing_performance(self):
+        # Test that batch processing works efficiently
+        processor = TextProcessor(
+            lowercase=True,
+            remove_stopwords=True,
+            lemmatize=True
+        )
+        
+        texts = ["Stock rising"] * 100  # Process same text 100 times
+        results = processor.process_batch(texts, return_strings=True)
+        
+        assert len(results) == 100
+        # All results should be identical due to caching
+        assert all(r == results[0] for r in results)
 

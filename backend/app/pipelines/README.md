@@ -41,7 +41,7 @@ python ingest_reddit.py --keywords "stock market" "earnings" "fed"
 
 **Custom output directory:**
 ```bash
-python ingest_reddit.py --output ../../../data/processed/reddit --run-id 2025-10-28
+python ingest_reddit.py --output ../../../data/raw/reddit --run-id 2025-10-28
 ```
 
 **Combine multiple options:**
@@ -158,7 +158,7 @@ python ingest_twitter.py --min-engagement 10
 
 **Custom output directory:**
 ```bash
-python ingest_twitter.py --output ../../../data/processed/twitter --run-id 2025-10-28
+python ingest_twitter.py --output ../../../data/raw/twitter --run-id 2025-10-28
 ```
 
 **Combine multiple options:**
@@ -167,7 +167,7 @@ python ingest_twitter.py \
   --keywords "earnings beat" "fed rate" "market crash" \
   --max-tweets 50 \
   --min-engagement 10 \
-  --output ../../../data/processed/twitter
+  --output ../../../data/raw/twitter
 ```
 
 ### Default Configuration
@@ -226,7 +226,7 @@ Total tweets: 28
 | `--max-tweets` | Maximum tweets to collect | 30 |
 | `--language` | Language code | en |
 | `--min-engagement` | Minimum engagement threshold | 5 |
-| `--output` | Output directory | data/processed/twitter |
+| `--output` | Output directory | data/raw/twitter |
 | `--run-id` | Run identifier | Current date (YYYY-MM-DD) |
 | `--log-level` | Logging level | INFO |
 
@@ -272,7 +272,7 @@ python ingest_news.py --days-back 30 --max-articles 100
 
 **Custom output directory:**
 ```bash
-python ingest_news.py --output ../../../data/processed/news --run-id 2025-11-02
+python ingest_news.py --output ../../../data/raw/news --run-id 2025-11-02
 ```
 
 **Combine multiple options:**
@@ -380,7 +380,7 @@ Full list: https://newsapi.org/sources?category=business
 | `--days-back` | Number of days to search back | 7 |
 | `--max-articles` | Maximum articles to collect | 100 |
 | `--language` | Language code | en |
-| `--output` | Output directory | data/processed/news |
+| `--output` | Output directory | data/raw/news |
 | `--run-id` | Run identifier | Current date (YYYY-MM-DD) |
 | `--log-level` | Logging level | INFO |
 

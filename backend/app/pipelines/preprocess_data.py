@@ -7,9 +7,9 @@ tokenization, stopword removal, and lemmatization. Outputs preprocessed
 JSON files ready for sentiment analysis.
 
 Usage:
-    python preprocess_data.py --input data/processed/reddit --output data/preprocessed/reddit
+    python preprocess_data.py --input data/raw/reddit --output data/processed/reddit
     python preprocess_data.py --source all --remove-stopwords --lemmatize
-    python preprocess_data.py --input data/processed/news/2025-11-02 --config minimal
+    python preprocess_data.py --input data/raw/news/2025-11-02 --config minimal
 """
 
 import argparse
