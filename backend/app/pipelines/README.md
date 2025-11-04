@@ -401,7 +401,7 @@ Full list: https://newsapi.org/sources?category=business
 
 ---
 
-##  Text Preprocessing Pipeline
+## Text Preprocessing Pipeline
 
 The preprocessing pipeline cleans and normalizes collected text data. Features tokenization, stopword removal, and lemmatization with financial term preservation.
 
