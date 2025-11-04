@@ -267,6 +267,8 @@ def preprocess_file(
                     "remove_stopwords": processor.remove_stopwords,
                     "lemmatize": processor.lemmatize,
                     "preserve_financial": processor.preserve_financial,
+                    "preserve_financial_punctuation": processor.preserve_financial_punctuation,
+                    "handle_negations": processor.handle_negations,
                 },
                 "stats": {
                     "total_records": len(preprocessed_records),
@@ -341,7 +343,8 @@ def run_preprocessing(
     # Filter config to only include valid TextProcessor parameters
     valid_params = {
         'lowercase', 'remove_urls', 'remove_stopwords',
-        'lemmatize', 'preserve_financial'
+        'lemmatize', 'preserve_financial', 'preserve_financial_punctuation',
+        'handle_negations', 'custom_stopwords'
     }
     processor_config = {k: v for k, v in config.items() if k in valid_params}
 
