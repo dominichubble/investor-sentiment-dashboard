@@ -1,6 +1,6 @@
 # Data Pipelines
 
-Scripts for collecting data from social media and news sources.
+Scripts for collecting and preprocessing data from social media and news sources.
 
 ## 📁 Structure
 
@@ -10,6 +10,7 @@ pipelines/
 ├── ingest_reddit.py      # Reddit data collection
 ├── ingest_twitter.py     # Twitter/X data collection
 ├── ingest_news.py        # News API data collection
+├── preprocess_data.py    # Text preprocessing pipeline
 └── utils.py              # Shared utilities (future)
 ```
 
@@ -397,3 +398,11 @@ Full list: https://newsapi.org/sources?category=business
 3. Add tests in `backend/tests/`
 4. Update this README
 
+
+---
+
+##  Text Preprocessing Pipeline
+
+The preprocessing pipeline cleans and normalizes collected text data. Features tokenization, stopword removal, and lemmatization with financial term preservation.
+
+See preprocess_data.py --help for full documentation.

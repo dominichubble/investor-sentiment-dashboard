@@ -150,3 +150,25 @@ pip install -r requirements.txt
 ## 📁 Data Output
 
 All notebooks write output to `../data/` (project-level data directory), not within the notebooks folder. This keeps the repository clean and separates code from data.
+
+---
+
+### `04-text-preprocessing.ipynb`
+**Purpose:** Documentation and demonstration of text preprocessing pipeline.
+
+**Status:**  Production script available at `backend/app/pipelines/preprocess_data.py`
+
+**What this notebook demonstrates:**
+- Text normalization (URLs, mentions, hashtags, punctuation)
+- Tokenization using NLTK
+- Stopword removal with financial term preservation
+- Lemmatization for word normalization
+- Complete preprocessing pipeline usage
+- Comparison of preprocessing configurations
+
+**For production use:**
+Use the production script instead:
+```bash
+cd backend/app/pipelines
+python preprocess_data.py --help
+```
