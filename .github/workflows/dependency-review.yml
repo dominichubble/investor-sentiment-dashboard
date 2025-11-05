@@ -1,6 +1,14 @@
 name: Dependency Review
 
-on: [pull_request]
+# Disabled: Requires GitHub Advanced Security which is not available on private repos without enterprise plan
+# To enable this workflow:
+# 1. Go to repository Settings > Code security and analysis
+# 2. Enable "Dependency graph" and "GitHub Advanced Security"
+# Or make the repository public
+
+on:
+  pull_request:
+    branches: [none] # Effectively disabled
 
 permissions:
   contents: read
