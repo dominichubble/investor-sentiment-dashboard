@@ -8,7 +8,8 @@ filters spam/bots, and exports to CSV format.
 Usage:
     python ingest_twitter.py --max-tweets 30
     python ingest_twitter.py --keywords "earnings" "fed rate" --min-engagement 10
-    python ingest_twitter.py --output ../data/processed/twitter --run-id 2025-10-28
+    python ingest_twitter.py --query "stock market OR bitcoin" --max-results 200
+    python ingest_twitter.py --output ../data/raw/twitter --run-id 2025-10-28
 """
 
 import argparse
@@ -504,8 +505,8 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/processed/twitter",
-        help="Output directory (default: data/processed/twitter)",
+        default="data/raw/twitter",
+        help="Output directory (default: data/raw/twitter)",
     )
 
     parser.add_argument(

@@ -8,7 +8,7 @@ filters low-quality content, and exports to JSON format.
 Usage:
     python ingest_news.py --max-articles 100
     python ingest_news.py --keywords "earnings" "fed rate" --sources bloomberg reuters
-    python ingest_news.py --output ../data/processed/news --run-id 2025-11-02
+    python ingest_news.py --output ../data/raw/news --run-id 2025-11-02
 """
 
 import argparse
@@ -490,8 +490,8 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/processed/news",
-        help="Output directory (default: data/processed/news)",
+        default="data/raw/news",
+        help="Output directory (default: data/raw/news)",
     )
 
     parser.add_argument(

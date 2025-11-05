@@ -91,7 +91,8 @@ See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for fu
 
 **Requirements:**
 ```bash
-pip install -r requirements.txt
+# Install dependencies from the backend directory
+pip install -r ../backend/requirements.txt
 ```
 
 **Environment Variables:**
@@ -139,14 +140,28 @@ NEWS_API_KEY=your_newsapi_key
 
 ---
 
-## 🔧 Setup
-
-Install dependencies for all notebooks:
-```bash
-cd notebooks
-pip install -r requirements.txt
-```
-
-## 📁 Data Output
+##  Data Output
 
 All notebooks write output to `../data/` (project-level data directory), not within the notebooks folder. This keeps the repository clean and separates code from data.
+
+---
+
+### `04-text-preprocessing.ipynb`
+**Purpose:** Documentation and demonstration of text preprocessing pipeline.
+
+**Status:**  Production script available at `backend/app/pipelines/preprocess_data.py`
+
+**What this notebook demonstrates:**
+- Text normalization (URLs, mentions, hashtags, punctuation)
+- Tokenization using NLTK
+- Stopword removal with financial term preservation
+- Lemmatization for word normalization
+- Complete preprocessing pipeline usage
+- Comparison of preprocessing configurations
+
+**For production use:**
+Use the production script instead:
+```bash
+cd backend/app/pipelines
+python preprocess_data.py --help
+```
