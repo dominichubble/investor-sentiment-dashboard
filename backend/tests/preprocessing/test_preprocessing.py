@@ -3,14 +3,14 @@
 
 from app.preprocessing import (
     TextProcessor,
-    preprocess_text,
-    tokenize,
-    remove_stopwords,
+    calculate_preprocessing_quality,
+    detect_stock_movements,
+    extract_tickers,
     lemmatize_tokens,
     normalize_text,
-    extract_tickers,
-    detect_stock_movements,
-    calculate_preprocessing_quality,
+    preprocess_text,
+    remove_stopwords,
+    tokenize,
 )
 
 
@@ -258,7 +258,9 @@ class TestPreprocessText:
         assert preprocess_text("", return_string=False) == []
 
     def test_complex_financial_text(self):
-        text = "@user $TSLA stock is up 15% today! 🚀 Check https://example.com #bullish"
+        text = (
+            "@user $TSLA stock is up 15% today! 🚀 Check https://example.com #bullish"
+        )
         result = preprocess_text(
             text,
             remove_stopwords_flag=True,
@@ -396,7 +398,9 @@ class TestFinancialPunctuation:
     def test_preserve_decimals(self):
         text = "EPS of 0.50 per share"
         result = normalize_text(text, preserve_financial_punctuation=True)
-        assert "0.50" in result or "0 50" in result  # May get split but decimal preserved
+        assert (
+            "0.50" in result or "0 50" in result
+        )  # May get split but decimal preserved
 
     def test_remove_other_punctuation(self):
         text = "Stock up 25%! Amazing!!!"
@@ -407,9 +411,7 @@ class TestFinancialPunctuation:
     def test_preprocess_with_financial_punctuation(self):
         text = "Revenue up $100M, margins at 15.5%"
         result = preprocess_text(
-            text, 
-            preserve_financial_punctuation=True,
-            return_string=True
+            text, preserve_financial_punctuation=True, return_string=True
         )
         assert "$" in result or "100" in result
         assert "%" in result or "15" in result
@@ -450,11 +452,7 @@ class TestNegationHandling:
 
     def test_preprocess_with_negations(self):
         text = "Stock not rising, no momentum"
-        result = preprocess_text(
-            text,
-            handle_negations=True,
-            return_string=True
-        )
+        result = preprocess_text(text, handle_negations=True, return_string=True)
         assert "not_rising" in result or "not_" in result
         assert "no_momentum" in result or "no_" in result
 
@@ -463,36 +461,27 @@ class TestIntensityModifiers:
     """Test preservation of intensity modifiers."""
 
     def test_preserve_very(self):
-        result = remove_stopwords(
-            ["very", "good", "stock"],
-            preserve_financial=True
-        )
+        result = remove_stopwords(["very", "good", "stock"], preserve_financial=True)
         assert "very" in result
         assert "good" in result
 
     def test_preserve_extremely(self):
         result = remove_stopwords(
-            ["extremely", "bullish", "market"],
-            preserve_financial=True
+            ["extremely", "bullish", "market"], preserve_financial=True
         )
         assert "extremely" in result
         assert "bullish" in result
 
     def test_preserve_highly(self):
         result = remove_stopwords(
-            ["highly", "profitable", "company"],
-            preserve_financial=True
+            ["highly", "profitable", "company"], preserve_financial=True
         )
         assert "highly" in result
         assert "profitable" in result
 
     def test_intensity_in_preprocess(self):
         text = "very bullish market, extremely profitable"
-        result = preprocess_text(
-            text,
-            remove_stopwords_flag=True,
-            return_string=True
-        )
+        result = preprocess_text(text, remove_stopwords_flag=True, return_string=True)
         assert "very" in result
         assert "extremely" in result
 
@@ -510,13 +499,13 @@ class TestFinBERTConfig:
         )
         text = "Stock up 25%, not declining"
         result = processor.process(text, return_string=True)
-        
+
         # Check that original case is preserved
         assert "Stock" in result or "stock" not in result or result[0].isupper()
-        
+
         # Check percentage preserved
         assert "25%" in result or "25" in result
-        
+
         # Check negation handled
         assert "not_declining" in result or "not_" in result
 
@@ -533,11 +522,11 @@ class TestFinBERTConfig:
             remove_stopwords=True,
             lemmatize=True,
         )
-        
+
         text = "Stock UP 25%, NOT declining"
         finbert_result = finbert.process(text, return_string=True)
         standard_result = standard.process(text, return_string=True)
-        
+
         # FinBERT should preserve more information
         assert len(finbert_result) >= len(standard_result)
         assert "25%" in finbert_result or "25" in finbert_result
@@ -584,13 +573,13 @@ class TestStockMovementDetection:
         text = "Stock up 25% today"
         movements = detect_stock_movements(text)
         assert len(movements) > 0
-        assert movements[0]['direction'] == 'positive'
+        assert movements[0]["direction"] == "positive"
 
     def test_detect_negative_movement(self):
         text = "Price down 5.5%"  # Use percentage instead
         movements = detect_stock_movements(text)
         assert len(movements) > 0
-        assert movements[0]['direction'] == 'negative'
+        assert movements[0]["direction"] == "negative"
 
     def test_detect_multiple_movements(self):
         text = "AAPL up 5%, TSLA down 3%"
@@ -601,9 +590,9 @@ class TestStockMovementDetection:
         text = "Stock gained 10%, another fell 5%, third increased 2%"
         movements = detect_stock_movements(text)
         assert len(movements) == 3
-        assert movements[0]['direction'] == 'positive'  # gained
-        assert movements[1]['direction'] == 'negative'  # fell
-        assert movements[2]['direction'] == 'positive'  # increased
+        assert movements[0]["direction"] == "positive"  # gained
+        assert movements[1]["direction"] == "negative"  # fell
+        assert movements[2]["direction"] == "positive"  # increased
 
     def test_no_movements(self):
         text = "The market is stable"
@@ -618,46 +607,46 @@ class TestQualityMetrics:
         original = "The stock market is very bullish"
         processed = "stock market very bullish"
         metrics = calculate_preprocessing_quality(original, processed)
-        
-        assert 'retention_rate' in metrics
-        assert 'unique_token_ratio' in metrics
-        assert 'financial_term_density' in metrics
-        assert 'avg_token_length' in metrics
+
+        assert "retention_rate" in metrics
+        assert "unique_token_ratio" in metrics
+        assert "financial_term_density" in metrics
+        assert "avg_token_length" in metrics
 
     def test_retention_rate(self):
         original = "The stock market is bullish today"
         processed = "stock market bullish"  # 3 out of 6 words
         metrics = calculate_preprocessing_quality(original, processed)
-        
-        assert metrics['retention_rate'] == 0.5
+
+        assert metrics["retention_rate"] == 0.5
 
     def test_financial_term_density(self):
         original = "The stock market is bullish"
         processed = "stock market bullish"  # 3 financial terms out of 3
         metrics = calculate_preprocessing_quality(original, processed)
-        
-        assert metrics['financial_term_density'] == 1.0
+
+        assert metrics["financial_term_density"] == 1.0
 
     def test_ticker_detection_in_metrics(self):
         original = "$AAPL and $TSLA stocks rising"
         processed = "$AAPL $TSLA stocks rising"
         metrics = calculate_preprocessing_quality(original, processed)
-        
-        assert metrics['ticker_count'] == 2
+
+        assert metrics["ticker_count"] == 2
 
     def test_negation_detection_in_metrics(self):
         original = "Stock is not profitable"
         processed = "stock not_profitable"
         metrics = calculate_preprocessing_quality(original, processed)
-        
-        assert metrics['has_negations'] is True
+
+        assert metrics["has_negations"] is True
 
     def test_empty_text_metrics(self):
         metrics = calculate_preprocessing_quality("", "")
-        
-        assert metrics['retention_rate'] == 0.0
-        assert metrics['ticker_count'] == 0
-        assert metrics['has_negations'] is False
+
+        assert metrics["retention_rate"] == 0.0
+        assert metrics["ticker_count"] == 0
+        assert metrics["has_negations"] is False
 
 
 class TestPerformanceOptimizations:
@@ -666,18 +655,18 @@ class TestPerformanceOptimizations:
     def test_lemmatizer_caching(self):
         # Test that repeated lemmatization uses cache
         processor = TextProcessor(lemmatize=True)
-        
+
         text = "stocks are rising rapidly"
         result1 = processor.process(text, return_string=True)
         result2 = processor.process(text, return_string=True)
-        
+
         # Should produce same results
         assert result1 == result2
 
     def test_stopwords_caching(self):
         # Test that stopwords are cached in processor
         processor = TextProcessor(remove_stopwords=True)
-        
+
         # Access cached stopwords
         stopwords = processor._get_stopwords()
         assert isinstance(stopwords, set)
@@ -685,16 +674,11 @@ class TestPerformanceOptimizations:
 
     def test_batch_processing_performance(self):
         # Test that batch processing works efficiently
-        processor = TextProcessor(
-            lowercase=True,
-            remove_stopwords=True,
-            lemmatize=True
-        )
-        
+        processor = TextProcessor(lowercase=True, remove_stopwords=True, lemmatize=True)
+
         texts = ["Stock rising"] * 100  # Process same text 100 times
         results = processor.process_batch(texts, return_strings=True)
-        
+
         assert len(results) == 100
         # All results should be identical due to caching
         assert all(r == results[0] for r in results)
-
