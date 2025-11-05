@@ -140,7 +140,7 @@ NEWS_API_KEY=your_newsapi_key
 
 ---
 
-##  Data Output
+## Data Output
 
 All notebooks write output to `../data/` (project-level data directory), not within the notebooks folder. This keeps the repository clean and separates code from data.
 
