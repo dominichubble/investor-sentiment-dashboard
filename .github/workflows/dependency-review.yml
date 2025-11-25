@@ -1,0 +1,28 @@
+name: Dependency Review
+
+# Disabled: Requires GitHub Advanced Security which is not available on private repos without enterprise plan
+# To enable this workflow:
+# 1. Go to repository Settings > Code security and analysis
+# 2. Enable "Dependency graph" and "GitHub Advanced Security"
+# Or make the repository public
+
+on:
+  pull_request:
+    branches: [none] # Effectively disabled
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: moderate
+          comment-summary-in-pr: true

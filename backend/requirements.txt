@@ -1,0 +1,34 @@
+# Backend Dependencies
+
+# Reddit API
+praw>=7.7.0
+
+# Twitter/X API
+tweepy>=4.14.0
+
+# News API
+newsapi-python>=0.2.7
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# Web framework (for future API)
+fastapi>=0.104.0
+uvicorn[standard]>=0.24.0
+
+# Data processing (for future use)
+pandas>=2.1.0
+numpy>=1.26.0
+
+# Text preprocessing
+nltk>=3.8.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Code quality
+black>=23.12.0
+isort>=5.13.0
+flake8>=7.0.0
+mypy>=1.8.0
