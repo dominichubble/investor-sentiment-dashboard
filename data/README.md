@@ -4,9 +4,10 @@ This directory contains sample cleaned and annotated datasets for the Investor S
 
 ## Overview
 
-The datasets in this repository represent **cleaned and preprocessed** financial sentiment data collected on **November 25, 2025** from:
-- **Reddit**: 292 posts from financial subreddits (r/wallstreetbets, r/stocks, r/investing, r/finance)
-- **News**: 100 articles from major financial news sources (Bloomberg, Reuters, CNBC, etc.)
+The datasets in this repository represent **cleaned and preprocessed** financial sentiment data from multiple sources:
+
+- **Reddit**: Posts from financial subreddits
+- **News**: Articles from major financial news sources
 
 All data has been preprocessed using the FinBERT-optimized configuration to prepare it for sentiment analysis.
 
@@ -14,68 +15,78 @@ All data has been preprocessed using the FinBERT-optimized configuration to prep
 
 ```
 data/
-├── README.md                                    # This file
-├── raw/                                         # Raw data (gitignored, not committed)
-│   ├── reddit/2025-11-25/                      # Raw Reddit posts
-│   └── news/2025-11-25/                        # Raw news articles
-└── processed/                                   # Cleaned and annotated data (committed)
-    ├── reddit/
-    │   └── reddit_finance_2025-11-25.json      # 292 cleaned Reddit posts
-    └── news/
-        └── news_finance_2025-11-25.json        # 100 cleaned news articles
+├── README.md                          # This file
+├── raw/                               # Raw data (gitignored, not committed)
+│   ├── reddit/YYYY-MM-DD/            # Raw Reddit posts
+│   ├── twitter/YYYY-MM-DD/           # Raw tweets
+│   └── news/YYYY-MM-DD/              # Raw news articles
+└── processed/                         # Cleaned and annotated data (committed)
+    ├── reddit/                       # Preprocessed Reddit posts
+    ├── twitter/                      # Preprocessed tweets
+    └── news/                         # Preprocessed news articles
 ```
 
-## Datasets
+## Dataset Schemas
 
-### `processed/reddit/reddit_finance_2025-11-25.json`
+### Reddit Data (`processed/reddit/`)
 
-**Source**: Reddit financial subreddits (r/wallstreetbets, r/stocks, r/investing, r/finance)  
-**Records**: 292 posts collected on November 25, 2025  
-**Format**: JSON array of objects  
-**Time Range**: Past week (November 18-25, 2025)
+**Source**: Reddit financial subreddits  
+**Format**: JSON with nested structure
 
 **Schema**:
-- `id` (string): Unique Reddit post ID
-- `title` (string): Post title
-- `text` (string): Original post text
-- `text_cleaned` (string): Preprocessed text ready for sentiment analysis
-- `author` (string): Reddit username
-- `subreddit` (string): Subreddit name
-- `created_utc` (integer): Unix timestamp
-- `score` (integer): Upvotes minus downvotes
-- `num_comments` (integer): Number of comments
-- `upvote_ratio` (float): Percentage of upvotes (0-1)
-- `url` (string): Direct link to post
-- `permalink` (string): Reddit permalink
-- `processed_at` (string): ISO 8601 timestamp of preprocessing
-- `preprocessing_config` (string): Configuration used ("finbert")
+**Data Fields:**
 
-### `processed/news/news_finance_2025-11-25.json`
+- `id`: Unique post identifier
+- `title`: Post title
+- `text`: Original post text
+- `text_cleaned`: Preprocessed text (FinBERT-optimized)
+- `text_tokens`: Tokenized version of cleaned text
+- `author`: Reddit username
+- `subreddit`: Subreddit name
+- `created_utc`: Unix timestamp
+- `score`: Upvotes minus downvotes
+- `num_comments`: Number of comments
+- `upvote_ratio`: Percentage of upvotes (0-1)
+- `url`: Direct link to post
+- `permalink`: Reddit permalink
 
-**Source**: Financial news APIs (Bloomberg, Reuters, CNBC, Financial Times, WSJ, Business Insider, Fortune)  
-**Records**: 100 articles collected on November 25, 2025  
-**Format**: JSON array of objects  
-**Time Range**: Past 7 days (November 18-25, 2025)
+**Metadata Fields:**
 
-**Schema**:
-- `source_id` (string): News source identifier
-- `source_name` (string): Human-readable source name
-- `author` (string): Article author
-- `title` (string): Article headline
-- `description` (string): Article summary
-- `content` (string): Full article text
-- `content_cleaned` (string): Preprocessed content
-- `url` (string): Article URL
-- `url_to_image` (string): Featured image URL
-- `published_at` (string): ISO 8601 timestamp
-- `processed_at` (string): ISO 8601 timestamp of preprocessing
-- `preprocessing_config` (string): Configuration used ("finbert")
+- `preprocessing.processed_at`: Timestamp of preprocessing
+- `preprocessing.config`: Preprocessing configuration used
+- `preprocessing.stats`: Token counts and statistics
+
+### News Data (`processed/news/`)
+
+**Source**: Financial news APIs  
+**Format**: JSON with nested structure
+
+**Data Fields**:
+
+- `source_id`: News source identifier
+- `source_name`: Human-readable source name
+- `author`: Article author
+- `title`: Article headline
+- `description`: Article summary
+- `content`: Full article text
+- `content_cleaned`: Preprocessed content (FinBERT-optimized)
+- `content_tokens`: Tokenized version of cleaned content
+- `url`: Article URL
+- `url_to_image`: Featured image URL
+- `published_at`: ISO 8601 publication timestamp
+
+**Metadata Fields:**
+
+- `preprocessing.processed_at`: Timestamp of preprocessing
+- `preprocessing.config`: Preprocessing configuration used
+- `preprocessing.stats`: Token counts and statistics
 
 ## Preprocessing Configuration
 
 All sample data uses the **FinBERT** preprocessing configuration, optimized for transformer-based sentiment models:
 
 ### Key Features:
+
 - ✅ **Case Preservation**: Maintains original casing (important for entities like "NVDA", "Fed")
 - ✅ **Financial Terms**: Preserves domain-specific vocabulary (bullish, bearish, rally, crash)
 - ✅ **Numeric Context**: Keeps financial punctuation (%, $, decimals)
@@ -95,6 +106,7 @@ All sample data uses the **FinBERT** preprocessing configuration, optimized for 
 ## Data Collection Methodology
 
 ### Reddit
+
 - **Subreddits**: wallstreetbets, stocks, investing, finance
 - **Search Keywords**: stock market, earnings, fed rate, inflation, major tickers
 - **Time Filter**: Last 7 days
@@ -102,14 +114,16 @@ All sample data uses the **FinBERT** preprocessing configuration, optimized for 
 - **Quality Filters**: Minimum engagement threshold
 
 ### Twitter/X
+
 - **Keywords**: stock market, earnings, inflation, major tickers ($NVDA, $TSLA, etc.)
 - **Language**: English only
-- **Quality Filters**: 
+- **Quality Filters**:
   - Minimum 5 total engagements (likes + retweets + replies)
   - Spam/bot detection
   - Excessive emoji filtering
 
 ### News
+
 - **Sources**: Bloomberg, Reuters, WSJ, Financial Times, CNBC, Business Insider
 - **Keywords**: stock market, earnings, interest rates, inflation, market crash
 - **Time Range**: Last 7 days
@@ -127,20 +141,32 @@ All sample data uses the **FinBERT** preprocessing configuration, optimized for 
 import json
 from pathlib import Path
 
-# Load Reddit dataset (292 posts)
-with open("data/processed/reddit/reddit_finance_2025-11-25.json", "r") as f:
-    reddit_data = json.load(f)
+# Load preprocessed Reddit data
+reddit_files = list(Path("data/processed/reddit").glob("*.json"))
+for file in reddit_files:
+    with open(file, "r") as f:
+        data = json.load(f)
+        records = data.get("data", data)  # Handle nested structure
 
-# Load News dataset (100 articles)
-with open("data/processed/news/news_finance_2025-11-25.json", "r") as f:
-    news_data = json.load(f)
+        # Access cleaned text for sentiment analysis
+        for post in records[:5]:  # First 5 posts
+            print(f"Title: {post.get('title', 'N/A')}")
+            print(f"Cleaned: {post.get('text_cleaned', 'N/A')}")
+            print(f"Subreddit: {post.get('subreddit', 'N/A')}")
+            print()
 
-# Access cleaned text for sentiment analysis
-for post in reddit_data[:5]:  # First 5 posts
-    print(f"Title: {post['title']}")
-    print(f"Cleaned: {post['text_cleaned']}")
-    print(f"Subreddit: {post['subreddit']}")
-    print()
+# Load preprocessed News data
+news_files = list(Path("data/processed/news").glob("*.json"))
+for file in news_files:
+    with open(file, "r") as f:
+        data = json.load(f)
+        records = data.get("data", data)
+
+        for article in records[:3]:  # First 3 articles
+            print(f"Title: {article.get('title', 'N/A')}")
+            print(f"Source: {article.get('source_name', 'N/A')}")
+            print(f"Cleaned: {article.get('content_cleaned', 'N/A')[:100]}...")
+            print()
 ```
 
 ### Preprocessing New Data
@@ -150,14 +176,12 @@ To preprocess new data collected from the pipelines:
 ```bash
 cd backend/app/pipelines
 
-# Process all sources
-python preprocess_data.py --source all --config finbert
+# Process specific source (automatically outputs to data/processed/{source}/)
+python preprocess_data.py --input ../../../data/raw/reddit/YYYY-MM-DD --config finbert --source reddit
+python preprocess_data.py --input ../../../data/raw/news/YYYY-MM-DD --config finbert --source news
 
-# Process specific source
-python preprocess_data.py --source reddit --config finbert
-
-# Process specific date directory
-python preprocess_data.py --input ../../../data/raw/reddit/2025-11-25 --config finbert
+# Or specify custom output directory
+python preprocess_data.py --input ../../../data/raw/reddit/YYYY-MM-DD --output ../../../data/processed/reddit --config finbert
 ```
 
 See [`backend/app/pipelines/README.md`](../backend/app/pipelines/README.md) for detailed pipeline documentation.
@@ -168,7 +192,6 @@ See [`backend/app/pipelines/README.md`](../backend/app/pipelines/README.md) for 
 - ✅ No personal identifiable information (PII) collected beyond public usernames
 - ✅ Data used for **academic research purposes only** (Final Year Project, Loughborough University)
 - ✅ Complies with platform Terms of Service
-- ✅ Real data collected from Reddit and News APIs on November 25, 2025
 - ⚠️ Data collection requires valid API credentials (see `.env.example`)
 
 ## Related Documentation
@@ -184,6 +207,6 @@ This project is licensed under the MIT License - see the [LICENSE](../LICENSE) f
 
 ---
 
-**Last Updated**: November 25, 2025  
-**Datasets Version**: 1.0.0  
-**Preprocessing Config**: FinBERT-optimized
+**Preprocessing Config**: FinBERT-optimized  
+**Project**: Final Year Project - Investor Sentiment Dashboard  
+**Institution**: Loughborough University
