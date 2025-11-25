@@ -508,7 +508,20 @@ def main():
     # Determine output path
     if not args.output:
         if args.input.is_dir():
-            args.output = args.input.parent / f"{args.input.name}_preprocessed"
+            # Extract date from input path and use for output in data/processed/{source}/
+            input_name = args.input.name
+            source_hint = args.source or "data"
+
+            # Try to find data/processed/{source}/ directory
+            project_root = args.input.parent
+            while project_root.parent != project_root:
+                if (project_root / "data" / "processed").exists():
+                    args.output = project_root / "data" / "processed" / source_hint
+                    break
+                project_root = project_root.parent
+            else:
+                # Fallback to old behavior
+                args.output = args.input.parent / f"{args.input.name}_preprocessed"
         else:
             args.output = args.input.parent / "preprocessed"
 
