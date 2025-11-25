@@ -511,7 +511,7 @@ def main():
             # Extract date from input path and use for output in data/processed/{source}/
             input_name = args.input.name
             source_hint = args.source or "data"
-            
+
             # Try to find data/processed/{source}/ directory
             project_root = args.input.parent
             while project_root.parent != project_root:
