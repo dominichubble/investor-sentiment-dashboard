@@ -242,5 +242,6 @@ pytest tests/test_preprocessing.py -v
 ## Related Documentation
 
 - [Data Pipeline](data-pipeline.md) - Full pipeline overview
+- [FinBERT Model](finbert-model.md) - Sentiment analysis with FinBERT
 - [Notebooks](../notebooks/04-text-preprocessing.ipynb) - Interactive examples
-- [Tests](../backend/tests/test_preprocessing.py) - Test examples
+- [Tests](../backend/tests/preprocessing/test_preprocessing.py) - Test examples

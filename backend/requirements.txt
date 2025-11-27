@@ -16,12 +16,21 @@ python-dotenv>=1.0.0
 fastapi>=0.104.0
 uvicorn[standard]>=0.24.0
 
-# Data processing (for future use)
+# Data processing
 pandas>=2.1.0
 numpy>=1.26.0
 
+# Visualization (for notebooks)
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
 # Text preprocessing
 nltk>=3.8.0
+
+# Machine Learning / FinBERT
+transformers>=4.35.0
+torch>=2.1.0
+accelerate>=0.25.0
 
 # Testing
 pytest>=7.4.0

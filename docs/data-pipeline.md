@@ -67,7 +67,27 @@ python backend/app/pipelines/preprocess_data.py --input data/raw/reddit/2025-11-
 
 ### 3. Sentiment Analysis
 
-*(Coming soon - will use FinBERT for financial sentiment classification)*
+Sentiment analysis uses the **ProsusAI/FinBERT** model to classify financial text into positive, negative, or neutral sentiment.
+
+#### FinBERT Module (`backend/app/models/finbert.py`)
+
+**Features:**
+- Pre-trained financial sentiment model (438MB cached locally)
+- Automatic GPU/CPU detection and fallback
+- Batch processing for efficient analysis
+- Single and batch prediction methods
+
+**Usage:**
+```bash
+# Initialize model (first time downloads ~438MB)
+cd backend
+python -m app.models.init_finbert
+
+# Process datasets
+python -c "from app.models.finbert import FinBERTSentiment; finbert = FinBERTSentiment()"
+```
+
+**See:** [FinBERT Model Documentation](finbert-model.md) for detailed API reference and examples.
 
 ### 4. Dashboard Visualization
 
@@ -148,5 +168,6 @@ data/
 ## Related Documentation
 
 - [Preprocessing Guide](preprocessing-guide.md) - Detailed preprocessing configuration
-- [API Documentation](api-documentation.md) - Backend endpoints
+- [FinBERT Model](finbert-model.md) - Sentiment analysis API reference
+- [FinBERT Implementation](finbert-implementation.md) - Implementation details
 - [Notebooks](../notebooks/README.md) - Exploration and analysis

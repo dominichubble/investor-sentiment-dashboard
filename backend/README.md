@@ -15,9 +15,13 @@ backend/
 │   │   ├── ingest_news.py      # News API data collection
 │   │   ├── preprocess_data.py  # Text preprocessing pipeline
 │   │   └── README.md           # Detailed pipeline documentation
-│   └── preprocessing/          # Text processing modules
+│   ├── preprocessing/          # Text processing modules
+│   │   ├── __init__.py
+│   │   └── text_processor.py   # Text cleaning and normalization
+│   └── models/                 # Machine learning models
 │       ├── __init__.py
-│       └── text_processor.py   # Text cleaning and normalization
+│       ├── finbert.py          # FinBERT sentiment analysis
+│       └── init_finbert.py     # Model initialization script
 ├── tests/                      # Unit and integration tests
 │   ├── __init__.py
 │   ├── conftest.py            # Pytest fixtures
@@ -26,9 +30,12 @@ backend/
 │   │   ├── test_ingest_reddit.py
 │   │   ├── test_ingest_twitter.py
 │   │   └── test_ingest_news.py
-│   └── preprocessing/
+│   ├── preprocessing/
+│   │   ├── __init__.py
+│   │   └── test_preprocessing.py
+│   └── models/
 │       ├── __init__.py
-│       └── test_preprocessing.py
+│       └── test_finbert.py
 ├── pyproject.toml             # Tool configurations (black, pytest, mypy)
 ├── requirements.txt           # Python dependencies
 ├── .flake8                    # Linting configuration
@@ -153,6 +160,39 @@ python preprocess_data.py \
 
 See [app/pipelines/README.md](app/pipelines/README.md) for detailed documentation.
 
+## 🤖 Sentiment Analysis
+
+### Initialize FinBERT Model
+
+```bash
+cd backend
+
+# Download and cache the model (run once)
+python -m app.models.init_finbert
+
+# With custom settings
+python -m app.models.init_finbert --device cuda --cache-dir /path/to/cache
+```
+
+### Use FinBERT in Code
+
+```python
+from app.models.finbert import FinBERTSentiment
+
+# Initialize model (uses cache if available)
+finbert = FinBERTSentiment()
+
+# Single prediction
+result = finbert.predict("Stock prices soared after earnings beat.")
+print(f"Sentiment: {result['label']} ({result['score']:.2%})")
+
+# Batch prediction (more efficient)
+texts = ["Market crashed", "Earnings exceeded expectations"]
+results = finbert.predict_batch(texts)
+```
+
+See the [FinBERT Model Documentation](../docs/finbert-model.md) for detailed API reference and usage examples.
+
 ## 🧪 Testing
 
 ### Run All Tests
@@ -261,9 +301,14 @@ Reusable text preprocessing components for financial sentiment analysis.
 
 ## 📚 Documentation
 
-- [Data Pipeline Documentation](../docs/data-pipeline.md)
-- [Preprocessing Guide](../docs/preprocessing-guide.md)
-- [Pipeline README](app/pipelines/README.md)
+### Core Documentation
+- [Data Pipeline Documentation](../docs/data-pipeline.md) - Complete data flow and pipeline overview
+- [Preprocessing Guide](../docs/preprocessing-guide.md) - Text preprocessing configurations
+- [Pipeline README](app/pipelines/README.md) - Detailed pipeline scripts documentation
+
+### Model Documentation
+- [FinBERT Model](../docs/finbert-model.md) - API reference and usage examples
+- [FinBERT Implementation](../docs/finbert-implementation.md) - Architecture and implementation details
 
 ## 🐛 Troubleshooting
 

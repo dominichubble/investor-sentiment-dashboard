@@ -149,7 +149,7 @@ All notebooks write output to `../data/` (project-level data directory), not wit
 ### `04-text-preprocessing.ipynb`
 **Purpose:** Documentation and demonstration of text preprocessing pipeline.
 
-**Status:**  Production script available at `backend/app/pipelines/preprocess_data.py`
+**Status:** ✅ Production script available at `backend/app/pipelines/preprocess_data.py`
 
 **What this notebook demonstrates:**
 - Text normalization (URLs, mentions, hashtags, punctuation)
@@ -165,3 +165,41 @@ Use the production script instead:
 cd backend/app/pipelines
 python preprocess_data.py --help
 ```
+
+See [docs/preprocessing-guide.md](../docs/preprocessing-guide.md) for detailed configuration documentation.
+
+---
+
+### `05-finbert-sentiment-analysis.ipynb`
+**Purpose:** Interactive demonstration of FinBERT sentiment analysis model.
+
+**Status:** ✅ Production module available at `backend/app/models/finbert.py`
+
+**What this notebook demonstrates:**
+- Model initialization and caching
+- Single and batch predictions
+- Sentiment analysis on real Reddit and News data
+- Visualization of sentiment distributions
+- Confidence score analysis
+- Performance benchmarks (single vs batch)
+- Practical use cases:
+  - Filter high-confidence negative sentiment
+  - Calculate overall market mood
+  - Compare Reddit vs News sentiment
+  - Aggregate weighted sentiment scores
+
+**Interactive Features:**
+- Run predictions on your own texts
+- Visualize sentiment distributions with charts
+- Compare processing speeds
+- Analyze 292 Reddit posts + 100 news articles
+- Export results for further analysis
+
+**For production use:**
+```python
+from app.models.finbert import FinBERTSentiment
+finbert = FinBERTSentiment()
+result = finbert.predict("Your financial text here")
+```
+
+See [docs/finbert-model.md](../docs/finbert-model.md) for complete API reference.
