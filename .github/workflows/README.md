@@ -1,5 +1,70 @@
 # GitHub Actions Workflows
 
+## 📊 Automated Data Collection
+
+### `collect-data.yml`
+
+**Purpose:** Automatically collect financial sentiment data from Reddit and News APIs daily.
+
+**Schedule:** 
+- Runs daily at 6:00 AM UTC (7:00 AM UK time in winter)
+- Can be manually triggered from the Actions tab
+
+**What it does:**
+1. Collects up to 100 Reddit posts from financial subreddits
+2. Collects news articles from the past 24 hours
+3. Preprocesses all data with FinBERT-optimized configuration
+4. Commits processed data back to the repository
+
+**Requirements:**
+
+You need to set up the following secrets in your GitHub repository:
+
+**Settings → Secrets and variables → Actions → New repository secret**
+
+| Secret Name | Description | How to Get |
+|-------------|-------------|------------|
+| `REDDIT_CLIENT_ID` | Reddit API client ID | https://www.reddit.com/prefs/apps |
+| `REDDIT_CLIENT_SECRET` | Reddit API secret | Same as above |
+| `REDDIT_USER_AGENT` | Reddit API user agent | Use: `investor-sentiment-dashboard/1.0` |
+| `NEWS_API_KEY` | NewsAPI.org API key | https://newsapi.org/register |
+
+#### Setting Up Secrets
+
+1. Go to your repository on GitHub
+2. Click **Settings** → **Secrets and variables** → **Actions**
+3. Click **New repository secret**
+4. Add each secret with the exact name and value
+
+#### Manual Trigger
+
+To run the workflow manually:
+
+1. Go to **Actions** tab in your GitHub repository
+2. Select **Daily Financial Data Collection** workflow
+3. Click **Run workflow** button
+4. Select branch (usually `main` or `dev`)
+5. Click **Run workflow**
+
+#### Monitoring
+
+- View workflow runs in the **Actions** tab
+- Each run shows a summary of files collected
+- Workflow continues even if one source fails
+- Data is automatically committed to the `data/` directory
+
+#### Benefits
+
+✅ **Free** - 2,000 minutes/month on GitHub Free  
+✅ **Automated** - No PC needed  
+✅ **Reliable** - Runs in the cloud  
+✅ **Versioned** - All data changes tracked in Git  
+✅ **Transparent** - Full logs of each collection  
+
+---
+
+# GitHub Actions Workflows
+
 This directory contains automated workflows for CI/CD and code quality.
 
 ## Workflows

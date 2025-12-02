@@ -1,0 +1,88 @@
+name: Daily Financial Data Collection
+
+on:
+  # Run daily at 6 AM UTC (7 AM UK time in winter, 6 AM in summer)
+  schedule:
+    - cron: '0 6 * * *'
+  
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  collect-and-process-data:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+      
+      - name: Create data directories
+        run: |
+          mkdir -p data/raw/reddit data/raw/news data/raw/twitter
+          mkdir -p data/processed/reddit data/processed/news data/processed/twitter
+      
+      - name: Collect Reddit data
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+        run: |
+          cd backend
+          python app/pipelines/ingest_reddit.py --limit 100
+        continue-on-error: true
+      
+      - name: Collect News data
+        env:
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: |
+          cd backend
+          python app/pipelines/ingest_news.py --days 1
+        continue-on-error: true
+      
+      - name: Preprocess all data
+        run: |
+          cd backend
+          python app/pipelines/preprocess_data.py --source all --config finbert
+        continue-on-error: true
+      
+      - name: Commit and push data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/
+          
+          # Check if there are changes to commit
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore: automated data collection $(date +'%Y-%m-%d %H:%M UTC')"
+            git push
+          fi
+      
+      - name: Create collection summary
+        if: always()
+        run: |
+          echo "## Data Collection Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Count files
+          reddit_count=$(find data/processed/reddit -name "*.json" 2>/dev/null | wc -l || echo "0")
+          news_count=$(find data/processed/news -name "*.json" 2>/dev/null | wc -l || echo "0")
+          
+          echo "### Processed Data Files" >> $GITHUB_STEP_SUMMARY
+          echo "- Reddit: $reddit_count files" >> $GITHUB_STEP_SUMMARY
+          echo "- News: $news_count files" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✓ Collection workflow completed" >> $GITHUB_STEP_SUMMARY
