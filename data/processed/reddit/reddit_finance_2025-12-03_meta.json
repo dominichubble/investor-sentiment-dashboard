@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "run_id": "2025-12-03",
+      "timestamp": "2025-12-03T06:27:18.765992",
+      "subreddits": [
+        "wallstreetbets",
+        "stocks",
+        "investing",
+        "finance"
+      ],
+      "keywords": [
+        "stock",
+        "stocks",
+        "market",
+        "earnings",
+        "fed",
+        "inflation",
+        "rate hike",
+        "nvda",
+        "tsla",
+        "aapl"
+      ],
+      "time_filter": "week",
+      "limit_per_subreddit": 100,
+      "total_posts": 254,
+      "errors": []
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2025-12-03T06:27:20.133470",
+      "source_file": "reddit_finance_2025-12-03_meta.json",
+      "source_type": "reddit",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 0,
+        "avg_tokens_per_record": 0.0
+      }
+    }
+  }
+}
