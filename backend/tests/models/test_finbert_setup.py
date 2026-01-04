@@ -16,8 +16,10 @@ import logging
 import sys
 from pathlib import Path
 
-# Add backend to path
-sys.path.insert(0, str(Path(__file__).parent / "backend"))
+# Add backend to path (navigate to project root, then into backend)
+project_root = Path(__file__).resolve().parents[3]
+backend_dir = project_root / "backend"
+sys.path.insert(0, str(backend_dir))
 
 from app.models.finbert_model import FinBERTModel
 
