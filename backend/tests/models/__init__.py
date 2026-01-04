@@ -150,8 +150,8 @@ class TestModelIntegration:
         for text, expected_label in test_cases:
             result = model.predict(text)
             if expected_label:
-                assert result["label"] == expected_label, (
-                    f"Expected label '{expected_label}' for: {text}, got '{result['label']}'"
-                )
+                assert (
+                    result["label"] == expected_label
+                ), f"Expected label '{expected_label}' for: {text}, got '{result['label']}'"
             else:
                 assert result["label"] in ["positive", "negative", "neutral"]
