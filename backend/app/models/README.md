@@ -82,7 +82,7 @@ print(info)
 Run the test script to verify setup:
 
 ```bash
-python test_finbert_setup.py
+python backend/tests/models/test_finbert_setup.py
 ```
 
 Run unit tests:
