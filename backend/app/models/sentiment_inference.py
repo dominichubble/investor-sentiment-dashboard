@@ -57,7 +57,7 @@ def analyze_sentiment(
     """
     if not isinstance(text, str):
         raise ValueError("Text input must be a non-empty string")
-    
+
     if not text or not text.strip():
         raise ValueError("Text input cannot be blank")
 
@@ -91,7 +91,7 @@ def analyze_batch(
             - label: Sentiment label ('positive', 'negative', or 'neutral')
             - score: Confidence score for the predicted label (0-1)
             - scores: (optional) All label scores if return_all_scores=True
-        
+
         If skip_errors=True, failed analyses will be None in the list.
 
     Raises:
