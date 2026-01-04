@@ -139,9 +139,7 @@ def tokenize_for_inference(
             add_special_tokens=add_special_tokens,
         )
 
-        logger.debug(
-            f"Tokenization complete. Input shape: {inputs['input_ids'].shape}"
-        )
+        logger.debug(f"Tokenization complete. Input shape: {inputs['input_ids'].shape}")
 
         return inputs
 
@@ -258,9 +256,7 @@ def tokenize_batch(
                 add_special_tokens=add_special_tokens,
             )
 
-        logger.info(
-            f"Batch tokenization complete. Shape: {inputs['input_ids'].shape}"
-        )
+        logger.info(f"Batch tokenization complete. Shape: {inputs['input_ids'].shape}")
 
         return inputs
 
