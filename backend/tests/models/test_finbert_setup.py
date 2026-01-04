@@ -79,7 +79,7 @@ def test_model_loading():
             "Market remains stable",
         ]
 
-        results = model.predict(test_texts)
+        results = model.predict_batch(test_texts)
 
         for text, result in zip(test_texts, results):
             logger.info(f"  '{text}' -> {result['label']} ({result['score']:.4f})")
