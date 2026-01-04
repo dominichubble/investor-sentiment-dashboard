@@ -9,7 +9,7 @@ Usage:
 
     model = FinBERTModel()
     sentiment = model.predict("The stock market is performing well today")
-    # Returns: {'label': 'positive', 'score': 0.95, 'scores': {...}}
+    # Returns: {'label': 'positive', 'score': 0.95}
 """
 
 import logging
