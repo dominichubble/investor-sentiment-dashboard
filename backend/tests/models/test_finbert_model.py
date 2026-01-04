@@ -39,6 +39,31 @@ class TestFinBERTModel:
         assert result["label"] in ["positive", "negative", "neutral"]
         assert 0 <= result["score"] <= 1
 
+    def test_single_prediction_with_all_scores(self, model):
+        """Test prediction with all scores returned."""
+        text = "The company reported strong earnings"
+        result = model.predict(text, return_all_scores=True)
+
+        assert "label" in result
+        assert "score" in result
+        assert "scores" in result
+        assert len(result["scores"]) == 3
+        assert all(
+            label in result["scores"] for label in ["positive", "negative", "neutral"]
+        )
+
+    def test_batch_prediction(self, model):
+        """Test prediction on multiple texts."""
+        texts = [
+            "Stock prices are rising",
+            "The market crashed today",
+            "Trading volume was normal",
+        ]
+        results = model.predict(texts)
+
+        assert len(results) == 3
+        assert all("label" in r and "score" in r for r in results)
+
     def test_positive_sentiment(self, model):
         """Test that clearly positive text is classified as positive."""
         text = "The company exceeded earnings expectations and stock soared"
@@ -55,17 +80,21 @@ class TestFinBERTModel:
         assert result["label"] == "negative"
         assert result["score"] > 0.5
 
-    def test_batch_prediction(self, model):
-        """Test prediction on multiple texts."""
-        texts = [
-            "Stock prices are rising",
-            "The market crashed today",
-            "Trading volume was normal",
-        ]
-        results = model.predict(texts)
+    def test_neutral_sentiment(self, model):
+        """Test neutral text classification."""
+        text = "The company announced its quarterly report"
+        result = model.predict(text)
 
-        assert len(results) == 3
-        assert all("label" in r and "score" in r for r in results)
+        # Neutral predictions might vary, so just check it's valid
+        assert result["label"] in ["positive", "negative", "neutral"]
+
+    def test_batch_processing(self, model):
+        """Test efficient batch processing."""
+        texts = [f"This is test sentence number {i}" for i in range(10)]
+        results = model.predict_batch(texts, batch_size=5)
+
+        assert len(results) == 10
+        assert all("label" in r for r in results)
 
     def test_get_device_info(self, model):
         """Test device information retrieval."""
@@ -83,3 +112,46 @@ class TestFinBERTModel:
         model2 = get_model()
 
         assert model1 is model2
+
+    def test_empty_text_handling(self, model):
+        """Test handling of empty text."""
+        result = model.predict("")
+
+        # Should still return a valid result
+        assert "label" in result
+        assert "score" in result
+
+    def test_long_text_truncation(self, model):
+        """Test that long texts are truncated properly."""
+        # Create a very long text (over 512 tokens)
+        long_text = " ".join(["stock market trading"] * 200)
+        result = model.predict(long_text)
+
+        # Should handle without errors
+        assert "label" in result
+        assert "score" in result
+
+
+class TestModelIntegration:
+    """Integration tests for the model."""
+
+    def test_financial_domain_texts(self):
+        """Test on various financial domain texts."""
+        model = get_model()
+
+        test_cases = [
+            ("Q3 earnings beat expectations", "positive"),
+            ("Company faces regulatory scrutiny", "negative"),
+            ("Stock split announced", None),  # Could be any
+            ("Dividend increased by 10%", "positive"),
+            ("CEO resigned amid scandal", "negative"),
+        ]
+
+        for text, expected_label in test_cases:
+            result = model.predict(text)
+            if expected_label:
+                assert (
+                    result["label"] == expected_label
+                ), f"Expected label '{expected_label}' for: {text}, got '{result['label']}'"
+            else:
+                assert result["label"] in ["positive", "negative", "neutral"]
