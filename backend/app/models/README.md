@@ -116,3 +116,92 @@ Models are cached by default in:
 - Windows: `%USERPROFILE%\.cache\huggingface\transformers\`
 
 First load will download ~400MB. Subsequent loads are instant.
+
+---
+
+## Sentiment Inference API
+
+High-level functions for sentiment analysis with batch processing and metadata tracking.
+
+### Quick Start
+
+```python
+from app.models import analyze_sentiment, analyze_batch
+
+# Single text
+result = analyze_sentiment("Stock prices surged today")
+# {'label': 'positive', 'score': 0.95}
+
+# Batch processing
+texts = ["Market up", "Losses reported", "Flat trading"]
+results = analyze_batch(texts)
+```
+
+### Functions
+
+#### `analyze_sentiment(text, return_all_scores=False)`
+
+Analyze sentiment of a single text input.
+
+```python
+result = analyze_sentiment("Market outlook uncertain", return_all_scores=True)
+# {
+#     'label': 'neutral',
+#     'score': 0.78,
+#     'scores': {'positive': 0.11, 'negative': 0.11, 'neutral': 0.78}
+# }
+```
+
+#### `analyze_batch(texts, batch_size=32, return_all_scores=False)`
+
+Efficiently analyze multiple texts.
+
+```python
+texts = ["Good news", "Bad news", "Neutral news"]
+results = analyze_batch(texts, batch_size=16)
+```
+
+#### `analyze_with_metadata(text, metadata=None)`
+
+Analyze sentiment and attach metadata.
+
+```python
+result = analyze_with_metadata(
+    "Stock volatility increases",
+    metadata={'post_id': '123', 'source': 'reddit'}
+)
+```
+
+#### `get_sentiment_summary(results)`
+
+Generate summary statistics from results.
+
+```python
+summary = get_sentiment_summary(results)
+# {
+#     'total': 100,
+#     'counts': {'positive': 40, 'negative': 30, 'neutral': 30},
+#     'percentages': {'positive': 40.0, 'negative': 30.0, 'neutral': 30.0},
+#     'average_confidence': 0.87
+# }
+```
+
+### Usage Example: Process Reddit Data
+
+```python
+from app.models import analyze_batch, get_sentiment_summary
+
+# Load posts
+posts = [
+    "TSLA to the moon! 🚀",
+    "Market crash coming",
+    "Earnings meet expectations"
+]
+
+# Analyze
+results = analyze_batch(posts)
+
+# Get summary
+summary = get_sentiment_summary(results)
+print(f"Positive: {summary['percentages']['positive']:.1f}%")
+```
