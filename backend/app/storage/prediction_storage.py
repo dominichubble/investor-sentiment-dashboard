@@ -211,7 +211,9 @@ def save_prediction(
     # Save using batch function (handles both formats)
     save_predictions_batch([prediction], output_file, format=format)
 
-    logger.info(f"Saved prediction to {output_file}: {record.label} ({record.confidence:.3f})")
+    logger.info(
+        f"Saved prediction to {output_file}: {record.label} ({record.confidence:.3f})"
+    )
 
     return record
 
@@ -276,9 +278,7 @@ def save_predictions_batch(
     return len(predictions)
 
 
-def _save_csv(
-    predictions: List[Dict], output_path: Path, append: bool
-) -> None:
+def _save_csv(predictions: List[Dict], output_path: Path, append: bool) -> None:
     """Save predictions to CSV format."""
     file_exists = output_path.exists() and output_path.stat().st_size > 0
     mode = "a" if append and file_exists else "w"
@@ -293,9 +293,7 @@ def _save_csv(
         writer.writerows(predictions)
 
 
-def _save_json(
-    predictions: List[Dict], output_path: Path, append: bool
-) -> None:
+def _save_json(predictions: List[Dict], output_path: Path, append: bool) -> None:
     """Save predictions to JSON format."""
     if append and output_path.exists():
         # Load existing data
