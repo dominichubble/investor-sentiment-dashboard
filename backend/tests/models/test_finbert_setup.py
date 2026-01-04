@@ -23,8 +23,7 @@ from app.models.finbert_model import FinBERTModel
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -34,13 +33,13 @@ def test_model_loading():
     logger.info("=" * 60)
     logger.info("Testing FinBERT Model Setup")
     logger.info("=" * 60)
-    
+
     try:
         # Initialize model
         logger.info("\n[1/4] Initializing FinBERT model...")
         model = FinBERTModel()
         logger.info("✓ Model initialized successfully")
-        
+
         # Check device
         logger.info("\n[2/4] Checking device configuration...")
         device_info = model.get_device_info()
@@ -48,41 +47,43 @@ def test_model_loading():
         logger.info(f"  Device Name: {device_info['device_name']}")
         logger.info(f"  CUDA Available: {device_info['cuda_available']}")
         logger.info(f"  Model Loaded: {device_info['model_loaded']}")
-        
-        if device_info['cuda_available']:
+
+        if device_info["cuda_available"]:
             logger.info(f"  CUDA Version: {device_info.get('cuda_version', 'N/A')}")
-            logger.info(f"  GPU Memory: {device_info.get('gpu_memory_allocated', 'N/A')}")
-        
+            logger.info(
+                f"  GPU Memory: {device_info.get('gpu_memory_allocated', 'N/A')}"
+            )
+
         logger.info("✓ Device configuration verified")
-        
+
         # Test single prediction
         logger.info("\n[3/4] Testing single prediction...")
         test_text = "The stock market is performing well today"
         result = model.predict(test_text, return_all_scores=True)
-        
+
         logger.info(f"  Input: '{test_text}'")
         logger.info(f"  Prediction: {result['label']} ({result['score']:.4f})")
         logger.info(f"  All scores:")
-        for label, score in result['scores'].items():
+        for label, score in result["scores"].items():
             logger.info(f"    {label}: {score:.4f}")
-        
+
         logger.info("✓ Single prediction successful")
-        
+
         # Test batch prediction
         logger.info("\n[4/4] Testing batch prediction...")
         test_texts = [
             "Company reports record earnings",
             "Stock prices plummet on bad news",
-            "Market remains stable"
+            "Market remains stable",
         ]
-        
+
         results = model.predict(test_texts)
-        
+
         for text, result in zip(test_texts, results):
             logger.info(f"  '{text}' -> {result['label']} ({result['score']:.4f})")
-        
+
         logger.info("✓ Batch prediction successful")
-        
+
         # Summary
         logger.info("\n" + "=" * 60)
         logger.info("✓ ALL TESTS PASSED")
@@ -91,9 +92,9 @@ def test_model_loading():
         logger.info(f"Model: {FinBERTModel.MODEL_NAME}")
         logger.info(f"Device: {device_info['device']}")
         logger.info(f"Labels: {', '.join(FinBERTModel.LABELS)}")
-        
+
         return True
-        
+
     except Exception as e:
         logger.error("\n" + "=" * 60)
         logger.error("✗ TEST FAILED")

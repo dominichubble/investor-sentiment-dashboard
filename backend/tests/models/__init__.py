@@ -33,7 +33,7 @@ class TestFinBERTModel:
         """Test prediction on a single text."""
         text = "The stock market is performing well today"
         result = model.predict(text)
-        
+
         assert "label" in result
         assert "score" in result
         assert result["label"] in ["positive", "negative", "neutral"]
@@ -43,22 +43,24 @@ class TestFinBERTModel:
         """Test prediction with all scores returned."""
         text = "The company reported strong earnings"
         result = model.predict(text, return_all_scores=True)
-        
+
         assert "label" in result
         assert "score" in result
         assert "scores" in result
         assert len(result["scores"]) == 3
-        assert all(label in result["scores"] for label in ["positive", "negative", "neutral"])
+        assert all(
+            label in result["scores"] for label in ["positive", "negative", "neutral"]
+        )
 
     def test_batch_prediction(self, model):
         """Test prediction on multiple texts."""
         texts = [
             "Stock prices are rising",
             "The market crashed today",
-            "Trading volume was normal"
+            "Trading volume was normal",
         ]
         results = model.predict(texts)
-        
+
         assert len(results) == 3
         assert all("label" in r and "score" in r for r in results)
 
@@ -66,7 +68,7 @@ class TestFinBERTModel:
         """Test that clearly positive text is classified as positive."""
         text = "The company exceeded earnings expectations and stock soared"
         result = model.predict(text)
-        
+
         assert result["label"] == "positive"
         assert result["score"] > 0.5
 
@@ -74,7 +76,7 @@ class TestFinBERTModel:
         """Test that clearly negative text is classified as negative."""
         text = "The company filed for bankruptcy and lost all value"
         result = model.predict(text)
-        
+
         assert result["label"] == "negative"
         assert result["score"] > 0.5
 
@@ -82,7 +84,7 @@ class TestFinBERTModel:
         """Test neutral text classification."""
         text = "The company announced its quarterly report"
         result = model.predict(text)
-        
+
         # Neutral predictions might vary, so just check it's valid
         assert result["label"] in ["positive", "negative", "neutral"]
 
@@ -90,14 +92,14 @@ class TestFinBERTModel:
         """Test efficient batch processing."""
         texts = [f"This is test sentence number {i}" for i in range(10)]
         results = model.predict_batch(texts, batch_size=5)
-        
+
         assert len(results) == 10
         assert all("label" in r for r in results)
 
     def test_get_device_info(self, model):
         """Test device information retrieval."""
         info = model.get_device_info()
-        
+
         assert "device" in info
         assert "device_name" in info
         assert "cuda_available" in info
@@ -108,13 +110,13 @@ class TestFinBERTModel:
         """Test that get_model() returns the same instance."""
         model1 = get_model()
         model2 = get_model()
-        
+
         assert model1 is model2
 
     def test_empty_text_handling(self, model):
         """Test handling of empty text."""
         result = model.predict("")
-        
+
         # Should still return a valid result
         assert "label" in result
         assert "score" in result
@@ -124,7 +126,7 @@ class TestFinBERTModel:
         # Create a very long text (over 512 tokens)
         long_text = " ".join(["stock market trading"] * 200)
         result = model.predict(long_text)
-        
+
         # Should handle without errors
         assert "label" in result
         assert "score" in result
@@ -136,7 +138,7 @@ class TestModelIntegration:
     def test_financial_domain_texts(self):
         """Test on various financial domain texts."""
         model = get_model()
-        
+
         test_cases = [
             ("Q3 earnings beat expectations", "positive"),
             ("Company faces regulatory scrutiny", "negative"),
@@ -144,7 +146,7 @@ class TestModelIntegration:
             ("Dividend increased by 10%", "positive"),
             ("CEO resigned amid scandal", "negative"),
         ]
-        
+
         for text, expected_label in test_cases:
             result = model.predict(text)
             if expected_label:
