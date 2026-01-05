@@ -267,7 +267,7 @@ def save_predictions_batch(
             raise ValueError(f"Prediction {i} validation failed: {e}")
 
     output_path = Path(output_file)
-    
+
     try:
         output_path.parent.mkdir(parents=True, exist_ok=True)
     except Exception as e:
@@ -288,7 +288,9 @@ def save_predictions_batch(
         logger.error(f"Failed to save predictions to {output_file}: {e}")
         raise IOError(f"Failed to save predictions: {e}") from e
     except Exception as e:
-        log_exception(logger, e, f"Unexpected error saving predictions to {output_file}")
+        log_exception(
+            logger, e, f"Unexpected error saving predictions to {output_file}"
+        )
         raise
 
     logger.info(
@@ -313,9 +315,9 @@ def _save_csv(predictions: List[Dict], output_path: Path, append: bool) -> None:
                 writer.writeheader()
 
             writer.writerows(predictions)
-        
+
         logger.debug(f"CSV save successful: {output_path}")
-    
+
     except IOError as e:
         logger.error(f"IO error writing CSV to {output_path}: {e}")
         raise IOError(f"Failed to write CSV file: {e}") from e
@@ -333,7 +335,9 @@ def _save_json(predictions: List[Dict], output_path: Path, append: bool) -> None
                 with open(output_path, "r", encoding="utf-8") as f:
                     existing_data = json.load(f)
                     if not isinstance(existing_data, list):
-                        logger.warning(f"Existing JSON is not a list, will overwrite: {output_path}")
+                        logger.warning(
+                            f"Existing JSON is not a list, will overwrite: {output_path}"
+                        )
                         existing_data = []
             except (json.JSONDecodeError, FileNotFoundError) as e:
                 logger.warning(f"Could not load existing JSON, starting fresh: {e}")
@@ -347,9 +351,9 @@ def _save_json(predictions: List[Dict], output_path: Path, append: bool) -> None
         # Save all data
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(all_predictions, f, indent=2, ensure_ascii=False)
-        
+
         logger.debug(f"JSON save successful: {output_path}")
-    
+
     except IOError as e:
         logger.error(f"IO error writing JSON to {output_path}: {e}")
         raise IOError(f"Failed to write JSON file: {e}") from e
@@ -397,7 +401,9 @@ def load_predictions(
     if format is None:
         format = input_path.suffix.lstrip(".").lower()
         if format not in ["csv", "json"]:
-            logger.error(f"Cannot auto-detect format from extension: {input_path.suffix}")
+            logger.error(
+                f"Cannot auto-detect format from extension: {input_path.suffix}"
+            )
             raise ValueError(
                 f"Cannot auto-detect format from extension: {input_path.suffix}. "
                 "Specify format parameter."
@@ -418,7 +424,9 @@ def load_predictions(
         logger.error(f"Failed to load predictions from {input_file}: {e}")
         raise IOError(f"Failed to load predictions: {e}") from e
     except Exception as e:
-        log_exception(logger, e, f"Unexpected error loading predictions from {input_file}")
+        log_exception(
+            logger, e, f"Unexpected error loading predictions from {input_file}"
+        )
         raise
 
     # Validate all predictions if requested
@@ -452,9 +460,7 @@ def _load_csv(input_path: Path) -> List[Dict]:
                     row["confidence"] = float(row["confidence"])
                     predictions.append(row)
                 except (ValueError, KeyError) as e:
-                    logger.warning(
-                        f"Skipping row {row_num} in {input_path}: {e}"
-                    )
+                    logger.warning(f"Skipping row {row_num} in {input_path}: {e}")
                     continue
     except IOError as e:
         logger.error(f"IO error reading CSV from {input_path}: {e}")
@@ -475,7 +481,7 @@ def _load_json(input_path: Path) -> List[Dict]:
         if not isinstance(predictions, list):
             logger.error(f"JSON file does not contain a list: {input_path}")
             raise ValueError("JSON file must contain a list of predictions")
-    
+
     except IOError as e:
         logger.error(f"IO error reading JSON from {input_path}: {e}")
         raise IOError(f"Failed to read JSON file: {e}") from e

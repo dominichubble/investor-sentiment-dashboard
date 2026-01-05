@@ -41,6 +41,7 @@ MAX_REASONABLE_LENGTH = 50000
 
 class TokenizationError(Exception):
     """Exception raised when tokenization fails."""
+
     pass
 
 
@@ -140,7 +141,7 @@ def tokenize_for_inference(
     if not text or text.isspace():
         logger.error("Empty or whitespace-only text provided")
         raise ValueError("Text input cannot be empty or whitespace-only")
-    
+
     # Check for extremely long texts
     text_length = len(text)
     if text_length > MAX_REASONABLE_LENGTH:
@@ -152,7 +153,7 @@ def tokenize_for_inference(
             f"Text is too long ({text_length} chars). "
             f"Please truncate to under {MAX_REASONABLE_LENGTH} characters."
         )
-    
+
     # Warn about long texts that might be truncated
     if text_length > 2000:
         logger.warning(
@@ -176,9 +177,9 @@ def tokenize_for_inference(
         )
 
         logger.debug(f"Tokenization complete. Input shape: {inputs['input_ids'].shape}")
-        
+
         # Check if text was truncated
-        num_tokens = inputs['input_ids'].shape[-1]
+        num_tokens = inputs["input_ids"].shape[-1]
         if num_tokens >= max_length:
             logger.warning(
                 f"Text was truncated to {max_length} tokens. "
@@ -262,14 +263,16 @@ def tokenize_batch(
             invalid_items.append((i, "empty", "empty string"))
         elif len(t) > MAX_REASONABLE_LENGTH:
             invalid_items.append((i, "too_long", f"{len(t)} chars"))
-    
+
     if invalid_items:
         logger.error(f"Found {len(invalid_items)} invalid texts")
-        error_details = [f"Index {i}: {reason} ({detail})" for i, reason, detail in invalid_items[:5]]
+        error_details = [
+            f"Index {i}: {reason} ({detail})" for i, reason, detail in invalid_items[:5]
+        ]
         raise ValueError(
             f"Found {len(invalid_items)} invalid texts. First few: {'; '.join(error_details)}"
         )
-    
+
     # Warn about long texts
     long_texts = [(i, len(t)) for i, t in enumerate(texts) if len(t) > 2000]
     if long_texts:
@@ -293,7 +296,7 @@ def tokenize_batch(
 
             for i in range(0, len(texts), batch_size):
                 batch_texts = texts[i : i + batch_size]
-                
+
                 try:
                     batch_inputs = tokenizer(
                         batch_texts,
@@ -308,7 +311,7 @@ def tokenize_batch(
                     all_attention_masks.append(batch_inputs["attention_mask"])
                     if "token_type_ids" in batch_inputs:
                         all_token_type_ids.append(batch_inputs["token_type_ids"])
-                
+
                 except Exception as batch_error:
                     logger.error(
                         f"Failed to tokenize mini-batch starting at index {i}: {batch_error}"

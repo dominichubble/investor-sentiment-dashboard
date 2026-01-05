@@ -19,24 +19,27 @@ Usage:
 import logging
 from typing import Dict, List, Optional, Union
 
-from .finbert_model import get_model
 from ..logging_config import FailedItemsTracker, log_exception
+from .finbert_model import get_model
 
 logger = logging.getLogger(__name__)
 
 
 class SentimentAnalysisError(Exception):
     """Base exception for sentiment analysis errors."""
+
     pass
 
 
 class TokenizationError(SentimentAnalysisError):
     """Exception raised when text tokenization fails."""
+
     pass
 
 
 class ModelInferenceError(SentimentAnalysisError):
     """Exception raised when model inference fails."""
+
     pass
 
 
@@ -85,7 +88,7 @@ def analyze_sentiment(
                 f"Text is very long ({text_length} chars), may cause issues. "
                 "Consider truncating before analysis."
             )
-        
+
         model = get_model()
         result = model.predict(text, return_all_scores=return_all_scores)
         logger.debug(f"Analyzed text: '{text[:50]}...' -> {result['label']}")
@@ -110,7 +113,10 @@ def analyze_batch(
     return_all_scores: bool = False,
     skip_errors: bool = True,
     track_failures: bool = True,
-) -> tuple[List[Optional[Dict[str, Union[str, float, Dict[str, float]]]]], Optional[FailedItemsTracker]]:
+) -> tuple[
+    List[Optional[Dict[str, Union[str, float, Dict[str, float]]]]],
+    Optional[FailedItemsTracker],
+]:
     """
     Analyze sentiment for multiple text inputs efficiently.
 
@@ -152,18 +158,18 @@ def analyze_batch(
 
     # Initialize failure tracker
     failures = FailedItemsTracker() if track_failures else None
-    
+
     # Filter out empty texts and track them
     valid_indices = []
     valid_texts = []
-    
+
     for i, t in enumerate(texts):
         if not t or not t.strip():
             if failures:
                 failures.add_failure(
                     item=f"Index {i}: {str(t)[:100]}",
                     error_type="EmptyText",
-                    error_message="Text is empty or whitespace only"
+                    error_message="Text is empty or whitespace only",
                 )
             logger.warning(f"Skipping empty text at index {i}")
         else:
@@ -178,40 +184,41 @@ def analyze_batch(
             raise ValueError("No valid (non-empty) texts provided")
 
     logger.info(f"Processing {len(valid_texts)}/{len(texts)} valid texts")
-    
+
     try:
         model = get_model()
-        
+
         # Process in batches with individual error handling
         all_results = []
-        
+
         for batch_start in range(0, len(valid_texts), batch_size):
             batch_end = min(batch_start + batch_size, len(valid_texts))
             batch_texts = valid_texts[batch_start:batch_end]
             batch_indices = valid_indices[batch_start:batch_end]
-            
-            logger.debug(f"Processing batch {batch_start//batch_size + 1}: "
-                        f"items {batch_start} to {batch_end-1}")
-            
+
+            logger.debug(
+                f"Processing batch {batch_start//batch_size + 1}: "
+                f"items {batch_start} to {batch_end-1}"
+            )
+
             try:
                 batch_results = model.predict_batch(
-                    batch_texts, 
-                    batch_size=len(batch_texts), 
-                    return_all_scores=return_all_scores
+                    batch_texts,
+                    batch_size=len(batch_texts),
+                    return_all_scores=return_all_scores,
                 )
                 all_results.extend(batch_results)
-                
+
             except Exception as batch_error:
                 # Batch failed, try individual items if skip_errors is True
                 logger.error(f"Batch processing failed: {batch_error}")
-                
+
                 if skip_errors:
                     logger.info("Attempting individual analysis for failed batch")
                     for idx, text in enumerate(batch_texts):
                         try:
                             result = analyze_sentiment(
-                                text, 
-                                return_all_scores=return_all_scores
+                                text, return_all_scores=return_all_scores
                             )
                             all_results.append(result)
                         except Exception as item_error:
@@ -223,15 +230,17 @@ def analyze_batch(
                                     error_message=str(item_error),
                                     additional_info={
                                         "text_length": len(text),
-                                        "batch_index": batch_start + idx
-                                    }
+                                        "batch_index": batch_start + idx,
+                                    },
                                 )
                             logger.error(
                                 f"Failed to analyze text at index {batch_indices[idx]}: "
                                 f"{item_error}"
                             )
                 else:
-                    raise RuntimeError(f"Batch analysis failed: {batch_error}") from batch_error
+                    raise RuntimeError(
+                        f"Batch analysis failed: {batch_error}"
+                    ) from batch_error
 
         # Map results back to original indices
         full_results = [None] * len(texts)
@@ -243,7 +252,7 @@ def analyze_batch(
             f"Batch analysis complete: {success_count}/{len(texts)} successful, "
             f"{failures.count() if failures else 0} failed"
         )
-        
+
         return full_results, failures
 
     except Exception as e:
@@ -257,7 +266,7 @@ def analyze_batch(
                             item=f"Index {i}: {text[:200]}",
                             error_type=type(e).__name__,
                             error_message=f"Critical batch error: {str(e)}",
-                            additional_info={"text_length": len(text)}
+                            additional_info={"text_length": len(text)},
                         )
             return [None] * len(texts), failures
         else:
