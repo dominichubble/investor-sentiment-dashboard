@@ -27,6 +27,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
+from ..logging_config import log_exception
+
 logger = logging.getLogger(__name__)
 
 # Required fields for prediction records
@@ -68,17 +70,21 @@ class PredictionRecord:
         """
         # Validate inputs
         if not text or not isinstance(text, str):
+            logger.error(f"Invalid text field: {type(text).__name__}")
             raise ValueError("text must be a non-empty string")
 
         if not source or not isinstance(source, str):
+            logger.error(f"Invalid source field: {type(source).__name__}")
             raise ValueError("source must be a non-empty string")
 
         if label not in ["positive", "negative", "neutral"]:
+            logger.error(f"Invalid label: {label}")
             raise ValueError(
                 f"label must be 'positive', 'negative', or 'neutral', got: {label}"
             )
 
         if not isinstance(confidence, (int, float)) or not 0 <= confidence <= 1:
+            logger.error(f"Invalid confidence score: {confidence}")
             raise ValueError(f"confidence must be between 0 and 1, got: {confidence}")
 
         self.text = text
@@ -256,19 +262,34 @@ def save_predictions_batch(
         try:
             validate_prediction(pred)
         except ValueError as e:
+            logger.error(f"Prediction {i} validation failed: {e}")
+            logger.debug(f"Failed prediction data: {pred}")
             raise ValueError(f"Prediction {i} validation failed: {e}")
 
     output_path = Path(output_file)
-    output_path.parent.mkdir(parents=True, exist_ok=True)
+    
+    try:
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+    except Exception as e:
+        logger.error(f"Failed to create output directory {output_path.parent}: {e}")
+        raise IOError(f"Cannot create output directory: {e}") from e
 
     format = format.lower()
 
-    if format == "csv":
-        _save_csv(predictions, output_path, append)
-    elif format == "json":
-        _save_json(predictions, output_path, append)
-    else:
-        raise ValueError(f"Unsupported format: {format}. Use 'csv' or 'json'")
+    try:
+        if format == "csv":
+            _save_csv(predictions, output_path, append)
+        elif format == "json":
+            _save_json(predictions, output_path, append)
+        else:
+            logger.error(f"Unsupported format requested: {format}")
+            raise ValueError(f"Unsupported format: {format}. Use 'csv' or 'json'")
+    except IOError as e:
+        logger.error(f"Failed to save predictions to {output_file}: {e}")
+        raise IOError(f"Failed to save predictions: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error saving predictions to {output_file}")
+        raise
 
     logger.info(
         f"Saved {len(predictions)} predictions to {output_file} "
@@ -280,39 +301,64 @@ def save_predictions_batch(
 
 def _save_csv(predictions: List[Dict], output_path: Path, append: bool) -> None:
     """Save predictions to CSV format."""
-    file_exists = output_path.exists() and output_path.stat().st_size > 0
-    mode = "a" if append and file_exists else "w"
+    try:
+        file_exists = output_path.exists() and output_path.stat().st_size > 0
+        mode = "a" if append and file_exists else "w"
 
-    with open(output_path, mode, newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=REQUIRED_FIELDS)
+        with open(output_path, mode, newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=REQUIRED_FIELDS)
 
-        # Write header only if new file or overwrite mode
-        if mode == "w":
-            writer.writeheader()
+            # Write header only if new file or overwrite mode
+            if mode == "w":
+                writer.writeheader()
 
-        writer.writerows(predictions)
+            writer.writerows(predictions)
+        
+        logger.debug(f"CSV save successful: {output_path}")
+    
+    except IOError as e:
+        logger.error(f"IO error writing CSV to {output_path}: {e}")
+        raise IOError(f"Failed to write CSV file: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error writing CSV to {output_path}")
+        raise
 
 
 def _save_json(predictions: List[Dict], output_path: Path, append: bool) -> None:
     """Save predictions to JSON format."""
-    if append and output_path.exists():
-        # Load existing data
-        try:
-            with open(output_path, "r", encoding="utf-8") as f:
-                existing_data = json.load(f)
-                if not isinstance(existing_data, list):
-                    existing_data = []
-        except (json.JSONDecodeError, FileNotFoundError):
-            existing_data = []
+    try:
+        if append and output_path.exists():
+            # Load existing data
+            try:
+                with open(output_path, "r", encoding="utf-8") as f:
+                    existing_data = json.load(f)
+                    if not isinstance(existing_data, list):
+                        logger.warning(f"Existing JSON is not a list, will overwrite: {output_path}")
+                        existing_data = []
+            except (json.JSONDecodeError, FileNotFoundError) as e:
+                logger.warning(f"Could not load existing JSON, starting fresh: {e}")
+                existing_data = []
 
-        # Append new predictions
-        all_predictions = existing_data + predictions
-    else:
-        all_predictions = predictions
+            # Append new predictions
+            all_predictions = existing_data + predictions
+        else:
+            all_predictions = predictions
 
-    # Save all data
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(all_predictions, f, indent=2, ensure_ascii=False)
+        # Save all data
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(all_predictions, f, indent=2, ensure_ascii=False)
+        
+        logger.debug(f"JSON save successful: {output_path}")
+    
+    except IOError as e:
+        logger.error(f"IO error writing JSON to {output_path}: {e}")
+        raise IOError(f"Failed to write JSON file: {e}") from e
+    except json.JSONEncodeError as e:
+        logger.error(f"JSON encoding error for {output_path}: {e}")
+        raise ValueError(f"Failed to encode predictions to JSON: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error writing JSON to {output_path}")
+        raise
 
 
 def load_predictions(
@@ -344,34 +390,48 @@ def load_predictions(
     input_path = Path(input_file)
 
     if not input_path.exists():
+        logger.error(f"Predictions file not found: {input_file}")
         raise FileNotFoundError(f"File not found: {input_file}")
 
     # Auto-detect format from extension if not specified
     if format is None:
         format = input_path.suffix.lstrip(".").lower()
         if format not in ["csv", "json"]:
+            logger.error(f"Cannot auto-detect format from extension: {input_path.suffix}")
             raise ValueError(
                 f"Cannot auto-detect format from extension: {input_path.suffix}. "
                 "Specify format parameter."
             )
+        logger.debug(f"Auto-detected format: {format}")
 
     format = format.lower()
 
-    if format == "csv":
-        predictions = _load_csv(input_path)
-    elif format == "json":
-        predictions = _load_json(input_path)
-    else:
-        raise ValueError(f"Unsupported format: {format}. Use 'csv' or 'json'")
+    try:
+        if format == "csv":
+            predictions = _load_csv(input_path)
+        elif format == "json":
+            predictions = _load_json(input_path)
+        else:
+            logger.error(f"Unsupported format: {format}")
+            raise ValueError(f"Unsupported format: {format}. Use 'csv' or 'json'")
+    except IOError as e:
+        logger.error(f"Failed to load predictions from {input_file}: {e}")
+        raise IOError(f"Failed to load predictions: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error loading predictions from {input_file}")
+        raise
 
     # Validate all predictions if requested
     if validate:
+        invalid_count = 0
         for i, pred in enumerate(predictions):
             try:
                 validate_prediction(pred)
             except ValueError as e:
+                invalid_count += 1
                 logger.warning(f"Prediction {i} failed validation: {e}")
-                raise
+                if invalid_count == 1:  # Only raise on first error
+                    raise
 
     logger.info(f"Loaded {len(predictions)} predictions from {input_file}")
 
@@ -382,24 +442,49 @@ def _load_csv(input_path: Path) -> List[Dict]:
     """Load predictions from CSV format."""
     predictions = []
 
-    with open(input_path, "r", encoding="utf-8") as f:
-        reader = csv.DictReader(f)
+    try:
+        with open(input_path, "r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
 
-        for row in reader:
-            # Convert confidence to float
-            row["confidence"] = float(row["confidence"])
-            predictions.append(row)
+            for row_num, row in enumerate(reader, start=1):
+                try:
+                    # Convert confidence to float
+                    row["confidence"] = float(row["confidence"])
+                    predictions.append(row)
+                except (ValueError, KeyError) as e:
+                    logger.warning(
+                        f"Skipping row {row_num} in {input_path}: {e}"
+                    )
+                    continue
+    except IOError as e:
+        logger.error(f"IO error reading CSV from {input_path}: {e}")
+        raise IOError(f"Failed to read CSV file: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error reading CSV from {input_path}")
+        raise
 
     return predictions
 
 
 def _load_json(input_path: Path) -> List[Dict]:
     """Load predictions from JSON format."""
-    with open(input_path, "r", encoding="utf-8") as f:
-        predictions = json.load(f)
+    try:
+        with open(input_path, "r", encoding="utf-8") as f:
+            predictions = json.load(f)
 
-    if not isinstance(predictions, list):
-        raise ValueError("JSON file must contain a list of predictions")
+        if not isinstance(predictions, list):
+            logger.error(f"JSON file does not contain a list: {input_path}")
+            raise ValueError("JSON file must contain a list of predictions")
+    
+    except IOError as e:
+        logger.error(f"IO error reading JSON from {input_path}: {e}")
+        raise IOError(f"Failed to read JSON file: {e}") from e
+    except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error for {input_path}: {e}")
+        raise ValueError(f"Invalid JSON format: {e}") from e
+    except Exception as e:
+        log_exception(logger, e, f"Unexpected error reading JSON from {input_path}")
+        raise
 
     return predictions
 

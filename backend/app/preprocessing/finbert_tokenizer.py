@@ -25,6 +25,8 @@ from typing import Dict, List, Optional, Union
 import torch
 from transformers import AutoTokenizer
 
+from ..logging_config import log_exception
+
 logger = logging.getLogger(__name__)
 
 # FinBERT model identifier
@@ -32,6 +34,14 @@ FINBERT_MODEL = "ProsusAI/finbert"
 
 # Global tokenizer cache
 _tokenizer_cache: Optional[AutoTokenizer] = None
+
+# Maximum reasonable text length (characters)
+MAX_REASONABLE_LENGTH = 50000
+
+
+class TokenizationError(Exception):
+    """Exception raised when tokenization fails."""
+    pass
 
 
 def get_tokenizer(cache_dir: Optional[str] = None) -> AutoTokenizer:
@@ -70,9 +80,14 @@ def get_tokenizer(cache_dir: Optional[str] = None) -> AutoTokenizer:
         logger.info("✓ FinBERT tokenizer loaded successfully")
         return tokenizer
 
+    except OSError as e:
+        logger.error(f"Failed to load tokenizer - network or file error: {e}")
+        raise RuntimeError(
+            f"Failed to load FinBERT tokenizer. Check network connection or cache directory. Error: {e}"
+        ) from e
     except Exception as e:
-        logger.error(f"Failed to load FinBERT tokenizer: {e}")
-        raise RuntimeError(f"Failed to load FinBERT tokenizer: {e}")
+        log_exception(logger, e, "Unexpected error loading FinBERT tokenizer")
+        raise RuntimeError(f"Failed to load FinBERT tokenizer: {e}") from e
 
 
 def tokenize_for_inference(
@@ -119,10 +134,31 @@ def tokenize_for_inference(
     """
     # Validate input
     if not isinstance(text, str):
+        logger.error(f"Invalid text type: {type(text).__name__}")
         raise ValueError(f"Text must be a string, got {type(text)}")
 
     if not text or text.isspace():
+        logger.error("Empty or whitespace-only text provided")
         raise ValueError("Text input cannot be empty or whitespace-only")
+    
+    # Check for extremely long texts
+    text_length = len(text)
+    if text_length > MAX_REASONABLE_LENGTH:
+        logger.error(
+            f"Text is extremely long ({text_length} chars). "
+            f"Maximum reasonable length is {MAX_REASONABLE_LENGTH}."
+        )
+        raise ValueError(
+            f"Text is too long ({text_length} chars). "
+            f"Please truncate to under {MAX_REASONABLE_LENGTH} characters."
+        )
+    
+    # Warn about long texts that might be truncated
+    if text_length > 2000:
+        logger.warning(
+            f"Text is long ({text_length} chars) and will likely be truncated "
+            f"to {max_length} tokens. Consider pre-processing."
+        )
 
     try:
         tokenizer = get_tokenizer(cache_dir=cache_dir)
@@ -140,12 +176,26 @@ def tokenize_for_inference(
         )
 
         logger.debug(f"Tokenization complete. Input shape: {inputs['input_ids'].shape}")
+        
+        # Check if text was truncated
+        num_tokens = inputs['input_ids'].shape[-1]
+        if num_tokens >= max_length:
+            logger.warning(
+                f"Text was truncated to {max_length} tokens. "
+                f"Original length: {text_length} chars"
+            )
 
         return inputs
 
+    except ValueError as e:
+        logger.error(f"Tokenization validation failed: {e}")
+        raise TokenizationError(f"Tokenization validation failed: {e}") from e
+    except RuntimeError as e:
+        logger.error(f"Tokenizer runtime error: {e}")
+        raise TokenizationError(f"Tokenizer runtime error: {e}") from e
     except Exception as e:
-        logger.error(f"Tokenization failed for text: {text[:100]}... Error: {e}")
-        raise RuntimeError(f"Tokenization failed: {e}")
+        log_exception(logger, e, f"Tokenization failed for text: {text[:100]}...")
+        raise TokenizationError(f"Tokenization failed: {e}") from e
 
 
 def tokenize_batch(
@@ -196,16 +246,36 @@ def tokenize_batch(
     """
     # Validate inputs
     if not texts:
+        logger.error("Empty texts list provided")
         raise ValueError("texts list cannot be empty")
 
     if not isinstance(texts, list):
+        logger.error(f"Invalid texts type: {type(texts).__name__}")
         raise ValueError(f"texts must be a list, got {type(texts)}")
 
-    # Check for empty strings
-    empty_indices = [i for i, t in enumerate(texts) if not t or not isinstance(t, str)]
-    if empty_indices:
+    # Check for empty strings and invalid types
+    invalid_items = []
+    for i, t in enumerate(texts):
+        if not isinstance(t, str):
+            invalid_items.append((i, "non-string", type(t).__name__))
+        elif not t or not t.strip():
+            invalid_items.append((i, "empty", "empty string"))
+        elif len(t) > MAX_REASONABLE_LENGTH:
+            invalid_items.append((i, "too_long", f"{len(t)} chars"))
+    
+    if invalid_items:
+        logger.error(f"Found {len(invalid_items)} invalid texts")
+        error_details = [f"Index {i}: {reason} ({detail})" for i, reason, detail in invalid_items[:5]]
         raise ValueError(
-            f"Found empty or non-string texts at indices: {empty_indices[:5]}"
+            f"Found {len(invalid_items)} invalid texts. First few: {'; '.join(error_details)}"
+        )
+    
+    # Warn about long texts
+    long_texts = [(i, len(t)) for i, t in enumerate(texts) if len(t) > 2000]
+    if long_texts:
+        logger.warning(
+            f"Found {len(long_texts)} texts longer than 2000 chars. "
+            f"These will likely be truncated to {max_length} tokens."
         )
 
     try:
@@ -223,27 +293,43 @@ def tokenize_batch(
 
             for i in range(0, len(texts), batch_size):
                 batch_texts = texts[i : i + batch_size]
-                batch_inputs = tokenizer(
-                    batch_texts,
-                    max_length=max_length,
-                    padding=padding,
-                    truncation=truncation,
-                    return_tensors=return_tensors,
-                    add_special_tokens=add_special_tokens,
-                )
+                
+                try:
+                    batch_inputs = tokenizer(
+                        batch_texts,
+                        max_length=max_length,
+                        padding=padding,
+                        truncation=truncation,
+                        return_tensors=return_tensors,
+                        add_special_tokens=add_special_tokens,
+                    )
 
-                all_input_ids.append(batch_inputs["input_ids"])
-                all_attention_masks.append(batch_inputs["attention_mask"])
-                if "token_type_ids" in batch_inputs:
-                    all_token_type_ids.append(batch_inputs["token_type_ids"])
+                    all_input_ids.append(batch_inputs["input_ids"])
+                    all_attention_masks.append(batch_inputs["attention_mask"])
+                    if "token_type_ids" in batch_inputs:
+                        all_token_type_ids.append(batch_inputs["token_type_ids"])
+                
+                except Exception as batch_error:
+                    logger.error(
+                        f"Failed to tokenize mini-batch starting at index {i}: {batch_error}"
+                    )
+                    raise TokenizationError(
+                        f"Mini-batch tokenization failed at index {i}: {batch_error}"
+                    ) from batch_error
 
             # Concatenate all batches
-            inputs = {
-                "input_ids": torch.cat(all_input_ids, dim=0),
-                "attention_mask": torch.cat(all_attention_masks, dim=0),
-            }
-            if all_token_type_ids:
-                inputs["token_type_ids"] = torch.cat(all_token_type_ids, dim=0)
+            try:
+                inputs = {
+                    "input_ids": torch.cat(all_input_ids, dim=0),
+                    "attention_mask": torch.cat(all_attention_masks, dim=0),
+                }
+                if all_token_type_ids:
+                    inputs["token_type_ids"] = torch.cat(all_token_type_ids, dim=0)
+            except Exception as concat_error:
+                logger.error(f"Failed to concatenate tokenized batches: {concat_error}")
+                raise TokenizationError(
+                    f"Failed to concatenate tokenized batches: {concat_error}"
+                ) from concat_error
 
         else:
             # Process all texts at once
@@ -260,9 +346,18 @@ def tokenize_batch(
 
         return inputs
 
+    except TokenizationError:
+        # Re-raise our custom exceptions
+        raise
+    except ValueError as e:
+        logger.error(f"Validation error during batch tokenization: {e}")
+        raise TokenizationError(f"Batch tokenization validation failed: {e}") from e
+    except RuntimeError as e:
+        logger.error(f"Runtime error during batch tokenization: {e}")
+        raise TokenizationError(f"Batch tokenization runtime error: {e}") from e
     except Exception as e:
-        logger.error(f"Batch tokenization failed: {e}")
-        raise RuntimeError(f"Batch tokenization failed: {e}")
+        log_exception(logger, e, "Unexpected error during batch tokenization")
+        raise TokenizationError(f"Batch tokenization failed: {e}") from e
 
 
 def get_tokenizer_info(cache_dir: Optional[str] = None) -> Dict[str, Union[str, int]]:

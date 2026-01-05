@@ -17,11 +17,27 @@ Usage:
 """
 
 import logging
-from typing import Dict, List, Union
+from typing import Dict, List, Optional, Union
 
 from .finbert_model import get_model
+from ..logging_config import FailedItemsTracker, log_exception
 
 logger = logging.getLogger(__name__)
+
+
+class SentimentAnalysisError(Exception):
+    """Base exception for sentiment analysis errors."""
+    pass
+
+
+class TokenizationError(SentimentAnalysisError):
+    """Exception raised when text tokenization fails."""
+    pass
+
+
+class ModelInferenceError(SentimentAnalysisError):
+    """Exception raised when model inference fails."""
+    pass
 
 
 def analyze_sentiment(
@@ -62,21 +78,39 @@ def analyze_sentiment(
         raise ValueError("Text input cannot be blank")
 
     try:
+        # Check text length
+        text_length = len(text)
+        if text_length > 10000:
+            logger.warning(
+                f"Text is very long ({text_length} chars), may cause issues. "
+                "Consider truncating before analysis."
+            )
+        
         model = get_model()
         result = model.predict(text, return_all_scores=return_all_scores)
         logger.debug(f"Analyzed text: '{text[:50]}...' -> {result['label']}")
         return result
+    except ValueError as e:
+        # Tokenization or input validation errors
+        logger.error(f"Input validation failed for text: {text[:100]}... Error: {e}")
+        raise TokenizationError(f"Text tokenization failed: {e}") from e
+    except RuntimeError as e:
+        # Model loading or inference errors
+        logger.error(f"Model inference failed: {e}")
+        raise ModelInferenceError(f"Model inference failed: {e}") from e
     except Exception as e:
-        logger.error(f"Sentiment analysis failed: {e}")
-        raise RuntimeError(f"Failed to analyze sentiment: {e}")
+        # Catch-all for unexpected errors
+        log_exception(logger, e, f"Unexpected error analyzing text: {text[:100]}...")
+        raise SentimentAnalysisError(f"Failed to analyze sentiment: {e}") from e
 
 
 def analyze_batch(
     texts: List[str],
     batch_size: int = 32,
     return_all_scores: bool = False,
-    skip_errors: bool = False,
-) -> List[Dict[str, Union[str, float, Dict[str, float]]]]:
+    skip_errors: bool = True,
+    track_failures: bool = True,
+) -> tuple[List[Optional[Dict[str, Union[str, float, Dict[str, float]]]]], Optional[FailedItemsTracker]]:
     """
     Analyze sentiment for multiple text inputs efficiently.
 
@@ -84,15 +118,17 @@ def analyze_batch(
         texts: List of text strings to analyze
         batch_size: Number of texts to process per batch (default: 32)
         return_all_scores: If True, include confidence scores for all labels
-        skip_errors: If True, return None for failed analyses instead of raising
+        skip_errors: If True, return None for failed analyses instead of raising (default: True)
+        track_failures: If True, track failed items and return tracker (default: True)
 
     Returns:
-        List of dictionaries, one per input text. Each dict contains:
-            - label: Sentiment label ('positive', 'negative', or 'neutral')
-            - score: Confidence score for the predicted label (0-1)
-            - scores: (optional) All label scores if return_all_scores=True
-
-        If skip_errors=True, failed analyses will be None in the list.
+        Tuple containing:
+            - List of dictionaries, one per input text. Each dict contains:
+                - label: Sentiment label ('positive', 'negative', or 'neutral')
+                - score: Confidence score for the predicted label (0-1)
+                - scores: (optional) All label scores if return_all_scores=True
+              If skip_errors=True, failed analyses will be None in the list.
+            - FailedItemsTracker object if track_failures=True, else None
 
     Raises:
         ValueError: If texts is empty or not a list
@@ -114,34 +150,118 @@ def analyze_batch(
     if not all(isinstance(t, str) for t in texts):
         raise ValueError("All items in texts must be strings")
 
-    # Filter out empty texts
-    valid_indices = [i for i, t in enumerate(texts) if t and t.strip()]
-    valid_texts = [texts[i] for i in valid_indices]
+    # Initialize failure tracker
+    failures = FailedItemsTracker() if track_failures else None
+    
+    # Filter out empty texts and track them
+    valid_indices = []
+    valid_texts = []
+    
+    for i, t in enumerate(texts):
+        if not t or not t.strip():
+            if failures:
+                failures.add_failure(
+                    item=f"Index {i}: {str(t)[:100]}",
+                    error_type="EmptyText",
+                    error_message="Text is empty or whitespace only"
+                )
+            logger.warning(f"Skipping empty text at index {i}")
+        else:
+            valid_indices.append(i)
+            valid_texts.append(t)
 
     if not valid_texts:
-        raise ValueError("No valid (non-empty) texts provided")
+        logger.error("No valid (non-empty) texts provided")
+        if skip_errors:
+            return [None] * len(texts), failures
+        else:
+            raise ValueError("No valid (non-empty) texts provided")
 
+    logger.info(f"Processing {len(valid_texts)}/{len(texts)} valid texts")
+    
     try:
         model = get_model()
-        results = model.predict_batch(
-            valid_texts, batch_size=batch_size, return_all_scores=return_all_scores
-        )
+        
+        # Process in batches with individual error handling
+        all_results = []
+        
+        for batch_start in range(0, len(valid_texts), batch_size):
+            batch_end = min(batch_start + batch_size, len(valid_texts))
+            batch_texts = valid_texts[batch_start:batch_end]
+            batch_indices = valid_indices[batch_start:batch_end]
+            
+            logger.debug(f"Processing batch {batch_start//batch_size + 1}: "
+                        f"items {batch_start} to {batch_end-1}")
+            
+            try:
+                batch_results = model.predict_batch(
+                    batch_texts, 
+                    batch_size=len(batch_texts), 
+                    return_all_scores=return_all_scores
+                )
+                all_results.extend(batch_results)
+                
+            except Exception as batch_error:
+                # Batch failed, try individual items if skip_errors is True
+                logger.error(f"Batch processing failed: {batch_error}")
+                
+                if skip_errors:
+                    logger.info("Attempting individual analysis for failed batch")
+                    for idx, text in enumerate(batch_texts):
+                        try:
+                            result = analyze_sentiment(
+                                text, 
+                                return_all_scores=return_all_scores
+                            )
+                            all_results.append(result)
+                        except Exception as item_error:
+                            all_results.append(None)
+                            if failures:
+                                failures.add_failure(
+                                    item=f"Index {batch_indices[idx]}: {text[:200]}",
+                                    error_type=type(item_error).__name__,
+                                    error_message=str(item_error),
+                                    additional_info={
+                                        "text_length": len(text),
+                                        "batch_index": batch_start + idx
+                                    }
+                                )
+                            logger.error(
+                                f"Failed to analyze text at index {batch_indices[idx]}: "
+                                f"{item_error}"
+                            )
+                else:
+                    raise RuntimeError(f"Batch analysis failed: {batch_error}") from batch_error
 
         # Map results back to original indices
         full_results = [None] * len(texts)
-        for i, result in zip(valid_indices, results):
+        for i, result in zip(valid_indices, all_results):
             full_results[i] = result
 
-        logger.info(f"Batch analysis complete: {len(valid_texts)}/{len(texts)} texts")
-        return full_results
+        success_count = sum(1 for r in full_results if r is not None)
+        logger.info(
+            f"Batch analysis complete: {success_count}/{len(texts)} successful, "
+            f"{failures.count() if failures else 0} failed"
+        )
+        
+        return full_results, failures
 
     except Exception as e:
-        logger.error(f"Batch sentiment analysis failed: {e}")
+        log_exception(logger, e, "Critical error during batch analysis")
         if skip_errors:
-            logger.warning("Returning None for all results due to error")
-            return [None] * len(texts)
+            logger.warning("Returning None for all results due to critical error")
+            if failures:
+                for i, text in enumerate(texts):
+                    if text and text.strip():
+                        failures.add_failure(
+                            item=f"Index {i}: {text[:200]}",
+                            error_type=type(e).__name__,
+                            error_message=f"Critical batch error: {str(e)}",
+                            additional_info={"text_length": len(text)}
+                        )
+            return [None] * len(texts), failures
         else:
-            raise RuntimeError(f"Failed to analyze batch: {e}")
+            raise RuntimeError(f"Failed to analyze batch: {e}") from e
 
 
 def analyze_with_metadata(
