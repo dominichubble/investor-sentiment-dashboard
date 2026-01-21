@@ -27,6 +27,10 @@ nltk>=3.8.0
 transformers>=4.35.0
 torch>=2.1.0
 
+# Explainable AI
+shap>=0.44.0
+matplotlib>=3.8.0
+
 # Testing
 pytest>=7.4.0
 pytest-cov>=4.1.0
