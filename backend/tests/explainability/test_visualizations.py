@@ -8,6 +8,7 @@ import tempfile
 from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")  # Use non-interactive backend for tests
 
 import pytest
@@ -70,9 +71,7 @@ class TestPlotTokenContributions:
         """Test that max_tokens parameter limits displayed tokens."""
         import matplotlib.pyplot as plt
 
-        fig = plot_token_contributions(
-            sample_explanation, max_tokens=5, show=False
-        )
+        fig = plot_token_contributions(sample_explanation, max_tokens=5, show=False)
         # Figure should be created successfully
         assert fig is not None
         plt.close(fig)

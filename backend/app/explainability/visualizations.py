@@ -29,8 +29,8 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 import numpy as np
+from matplotlib.figure import Figure
 
 logger = logging.getLogger(__name__)
 
@@ -76,9 +76,9 @@ def plot_token_contributions(
     prediction = explanation["prediction"]
 
     # Sort by absolute contribution and limit
-    sorted_contributions = sorted(
-        contributions, key=lambda x: abs(x[1]), reverse=True
-    )[:max_tokens]
+    sorted_contributions = sorted(contributions, key=lambda x: abs(x[1]), reverse=True)[
+        :max_tokens
+    ]
 
     # Reverse for bottom-to-top display
     sorted_contributions = list(reversed(sorted_contributions))
@@ -91,9 +91,11 @@ def plot_token_contributions(
 
     # Color based on contribution direction
     colors = [
-        CONTRIBUTION_COLORS["positive_contribution"]
-        if v > 0
-        else CONTRIBUTION_COLORS["negative_contribution"]
+        (
+            CONTRIBUTION_COLORS["positive_contribution"]
+            if v > 0
+            else CONTRIBUTION_COLORS["negative_contribution"]
+        )
         for v in values
     ]
 

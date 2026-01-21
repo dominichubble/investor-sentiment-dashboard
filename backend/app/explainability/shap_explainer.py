@@ -120,7 +120,9 @@ class SHAPExplainer:
         except Exception as e:
             logger.error(f"Prediction failed during SHAP computation: {e}")
             # Return uniform distribution on error
-            return cast(NDArray[np.floating[Any]], np.ones((len(processed_texts), 3)) / 3)
+            return cast(
+                NDArray[np.floating[Any]], np.ones((len(processed_texts), 3)) / 3
+            )
 
     def explain(
         self,
@@ -286,9 +288,9 @@ class SHAPExplainer:
                     continue
 
                 # Overall importance (mean absolute across all classes)
-                mean_abs = float(np.mean(
-                    [abs(shap_values[label][i]) for label in self.LABELS]
-                ))
+                mean_abs = float(
+                    np.mean([abs(shap_values[label][i]) for label in self.LABELS])
+                )
 
                 if token not in token_importance:
                     token_importance[token] = []
