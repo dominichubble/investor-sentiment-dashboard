@@ -65,10 +65,21 @@ class LIMEExplainer:
         # Get the FinBERT model
         self.model = get_model()
 
-        # Create LIME text explainer
+        # Create a custom tokenizer function that uses word-level splitting
+        # This works better with LIME's perturbation approach while still being
+        # interpretable. FinBERT will handle subword tokenization internally.
+        def tokenize_text(text: str) -> List[str]:
+            """Tokenize text into words for LIME perturbations."""
+            import re
+            # Split on whitespace and punctuation, keeping words
+            tokens = re.findall(r'\b\w+\b', text)
+            return tokens if tokens else [text]
+
+        # Create LIME text explainer with word-level tokenization
+        # Using word-level splitting works better than subword-level for interpretability
         self.explainer = LimeTextExplainer(
             class_names=self.CLASS_NAMES,
-            split_expression=r"\W+",  # Split on non-word characters
+            split_expression=r"\s+",  # Split on whitespace (keeps punctuation with words)
             bow=False,  # Don't use bag-of-words (position matters)
             random_state=42,
         )
@@ -101,22 +112,27 @@ class LIMEExplainer:
         assert self.model is not None, "Model not initialized"
 
         try:
-            # Use the model's batch predict method
+            # Use batch prediction for efficiency
             results = []
-            for text in processed_texts:
-                result = self.model.predict(text, return_all_scores=True)
-                if isinstance(result, dict) and "all_scores" in result:
-                    scores = result["all_scores"]
-                    # Ensure order is [positive, negative, neutral]
-                    probs = [
-                        scores.get("positive", 0.33),
-                        scores.get("negative", 0.33),
-                        scores.get("neutral", 0.33),
-                    ]
-                    results.append(probs)
-                else:
-                    # Fallback uniform distribution
-                    results.append([0.33, 0.33, 0.33])
+            batch_size = 32  # Process in batches
+            
+            for i in range(0, len(processed_texts), batch_size):
+                batch = processed_texts[i:i + batch_size]
+                batch_results = self.model.predict_batch(batch, batch_size=len(batch), return_all_scores=True)
+                
+                for result in batch_results:
+                    if isinstance(result, dict) and "scores" in result:
+                        scores = result["scores"]
+                        # Ensure order is [positive, negative, neutral]
+                        probs = [
+                            scores.get("positive", 0.33),
+                            scores.get("negative", 0.33),
+                            scores.get("neutral", 0.33),
+                        ]
+                        results.append(probs)
+                    else:
+                        # Fallback uniform distribution
+                        results.append([0.33, 0.33, 0.33])
 
             return cast(NDArray[np.floating[Any]], np.array(results))
 
@@ -183,7 +199,11 @@ class LIMEExplainer:
         )
 
         # Extract feature weights for the predicted class
-        feature_weights = dict(lime_exp.as_list(label=predicted_idx))
+        try:
+            feature_weights = dict(lime_exp.as_list(label=predicted_idx))
+        except (KeyError, IndexError) as e:
+            logger.warning(f"Failed to extract feature weights for class {predicted_idx}: {e}")
+            feature_weights = {}
 
         # Get all features for all classes
         all_class_weights = {}
@@ -191,17 +211,32 @@ class LIMEExplainer:
             try:
                 class_features = dict(lime_exp.as_list(label=class_idx))
                 all_class_weights[class_name] = class_features
-            except KeyError:
+            except (KeyError, IndexError):
                 # If class wasn't explained, use empty dict
                 all_class_weights[class_name] = {}
 
         # Sort features by absolute weight
         sorted_features = sorted(
-            feature_weights.items(), key=lambda x: abs(x[1]), reverse=True
+            feature_weights.items(), key=lambda x: float(abs(x[1])), reverse=True
         )
+        
+        # Warn if all weights are zero (indicates LIME couldn't find meaningful features)
+        if feature_weights and all(abs(w) < 1e-6 for w in feature_weights.values()):
+            logger.warning(
+                f"All LIME feature weights are near zero. This may indicate:\n"
+                f"  1. Model predictions are too confident (not enough variation)\n"
+                f"  2. Tokenization mismatch between LIME and FinBERT\n"
+                f"  3. Need more samples (current: {num_samples})\n"
+                f"Consider increasing num_samples or checking model predictions."
+            )
 
         # Get local prediction (LIME's interpretation)
-        local_pred = lime_exp.local_pred[predicted_idx] if lime_exp.local_pred else None
+        # When explaining a single class, local_pred is a 1D array with one element
+        if lime_exp.local_pred is not None:
+            # Since we only explained one class (predicted_idx), local_pred has shape (1,)
+            local_pred = float(lime_exp.local_pred[0]) if len(lime_exp.local_pred) > 0 else None
+        else:
+            local_pred = None
 
         explanation = {
             "text": text,
@@ -212,15 +247,19 @@ class LIMEExplainer:
             "feature_weights": feature_weights,
             "all_class_weights": all_class_weights,
             "top_features": sorted_features[:num_features],
-            "local_prediction": float(local_pred) if local_pred is not None else None,
+            "local_prediction": local_pred,
             "num_features": num_features,
             "num_samples": num_samples,
         }
 
-        logger.info(
-            f"Explanation complete. Top feature: '{sorted_features[0][0]}' "
-            f"({sorted_features[0][1]:+.4f})"
-        )
+        # Log completion with top feature if available
+        if sorted_features:
+            logger.info(
+                f"Explanation complete. Top feature: '{sorted_features[0][0]}' "
+                f"({sorted_features[0][1]:+.4f})"
+            )
+        else:
+            logger.warning("Explanation complete but no features found")
 
         return explanation
 
@@ -319,20 +358,20 @@ class LIMEExplainer:
 
         # Calculate average importance for each feature
         avg_importance = {
-            feature: np.mean(values) for feature, values in feature_importance.items()
+            feature: float(np.mean(values)) for feature, values in feature_importance.items()
         }
 
         # Calculate per-class average
         class_avg_importance = {}
         for label in self.LABELS:
             class_avg_importance[label] = {
-                feature: np.mean(values)
+                feature: float(np.mean(values))
                 for feature, values in class_feature_importance[label].items()
             }
 
         # Get top features by importance
         sorted_features = sorted(
-            avg_importance.items(), key=lambda x: x[1], reverse=True
+            avg_importance.items(), key=lambda x: float(x[1]), reverse=True
         )
         top_features = sorted_features[:top_n]
 
