@@ -16,5 +16,13 @@ data/raw/
 !data/processed/
 !data/processed/**/*.json
 
+# Prediction outputs and logs (generated files)
+data/predictions/
+logs/
+
+# Generated explainability examples
+**/lime_examples/
+data/processed/explanations/lime_examples/
+
 # Notebook checkpoints
 .ipynb_checkpoints/
