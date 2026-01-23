@@ -785,7 +785,9 @@ def generate_lime_html(
 
         if abs(normalized) < 0.01:
             # Neutral/no contribution
-            html_parts.append(f'<span style="padding: 2px 4px; margin: 1px;">{word}</span>')
+            html_parts.append(
+                f'<span style="padding: 2px 4px; margin: 1px;">{word}</span>'
+            )
         elif normalized > 0:
             # Green for positive contribution
             r, g, b = int(255 * (1 - normalized)), 255, int(255 * (1 - normalized))
