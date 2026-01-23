@@ -31,6 +31,7 @@ torch>=2.1.0
 shap>=0.44.0
 lime>=0.2.0.1
 matplotlib>=3.8.0
+seaborn>=0.13.0
 
 # Testing
 pytest>=7.4.0
@@ -41,3 +42,13 @@ black>=23.12.0
 isort>=5.13.0
 flake8>=7.0.0
 mypy>=1.8.0
+
+# Entity extraction (FYP-203)
+spacy>=3.7.0
+
+# Financial data (FYP-203)
+yfinance>=0.2.0
+
+# Fuzzy matching (FYP-203)
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.25.0

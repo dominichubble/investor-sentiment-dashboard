@@ -8,12 +8,14 @@ from .prediction_storage import (
     save_predictions_batch,
     validate_prediction,
 )
+from .stock_sentiment_storage import StockSentimentStorage
 
 __all__ = [
     "PredictionRecord",
+    "get_storage_stats",
+    "load_predictions",
     "save_prediction",
     "save_predictions_batch",
-    "load_predictions",
     "validate_prediction",
-    "get_storage_stats",
+    "StockSentimentStorage",
 ]
