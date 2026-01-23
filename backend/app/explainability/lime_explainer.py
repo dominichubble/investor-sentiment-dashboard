@@ -71,8 +71,9 @@ class LIMEExplainer:
         def tokenize_text(text: str) -> List[str]:
             """Tokenize text into words for LIME perturbations."""
             import re
+
             # Split on whitespace and punctuation, keeping words
-            tokens = re.findall(r'\b\w+\b', text)
+            tokens = re.findall(r"\b\w+\b", text)
             return tokens if tokens else [text]
 
         # Create LIME text explainer with word-level tokenization
@@ -115,11 +116,13 @@ class LIMEExplainer:
             # Use batch prediction for efficiency
             results = []
             batch_size = 32  # Process in batches
-            
+
             for i in range(0, len(processed_texts), batch_size):
-                batch = processed_texts[i:i + batch_size]
-                batch_results = self.model.predict_batch(batch, batch_size=len(batch), return_all_scores=True)
-                
+                batch = processed_texts[i : i + batch_size]
+                batch_results = self.model.predict_batch(
+                    batch, batch_size=len(batch), return_all_scores=True
+                )
+
                 for result in batch_results:
                     if isinstance(result, dict) and "scores" in result:
                         scores = result["scores"]
@@ -202,7 +205,9 @@ class LIMEExplainer:
         try:
             feature_weights = dict(lime_exp.as_list(label=predicted_idx))
         except (KeyError, IndexError) as e:
-            logger.warning(f"Failed to extract feature weights for class {predicted_idx}: {e}")
+            logger.warning(
+                f"Failed to extract feature weights for class {predicted_idx}: {e}"
+            )
             feature_weights = {}
 
         # Get all features for all classes
@@ -219,7 +224,7 @@ class LIMEExplainer:
         sorted_features = sorted(
             feature_weights.items(), key=lambda x: float(abs(x[1])), reverse=True
         )
-        
+
         # Warn if all weights are zero (indicates LIME couldn't find meaningful features)
         if feature_weights and all(abs(w) < 1e-6 for w in feature_weights.values()):
             logger.warning(
@@ -234,7 +239,9 @@ class LIMEExplainer:
         # When explaining a single class, local_pred is a 1D array with one element
         if lime_exp.local_pred is not None:
             # Since we only explained one class (predicted_idx), local_pred has shape (1,)
-            local_pred = float(lime_exp.local_pred[0]) if len(lime_exp.local_pred) > 0 else None
+            local_pred = (
+                float(lime_exp.local_pred[0]) if len(lime_exp.local_pred) > 0 else None
+            )
         else:
             local_pred = None
 
@@ -358,7 +365,8 @@ class LIMEExplainer:
 
         # Calculate average importance for each feature
         avg_importance = {
-            feature: float(np.mean(values)) for feature, values in feature_importance.items()
+            feature: float(np.mean(values))
+            for feature, values in feature_importance.items()
         }
 
         # Calculate per-class average
