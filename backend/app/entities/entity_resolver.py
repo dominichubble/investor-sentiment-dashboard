@@ -45,9 +45,7 @@ class EntityResolver:
             "supreme court",
         }
 
-    def resolve(
-        self, entity_text: str, threshold: float = 0.85
-    ) -> Optional[Dict]:
+    def resolve(self, entity_text: str, threshold: float = 0.85) -> Optional[Dict]:
         """
         Resolve entity text to stock ticker information.
 

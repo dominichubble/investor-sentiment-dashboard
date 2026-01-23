@@ -31,9 +31,7 @@ def _get_nlp():
     return _nlp
 
 
-def extract_company_entities(
-    text: str, include_context: bool = False
-) -> List[Dict]:
+def extract_company_entities(text: str, include_context: bool = False) -> List[Dict]:
     """
     Extract organization entities that might be stocks using NER.
 
@@ -144,9 +142,7 @@ def extract_financial_keywords(text: str) -> Dict[str, bool]:
 
     return {
         "has_stock_keywords": any(kw in text_lower for kw in stock_keywords),
-        "has_company_keywords": any(
-            kw in text_lower for kw in company_keywords
-        ),
+        "has_company_keywords": any(kw in text_lower for kw in company_keywords),
         "has_performance_keywords": any(
             kw in text_lower for kw in performance_keywords
         ),

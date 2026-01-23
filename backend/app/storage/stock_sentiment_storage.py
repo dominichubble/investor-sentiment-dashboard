@@ -120,7 +120,9 @@ class StockSentimentStorage:
 
         return record_id
 
-    def save_analysis_result(self, result: Dict, source: Optional[str] = None) -> List[str]:
+    def save_analysis_result(
+        self, result: Dict, source: Optional[str] = None
+    ) -> List[str]:
         """
         Save full stock sentiment analysis result.
 
@@ -192,9 +194,7 @@ class StockSentimentStorage:
 
         return results
 
-    def get_trending_stocks(
-        self, min_mentions: int = 5, hours: int = 24
-    ) -> List[Dict]:
+    def get_trending_stocks(self, min_mentions: int = 5, hours: int = 24) -> List[Dict]:
         """
         Get stocks with most mentions in recent period.
 
@@ -215,9 +215,7 @@ class StockSentimentStorage:
         ticker_counts: Dict[str, int] = {}
 
         for record in self._data.get("sentiments", []):
-            record_time = datetime.fromisoformat(
-                record["timestamp"]
-            ).timestamp()
+            record_time = datetime.fromisoformat(record["timestamp"]).timestamp()
 
             if record_time >= cutoff:
                 ticker = record["ticker"]
@@ -307,7 +305,5 @@ class StockSentimentStorage:
         return {
             "total_records": len(sentiments),
             "unique_tickers": len(unique_tickers),
-            "last_updated": self._data.get("metadata", {}).get(
-                "last_updated", None
-            ),
+            "last_updated": self._data.get("metadata", {}).get("last_updated", None),
         }

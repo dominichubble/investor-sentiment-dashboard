@@ -190,9 +190,7 @@ class TestConvenienceFunction:
         """Test analyze_stock_sentiment convenience function."""
         text = "$AAPL surged 15% on strong earnings"
 
-        result = analyze_stock_sentiment(
-            text, stock_database=mock_stock_db
-        )
+        result = analyze_stock_sentiment(text, stock_database=mock_stock_db)
 
         assert "text" in result
         assert "overall_sentiment" in result

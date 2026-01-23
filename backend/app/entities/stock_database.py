@@ -49,13 +49,9 @@ class StockDatabase:
                 self._stocks = data.get("stocks", {})
                 self._build_name_index()
                 self._loaded = True
-                logger.info(
-                    f"Loaded {len(self._stocks)} stocks from database"
-                )
+                logger.info(f"Loaded {len(self._stocks)} stocks from database")
         else:
-            logger.info(
-                "Stock database not found. Downloading from SEC EDGAR..."
-            )
+            logger.info("Stock database not found. Downloading from SEC EDGAR...")
             self.download_and_build()
 
     def download_and_build(self) -> None:
@@ -66,10 +62,11 @@ class StockDatabase:
             # Download SEC EDGAR company tickers JSON
             # SEC requires specific User-Agent with contact info
             url = "https://www.sec.gov/files/company_tickers.json"
-            
+
             # Try using requests library first (better handling)
             try:
                 import requests
+
                 headers = {
                     "User-Agent": "InvestorSentimentDashboard/1.0 (Academic Research; contact@example.com)",
                     "Accept-Encoding": "gzip, deflate",
@@ -81,11 +78,12 @@ class StockDatabase:
             except ImportError:
                 # Fall back to urllib if requests not available
                 from urllib.request import Request
+
                 req = Request(
                     url,
                     headers={
                         "User-Agent": "InvestorSentimentDashboard/1.0 (Academic Research; contact@example.com)"
-                    }
+                    },
                 )
                 with urlopen(req) as response:
                     sec_data = json.loads(response.read().decode("utf-8"))
@@ -114,14 +112,12 @@ class StockDatabase:
             self.save()
             self._loaded = True
 
-            logger.info(
-                f"Built stock database with {len(self._stocks)} stocks"
-            )
+            logger.info(f"Built stock database with {len(self._stocks)} stocks")
 
         except Exception as e:
             logger.error(f"Failed to download stock data: {e}")
             logger.info("Trying alternative: building database from common stocks...")
-            
+
             # Fallback: Create database with common major stocks
             self._build_fallback_database()
             self._build_name_index()
@@ -196,11 +192,12 @@ class StockDatabase:
             if short_name.lower().endswith(suffix.lower()):
                 short_name = short_name[: -len(suffix)]
                 break
-        
+
         # Also remove trailing state codes like " - DE", " - MD"
         import re
-        short_name = re.sub(r'\s*[-/]\s*[A-Z]{2}$', '', short_name)
-        
+
+        short_name = re.sub(r"\s*[-/]\s*[A-Z]{2}$", "", short_name)
+
         # Remove "THE " prefix for indexing
         if short_name.upper().startswith("THE "):
             short_name = short_name[4:]
@@ -221,26 +218,38 @@ class StockDatabase:
                 name_lower = common_name.lower()
                 if name_lower and name_lower not in self._name_to_ticker:
                     self._name_to_ticker[name_lower] = ticker
-            
+
             # Extract and index short name
             short_name = self._extract_short_name(company_name)
             if short_name:
                 short_lower = short_name.lower()
                 if short_lower not in self._name_to_ticker:
                     self._name_to_ticker[short_lower] = ticker
-                
+
                 # Also index title case version for matching
                 # e.g., "MICROSOFT" -> "Microsoft"
                 title_case = short_name.title()
                 if title_case.lower() not in self._name_to_ticker:
                     self._name_to_ticker[title_case.lower()] = ticker
-            
+
             # Index first word if it's substantial (>3 chars)
             # Helps match "Tesla" from "Tesla, Inc."
             first_word = company_name.split()[0] if company_name else ""
             if len(first_word) > 3 and first_word.lower() not in self._name_to_ticker:
                 # Avoid common words
-                skip_words = {"the", "inc", "corp", "ltd", "llc", "plc", "new", "first", "american", "national", "united"}
+                skip_words = {
+                    "the",
+                    "inc",
+                    "corp",
+                    "ltd",
+                    "llc",
+                    "plc",
+                    "new",
+                    "first",
+                    "american",
+                    "national",
+                    "united",
+                }
                 if first_word.lower() not in skip_words:
                     self._name_to_ticker[first_word.lower()] = ticker
 
@@ -299,9 +308,7 @@ class StockDatabase:
 
         # Partial name matches
         for name, ticker in self._name_to_ticker.items():
-            if query_lower in name and ticker not in [
-                r["ticker"] for r in results
-            ]:
+            if query_lower in name and ticker not in [r["ticker"] for r in results]:
                 results.append(self._stocks[ticker])
 
             if len(results) >= limit:
@@ -334,7 +341,7 @@ class StockDatabase:
     def _build_fallback_database(self) -> None:
         """
         Build fallback database with common major stocks.
-        
+
         Used when SEC EDGAR download fails.
         """
         # Top 100+ most commonly mentioned stocks
@@ -529,7 +536,7 @@ class StockDatabase:
             ("VLO", "Valero Energy Corporation", "Valero"),
             ("PSX", "Phillips 66", "Phillips 66"),
         ]
-        
+
         self._stocks = {}
         for ticker, company_name, short_name in fallback_stocks:
             self._stocks[ticker] = {
@@ -540,5 +547,5 @@ class StockDatabase:
                 "is_active": True,
                 "source": "fallback",
             }
-        
+
         logger.info(f"Built fallback database with {len(self._stocks)} common stocks")

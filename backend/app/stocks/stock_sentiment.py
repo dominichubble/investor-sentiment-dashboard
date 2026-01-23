@@ -39,7 +39,7 @@ class StockSentimentAnalyzer:
         self.model = model or FinBERTModel()
         self.stock_db = stock_database or StockDatabase()
         self.stock_db.load()
-        
+
         # Auto-rebuild if database is empty
         if self.stock_db.get_total_stocks() == 0:
             logger.info("Stock database is empty, rebuilding with fallback data...")
@@ -47,8 +47,10 @@ class StockSentimentAnalyzer:
                 self.stock_db.database_file.unlink()
             self.stock_db._loaded = False
             self.stock_db.download_and_build()
-            logger.info(f"Rebuilt database with {self.stock_db.get_total_stocks()} stocks")
-        
+            logger.info(
+                f"Rebuilt database with {self.stock_db.get_total_stocks()} stocks"
+            )
+
         self.entity_resolver = EntityResolver(self.stock_db)
 
     def analyze(
@@ -103,9 +105,7 @@ class StockSentimentAnalyzer:
         overall_sentiment = self.model.predict(text)
 
         # Extract stock entities
-        stocks = self._extract_all_stocks(
-            text, extract_context, include_movements
-        )
+        stocks = self._extract_all_stocks(text, extract_context, include_movements)
 
         # Build result
         processing_time = (time.time() - start_time) * 1000
@@ -203,9 +203,7 @@ class StockSentimentAnalyzer:
 
                 # Extract context if requested
                 context = (
-                    self._extract_context(text, position)
-                    if extract_context
-                    else None
+                    self._extract_context(text, position) if extract_context else None
                 )
 
                 # Analyze sentiment for context
@@ -246,9 +244,9 @@ class StockSentimentAnalyzer:
     ) -> None:
         """
         Extract stocks by direct name matching against the database.
-        
+
         This is a fallback for when spaCy NER doesn't recognize company names.
-        
+
         Args:
             text: Input text
             stocks: List to append found stocks to
@@ -257,49 +255,49 @@ class StockSentimentAnalyzer:
         """
         # Get all stocks from database for matching
         all_tickers = self.stock_db.get_all_tickers()
-        
+
         for ticker in all_tickers:
             if ticker in seen_tickers:
                 continue
-                
+
             stock_info = self.stock_db.get_by_ticker(ticker)
             if not stock_info:
                 continue
-            
+
             # Check for common names in text
             common_names = stock_info.get("common_names", [])
-            
+
             for name in common_names:
                 # Skip very short names (likely to cause false positives)
                 if len(name) < 3:
                     continue
-                
+
                 # Skip ticker-only names (already handled)
                 if name.upper() == ticker:
                     continue
-                
+
                 # Case-insensitive word boundary search
                 # \b ensures we match whole words only (not "apple" in "pineapple")
-                pattern = r'\b' + re.escape(name) + r'\b'
+                pattern = r"\b" + re.escape(name) + r"\b"
                 match = re.search(pattern, text, re.IGNORECASE)
-                
+
                 if match:
                     position = {"start": match.start(), "end": match.end()}
-                    
+
                     # Extract context if requested
                     context = (
                         self._extract_context(text, position)
                         if extract_context
                         else None
                     )
-                    
+
                     # Analyze sentiment for context
                     sentiment = (
                         self.model.predict(context)
                         if context
                         else {"label": "neutral", "score": 0.33}
                     )
-                    
+
                     stocks.append(
                         {
                             "ticker": ticker,
@@ -313,13 +311,11 @@ class StockSentimentAnalyzer:
                             "position": position,
                         }
                     )
-                    
+
                     seen_tickers.add(ticker)
                     break  # Found this stock, move to next
 
-    def _extract_context(
-        self, text: str, position: Dict, window: int = 80
-    ) -> str:
+    def _extract_context(self, text: str, position: Dict, window: int = 80) -> str:
         """
         Extract focused context around a stock mention.
 
@@ -337,39 +333,39 @@ class StockSentimentAnalyzer:
         start = max(0, position["start"] - window)
         end = min(len(text), position["end"] + window)
         context = text[start:end]
-        
+
         # Find the stock mention within the context
         mention_start = position["start"] - start
         mention_end = position["end"] - start
-        
+
         # Split on clause delimiters that often separate different stocks' sentiments
         # e.g., "AAPL surged while TSLA dropped" - split on "while"
         clause_delimiters = [
-            r'\s+while\s+',
-            r'\s+but\s+',
-            r'\s+however\s+',
-            r'\s+whereas\s+',
-            r'\s+although\s+',
-            r'\s+though\s+',
-            r',\s+and\s+',
-            r',\s+but\s+',
-            r';\s+',
+            r"\s+while\s+",
+            r"\s+but\s+",
+            r"\s+however\s+",
+            r"\s+whereas\s+",
+            r"\s+although\s+",
+            r"\s+though\s+",
+            r",\s+and\s+",
+            r",\s+but\s+",
+            r";\s+",
         ]
-        
+
         # Try to find which clause contains the stock mention
         best_clause = context
         min_length = len(context)
-        
+
         for delimiter_pattern in clause_delimiters:
             # Split the context
             parts = re.split(delimiter_pattern, context, flags=re.IGNORECASE)
-            
+
             # Find which part contains the mention
             current_pos = 0
             for part in parts:
                 part_start = current_pos
                 part_end = current_pos + len(part)
-                
+
                 # Check if mention is in this part
                 if part_start <= mention_start < part_end:
                     # Use this clause if it's shorter (more focused)
@@ -377,29 +373,29 @@ class StockSentimentAnalyzer:
                         best_clause = part.strip()
                         min_length = len(best_clause)
                     break
-                
+
                 # Account for delimiter length (approximate)
                 current_pos = part_end + 5
-        
+
         # Clean up the clause
         best_clause = best_clause.strip()
-        
+
         # If clause is too short, try sentence boundaries
         if len(best_clause) < 20:
             # Extract sentence containing the mention from original text
-            sentences = re.split(r'[.!?]+', text)
+            sentences = re.split(r"[.!?]+", text)
             char_count = 0
-            
+
             for sentence in sentences:
                 sentence_start = char_count
                 sentence_end = char_count + len(sentence)
-                
+
                 if sentence_start <= position["start"] < sentence_end:
                     best_clause = sentence.strip()
                     break
-                
+
                 char_count = sentence_end + 1
-        
+
         return best_clause if best_clause else context.strip()
 
 
