@@ -40,8 +40,8 @@ class BatchExplainRequest(BaseModel):
     texts: List[str] = Field(
         ...,
         description="List of texts to explain",
-        min_items=1,
-        max_items=20,
+        min_length=1,
+        max_length=20,
     )
     num_features: int = Field(10, description="Number of top features", ge=1, le=50)
     num_samples: int = Field(1000, description="Number of samples for LIME", ge=100, le=5000)

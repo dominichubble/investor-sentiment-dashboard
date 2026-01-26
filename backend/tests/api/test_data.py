@@ -134,10 +134,12 @@ class TestSinglePredictionEndpoint:
 
     def test_get_prediction_invalid_id(self):
         """Test with invalid prediction ID format."""
-        response = client.get("/api/v1/data/predictions/")
+        # Note: trailing slash matches the list endpoint, so returns 200
+        # Test with an actual invalid ID instead
+        response = client.get("/api/v1/data/predictions/invalid-id-format")
 
-        # Should return 404 (not found path)
-        assert response.status_code in [404, 405]
+        # Should return 404 (prediction not found)
+        assert response.status_code == 404
 
 
 class TestStockSentimentEndpoint:
@@ -324,13 +326,13 @@ class TestDataEndpointsIntegration:
         assert predictions_response.status_code == 200
         assert stats_response.status_code == 200
 
-        # If both succeed, counts should be related
-        # (statistics might include more than one page)
+        # If both succeed, counts should match
         predictions_data = predictions_response.json()
         stats_data = stats_response.json()
 
         if predictions_data["total"] > 0:
-            assert stats_data["total_predictions"] >= predictions_data["page_size"]
+            # Total predictions in stats should match total in predictions endpoint
+            assert stats_data["total_predictions"] == predictions_data["total"]
 
     def test_filter_combinations(self):
         """Test various filter combinations work together."""

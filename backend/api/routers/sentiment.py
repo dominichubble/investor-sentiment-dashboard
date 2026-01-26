@@ -26,7 +26,7 @@ class SentimentAnalysisRequest(BaseModel):
     options: Optional[dict] = Field(
         None,
         description="Analysis options",
-        example={"include_scores": True, "include_explanation": False},
+        json_schema_extra={"example": {"include_scores": True, "include_explanation": False}},
     )
 
 
@@ -36,8 +36,8 @@ class BatchSentimentRequest(BaseModel):
     texts: List[str] = Field(
         ...,
         description="List of texts to analyze",
-        min_items=1,
-        max_items=100,
+        min_length=1,
+        max_length=100,
     )
     options: Optional[dict] = Field(None, description="Analysis options")
 
@@ -130,8 +130,8 @@ async def analyze_sentiment(
             request.options.get("include_scores", True) if request.options else True
         )
 
-        # Analyze sentiment
-        result = model.predict(request.text)
+        # Analyze sentiment with all scores if requested
+        result = model.predict(request.text, return_all_scores=include_scores)
 
         # Build response
         sentiment_scores = None
@@ -212,7 +212,7 @@ async def batch_analyze_sentiment(
         # Analyze all texts
         results = []
         for text in request.texts:
-            result = model.predict(text)
+            result = model.predict(text, return_all_scores=include_scores)
 
             sentiment_scores = None
             if include_scores and "scores" in result:
