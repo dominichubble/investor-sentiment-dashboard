@@ -24,5 +24,9 @@ logs/
 **/lime_examples/
 data/processed/explanations/lime_examples/
 
+# Generated stock database and sentiment data
+data/stocks/
+data/stock_sentiments/
+
 # Notebook checkpoints
 .ipynb_checkpoints/

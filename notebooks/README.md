@@ -1,167 +1,183 @@
-# Notebooks
+# Analysis Notebooks
 
-This directory contains Jupyter notebooks for data exploration, analysis, and experimentation.
+Interactive Jupyter notebooks for exploring the investor sentiment analysis system.
 
-> **⚠️ Note:** For production data collection, use the Python scripts in `backend/app/pipelines/` instead of notebooks. Notebooks here are for exploration and documentation only.
+## Available Notebooks
 
-## 📓 Notebooks
+### 01. Reddit Ingestion (`01-reddit-ingest.ipynb`)
+Demonstrates Reddit data collection using PRAW API.
 
-### `01-reddit-ingest.ipynb`
-**Purpose:** Documentation and prototyping for Reddit data collection.
+### 02. Twitter Ingestion (`02-twitter-ingest.ipynb`)
+Shows Twitter/X data collection using Tweepy.
 
-**Status:** ✅ Production script available at `backend/app/pipelines/ingest_reddit.py`
+### 03. News Ingestion (`03-news-ingest.ipynb`)
+Explores news article collection using NewsAPI.
 
-**What this notebook demonstrates:**
-- How to connect to Reddit API using PRAW
-- Text cleaning and normalization techniques
-- Post deduplication logic
-- Data structure and output format
+### 04. Text Preprocessing (`04-text-preprocessing.ipynb`)
+Covers text cleaning, normalization, and preprocessing techniques.
 
-**For production use:**
-Use the production script instead:
+### 05. Sentiment Analysis (`05-sentiment-analysis.ipynb`)
+Demonstrates FinBERT sentiment analysis for financial text.
+
+### 06. SHAP Explainability (`06-shap-explainability.ipynb`)
+Shows SHAP-based model explainability for sentiment predictions.
+
+### 07. LIME Explainability (`07-lime-explainability.ipynb`)
+Demonstrates LIME local interpretable explanations for FinBERT.
+
+### 08. Stock Entity Sentiment (`08-stock-entity-sentiment.ipynb`) ⭐ NEW
+**Complete stock entity extraction and sentiment pairing system (FYP-203).**
+
+Features:
+- Extract stocks by ticker symbols ($AAPL) and company names (Apple)
+- Analyze sentiment for each stock mention
+- Store and query stock sentiment data
+- Support for 13,000+ US-listed stocks
+- Visualizations and performance analysis
+
+## Quick Start
+
+### Setup Environment
+
 ```bash
-cd backend/app/pipelines
-python ingest_reddit.py --help
-```
-
-See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for full documentation.
-
----
-
-### `02-twitter-ingest.ipynb`
-**Purpose:** Documentation and prototyping for Twitter/X data collection.
-
-**Status:** ✅ Production script available at `backend/app/pipelines/ingest_twitter.py`
-
-**What this notebook demonstrates:**
-- How to connect to Twitter API using Tweepy
-- Text cleaning (URLs, mentions, hashtags)
-- Spam and bot detection techniques
-- Engagement-based quality filtering
-- CSV export format
-
-**For production use:**
-Use the production script instead:
-```bash
-cd backend/app/pipelines
-python ingest_twitter.py --help
-```
-
-**Quality Filters:**
-- Removes spam patterns (promotional content, bot networks)
-- Filters low engagement tweets (< 5 likes+retweets+replies)
-- Detects uniform engagement patterns (bot networks)
-- Removes excessive emojis, hashtags, and cashtags
-
-See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for full documentation.
-
----
-
-### `03-news-ingest.ipynb`
-**Purpose:** Documentation and prototyping for News API data collection.
-
-**Status:** ✅ Production script available at `backend/app/pipelines/ingest_news.py`
-
-**What this notebook demonstrates:**
-- How to connect to NewsAPI.org
-- Article search by keywords and sources
-- Text cleaning (HTML tags, URLs, NewsAPI artifacts)
-- Quality filtering (paywalled, removed content)
-- Deduplication by URL and title
-- JSON export format
-
-**For production use:**
-Use the production script instead:
-```bash
-cd backend/app/pipelines
-python ingest_news.py --help
-```
-
-**Quality Filters:**
-- Removes short titles (< 10 chars)
-- Filters [Removed] and paywalled articles (< 100 chars content)
-- Removes duplicates by URL and title
-- Only keeps articles with meaningful content
-
-See [backend/app/pipelines/README.md](../backend/app/pipelines/README.md) for full documentation.
-
----
-
-## 🔧 Setup
-
-**Requirements:**
-```bash
-# Install dependencies from the backend directory
+# Install dependencies
 pip install -r ../backend/requirements.txt
+
+# Download spaCy model (for notebook 08)
+python -m spacy download en_core_web_sm
+
+# Launch Jupyter
+jupyter notebook
 ```
 
-**Environment Variables:**
-Create a `.env` file in the project root with:
+### Recommended Order
+
+For a complete walkthrough of the system:
+
+1. **Data Collection**: Notebooks 01-03
+2. **Preprocessing**: Notebook 04
+3. **Sentiment Analysis**: Notebook 05
+4. **Explainability**: Notebooks 06-07
+5. **Stock Entity Pairing**: Notebook 08 ⭐
+
+## Notebook 08 Highlights
+
+The stock entity sentiment notebook (`08-stock-entity-sentiment.ipynb`) is the most comprehensive and includes:
+
+### 1. Stock Database
+- Access 13,000+ US stocks from SEC EDGAR
+- Lookup by ticker or company name
+- Search functionality
+
+### 2. Entity Extraction
+- spaCy NER for company names
+- Financial keyword detection
+- Context extraction
+
+### 3. Entity Resolution
+- Exact and fuzzy matching
+- Handle name variations
+- Blacklist for false positives
+
+### 4. Sentiment Analysis
+- Single stock analysis
+- Multiple stocks with different sentiments
+- Real-world examples (Reddit, Twitter, News)
+
+### 5. Storage & Querying
+- Save stock sentiment data
+- Aggregate by ticker
+- Trending stocks analysis
+
+### 6. Visualization
+- Sentiment comparison charts
+- Distribution plots
+- Performance benchmarks
+
+### 7. Integration
+- Process existing data files
+- Batch processing examples
+- API integration examples
+
+## Example Usage
+
+```python
+from app.stocks import analyze_stock_sentiment
+
+# Analyze text
+text = "Apple reported strong earnings. Stock surged 15%."
+result = analyze_stock_sentiment(text)
+
+# Access results
+for stock in result['stocks']:
+    print(f"{stock['ticker']}: {stock['sentiment']['label']}")
+```
+
+## Output Examples
+
+**Single Stock:**
+```
+AAPL: positive (0.92)
+Context: Apple reported strong earnings
+```
+
+**Multiple Stocks:**
+```
+AAPL: positive (0.89)
+TSLA: negative (0.78)
+MSFT: positive (0.85)
+```
+
+## Data Sources
+
+Notebooks use data from:
+- `data/processed/reddit/` - Reddit posts
+- `data/processed/news/` - News articles
+- `data/processed/twitter/` - Tweets (when available)
+
+## Tips
+
+- **Restart Kernel**: If you modify backend code, restart the notebook kernel to reload modules
+- **Module Reload**: Notebook 08 includes automatic module reloading
+- **Performance**: Use `extract_context=False` for faster processing
+- **Memory**: For large datasets, process in batches
+
+## Documentation
+
+- **Quick Start**: `../docs/FYP-203-Quick-Start.md`
+- **Implementation Guide**: `../docs/FYP-203-Implementation-Guide.md`
+- **API Documentation**: `../backend/api/README.md`
+
+## Troubleshooting
+
+**Import Errors:**
+```python
+import sys
+from pathlib import Path
+backend_path = str(Path.cwd().parent / "backend")
+sys.path.insert(0, backend_path)
+```
+
+**spaCy Model Missing:**
 ```bash
-# Reddit API
-REDDIT_CLIENT_ID=your_client_id
-REDDIT_CLIENT_SECRET=your_client_secret
-REDDIT_USER_AGENT=investor-sentiment-dashboard/0.1 by your_username
-
-# Twitter API
-TWITTER_BEARER_TOKEN=your_bearer_token
-
-# News API
-NEWS_API_KEY=your_newsapi_key
+python -m spacy download en_core_web_sm
 ```
 
-### Getting API Credentials
+**FinBERT Model Download:**
+The model downloads automatically on first use (~450MB).
 
-**Reddit:**
-1. Go to https://www.reddit.com/prefs/apps
-2. Click "Create App" or "Create Another App"
-3. Select "script" as the app type
-4. Copy the client ID and secret
+## Contributing
 
-**Twitter/X:**
-1. Apply for developer account at https://developer.twitter.com/
-2. Create an app
-3. Get your Bearer Token (for read-only access)
-4. Free tier: 1,500 tweets/month
+When adding new notebooks:
+1. Follow the naming convention: `##-descriptive-name.ipynb`
+2. Include clear markdown explanations
+3. Add example outputs
+4. Update this README
+5. Test with fresh kernel
 
-**NewsAPI.org:**
-1. Register at https://newsapi.org/register
-2. Choose "Developer" plan (FREE)
-3. Copy your API key from dashboard
-4. Free tier: 100 requests/day, 1-month history
+## Resources
 
-**Usage:**
-1. Open the notebook in Jupyter or VS Code
-2. Adjust parameters in cell 2 if needed (subreddits, keywords, time filter)
-3. Run all cells
-
-**Output:**
-- JSON file with posts containing: id, title, selftext, author, subreddit, timestamps, engagement metrics
-
----
-
-## Data Output
-
-All notebooks write output to `../data/` (project-level data directory), not within the notebooks folder. This keeps the repository clean and separates code from data.
-
----
-
-### `04-text-preprocessing.ipynb`
-**Purpose:** Documentation and demonstration of text preprocessing pipeline.
-
-**Status:**  Production script available at `backend/app/pipelines/preprocess_data.py`
-
-**What this notebook demonstrates:**
-- Text normalization (URLs, mentions, hashtags, punctuation)
-- Tokenization using NLTK
-- Stopword removal with financial term preservation
-- Lemmatization for word normalization
-- Complete preprocessing pipeline usage
-- Comparison of preprocessing configurations
-
-**For production use:**
-Use the production script instead:
-```bash
-cd backend/app/pipelines
-python preprocess_data.py --help
-```
+- **Project Repository**: Main investor sentiment dashboard
+- **Backend Code**: `../backend/app/`
+- **Tests**: `../backend/tests/`
+- **Scripts**: `../backend/scripts/`
