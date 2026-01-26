@@ -330,15 +330,12 @@ async def explain_with_shap(request: SHAPExplainRequest) -> ExplanationResponse:
         start_time = time.time()
 
         # Generate SHAP explanation
-        explanation = shap_explainer.explain(
-            text=request.text,
-            top_k=request.num_features,
-        )
+        explanation = shap_explainer.explain(text=request.text)
 
-        # Build response
+        # Build response (limit to requested number of features)
         features = [
             FeatureWeight(feature=word, weight=float(weight))
-            for word, weight in explanation["features"]
+            for word, weight in explanation["features"][:request.num_features]
         ]
 
         prediction = SentimentPrediction(
