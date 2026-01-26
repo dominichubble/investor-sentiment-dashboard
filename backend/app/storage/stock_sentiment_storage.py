@@ -307,3 +307,34 @@ class StockSentimentStorage:
             "unique_tickers": len(unique_tickers),
             "last_updated": self._data.get("metadata", {}).get("last_updated", None),
         }
+
+    def get_all_sentiments(self) -> List[Dict]:
+        """
+        Get all sentiment records.
+
+        Returns:
+            List of all sentiment records
+        """
+        if not self._loaded:
+            self.load()
+
+        return self._data.get("sentiments", [])
+
+    def get_stock_sentiments(self, ticker: str) -> List[Dict]:
+        """
+        Get all sentiment records for a specific stock ticker.
+
+        Args:
+            ticker: Stock ticker symbol
+
+        Returns:
+            List of sentiment records for the ticker
+        """
+        if not self._loaded:
+            self.load()
+
+        return [
+            record
+            for record in self._data.get("sentiments", [])
+            if record.get("ticker", "").upper() == ticker.upper()
+        ]

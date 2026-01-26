@@ -16,10 +16,9 @@ from app.models.finbert_model import FinBERTModel
 
 router = APIRouter(prefix="/explainability", tags=["explainability"])
 
-# Initialize models and explainers
-model = FinBERTModel()
-lime_explainer = LIMEExplainer(model)
-shap_explainer = SHAPExplainer(model)
+# Initialize explainers (they load the model internally)
+lime_explainer = LIMEExplainer()
+shap_explainer = SHAPExplainer()
 
 
 # Request/Response Models
@@ -333,7 +332,7 @@ async def explain_with_shap(request: SHAPExplainRequest) -> ExplanationResponse:
         # Generate SHAP explanation
         explanation = shap_explainer.explain(
             text=request.text,
-            num_features=request.num_features,
+            top_k=request.num_features,
         )
 
         # Build response
