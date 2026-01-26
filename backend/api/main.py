@@ -9,7 +9,7 @@ from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import sentiment, stocks
+from .routers import explainability, sentiment, stocks
 
 # Create FastAPI app
 app = FastAPI(
@@ -31,6 +31,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(sentiment.router, prefix="/api/v1")
+app.include_router(explainability.router, prefix="/api/v1")
 app.include_router(stocks.router, prefix="/api/v1")
 
 
@@ -46,6 +47,7 @@ async def root():
         },
         "endpoints": {
             "sentiment": "/api/v1/sentiment",
+            "explainability": "/api/v1/explainability",
             "stocks": "/api/v1/stocks",
             "health": "/health",
             "info": "/info",
@@ -133,6 +135,9 @@ async def api_info():
         "capabilities": [
             "sentiment_analysis",
             "batch_sentiment_analysis",
+            "lime_explainability",
+            "shap_explainability",
+            "batch_explanations",
             "stock_entity_extraction",
             "context_aware_sentiment",
             "stock_database_lookup",
