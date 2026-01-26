@@ -176,13 +176,14 @@ async def explain_prediction(request: ExplainRequest) -> ExplanationResponse:
         # Build response
         features = [
             FeatureWeight(feature=word, weight=weight)
-            for word, weight in explanation["features"]
+            for word, weight in explanation["top_features"]
         ]
 
+        pred_dict = explanation["prediction"]
         prediction = SentimentPrediction(
-            label=explanation["prediction"],
-            score=explanation["confidence"],
-            all_scores=explanation["all_scores"],
+            label=pred_dict["label"],
+            score=pred_dict["score"],
+            all_scores=pred_dict.get("scores", {}),
         )
 
         processing_time = (time.time() - start_time) * 1000
@@ -260,13 +261,14 @@ async def batch_explain_predictions(
 
             features = [
                 FeatureWeight(feature=word, weight=weight)
-                for word, weight in explanation["features"][:request.num_features]
+                for word, weight in explanation["top_features"][:request.num_features]
             ]
 
+            pred_dict = explanation["prediction"]
             prediction = SentimentPrediction(
-                label=explanation["prediction"],
-                score=explanation["confidence"],
-                all_scores=explanation["all_scores"],
+                label=pred_dict["label"],
+                score=pred_dict["score"],
+                all_scores=pred_dict.get("scores", {}),
             )
 
             results.append(
@@ -335,13 +337,14 @@ async def explain_with_shap(request: SHAPExplainRequest) -> ExplanationResponse:
         # Build response (limit to requested number of features)
         features = [
             FeatureWeight(feature=word, weight=float(weight))
-            for word, weight in explanation["features"][:request.num_features]
+            for word, weight in explanation["top_contributors"][:request.num_features]
         ]
 
+        pred_dict = explanation["prediction"]
         prediction = SentimentPrediction(
-            label=explanation["prediction"],
-            score=explanation["confidence"],
-            all_scores=explanation["all_scores"],
+            label=pred_dict["label"],
+            score=pred_dict["score"],
+            all_scores=pred_dict.get("scores", {}),
         )
 
         processing_time = (time.time() - start_time) * 1000
