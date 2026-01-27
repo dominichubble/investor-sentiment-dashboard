@@ -2,8 +2,9 @@
 Tests for data retrieval API endpoints.
 """
 
-import pytest
 from datetime import date, timedelta
+
+import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
@@ -318,9 +319,7 @@ class TestDataEndpointsIntegration:
     def test_predictions_to_statistics_consistency(self):
         """Test that predictions count matches statistics."""
         # Get all predictions
-        predictions_response = client.get(
-            "/api/v1/data/predictions?page_size=100"
-        )
+        predictions_response = client.get("/api/v1/data/predictions?page_size=100")
         stats_response = client.get("/api/v1/data/statistics")
 
         assert predictions_response.status_code == 200

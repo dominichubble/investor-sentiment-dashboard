@@ -46,7 +46,10 @@ class TestSentimentEndpoints:
         assert "positive" in scores
         assert "negative" in scores
         assert "neutral" in scores
-        assert abs(scores["positive"] + scores["negative"] + scores["neutral"] - 1.0) < 0.01
+        assert (
+            abs(scores["positive"] + scores["negative"] + scores["neutral"] - 1.0)
+            < 0.01
+        )
 
         # Check metadata
         metadata = data["metadata"]
