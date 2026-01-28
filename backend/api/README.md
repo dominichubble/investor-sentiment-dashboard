@@ -1,215 +1,447 @@
 # Investor Sentiment Dashboard API
 
-FastAPI application providing REST API endpoints for stock entity extraction and sentiment analysis.
+REST API for financial sentiment analysis with explainability and stock entity extraction.
 
 ## Features
 
-- **Stock Entity Extraction**: Detect stocks by ticker symbols and company names
-- **Sentiment Analysis**: FinBERT-powered sentiment analysis for each stock mention
-- **Storage**: Save and query historical stock sentiment data
-- **Aggregation**: Trending stocks, sentiment distribution, time-series queries
+- **Sentiment Analysis**: Real-time and batch sentiment classification using FinBERT
+- **Explainability**: LIME and SHAP explanations for model predictions
+- **Stock Entity Extraction**: Identify and track sentiment for specific stocks
+- **Historical Data**: Access past predictions and sentiment trends
+- **Statistics**: Aggregate metrics and insights
+
+## Quick Start
+
+### Installation
+
+```bash
+# Install dependencies
+cd backend
+pip install -r requirements.txt
+
+# Install additional API dependencies
+pip install fastapi uvicorn python-multipart
+```
+
+### Running the Server
+
+```bash
+# Development mode (with auto-reload)
+cd backend
+uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Production mode
+uvicorn api.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
+
+### Access Documentation
+
+Once the server is running:
+
+- **Swagger UI**: http://localhost:8000/docs
+- **ReDoc**: http://localhost:8000/redoc
+- **OpenAPI JSON**: http://localhost:8000/openapi.json
 
 ## API Endpoints
 
-### Stock Analysis
+### Core Sentiment (`/api/v1/sentiment`)
 
-#### `POST /api/v1/stocks/analyze`
-Analyze text and extract stock-sentiment pairs.
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/analyze` | POST | Single text sentiment analysis |
+| `/batch` | POST | Batch sentiment analysis (up to 100 texts) |
 
-**Request:**
-```json
-{
-  "text": "Apple reported strong earnings while Tesla faced delays",
-  "extract_context": true,
-  "include_movements": true,
-  "source": "news"
-}
+### Explainability (`/api/v1/explainability`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/explain` | POST | LIME explanation for prediction |
+| `/batch` | POST | Batch LIME explanations (up to 20 texts) |
+| `/shap` | POST | SHAP explanation for prediction |
+| `/examples` | GET | Pre-computed example explanations |
+
+### Data Retrieval (`/api/v1/data`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/predictions` | GET | Historical predictions with filtering |
+| `/predictions/{id}` | GET | Get specific prediction by ID |
+| `/stocks/{ticker}/sentiment` | GET | Sentiment history for a stock |
+| `/statistics` | GET | Aggregate statistics and metrics |
+
+### Stock Analysis (`/api/v1/stocks`)
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/analyze` | POST | Analyze text for stock entities and sentiment |
+| `/batch` | POST | Batch stock analysis |
+| `/ticker/{ticker}` | GET | Get stock information |
+| `/search` | GET | Search stocks by name |
+| `/trending` | GET | Get trending stocks by sentiment |
+
+### Health & Info
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/health` | GET | Health check with service status |
+| `/info` | GET | API version and capabilities |
+| `/` | GET | Root endpoint with navigation |
+
+## Usage Examples
+
+### 1. Analyze Sentiment
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/sentiment/analyze" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "Tesla stock surged 15% on strong Q4 earnings",
+    "options": {"include_scores": true}
+  }'
 ```
 
 **Response:**
 ```json
 {
-  "text": "Apple reported strong earnings...",
+  "text": "Tesla stock surged 15% on strong Q4 earnings",
+  "sentiment": {
+    "label": "positive",
+    "score": 0.95,
+    "scores": {
+      "positive": 0.95,
+      "negative": 0.02,
+      "neutral": 0.03
+    }
+  },
+  "metadata": {
+    "model": "finbert",
+    "processing_time_ms": 127.5,
+    "timestamp": "2026-01-23T10:30:00Z"
+  }
+}
+```
+
+### 2. Get LIME Explanation
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/explainability/explain" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "Markets crashed on disappointing jobs report",
+    "num_features": 5
+  }'
+```
+
+**Response:**
+```json
+{
+  "text": "Markets crashed on disappointing jobs report",
+  "prediction": {
+    "label": "negative",
+    "score": 0.93,
+    "all_scores": {
+      "positive": 0.02,
+      "negative": 0.93,
+      "neutral": 0.05
+    }
+  },
+  "features": [
+    {"feature": "crashed", "weight": 0.42},
+    {"feature": "disappointing", "weight": 0.31},
+    {"feature": "Markets", "weight": 0.15},
+    {"feature": "jobs", "weight": 0.08},
+    {"feature": "report", "weight": 0.05}
+  ],
+  "metadata": {
+    "method": "LIME",
+    "num_features": 5,
+    "num_samples": 1000,
+    "processing_time_ms": 2341.2,
+    "timestamp": "2026-01-23T10:35:00Z"
+  }
+}
+```
+
+### 3. Analyze Stock Mentions
+
+```bash
+curl -X POST "http://localhost:8000/api/v1/stocks/analyze" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "Apple reports record iPhone sales while Microsoft announces AI breakthrough"
+  }'
+```
+
+**Response:**
+```json
+{
+  "text": "Apple reports record iPhone sales while Microsoft announces AI breakthrough",
   "overall_sentiment": {
     "label": "positive",
-    "score": 0.89,
-    "scores": {"positive": 0.89, "negative": 0.05, "neutral": 0.06}
+    "score": 0.91
   },
   "stocks": [
     {
       "ticker": "AAPL",
       "company_name": "Apple Inc.",
-      "mentioned_as": "Apple",
-      "sentiment": {"label": "positive", "score": 0.92},
-      "context": "Apple reported strong earnings",
-      "position": {"start": 0, "end": 5}
+      "sentiment": {
+        "label": "positive",
+        "score": 0.89
+      },
+      "context": "Apple reports record iPhone sales",
+      "confidence": 0.95
+    },
+    {
+      "ticker": "MSFT",
+      "company_name": "Microsoft Corp",
+      "sentiment": {
+        "label": "positive",
+        "score": 0.93
+      },
+      "context": "Microsoft announces AI breakthrough",
+      "confidence": 0.92
     }
   ],
   "metadata": {
-    "entities_found": 2,
-    "tickers_extracted": ["AAPL", "TSLA"],
-    "processing_time_ms": 45.2
+    "num_stocks_found": 2,
+    "processing_time_ms": 345.7,
+    "timestamp": "2026-01-23T10:40:00Z"
   }
 }
 ```
 
-### Query Stock Sentiment
+### 4. Get Statistics
 
-#### `GET /api/v1/stocks/{ticker}/sentiment`
-Get aggregated sentiment for a specific stock.
-
-**Parameters:**
-- `start_date` (optional): Filter by start date (YYYY-MM-DD)
-- `end_date` (optional): Filter by end date (YYYY-MM-DD)
-- `source` (optional): Filter by source (reddit/twitter/news)
-- `include_records` (optional): Include individual records
+```bash
+curl "http://localhost:8000/api/v1/data/statistics"
+```
 
 **Response:**
 ```json
 {
-  "ticker": "AAPL",
-  "total_mentions": 150,
-  "average_score": 0.72,
+  "total_predictions": 1523,
+  "total_stocks_analyzed": 247,
   "sentiment_distribution": {
-    "positive": 95,
-    "negative": 25,
-    "neutral": 30
+    "positive": 612,
+    "negative": 534,
+    "neutral": 377,
+    "positive_percentage": 40.18,
+    "negative_percentage": 35.06,
+    "neutral_percentage": 24.76
+  },
+  "top_stocks": [
+    {
+      "ticker": "AAPL",
+      "company_name": "Apple Inc.",
+      "count": 89,
+      "positive": 56,
+      "negative": 21,
+      "neutral": 12
+    }
+  ],
+  "recent_activity": {
+    "last_24h": 45,
+    "last_7d": 312,
+    "last_30d": 1523
+  },
+  "date_range": {
+    "earliest": "2025-12-23T08:15:00Z",
+    "latest": "2026-01-23T10:45:00Z"
   }
 }
 ```
 
-#### `GET /api/v1/stocks/{ticker}/mentions`
-Get recent mentions of a stock with pagination.
+### 5. Filter Historical Predictions
 
-**Parameters:**
-- `limit`: Maximum results (default: 50, max: 500)
-- `offset`: Pagination offset (default: 0)
-- `source`: Filter by source
+```bash
+curl "http://localhost:8000/api/v1/data/predictions?sentiment=positive&page=1&page_size=10"
+```
 
-#### `GET /api/v1/stocks/trending`
-Get trending stocks by mention count.
+## Rate Limits
 
-**Parameters:**
-- `period`: Time period (24h, 7d, 30d)
-- `min_mentions`: Minimum mentions required
-- `limit`: Maximum results
+- **Default endpoints**: 100 requests/minute
+- **Batch endpoints**: 10 requests/minute
+- **Explanation endpoints**: 5 requests/minute (computationally expensive)
 
-**Response:**
+## Error Responses
+
+All endpoints return consistent error responses:
+
 ```json
 {
-  "trending": [
-    {"ticker": "AAPL", "mentions": 245},
-    {"ticker": "TSLA", "mentions": 189}
-  ],
-  "period_hours": 24,
-  "total_stocks": 15
+  "detail": "Error message describing what went wrong"
 }
 ```
 
-#### `POST /api/v1/stocks/compare`
-Compare sentiment across multiple stocks.
+**Common Status Codes:**
+- `200`: Success
+- `400`: Bad request (invalid parameters)
+- `404`: Resource not found
+- `422`: Validation error (invalid input format)
+- `429`: Rate limit exceeded
+- `500`: Internal server error
 
-**Query Parameters:**
-- `tickers`: List of ticker symbols (repeatable)
-- `start_date`: Optional start date
-- `end_date`: Optional end date
+## Authentication
 
-**Example:**
+Currently, the API is open for development. For production:
+
+```python
+# TODO: Implement API key authentication
+# Add to headers: {"Authorization": "Bearer YOUR_API_KEY"}
 ```
-POST /api/v1/stocks/compare?tickers=AAPL&tickers=TSLA&tickers=MSFT
-```
-
-#### `GET /api/v1/stocks/statistics`
-Get overall statistics.
-
-## Running the API
-
-### Development
-
-```bash
-cd backend
-pip install -r requirements.txt
-python -m spacy download en_core_web_sm
-
-# Run FastAPI server
-uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-### Production
-
-```bash
-uvicorn api.main:app --host 0.0.0.0 --port 8000 --workers 4
-```
-
-## API Documentation
-
-Once the server is running, visit:
-- **Swagger UI**: http://localhost:8000/docs
-- **ReDoc**: http://localhost:8000/redoc
 
 ## Testing
 
 ```bash
-pytest tests/ -v
+# Run all API tests
+cd backend
+pytest tests/api/ -v
+
+# Run specific test file
+pytest tests/api/test_sentiment.py -v
+
+# Run with coverage
+pytest tests/api/ --cov=api --cov-report=html
 ```
 
-## Dependencies
+## Performance
 
-- **FastAPI**: Modern web framework
-- **Pydantic**: Data validation
-- **FinBERT**: Sentiment analysis
-- **spaCy**: Entity extraction
-- **FuzzyWuzzy**: Fuzzy string matching
+**Typical Response Times:**
+- Sentiment analysis: 50-150ms
+- LIME explanation: 1-3 seconds
+- SHAP explanation: 2-5 seconds
+- Stock entity extraction: 100-300ms
+- Data queries: 10-50ms
 
-## Architecture
+**Optimization Tips:**
+1. Use batch endpoints for multiple texts
+2. Cache frequent queries
+3. Use pagination for large result sets
+4. Consider async processing for explanations
+
+## Development
+
+### Project Structure
 
 ```
-api/
-├── main.py           # FastAPI app setup
-├── routers/
-│   └── stocks.py     # Stock endpoints
-└── README.md
+backend/api/
+├── main.py              # FastAPI app initialization
+├── routers/             # API route handlers
+│   ├── sentiment.py     # Sentiment endpoints
+│   ├── explainability.py # Explainability endpoints
+│   ├── data.py          # Data retrieval endpoints
+│   └── stocks.py        # Stock analysis endpoints
+└── README.md            # This file
 
-app/
-├── entities/         # Entity extraction
-├── stocks/           # Stock sentiment analysis
-├── storage/          # Data persistence
-└── models/           # FinBERT model
+backend/tests/api/
+├── test_sentiment.py
+├── test_explainability.py
+├── test_data.py
+└── test_stocks.py
 ```
 
-## Rate Limiting
+### Adding New Endpoints
 
-Consider implementing rate limiting for production:
-- Per-IP limits
-- API key authentication
-- Request throttling
+1. Create/modify router in `backend/api/routers/`
+2. Define Pydantic models for request/response
+3. Implement endpoint logic
+4. Add tests in `backend/tests/api/`
+5. Update this README
 
-## CORS Configuration
+### CORS Configuration
 
-Update CORS settings in `main.py` for production:
+For production, update CORS settings in `main.py`:
 
 ```python
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://yourdomain.com"],
+    allow_origins=["https://yourdomain.com"],  # Specific domains
     allow_credentials=True,
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
 )
 ```
 
+## Deployment
+
+### Docker (Recommended)
+
+```dockerfile
+FROM python:3.11-slim
+
+WORKDIR /app
+COPY backend/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install fastapi uvicorn
+
+COPY backend/ .
+
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+```
+
+```bash
+# Build and run
+docker build -t sentiment-api .
+docker run -p 8000:8000 sentiment-api
+```
+
+### Cloud Platforms
+
+**AWS Lambda:**
+```bash
+pip install mangum
+# Use Mangum adapter in main.py
+```
+
+**Google Cloud Run:**
+```bash
+gcloud run deploy sentiment-api --source .
+```
+
+**Azure Container Instances:**
+```bash
+az container create --name sentiment-api --image sentiment-api:latest
+```
+
 ## Monitoring
 
-Consider adding:
-- Request logging
-- Error tracking (Sentry)
-- Performance monitoring
-- Health checks
+### Health Checks
 
-## Security
+```bash
+# Check API health
+curl http://localhost:8000/health
 
-- Implement authentication for sensitive endpoints
-- Use HTTPS in production
-- Validate and sanitize all inputs
-- Set appropriate CORS policies
-- Rate limiting per user/IP
+# Check service status
+curl http://localhost:8000/info
+```
+
+### Logging
+
+Logs are output to stdout/stderr. Configure logging:
+
+```python
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+```
+
+## Contributing
+
+1. Follow existing code patterns
+2. Add tests for new endpoints
+3. Update this README
+4. Run linter: `flake8 api/`
+5. Format code: `black api/`
+
+## License
+
+See main project LICENSE file.
+
+## Support
+
+- **Documentation**: http://localhost:8000/docs
+- **Issues**: See project repository
+- **API Plan**: See `docs/api-endpoint-plan.md`
