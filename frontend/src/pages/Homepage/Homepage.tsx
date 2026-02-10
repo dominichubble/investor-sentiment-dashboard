@@ -4,32 +4,9 @@ import MetricCard from '../../components/MetricCard';
 import SummaryCard from '../../components/SummaryCard';
 import { MiniLineChart, SentimentBarChart, MiniAreaChart } from '../../components/Charts';
 import { DropdownOption } from '../../components/DropdownButton';
-import { DashboardData } from '../../types';
+import { apiService, StatisticsResponse } from '../../services/api';
 import './Homepage.css';
 
-// Mock data - replace with actual API calls
-const mockDashboardData: DashboardData = {
-  netSentiment: {
-    score: 0.38,
-    label: '+0.38',
-    description: 'Mildly Positive (Normalized -1 to +1)'
-  },
-  sentimentBreakdown: {
-    positive: 42,
-    neutral: 38,
-    negative: 20
-  },
-  totalDocuments: 12847,
-  activeSources: 3,
-  summaryText: `Over the past 7 days, aggregated sentiment across all asset classes has remained moderately positive (+0.38).
-
-Positive sentiment is primarily driven by discussions surrounding Bitcoin ETF approvals on Twitter/X and select technology stock earnings in financial news. Conversely, inflation concerns and regulatory uncertainty continue to fuel negative sentiment in broader market discussions.
-
-Neutral sentiment remains dominant in general market commentary.
-
-The model exhibits high confidence (92.4%) across most classifications.`,
-  confidence: 92.4
-};
 
 const assetOptions: DropdownOption[] = [
   { id: 'all', label: 'All Assets (ETFs, Crypto, Stocks)', value: 'all' },
@@ -48,27 +25,24 @@ const timeframeOptions: DropdownOption[] = [
 const Homepage: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<DropdownOption>(assetOptions[0]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<DropdownOption>(timeframeOptions[0]);
-  const [dashboardData, setDashboardData] = useState<DashboardData>(mockDashboardData);
-  const [isLoading, setIsLoading] = useState(false);
+  const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch data when filters change
+  // Fetch data when component mounts and filters change  
   useEffect(() => {
     fetchDashboardData();
   }, [selectedAsset, selectedTimeframe]);
 
   const fetchDashboardData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch(`/api/sentiment?asset=${selectedAsset.value}&timeframe=${selectedTimeframe.value}`);
-      // const data = await response.json();
-      // setDashboardData(data);
-      
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 500));
-      setDashboardData(mockDashboardData);
-    } catch (error) {
+      const stats = await apiService.getStatistics();
+      setStatistics(stats);
+    } catch (error: any) {
       console.error('Error fetching dashboard data:', error);
+      setError(error.response?.data?.detail || 'Failed to load data. Please ensure the backend is running.');
     } finally {
       setIsLoading(false);
     }
@@ -91,7 +65,11 @@ const Homepage: React.FC = () => {
     return num.toLocaleString();
   };
 
-  // Generate mock trend data for visualizations
+  const formatPercentage = (num: number): string => {
+    return `${num.toFixed(1)}%`;
+  };
+
+  // Generate mock trend data for visualizations (TODO: Replace with time-series data from API)
   const generateTrendData = (days: number, trend: 'up' | 'down' | 'stable'): number[] => {
     const data: number[] = [];
     let value = 0.2 + Math.random() * 0.3;
@@ -109,11 +87,97 @@ const Homepage: React.FC = () => {
     return data;
   };
 
+  // Calculate net sentiment score from distribution
+  const calculateNetSentiment = (): string => {
+    if (!statistics) return '0.00';
+    const dist = statistics.sentiment_distribution;
+    // Calculate normalized score (-1 to +1)
+    const score = ((dist.positive_percentage - dist.negative_percentage) / 100).toFixed(2);
+    return Number(score) >= 0 ? `+${score}` : score;
+  };
+
+  const getSentimentDescription = (): string => {
+    if (!statistics) return 'Loading...';
+    const score = parseFloat(calculateNetSentiment());
+    if (score > 0.5) return 'Strongly Positive';
+    if (score > 0.2) return 'Moderately Positive';
+    if (score > -0.2) return 'Neutral';
+    if (score > -0.5) return 'Moderately Negative';
+    return 'Strongly Negative';
+  };
+
+  const generateSummaryText = (): string => {
+    if (!statistics) return 'Loading data...';
+    
+    const dist = statistics.sentiment_distribution;
+    const score = calculateNetSentiment();
+    const topStock = statistics.top_stocks[0];
+    const recentActivity = statistics.recent_activity;
+    
+    return `Over the analyzed period, sentiment across all tracked assets remains ${getSentimentDescription().toLowerCase()} (${score}).
+
+Sentiment is distributed as follows: ${formatPercentage(dist.positive_percentage)} positive, ${formatPercentage(dist.neutral_percentage)} neutral, and ${formatPercentage(dist.negative_percentage)} negative. The most discussed stock is ${topStock?.ticker || 'N/A'} (${topStock?.company_name || 'N/A'}) with ${topStock?.count || 0} mentions.
+
+Recent activity shows ${recentActivity.last_24h} predictions in the last 24 hours, ${recentActivity.last_7d} in the last 7 days, and ${recentActivity.last_30d} in the last 30 days.
+
+The system has analyzed ${formatNumber(statistics.total_predictions)} documents across ${statistics.total_stocks_analyzed} unique stocks, providing comprehensive coverage of market sentiment.`;
+  };
+
   const sentimentTrendData = generateTrendData(20, 'up');
   const documentTrendData = generateTrendData(20, 'up');
 
+  // Determine active sources (simplified - could be enhanced with API data)
+  const getActiveSources = (): number => {
+    // This could be determined from the API data
+    return 3; // Reddit, Twitter, News
+  };
+
+  if (error) {
+    return (
+      <div className="homepage">
+        <Navbar
+          assetOptions={assetOptions}
+          selectedAsset={selectedAsset}
+          onAssetChange={handleAssetChange}
+          timeframeOptions={timeframeOptions}
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={handleTimeframeChange}
+        />
+        <div className="error-message">
+          <h2>⚠️ Unable to Load Data</h2>
+          <p>{error}</p>
+          <button onClick={fetchDashboardData} className="retry-button">
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading || !statistics) {
+    return (
+      <div className="homepage">
+        <Navbar
+          assetOptions={assetOptions}
+          selectedAsset={selectedAsset}
+          onAssetChange={handleAssetChange}
+          timeframeOptions={timeframeOptions}
+          selectedTimeframe={selectedTimeframe}
+          onTimeframeChange={handleTimeframeChange}
+        />
+        <div className="loading-overlay">
+          <div className="loading-spinner"></div>
+          <p className="loading-text">Loading sentiment data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const netSentiment = calculateNetSentiment();
+  const netScore = parseFloat(netSentiment);
+
   return (
-    <div className={`homepage ${isLoading ? 'loading' : ''}`}>
+    <div className="homepage">
       <Navbar
         assetOptions={assetOptions}
         selectedAsset={selectedAsset}
@@ -126,73 +190,68 @@ const Homepage: React.FC = () => {
       <div className="metrics-grid">
         <MetricCard
           title="NET SENTIMENT SCORE"
-          value={dashboardData.netSentiment.label}
-          description={dashboardData.netSentiment.description}
-          trend={dashboardData.netSentiment.score > 0 ? 'up' : dashboardData.netSentiment.score < 0 ? 'down' : 'neutral'}
+          value={netSentiment}
+          description={getSentimentDescription()}
+          trend={netScore > 0 ? 'up' : netScore < 0 ? 'down' : 'neutral'}
           onClick={() => handleCardClick('net-sentiment')}
           chart={
             <MiniLineChart 
               data={sentimentTrendData} 
-              color="#6cdf7e"
+              color={netScore > 0 ? "#6cdf7e" : netScore < 0 ? "#cb6e68" : "#8e94a0"}
             />
           }
         />
         
         <MetricCard
           title="SENTIMENT BREAKDOWN"
-          value={`${dashboardData.sentimentBreakdown.positive}%`}
-          description="Distribution across sentiment categories"
+          value={`${formatPercentage(statistics.sentiment_distribution.positive_percentage)}`}
+          description={`Positive leads with ${statistics.sentiment_distribution.positive} documents`}
           onClick={() => handleCardClick('sentiment-breakdown')}
           chart={
             <SentimentBarChart
-              positive={dashboardData.sentimentBreakdown.positive}
-              neutral={dashboardData.sentimentBreakdown.neutral}
-              negative={dashboardData.sentimentBreakdown.negative}
+              positive={statistics.sentiment_distribution.positive_percentage}
+              neutral={statistics.sentiment_distribution.neutral_percentage}
+              negative={statistics.sentiment_distribution.negative_percentage}
             />
           }
         />
         
         <MetricCard
           title="TOTAL DOCUMENTS ANALYSED"
-          value={formatNumber(dashboardData.totalDocuments)}
-          description={`From ${dashboardData.activeSources} active data sources`}
+          value={formatNumber(statistics.total_predictions)}
+          description={`Tracking ${statistics.total_stocks_analyzed} unique stocks`}
           onClick={() => handleCardClick('total-documents')}
           chart={
             <MiniAreaChart 
-              data={documentTrendData.map(v => v * 15000)} 
+              data={documentTrendData.map(v => v * statistics.total_predictions)} 
               color="#5c7cfa"
             />
           }
         />
         
         <MetricCard
-          title="ACTIVE DATA SOURCES"
-          value={dashboardData.activeSources}
-          description="Twitter/X, Reddit, Financial News"
+          title="ACTIVE STOCKS TRACKED"
+          value={statistics.total_stocks_analyzed}
+          description={`Top: ${statistics.top_stocks[0]?.ticker || 'N/A'} (${statistics.top_stocks[0]?.count || 0} mentions)`}
           onClick={() => handleCardClick('active-sources')}
         />
       </div>
 
       <SummaryCard
-        title="DOMINATED SENTIMENT TRENDS (SUMMARY)"
-        summary={dashboardData.summaryText}
-        embeddedCardValue={dashboardData.netSentiment.label}
-        embeddedCardDescription={`Confidence: ${dashboardData.confidence}%`}
+        title="SENTIMENT ANALYSIS SUMMARY"
+        summary={generateSummaryText()}
+        embeddedCardTitle="RECENT ACTIVITY"
+        embeddedCardValue={formatNumber(statistics.recent_activity.last_7d)}
+        embeddedCardDescription={`Predictions in last 7 days (${statistics.recent_activity.last_24h} today)`}
         embeddedCardChart={
           <SentimentBarChart
-            positive={dashboardData.sentimentBreakdown.positive}
-            neutral={dashboardData.sentimentBreakdown.neutral}
-            negative={dashboardData.sentimentBreakdown.negative}
+            positive={statistics.sentiment_distribution.positive_percentage}
+            neutral={statistics.sentiment_distribution.neutral_percentage}
+            negative={statistics.sentiment_distribution.negative_percentage}
             height={100}
           />
         }
       />
-
-      {isLoading && (
-        <div className="loading-overlay">
-          <div className="loading-spinner"></div>
-        </div>
-      )}
     </div>
   );
 };
