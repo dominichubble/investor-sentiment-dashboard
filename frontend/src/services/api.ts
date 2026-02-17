@@ -72,6 +72,7 @@ export interface TrendingStocksResponse {
 
 export interface PredictionRecord {
   id: string;
+  record_type: string;
   text: string;
   sentiment: SentimentInfo;
   source?: string;

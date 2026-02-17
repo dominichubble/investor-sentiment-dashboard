@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 def _run_keyword_predictions(texts: List[str]) -> Tuple[List[str], float]:
     """Run keyword-based sentiment on all texts. Returns (labels, elapsed_seconds)."""
-    from app.pipelines.process_stock_sentiments import calculate_financial_sentiment
+    from app.models.keyword_sentiment import calculate_financial_sentiment
 
     start = time.time()
     labels = []

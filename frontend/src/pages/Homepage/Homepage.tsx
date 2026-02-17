@@ -117,7 +117,7 @@ Sentiment is distributed as follows: ${formatPercentage(dist.positive_percentage
 
 Recent activity shows ${recentActivity.last_24h} predictions in the last 24 hours, ${recentActivity.last_7d} in the last 7 days, and ${recentActivity.last_30d} in the last 30 days.
 
-The system has analyzed ${formatNumber(statistics.total_predictions)} documents across ${statistics.total_stocks_analyzed} unique stocks, providing comprehensive coverage of market sentiment.`;
+The system has analyzed ${formatNumber(statistics.total_predictions)} records across ${statistics.total_stocks_analyzed} unique stocks, providing comprehensive coverage of market sentiment.`;
   };
 
   const sentimentTrendData = generateTrendData(20, 'up');
@@ -203,7 +203,7 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
         <MetricCard
           title="SENTIMENT BREAKDOWN"
           value={`${formatPercentage(statistics.sentiment_distribution.positive_percentage)}`}
-          description={`Positive leads with ${statistics.sentiment_distribution.positive} documents`}
+          description={`Positive leads with ${statistics.sentiment_distribution.positive} records`}
           onClick={() => handleCardClick('sentiment-breakdown')}
           chart={
             <SentimentBarChart
@@ -215,10 +215,10 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
         />
         
         <MetricCard
-          title="TOTAL DOCUMENTS ANALYSED"
+          title="TOTAL RECORDS ANALYSED"
           value={formatNumber(statistics.total_predictions)}
           description={`Tracking ${statistics.total_stocks_analyzed} unique stocks`}
-          onClick={() => handleCardClick('total-documents')}
+          onClick={() => handleCardClick('total-records')}
           chart={
             <MiniAreaChart 
               data={documentTrendData.map(v => v * statistics.total_predictions)} 

@@ -1,7 +1,7 @@
 """
-Storage module for stock-sentiment pairs.
+Legacy JSON-based storage for stock-sentiment pairs.
 
-Manages saving and retrieving stock sentiment analysis results.
+Retained for migration/reference; SQLite is the primary store.
 """
 
 import json
