@@ -1,5 +1,9 @@
 # Storage Module
 
+**Note:** The primary store is now SQLite (`data/db/sentiments.db`) using the unified
+`sentiment_records` table. The CSV/JSON helpers in `prediction_storage.py` are legacy
+import/export utilities and are no longer used as the system of record.
+
 This module provides functionality to save and load sentiment predictions in structured formats (CSV and JSON) with comprehensive validation to ensure data integrity.
 
 ## Overview

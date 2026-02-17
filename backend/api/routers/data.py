@@ -2,14 +2,17 @@
 Data retrieval API endpoints.
 
 Provides access to historical predictions, stock sentiments, and statistics.
+Includes TTL caching for the statistics endpoint.
 """
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional
 
+from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
+from app.entities.stock_database import StockDatabase
 from app.storage import StockSentimentStorage
 
 router = APIRouter(prefix="/data", tags=["data"])
@@ -17,6 +20,13 @@ router = APIRouter(prefix="/data", tags=["data"])
 # Initialize storage
 storage = StockSentimentStorage()
 storage.load()
+
+# Initialize stock database for name lookup
+stock_db = StockDatabase()
+stock_db.load()
+
+# Statistics cache (5 minute TTL)
+_stats_cache: TTLCache = TTLCache(maxsize=4, ttl=300)
 
 
 # Request/Response Models
@@ -31,6 +41,7 @@ class PredictionRecord(BaseModel):
     """Historical prediction record."""
 
     id: str = Field(..., description="Prediction ID")
+    record_type: str = Field(..., description="Record type (document or stock)")
     text: str = Field(..., description="Analyzed text")
     sentiment: SentimentInfo = Field(..., description="Sentiment prediction")
     source: Optional[str] = Field(None, description="Data source")
@@ -114,75 +125,60 @@ async def get_predictions(
     ```
     """
     try:
-        # Get all stock sentiments from storage
-        all_data = storage.get_all_sentiments()
+        start_dt = (
+            datetime.combine(start_date, datetime.min.time()) if start_date else None
+        )
+        end_dt = datetime.combine(end_date, datetime.max.time()) if end_date else None
 
-        # Convert to prediction records
-        predictions = []
-        for item in all_data:
-            # Extract sentiment info
-            overall_sent = item.get("overall_sentiment", {})
-
-            predictions.append({
-                "id": item.get("id", str(hash(item.get("text", "")))),
-                "text": item.get("text", ""),
-                "sentiment": {
-                    "label": overall_sent.get("label", "neutral"),
-                    "score": overall_sent.get("score", 0.0),
-                },
-                "source": item.get("source"),
-                "timestamp": item.get("timestamp", datetime.utcnow().isoformat() + "Z"),
-                "metadata": {
-                    "num_stocks": len(item.get("stocks", [])),
-                    "has_stocks": len(item.get("stocks", [])) > 0,
-                },
-            })
-
-        # Apply filters
-        if source:
-            predictions = [p for p in predictions if p.get("source") == source]
-
-        if sentiment:
-            predictions = [
-                p for p in predictions 
-                if p["sentiment"]["label"].lower() == sentiment.lower()
-            ]
-
-        if start_date:
-            start_dt = datetime.combine(start_date, datetime.min.time())
-            predictions = [
-                p for p in predictions
-                if datetime.fromisoformat(p["timestamp"].replace("Z", "")) >= start_dt
-            ]
-
-        if end_date:
-            end_dt = datetime.combine(end_date, datetime.max.time())
-            predictions = [
-                p for p in predictions
-                if datetime.fromisoformat(p["timestamp"].replace("Z", "")) <= end_dt
-            ]
-
-        # Calculate pagination
-        total = len(predictions)
         start_idx = (page - 1) * page_size
-        end_idx = start_idx + page_size
 
-        # Get page of results
-        page_predictions = predictions[start_idx:end_idx]
+        sentiment_filter = sentiment.lower() if sentiment else None
+        source_filter = source.lower() if source else None
 
-        # Convert to Pydantic models
-        prediction_records = [
-            PredictionRecord(
-                id=p["id"],
-                text=p["text"],
-                sentiment=SentimentInfo(**p["sentiment"]),
-                source=p.get("source"),
-                timestamp=p["timestamp"],
-                metadata=p.get("metadata"),
+        records, total = storage.query_records(
+            record_types=None,
+            source=source_filter,
+            sentiment=sentiment_filter,
+            start_date=start_dt,
+            end_date=end_dt,
+            limit=page_size,
+            offset=start_idx,
+        )
+
+        prediction_records = []
+        for record in records:
+            text_val = record.get("text", "")
+            if record.get("record_type") == "stock" and record.get("context"):
+                text_val = record.get("context", "")
+
+            metadata = {"record_type": record.get("record_type")}
+            if record.get("record_type") == "stock":
+                metadata.update(
+                    {
+                        "ticker": record.get("ticker"),
+                        "mentioned_as": record.get("mentioned_as"),
+                        "document_id": record.get("document_id"),
+                    }
+                )
+            else:
+                metadata.update({"document_id": record.get("document_id")})
+
+            prediction_records.append(
+                PredictionRecord(
+                    id=record.get("id"),
+                    record_type=record.get("record_type", "document"),
+                    text=text_val,
+                    sentiment=SentimentInfo(
+                        label=record.get("sentiment_label", "neutral"),
+                        score=record.get("sentiment_score", 0.0),
+                    ),
+                    source=record.get("source"),
+                    timestamp=record.get("timestamp", datetime.utcnow().isoformat() + "Z"),
+                    metadata=metadata,
+                )
             )
-            for p in page_predictions
-        ]
 
+        end_idx = start_idx + page_size
         return PredictionsResponse(
             predictions=prediction_records,
             total=total,
@@ -214,32 +210,49 @@ async def get_prediction(prediction_id: str) -> PredictionRecord:
     ```
     """
     try:
-        # Get all sentiments and find by ID
-        all_data = storage.get_all_sentiments()
+        record = storage.get_record_by_id(prediction_id)
+        if not record:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Prediction with ID '{prediction_id}' not found",
+            )
 
-        for item in all_data:
-            item_id = item.get("id", str(hash(item.get("text", ""))))
-            if item_id == prediction_id:
-                overall_sent = item.get("overall_sentiment", {})
+        text_val = record.get("text", "")
+        if record.get("record_type") == "stock" and record.get("context"):
+            text_val = record.get("context", "")
 
-                return PredictionRecord(
-                    id=item_id,
-                    text=item.get("text", ""),
-                    sentiment=SentimentInfo(
-                        label=overall_sent.get("label", "neutral"),
-                        score=overall_sent.get("score", 0.0),
-                    ),
-                    source=item.get("source"),
-                    timestamp=item.get("timestamp", datetime.utcnow().isoformat() + "Z"),
-                    metadata={
-                        "num_stocks": len(item.get("stocks", [])),
-                        "stocks": item.get("stocks", []),
-                    },
-                )
+        metadata = {"record_type": record.get("record_type")}
+        if record.get("record_type") == "document":
+            stocks, _ = storage.query_records(
+                record_types=["stock"], document_id=record.get("id")
+            )
+            metadata.update(
+                {
+                    "document_id": record.get("document_id"),
+                    "num_stocks": len(stocks),
+                    "stocks": stocks,
+                }
+            )
+        else:
+            metadata.update(
+                {
+                    "ticker": record.get("ticker"),
+                    "mentioned_as": record.get("mentioned_as"),
+                    "document_id": record.get("document_id"),
+                }
+            )
 
-        raise HTTPException(
-            status_code=404,
-            detail=f"Prediction with ID '{prediction_id}' not found",
+        return PredictionRecord(
+            id=record.get("id"),
+            record_type=record.get("record_type", "document"),
+            text=text_val,
+            sentiment=SentimentInfo(
+                label=record.get("sentiment_label", "neutral"),
+                score=record.get("sentiment_score", 0.0),
+            ),
+            source=record.get("source"),
+            timestamp=record.get("timestamp", datetime.utcnow().isoformat() + "Z"),
+            metadata=metadata,
         )
 
     except HTTPException:
@@ -273,8 +286,16 @@ async def get_stock_sentiment(
     ```
     """
     try:
-        # Get sentiments for this ticker
-        stock_data = storage.get_stock_sentiments(ticker.upper())
+        start_dt = (
+            datetime.combine(start_date, datetime.min.time())
+            if start_date
+            else None
+        )
+
+        # Get sentiments for this ticker (stock records only)
+        stock_data = storage.get_stock_sentiment(
+            ticker.upper(), start_date=start_dt
+        )
 
         if not stock_data:
             raise HTTPException(
@@ -282,36 +303,28 @@ async def get_stock_sentiment(
                 detail=f"No sentiment data found for ticker '{ticker}'",
             )
 
-        # Apply date filter if specified
-        if start_date:
-            start_dt = datetime.combine(start_date, datetime.min.time())
-            stock_data = [
-                item for item in stock_data
-                if datetime.fromisoformat(
-                    item.get("timestamp", "").replace("Z", "")
-                ) >= start_dt
-            ]
-
         # Apply limit
         stock_data = stock_data[:limit]
+
+        # Lookup company name
+        company_info = stock_db.get_by_ticker(ticker.upper()) or {}
+        company_name = company_info.get("company_name", ticker.upper())
 
         # Build sentiment records
         sentiments = []
         for item in stock_data:
-            for stock in item.get("stocks", []):
-                if stock.get("ticker", "").upper() == ticker.upper():
-                    sentiments.append(
-                        StockSentimentRecord(
-                            ticker=stock["ticker"],
-                            company_name=stock.get("company_name", ticker),
-                            sentiment=SentimentInfo(
-                                label=stock["sentiment"]["label"],
-                                score=stock["sentiment"]["score"],
-                            ),
-                            context=stock.get("context", ""),
-                            timestamp=item.get("timestamp", ""),
-                        )
-                    )
+            sentiments.append(
+                StockSentimentRecord(
+                    ticker=item.get("ticker", ticker.upper()),
+                    company_name=company_name,
+                    sentiment=SentimentInfo(
+                        label=item.get("sentiment_label", "neutral"),
+                        score=item.get("sentiment_score", 0.0),
+                    ),
+                    context=item.get("context", ""),
+                    timestamp=item.get("timestamp", ""),
+                )
+            )
 
         # Calculate summary statistics
         if sentiments:
@@ -385,6 +398,10 @@ async def get_statistics() -> StatisticsResponse:
     GET /api/v1/data/statistics
     ```
     """
+    cached = _stats_cache.get("statistics")
+    if cached is not None:
+        return cached
+
     try:
         # Get all data
         all_data = storage.get_all_sentiments()
@@ -398,27 +415,27 @@ async def get_statistics() -> StatisticsResponse:
         timestamps = []
 
         for item in all_data:
-            # Count overall sentiment
-            overall_sent = item.get("overall_sentiment", {})
-            label = overall_sent.get("label", "neutral")
+            label = item.get("sentiment_label", "neutral")
             sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
 
-            # Count stock mentions
-            for stock in item.get("stocks", []):
-                ticker = stock.get("ticker", "")
+            if item.get("record_type") == "stock":
+                ticker = item.get("ticker", "")
                 if ticker:
                     if ticker not in stock_mentions:
+                        company_info = stock_db.get_by_ticker(ticker) or {}
+                        company_name = company_info.get(
+                            "company_name", item.get("mentioned_as", ticker)
+                        )
                         stock_mentions[ticker] = {
                             "ticker": ticker,
-                            "company_name": stock.get("company_name", ticker),
+                            "company_name": company_name,
                             "count": 0,
                             "positive": 0,
                             "negative": 0,
                             "neutral": 0,
                         }
                     stock_mentions[ticker]["count"] += 1
-                    stock_sentiment = stock.get("sentiment", {}).get("label", "neutral")
-                    stock_mentions[ticker][stock_sentiment] += 1
+                    stock_mentions[ticker][label] = stock_mentions[ticker].get(label, 0) + 1
 
             # Collect timestamps
             ts = item.get("timestamp")
@@ -483,7 +500,7 @@ async def get_statistics() -> StatisticsResponse:
             ),
         }
 
-        return StatisticsResponse(
+        response = StatisticsResponse(
             total_predictions=total_predictions,
             total_stocks_analyzed=len(stock_mentions),
             sentiment_distribution=sentiment_distribution,
@@ -491,6 +508,8 @@ async def get_statistics() -> StatisticsResponse:
             recent_activity=recent_counts,
             date_range=date_range,
         )
+        _stats_cache["statistics"] = response
+        return response
 
     except Exception as e:
         raise HTTPException(

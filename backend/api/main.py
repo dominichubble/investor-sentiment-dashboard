@@ -9,7 +9,7 @@ from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .routers import data, explainability, sentiment, stocks
+from .routers import correlation, data, explainability, sentiment, stocks
 
 # Create FastAPI app
 app = FastAPI(
@@ -34,6 +34,7 @@ app.include_router(sentiment.router, prefix="/api/v1")
 app.include_router(explainability.router, prefix="/api/v1")
 app.include_router(data.router, prefix="/api/v1")
 app.include_router(stocks.router, prefix="/api/v1")
+app.include_router(correlation.router, prefix="/api/v1")
 
 
 @app.get("/")
@@ -51,6 +52,7 @@ async def root():
             "explainability": "/api/v1/explainability",
             "data": "/api/v1/data",
             "stocks": "/api/v1/stocks",
+            "correlation": "/api/v1/correlation",
             "health": "/health",
             "info": "/info",
         },
@@ -147,6 +149,9 @@ async def api_info():
             "historical_data_retrieval",
             "statistics_aggregation",
             "prediction_filtering",
+            "sentiment_price_correlation",
+            "lag_analysis",
+            "price_history",
         ],
         "models": {
             "sentiment": {

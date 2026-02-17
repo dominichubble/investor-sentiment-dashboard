@@ -37,6 +37,7 @@ class TestPredictionsEndpoint:
         if data["total"] > 0:
             prediction = data["predictions"][0]
             assert "id" in prediction
+            assert "record_type" in prediction
             assert "text" in prediction
             assert "sentiment" in prediction
             assert "timestamp" in prediction

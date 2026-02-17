@@ -3,7 +3,7 @@ Process Existing Data with Sentiment Analysis
 
 This script reads existing data from your data collection pipelines
 (Reddit, Twitter, News) and processes it through sentiment analysis,
-then saves the predictions using the storage module.
+then saves the predictions to SQLite storage.
 
 Usage:
     python process_existing_data.py --input data/twitter_finance_*.csv --source twitter
@@ -13,7 +13,7 @@ Usage:
 
 import argparse
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -22,16 +22,99 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from app.models import analyze_batch
-from app.storage import save_predictions_batch
+from app.storage import StockSentimentStorage
+from app.storage.record_ids import make_record_id
 
 
-def process_csv_file(input_file: Path, source: str, text_column: str = "text") -> int:
+def _coerce_timestamp(value) -> str | None:
+    """Best-effort parse of timestamps into ISO-8601 (UTC) with Z suffix."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+
+    # Numeric timestamps (assume Unix seconds or milliseconds)
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        try:
+            ts_val = float(value)
+            if ts_val > 1e12:  # likely milliseconds
+                ts_val = ts_val / 1000.0
+            dt = datetime.utcfromtimestamp(ts_val)
+            return dt.isoformat() + "Z"
+        except (ValueError, OSError, OverflowError):
+            return None
+
+    # String timestamps
+    try:
+        dt = pd.to_datetime(value, utc=True, errors="coerce")
+        if pd.isna(dt):
+            return None
+        dt = dt.to_pydatetime()
+        if dt.tzinfo is not None:
+            dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
+        return dt.isoformat() + "Z"
+    except Exception:
+        return None
+
+
+def _extract_timestamp(row: pd.Series) -> str:
+    """Extract a stable timestamp from a row, with fallback to now."""
+    candidates = [
+        "timestamp",
+        "created_at",
+        "created_utc",
+        "published_at",
+        "date",
+        "datetime",
+    ]
+    for key in candidates:
+        if key in row:
+            value = row[key]
+            if value is None:
+                continue
+            if isinstance(value, float) and pd.isna(value):
+                continue
+            parsed = _coerce_timestamp(value)
+            if parsed:
+                return parsed
+    return datetime.utcnow().isoformat() + "Z"
+
+
+def _extract_source_id(row: pd.Series) -> str:
+    """Extract a stable source identifier from a row if available."""
+    candidates = [
+        "id",
+        "source_id",
+        "url",
+        "permalink",
+        "reddit_id",
+        "tweet_id",
+        "post_id",
+    ]
+    for key in candidates:
+        if key in row:
+            value = row[key]
+            if value is None:
+                continue
+            if isinstance(value, float) and pd.isna(value):
+                continue
+            value = str(value).strip()
+            if value:
+                return value
+    return ""
+
+
+def process_csv_file(
+    input_file: Path,
+    source: str,
+    storage: StockSentimentStorage,
+    text_column: str = "text",
+) -> int:
     """
     Process a CSV file through sentiment analysis and save predictions.
 
     Args:
         input_file: Path to input CSV file
         source: Data source identifier (reddit, twitter, news)
+        storage: SQLite storage instance
         text_column: Name of column containing text to analyze
 
     Returns:
@@ -52,9 +135,11 @@ def process_csv_file(input_file: Path, source: str, text_column: str = "text") -
         print(f"Available columns: {', '.join(df.columns)}")
         return 0
 
-    # Get texts (drop nulls and empty strings)
-    texts = df[text_column].dropna().tolist()
-    texts = [str(t).strip() for t in texts if t and str(t).strip()]
+    # Get valid rows (drop nulls and empty strings)
+    valid_rows = df[df[text_column].notna()].copy()
+    valid_rows["__text__"] = valid_rows[text_column].astype(str).str.strip()
+    valid_rows = valid_rows[valid_rows["__text__"] != ""].reset_index(drop=True)
+    texts = valid_rows["__text__"].tolist()
 
     if not texts:
         print("No valid texts found in file")
@@ -70,31 +155,40 @@ def process_csv_file(input_file: Path, source: str, text_column: str = "text") -
         print(f"Error during sentiment analysis: {e}")
         return 0
 
-    # Prepare predictions for storage
-    print("Preparing predictions...")
-    timestamp = datetime.utcnow().isoformat()
-    predictions = []
+    # Prepare records for SQLite storage
+    print("Preparing records for SQLite...")
+    records = []
 
-    for text, result in zip(texts, results):
-        predictions.append(
+    for idx, (text, result) in enumerate(zip(texts, results)):
+        row = valid_rows.iloc[idx]
+        timestamp = _extract_timestamp(row)
+        source_id = _extract_source_id(row)
+        record_id = make_record_id("doc", source, source_id, timestamp, text[:200])
+        records.append(
             {
-                "text": text[:500],  # Limit text length for storage
+                "id": record_id,
+                "record_type": "document",
+                "document_id": record_id,
+                "text": text[:2000],
+                "ticker": None,
+                "mentioned_as": "",
+                "sentiment_label": result["label"],
+                "sentiment_score": result["score"],
+                "context": "",
                 "source": source,
+                "source_id": source_id,
+                "position_start": None,
+                "position_end": None,
                 "timestamp": timestamp,
-                "label": result["label"],
-                "confidence": result["score"],
+                "sentiment_mode": "finbert",
             }
         )
 
-    # Save predictions
-    output_file = Path("data") / "predictions" / f"{source}_predictions.csv"
-    print(f"Saving {len(predictions)} predictions to {output_file}...")
+    print(f"Saving {len(records)} predictions to SQLite...")
 
     try:
-        count = save_predictions_batch(
-            predictions, output_file, format="csv", append=True
-        )
-        print(f"✓ Saved {count} predictions successfully!")
+        count = storage.save_records_batch(records)
+        print(f"âœ“ Saved {count} predictions successfully!")
         return count
     except Exception as e:
         print(f"Error saving predictions: {e}")
@@ -136,6 +230,9 @@ def main():
         print(f"No files found matching: {args.input}")
         return
 
+    storage = StockSentimentStorage()
+    storage.load()
+
     print(f"Found {len(files)} file(s) to process")
     total_saved = 0
 
@@ -144,7 +241,7 @@ def main():
             print(f"Skipping {file} (does not exist)")
             continue
 
-        count = process_csv_file(file, args.source, args.text_column)
+        count = process_csv_file(file, args.source, storage, args.text_column)
         total_saved += count
         print()
 

@@ -8,7 +8,7 @@ from .prediction_storage import (
     save_predictions_batch,
     validate_prediction,
 )
-from .stock_sentiment_storage import StockSentimentStorage
+from .sqlite_storage import SQLiteSentimentStorage as StockSentimentStorage
 
 __all__ = [
     "PredictionRecord",
