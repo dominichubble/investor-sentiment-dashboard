@@ -268,7 +268,7 @@ async def get_trending_stocks(
     period: str = Query(
         "24h",
         description="Time period (24h, 7d, 30d)",
-        regex="^(24h|7d|30d)$",
+        pattern="^(24h|7d|30d)$",
     ),
     min_mentions: int = Query(
         5, ge=1, description="Minimum mentions required"

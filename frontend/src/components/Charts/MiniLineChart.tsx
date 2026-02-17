@@ -12,13 +12,15 @@ const MiniLineChart: React.FC<MiniLineChartProps> = ({
   color,
   height = 60 
 }) => {
+  if (!data || data.length === 0) return null;
+
   const chartData = data.map((value, index) => ({
     value,
     index
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
+    <ResponsiveContainer width="100%" height={height} minWidth={0}>
       <LineChart data={chartData}>
         <YAxis hide domain={['auto', 'auto']} />
         <Line 
@@ -27,7 +29,7 @@ const MiniLineChart: React.FC<MiniLineChartProps> = ({
           stroke={color} 
           strokeWidth={2}
           dot={false}
-          isAnimationActive={true}
+          isAnimationActive={false}
         />
       </LineChart>
     </ResponsiveContainer>

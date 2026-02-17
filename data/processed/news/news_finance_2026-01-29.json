@@ -1,0 +1,104 @@
+{
+  "data": [
+    {
+      "source_id": "business-insider",
+      "source_name": "Business Insider",
+      "author": "Aditi Bharade,Huileng Tan",
+      "title": "Tiffany & Co. is setting its sights on the gold girlies",
+      "description": "LVMH is pushing Tiffany toward gold and high jewelry, where it sees higher demand, and away from silver jewelry.",
+      "url": "https://www.businessinsider.com/tiffany-lvmh-gold-high-jewelry-pulling-back-silver-2026-1",
+      "url_to_image": "https://i.insider.com/69799449d3c7faef0ecd0c9e?width=1200&format=jpeg",
+      "published_at": "2026-01-28T05:00:20Z",
+      "content": "Tiffany & Co. is pivoting away from silver jewelry.Nicolas Economou/NurPhoto\r\n<ul><li>Tiffany & Co. will be moving away from the silver jewelry that brought it international fame.</li><li>LVMH is pus… [+3144 chars]",
+      "clean_title": "Tiffany & Co. is setting its sights on the gold girlies",
+      "clean_description": "LVMH is pushing Tiffany toward gold and high jewelry, where it sees higher demand, and away from silver jewelry.",
+      "clean_content": "Tiffany & Co. is pivoting away from silver jewelry.Nicolas Economou/NurPhoto Tiffany & Co. will be moving away from the silver jewelry that brought it international fame.LVMH is pus…",
+      "clean_title_tokens": [
+        "Tiffany",
+        "Co.",
+        "is",
+        "setting",
+        "its",
+        "sights",
+        "on",
+        "the",
+        "gold",
+        "girlies"
+      ],
+      "clean_title_processed": "Tiffany Co. is setting its sights on the gold girlies",
+      "clean_description_tokens": [
+        "LVMH",
+        "is",
+        "pushing",
+        "Tiffany",
+        "toward",
+        "gold",
+        "and",
+        "high",
+        "jewelry",
+        "where",
+        "it",
+        "sees",
+        "higher",
+        "demand",
+        "and",
+        "away",
+        "from",
+        "silver",
+        "jewelry",
+        "."
+      ],
+      "clean_description_processed": "LVMH is pushing Tiffany toward gold and high jewelry where it sees higher demand and away from silver jewelry .",
+      "clean_content_tokens": [
+        "Tiffany",
+        "Co.",
+        "is",
+        "pivoting",
+        "away",
+        "from",
+        "silver",
+        "jewelry.Nicolas",
+        "EconomouNurPhoto",
+        "Tiffany",
+        "Co.",
+        "will",
+        "be",
+        "moving",
+        "away",
+        "from",
+        "the",
+        "silver",
+        "jewelry",
+        "that",
+        "brought",
+        "it",
+        "international",
+        "fame.LVMH",
+        "is",
+        "pus…"
+      ],
+      "clean_content_processed": "Tiffany Co. is pivoting away from silver jewelry.Nicolas EconomouNurPhoto Tiffany Co. will be moving away from the silver jewelry that brought it international fame.LVMH is pus…"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-01-29T06:43:26.999171",
+      "source_file": "news_finance_2026-01-29.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 56,
+        "avg_tokens_per_record": 56.0
+      }
+    }
+  }
+}

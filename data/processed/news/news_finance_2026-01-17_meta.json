@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "run_id": "2026-01-17",
+      "timestamp": "2026-01-17T06:27:27.163414",
+      "total_articles": 2,
+      "sources": [
+        "Bloomberg"
+      ]
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-01-17T06:27:36.531319",
+      "source_file": "news_finance_2026-01-17_meta.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 0,
+        "avg_tokens_per_record": 0.0
+      }
+    }
+  }
+}

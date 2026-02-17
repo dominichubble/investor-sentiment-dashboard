@@ -1,0 +1,110 @@
+{
+  "data": [
+    {
+      "source_id": "bloomberg",
+      "source_name": "Bloomberg",
+      "author": "Bloomberg",
+      "title": "Asian stocks enter 2026 under cloud of AI valuation risks, policy divergence",
+      "description": "Asian stocks face challenges in 2026 due to AI valuation concerns and divergent policies amid recent strong performances.",
+      "url": "https://www.bloomberg.com/news/articles/2026-01-04/ai-bubble-fears-and-policy-splits-loom-over-asia-stocks-in-2026",
+      "url_to_image": "https://bl-i.thgim.com/public/incoming/z893mc/article70470025.ece/alternates/LANDSCAPE_1200/IMG_bl15_think1_leadpic1_2_1_4UECG0LA.jpg",
+      "published_at": "2026-01-04T04:03:20Z",
+      "content": "Asian equities kicked off the new year with sharp gains, but the advance may face headwinds from worries over an artificial-intelligence bubble and diverging interest-rate paths across the region.\r\nA… [+5363 chars]",
+      "clean_title": "Asian stocks enter 2026 under cloud of AI valuation risks, policy divergence",
+      "clean_description": "Asian stocks face challenges in 2026 due to AI valuation concerns and divergent policies amid recent strong performances.",
+      "clean_content": "Asian equities kicked off the new year with sharp gains, but the advance may face headwinds from worries over an artificial-intelligence bubble and diverging interest-rate paths across the region. A…",
+      "clean_title_tokens": [
+        "Asian",
+        "stocks",
+        "enter",
+        "2026",
+        "under",
+        "cloud",
+        "of",
+        "AI",
+        "valuation",
+        "risks",
+        "policy",
+        "divergence"
+      ],
+      "clean_title_processed": "Asian stocks enter 2026 under cloud of AI valuation risks policy divergence",
+      "clean_description_tokens": [
+        "Asian",
+        "stocks",
+        "face",
+        "challenges",
+        "in",
+        "2026",
+        "due",
+        "to",
+        "AI",
+        "valuation",
+        "concerns",
+        "and",
+        "divergent",
+        "policies",
+        "amid",
+        "recent",
+        "strong",
+        "performances",
+        "."
+      ],
+      "clean_description_processed": "Asian stocks face challenges in 2026 due to AI valuation concerns and divergent policies amid recent strong performances .",
+      "clean_content_tokens": [
+        "Asian",
+        "equities",
+        "kicked",
+        "off",
+        "the",
+        "new",
+        "year",
+        "with",
+        "sharp",
+        "gains",
+        "but",
+        "the",
+        "advance",
+        "may",
+        "face",
+        "headwinds",
+        "from",
+        "worries",
+        "over",
+        "an",
+        "artificialintelligence",
+        "bubble",
+        "and",
+        "diverging",
+        "interestrate",
+        "paths",
+        "across",
+        "the",
+        "region",
+        ".",
+        "A…"
+      ],
+      "clean_content_processed": "Asian equities kicked off the new year with sharp gains but the advance may face headwinds from worries over an artificialintelligence bubble and diverging interestrate paths across the region . A…"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-01-05T06:33:43.452942",
+      "source_file": "news_finance_2026-01-05.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 62,
+        "avg_tokens_per_record": 62.0
+      }
+    }
+  }
+}

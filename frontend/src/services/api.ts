@@ -1,10 +1,20 @@
 import axios from 'axios';
+import type {
+  CorrelationResponse,
+  CorrelationOverviewItem,
+  LagAnalysisResponse,
+  TimeSeriesResponse,
+  PriceHistoryResponse,
+  StockInfoResponse,
+  GrangerCausalityResponse,
+  RollingCorrelationResponse,
+} from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -168,6 +178,111 @@ export const apiService = {
 
   async batchAnalyzeSentiment(texts: string[], options?: any): Promise<any> {
     const response = await api.post('/sentiment/batch', { texts, options });
+    return response.data;
+  },
+
+  // --- Correlation endpoints ---
+
+  async getCorrelation(
+    ticker: string,
+    params?: {
+      period?: string;
+      sentiment_metric?: string;
+      price_metric?: string;
+    }
+  ): Promise<CorrelationResponse> {
+    const response = await api.get<CorrelationResponse>(
+      `/correlation/${ticker}`,
+      { params }
+    );
+    return response.data;
+  },
+
+  async getCorrelationTimeseries(
+    ticker: string,
+    params?: { period?: string }
+  ): Promise<TimeSeriesResponse> {
+    const response = await api.get<TimeSeriesResponse>(
+      `/correlation/${ticker}/timeseries`,
+      { params }
+    );
+    return response.data;
+  },
+
+  async getLagAnalysis(
+    ticker: string,
+    params?: {
+      max_lag_days?: number;
+      period?: string;
+      sentiment_metric?: string;
+    }
+  ): Promise<LagAnalysisResponse> {
+    const response = await api.get<LagAnalysisResponse>(
+      `/correlation/${ticker}/lag-analysis`,
+      { params }
+    );
+    return response.data;
+  },
+
+  async getCorrelationOverview(
+    params?: {
+      min_mentions?: number;
+      period?: string;
+    }
+  ): Promise<CorrelationOverviewItem[]> {
+    const response = await api.get<CorrelationOverviewItem[]>(
+      '/correlation/overview/all',
+      { params }
+    );
+    return response.data;
+  },
+
+  async getPriceHistory(
+    ticker: string,
+    params?: { period?: string }
+  ): Promise<PriceHistoryResponse> {
+    const response = await api.get<PriceHistoryResponse>(
+      `/correlation/${ticker}/price-history`,
+      { params }
+    );
+    return response.data;
+  },
+
+  async getStockInfo(ticker: string): Promise<StockInfoResponse> {
+    const response = await api.get<StockInfoResponse>(
+      `/correlation/${ticker}/info`
+    );
+    return response.data;
+  },
+
+  async getGrangerCausality(
+    ticker: string,
+    params?: {
+      max_lag?: number;
+      period?: string;
+      sentiment_metric?: string;
+    }
+  ): Promise<GrangerCausalityResponse> {
+    const response = await api.get<GrangerCausalityResponse>(
+      `/correlation/${ticker}/granger`,
+      { params }
+    );
+    return response.data;
+  },
+
+  async getRollingCorrelation(
+    ticker: string,
+    params?: {
+      window?: number;
+      period?: string;
+      sentiment_metric?: string;
+      price_metric?: string;
+    }
+  ): Promise<RollingCorrelationResponse> {
+    const response = await api.get<RollingCorrelationResponse>(
+      `/correlation/${ticker}/rolling`,
+      { params }
+    );
     return response.data;
   },
 

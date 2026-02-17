@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import MetricCard from '../../components/MetricCard';
 import SummaryCard from '../../components/SummaryCard';
-import { MiniLineChart, SentimentBarChart, MiniAreaChart } from '../../components/Charts';
+import { MiniLineChart, SentimentBarChart, MiniAreaChart, CorrelationHeatmap } from '../../components/Charts';
+import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { DropdownOption } from '../../components/DropdownButton';
-import { apiService, StatisticsResponse } from '../../services/api';
+import { useDashboard } from '../../context/DashboardContext';
 import './Homepage.css';
 
 
@@ -23,42 +25,40 @@ const timeframeOptions: DropdownOption[] = [
 ];
 
 const Homepage: React.FC = () => {
+  const navigate = useNavigate();
+  const {
+    statistics,
+    correlationOverview,
+    selectedAssetType,
+    selectedTimeframe: ctxTimeframe,
+    isLoading,
+    error,
+    setSelectedAssetType,
+    setSelectedTimeframe: setCtxTimeframe,
+    refreshData,
+  } = useDashboard();
+
   const [selectedAsset, setSelectedAsset] = useState<DropdownOption>(assetOptions[0]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<DropdownOption>(timeframeOptions[0]);
-  const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch data when component mounts and filters change  
-  useEffect(() => {
-    fetchDashboardData();
-  }, [selectedAsset, selectedTimeframe]);
-
-  const fetchDashboardData = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const stats = await apiService.getStatistics();
-      setStatistics(stats);
-    } catch (error: any) {
-      console.error('Error fetching dashboard data:', error);
-      setError(error.response?.data?.detail || 'Failed to load data. Please ensure the backend is running.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleAssetChange = (option: DropdownOption) => {
     setSelectedAsset(option);
+    setSelectedAssetType(option.value);
   };
 
   const handleTimeframeChange = (option: DropdownOption) => {
     setSelectedTimeframe(option);
+    setCtxTimeframe(option.value);
   };
 
   const handleCardClick = (cardType: string) => {
-    console.log(`Card clicked: ${cardType}`);
-    // TODO: Navigate to detailed view or open modal
+    if (cardType === 'correlation') {
+      navigate('/correlation');
+    }
+  };
+
+  const handleStockClick = (ticker: string) => {
+    navigate('/correlation');
   };
 
   const formatNumber = (num: number): string => {
@@ -69,7 +69,6 @@ const Homepage: React.FC = () => {
     return `${num.toFixed(1)}%`;
   };
 
-  // Generate mock trend data for visualizations (TODO: Replace with time-series data from API)
   const generateTrendData = (days: number, trend: 'up' | 'down' | 'stable'): number[] => {
     const data: number[] = [];
     let value = 0.2 + Math.random() * 0.3;
@@ -87,11 +86,9 @@ const Homepage: React.FC = () => {
     return data;
   };
 
-  // Calculate net sentiment score from distribution
   const calculateNetSentiment = (): string => {
     if (!statistics) return '0.00';
     const dist = statistics.sentiment_distribution;
-    // Calculate normalized score (-1 to +1)
     const score = ((dist.positive_percentage - dist.negative_percentage) / 100).toFixed(2);
     return Number(score) >= 0 ? `+${score}` : score;
   };
@@ -126,13 +123,13 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
   const sentimentTrendData = generateTrendData(20, 'up');
   const documentTrendData = generateTrendData(20, 'up');
 
-  // Determine active sources (simplified - could be enhanced with API data)
-  const getActiveSources = (): number => {
-    // This could be determined from the API data
-    return 3; // Reddit, Twitter, News
+  // Get the top correlated stock for the summary card
+  const getTopCorrelation = () => {
+    if (correlationOverview.length === 0) return null;
+    return correlationOverview[0];
   };
 
-  if (error) {
+  if (error && !statistics) {
     return (
       <div className="homepage">
         <Navbar
@@ -144,9 +141,9 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
           onTimeframeChange={handleTimeframeChange}
         />
         <div className="error-message">
-          <h2>⚠️ Unable to Load Data</h2>
+          <h2>Unable to Load Data</h2>
           <p>{error}</p>
-          <button onClick={fetchDashboardData} className="retry-button">
+          <button onClick={refreshData} className="retry-button">
             Retry
           </button>
         </div>
@@ -175,6 +172,7 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
 
   const netSentiment = calculateNetSentiment();
   const netScore = parseFloat(netSentiment);
+  const topCorr = getTopCorrelation();
 
   return (
     <div className="homepage">
@@ -230,10 +228,13 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
         />
         
         <MetricCard
-          title="ACTIVE STOCKS TRACKED"
-          value={statistics.total_stocks_analyzed}
-          description={`Top: ${statistics.top_stocks[0]?.ticker || 'N/A'} (${statistics.top_stocks[0]?.count || 0} mentions)`}
-          onClick={() => handleCardClick('active-sources')}
+          title="TOP CORRELATION"
+          value={topCorr ? `${topCorr.pearson_r >= 0 ? '+' : ''}${topCorr.pearson_r.toFixed(3)}` : 'N/A'}
+          description={topCorr
+            ? `${topCorr.ticker}: ${topCorr.interpretation}`
+            : 'No correlation data yet'}
+          trend={topCorr ? (topCorr.pearson_r > 0 ? 'up' : topCorr.pearson_r < 0 ? 'down' : 'neutral') : 'neutral'}
+          onClick={() => handleCardClick('correlation')}
         />
       </div>
 
@@ -252,6 +253,29 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} documents 
           />
         }
       />
+
+      {/* Correlation Overview Section */}
+      {correlationOverview.length > 0 && (
+        <ErrorBoundary fallbackTitle="Failed to load correlation overview">
+          <div className="correlation-section">
+            <div className="correlation-section-header">
+              <div>
+                <h2 className="correlation-section-title">Sentiment-Price Correlations</h2>
+                <p className="correlation-section-desc">
+                  How sentiment aligns with actual stock price movements. Click a stock for detailed analysis.
+                </p>
+              </div>
+              <button className="view-all-btn" onClick={() => navigate('/correlation')}>
+                View Full Analysis
+              </button>
+            </div>
+            <CorrelationHeatmap
+              data={correlationOverview.slice(0, 12)}
+              onStockClick={handleStockClick}
+            />
+          </div>
+        </ErrorBoundary>
+      )}
     </div>
   );
 };

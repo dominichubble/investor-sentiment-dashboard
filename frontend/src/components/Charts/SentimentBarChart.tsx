@@ -21,7 +21,7 @@ const SentimentBarChart: React.FC<SentimentBarChartProps> = ({
   ];
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
+    <ResponsiveContainer width="100%" height={height} minWidth={0}>
       <BarChart data={data}>
         <XAxis 
           dataKey="name" 

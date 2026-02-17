@@ -2,11 +2,13 @@
 Data retrieval API endpoints.
 
 Provides access to historical predictions, stock sentiments, and statistics.
+Includes TTL caching for the statistics endpoint.
 """
 
 from datetime import date, datetime, timedelta
 from typing import List, Optional
 
+from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
@@ -17,6 +19,9 @@ router = APIRouter(prefix="/data", tags=["data"])
 # Initialize storage
 storage = StockSentimentStorage()
 storage.load()
+
+# Statistics cache (5 minute TTL)
+_stats_cache: TTLCache = TTLCache(maxsize=4, ttl=300)
 
 
 # Request/Response Models
@@ -117,26 +122,42 @@ async def get_predictions(
         # Get all stock sentiments from storage
         all_data = storage.get_all_sentiments()
 
-        # Convert to prediction records
+        # Convert to prediction records (supports both flat and nested formats)
         predictions = []
         for item in all_data:
-            # Extract sentiment info
-            overall_sent = item.get("overall_sentiment", {})
-
-            predictions.append({
-                "id": item.get("id", str(hash(item.get("text", "")))),
-                "text": item.get("text", ""),
-                "sentiment": {
-                    "label": overall_sent.get("label", "neutral"),
-                    "score": overall_sent.get("score", 0.0),
-                },
-                "source": item.get("source"),
-                "timestamp": item.get("timestamp", datetime.utcnow().isoformat() + "Z"),
-                "metadata": {
-                    "num_stocks": len(item.get("stocks", [])),
-                    "has_stocks": len(item.get("stocks", [])) > 0,
-                },
-            })
+            if "sentiment_label" in item:
+                # Flat record format
+                predictions.append({
+                    "id": item.get("id", str(hash(item.get("context", "")))),
+                    "text": item.get("context", ""),
+                    "sentiment": {
+                        "label": item.get("sentiment_label", "neutral"),
+                        "score": item.get("sentiment_score", 0.0),
+                    },
+                    "source": item.get("source"),
+                    "timestamp": item.get("timestamp", datetime.utcnow().isoformat() + "Z"),
+                    "metadata": {
+                        "ticker": item.get("ticker", ""),
+                        "mentioned_as": item.get("mentioned_as", ""),
+                    },
+                })
+            else:
+                # Nested record format
+                overall_sent = item.get("overall_sentiment", {})
+                predictions.append({
+                    "id": item.get("id", str(hash(item.get("text", "")))),
+                    "text": item.get("text", ""),
+                    "sentiment": {
+                        "label": overall_sent.get("label", "neutral"),
+                        "score": overall_sent.get("score", 0.0),
+                    },
+                    "source": item.get("source"),
+                    "timestamp": item.get("timestamp", datetime.utcnow().isoformat() + "Z"),
+                    "metadata": {
+                        "num_stocks": len(item.get("stocks", [])),
+                        "has_stocks": len(item.get("stocks", [])) > 0,
+                    },
+                })
 
         # Apply filters
         if source:
@@ -385,6 +406,10 @@ async def get_statistics() -> StatisticsResponse:
     GET /api/v1/data/statistics
     ```
     """
+    cached = _stats_cache.get("statistics")
+    if cached is not None:
+        return cached
+
     try:
         # Get all data
         all_data = storage.get_all_sentiments()
@@ -398,27 +423,49 @@ async def get_statistics() -> StatisticsResponse:
         timestamps = []
 
         for item in all_data:
-            # Count overall sentiment
-            overall_sent = item.get("overall_sentiment", {})
-            label = overall_sent.get("label", "neutral")
-            sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
+            # Support both flat records (from processing pipeline) and nested records
+            # Flat format: {ticker, sentiment_label, sentiment_score, ...}
+            # Nested format: {overall_sentiment: {label, score}, stocks: [...]}
 
-            # Count stock mentions
-            for stock in item.get("stocks", []):
-                ticker = stock.get("ticker", "")
+            if "sentiment_label" in item:
+                # Flat record format
+                label = item.get("sentiment_label", "neutral")
+                sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
+
+                ticker = item.get("ticker", "")
                 if ticker:
                     if ticker not in stock_mentions:
                         stock_mentions[ticker] = {
                             "ticker": ticker,
-                            "company_name": stock.get("company_name", ticker),
+                            "company_name": item.get("mentioned_as", ticker),
                             "count": 0,
                             "positive": 0,
                             "negative": 0,
                             "neutral": 0,
                         }
                     stock_mentions[ticker]["count"] += 1
-                    stock_sentiment = stock.get("sentiment", {}).get("label", "neutral")
-                    stock_mentions[ticker][stock_sentiment] += 1
+                    stock_mentions[ticker][label] = stock_mentions[ticker].get(label, 0) + 1
+            else:
+                # Nested record format (original API format)
+                overall_sent = item.get("overall_sentiment", {})
+                label = overall_sent.get("label", "neutral")
+                sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
+
+                for stock in item.get("stocks", []):
+                    ticker = stock.get("ticker", "")
+                    if ticker:
+                        if ticker not in stock_mentions:
+                            stock_mentions[ticker] = {
+                                "ticker": ticker,
+                                "company_name": stock.get("company_name", ticker),
+                                "count": 0,
+                                "positive": 0,
+                                "negative": 0,
+                                "neutral": 0,
+                            }
+                        stock_mentions[ticker]["count"] += 1
+                        stock_sentiment = stock.get("sentiment", {}).get("label", "neutral")
+                        stock_mentions[ticker][stock_sentiment] += 1
 
             # Collect timestamps
             ts = item.get("timestamp")
@@ -483,7 +530,7 @@ async def get_statistics() -> StatisticsResponse:
             ),
         }
 
-        return StatisticsResponse(
+        response = StatisticsResponse(
             total_predictions=total_predictions,
             total_stocks_analyzed=len(stock_mentions),
             sentiment_distribution=sentiment_distribution,
@@ -491,6 +538,8 @@ async def get_statistics() -> StatisticsResponse:
             recent_activity=recent_counts,
             date_range=date_range,
         )
+        _stats_cache["statistics"] = response
+        return response
 
     except Exception as e:
         raise HTTPException(
