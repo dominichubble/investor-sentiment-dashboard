@@ -73,8 +73,10 @@ def run_benchmark(
     texts = [item["text"] for item in dataset]
     true_labels = [item["label"] for item in dataset]
 
-    logger.info(f"Dataset: {stats['total']} samples "
-                f"(pos={stats['positive']}, neg={stats['negative']}, neu={stats['neutral']})")
+    logger.info(
+        f"Dataset: {stats['total']} samples "
+        f"(pos={stats['positive']}, neg={stats['negative']}, neu={stats['neutral']})"
+    )
 
     results = {}
 

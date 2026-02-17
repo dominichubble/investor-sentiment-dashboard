@@ -24,9 +24,9 @@ from typing import Dict, List, Optional
 from pydantic import ValidationError
 
 from app.schemas.sentiment import SentimentRecord
+from app.stocks import StockSentimentAnalyzer
 from app.storage import StockSentimentStorage
 from app.storage.record_ids import make_record_id
-from app.stocks import StockSentimentAnalyzer
 
 logging.basicConfig(
     level=logging.INFO,
@@ -305,9 +305,7 @@ def process_all_data(data_dir: Path, max_records: Optional[int] = None) -> Dict:
                 "ticker": ticker,
                 "mentioned_as": stock.get("mentioned_as", ""),
                 "sentiment_label": stock.get("sentiment", {}).get("label", "neutral"),
-                "sentiment_score": float(
-                    stock.get("sentiment", {}).get("score", 0.5)
-                ),
+                "sentiment_score": float(stock.get("sentiment", {}).get("score", 0.5)),
                 "context": context,
                 "source": source,
                 "source_id": source_id,

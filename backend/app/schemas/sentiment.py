@@ -67,6 +67,7 @@ class SentimentRecord(BaseModel):
 # Backwards compatibility alias
 class StockSentimentRecord(SentimentRecord):
     """Legacy alias for stock sentiment records."""
+
     pass
 
 
@@ -76,9 +77,7 @@ class SentimentMetadata(BaseModel):
     total_sentiments: int = Field(..., ge=0)
     unique_tickers: int = Field(..., ge=0)
     last_updated: str = Field(..., description="ISO timestamp of last processing run")
-    sentiment_mode: str = Field(
-        default="keyword", description="keyword or finbert"
-    )
+    sentiment_mode: str = Field(default="keyword", description="keyword or finbert")
     processing_stats: Optional[dict] = Field(
         default=None, description="Processing statistics"
     )

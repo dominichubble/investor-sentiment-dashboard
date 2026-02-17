@@ -25,8 +25,8 @@ from sqlalchemy import (
     create_engine,
     func,
     inspect,
-    text as sql_text,
 )
+from sqlalchemy import text as sql_text
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
@@ -80,9 +80,7 @@ class SentimentRecordRow(Base):
             "source_id": self.source_id,
             "position_start": self.position_start,
             "position_end": self.position_end,
-            "timestamp": self.timestamp.isoformat() + "Z"
-            if self.timestamp
-            else None,
+            "timestamp": self.timestamp.isoformat() + "Z" if self.timestamp else None,
             "sentiment_mode": self.sentiment_mode,
         }
 
@@ -141,8 +139,10 @@ def _coerce_position(position: Optional[object]) -> Tuple[Optional[int], Optiona
     if isinstance(position, dict):
         start = position.get("start")
         end = position.get("end")
-        return (int(start) if isinstance(start, int) else None,
-                int(end) if isinstance(end, int) else None)
+        return (
+            int(start) if isinstance(start, int) else None,
+            int(end) if isinstance(end, int) else None,
+        )
     if isinstance(position, int):
         return (position, None)
     return (None, None)
@@ -159,7 +159,7 @@ def _bulk_insert_records(session: Session, records: List[Dict]) -> int:
 
     total_inserted = 0
     for i in range(0, len(records), batch_size):
-        batch = records[i: i + batch_size]
+        batch = records[i : i + batch_size]
         stmt = sqlite_insert(SentimentRecordRow).values(batch)
         stmt = stmt.prefix_with("OR IGNORE")
         result = session.execute(stmt)
@@ -176,13 +176,17 @@ def _migrate_from_legacy_table(session: Session) -> int:
         return 0
 
     logger.info("Migrating legacy table stock_sentiments into sentiment_records...")
-    rows = session.execute(
-        sql_text(
-            "SELECT id, ticker, mentioned_as, sentiment_label, sentiment_score, "
-            "context, source, source_id, full_text, position, timestamp, sentiment_mode "
-            "FROM stock_sentiments"
+    rows = (
+        session.execute(
+            sql_text(
+                "SELECT id, ticker, mentioned_as, sentiment_label, sentiment_score, "
+                "context, source, source_id, full_text, position, timestamp, sentiment_mode "
+                "FROM stock_sentiments"
+            )
         )
-    ).mappings().all()
+        .mappings()
+        .all()
+    )
 
     records: List[Dict] = []
     for row in rows:
@@ -191,8 +195,12 @@ def _migrate_from_legacy_table(session: Session) -> int:
         text_val = row.get("full_text") or row.get("context") or ""
         records.append(
             {
-                "id": row.get("id") or make_record_id(
-                    "stock", row.get("ticker", ""), row.get("timestamp", ""), row.get("context", "")
+                "id": row.get("id")
+                or make_record_id(
+                    "stock",
+                    row.get("ticker", ""),
+                    row.get("timestamp", ""),
+                    row.get("context", ""),
                 ),
                 "record_type": "stock",
                 "document_id": None,
@@ -287,7 +295,9 @@ def _migrate_predictions_files(session: Session, predictions_dir: Path) -> int:
                     label = row.get("label") or "neutral"
                     confidence = row.get("confidence")
                     try:
-                        confidence_val = float(confidence) if confidence is not None else 0.5
+                        confidence_val = (
+                            float(confidence) if confidence is not None else 0.5
+                        )
                     except (ValueError, TypeError):
                         confidence_val = 0.5
                     text_val = row.get("text") or ""
@@ -366,7 +376,9 @@ def _migrate_predictions_files(session: Session, predictions_dir: Path) -> int:
         inserted_total += _bulk_insert_records(session, records)
 
     if inserted_total:
-        logger.info(f"  Migrated {inserted_total} document records from predictions files")
+        logger.info(
+            f"  Migrated {inserted_total} document records from predictions files"
+        )
     return inserted_total
 
 

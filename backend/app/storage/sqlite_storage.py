@@ -76,7 +76,7 @@ class SQLiteSentimentStorage:
 
             total_inserted = 0
             for i in range(0, len(records), batch_size):
-                batch = records[i: i + batch_size]
+                batch = records[i : i + batch_size]
                 stmt = sqlite_insert(SentimentRecordRow).values(batch)
                 stmt = stmt.prefix_with("OR IGNORE")
                 result = session.execute(stmt)
@@ -142,7 +142,9 @@ class SQLiteSentimentStorage:
         count = self.save_records_batch([record])
         return record["id"] if count else record["id"]
 
-    def save_analysis_result(self, result: Dict, source: Optional[str] = None) -> List[str]:
+    def save_analysis_result(
+        self, result: Dict, source: Optional[str] = None
+    ) -> List[str]:
         """
         Save a StockSentimentAnalyzer result.
 
@@ -196,7 +198,9 @@ class SQLiteSentimentStorage:
                     "text": text,
                     "ticker": stock.get("ticker"),
                     "mentioned_as": stock.get("mentioned_as", ""),
-                    "sentiment_label": stock.get("sentiment", {}).get("label", "neutral"),
+                    "sentiment_label": stock.get("sentiment", {}).get(
+                        "label", "neutral"
+                    ),
                     "sentiment_score": stock.get("sentiment", {}).get("score", 0.5),
                     "context": stock.get("context", "") or "",
                     "source": source or "",
@@ -363,10 +367,16 @@ class SQLiteSentimentStorage:
                     "ticker": ticker,
                     "total_mentions": 0,
                     "average_score": 0.0,
-                    "sentiment_distribution": {"positive": 0, "negative": 0, "neutral": 0},
+                    "sentiment_distribution": {
+                        "positive": 0,
+                        "negative": 0,
+                        "neutral": 0,
+                    },
                 }
 
-            avg_query = session.query(func.avg(SentimentRecordRow.sentiment_score)).filter(
+            avg_query = session.query(
+                func.avg(SentimentRecordRow.sentiment_score)
+            ).filter(
                 SentimentRecordRow.record_type == "stock",
                 SentimentRecordRow.ticker == ticker,
             )
@@ -384,7 +394,9 @@ class SQLiteSentimentStorage:
                 SentimentRecordRow.ticker == ticker,
             )
             if start_date:
-                dist_query = dist_query.filter(SentimentRecordRow.timestamp >= start_date)
+                dist_query = dist_query.filter(
+                    SentimentRecordRow.timestamp >= start_date
+                )
             if end_date:
                 dist_query = dist_query.filter(SentimentRecordRow.timestamp <= end_date)
             dist_rows = dist_query.group_by(SentimentRecordRow.sentiment_label).all()
@@ -426,9 +438,7 @@ class SQLiteSentimentStorage:
                 .filter(SentimentRecordRow.record_type == "stock")
                 .scalar()
             )
-            last_updated_str = (
-                last_updated.isoformat() + "Z" if last_updated else None
-            )
+            last_updated_str = last_updated.isoformat() + "Z" if last_updated else None
             return {
                 "total_records": int(total),
                 "unique_tickers": int(unique_tickers),
