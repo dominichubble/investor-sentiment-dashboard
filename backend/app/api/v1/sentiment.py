@@ -8,12 +8,8 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from app.explainability.lime_explainer import get_lime_explainer
-from app.models.sentiment_inference import (
-    analyze_batch as run_batch_sentiment,
-)
-from app.models.sentiment_inference import (
-    analyze_sentiment as run_sentiment,
-)
+from app.models.sentiment_inference import analyze_batch as run_batch_sentiment
+from app.models.sentiment_inference import analyze_sentiment as run_sentiment
 
 router = APIRouter(prefix="/sentiment", tags=["sentiment"])
 
@@ -110,7 +106,9 @@ def run_lime_explain(
 ) -> dict[str, Any]:
     """Run LIME explanation using shared explainer singleton."""
     explainer = get_lime_explainer()
-    return explainer.explain(text=text, num_features=num_features, num_samples=num_samples)
+    return explainer.explain(
+        text=text, num_features=num_features, num_samples=num_samples
+    )
 
 
 @router.post("/analyze", response_model=AnalyzeResponse)
@@ -127,7 +125,9 @@ async def analyze_sentiment(request: AnalyzeRequest) -> AnalyzeResponse:
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"sentiment analysis failed: {exc}") from exc
+        raise HTTPException(
+            status_code=500, detail=f"sentiment analysis failed: {exc}"
+        ) from exc
 
     scores_payload = None
     if include_scores and isinstance(result.get("scores"), dict):
@@ -156,9 +156,13 @@ async def analyze_sentiment(request: AnalyzeRequest) -> AnalyzeResponse:
 async def batch_analyze_sentiment(request: BatchRequest) -> BatchResponse:
     """Analyze sentiment for multiple texts, preserving input order."""
     if not request.texts:
-        raise HTTPException(status_code=400, detail="texts must contain at least one item")
+        raise HTTPException(
+            status_code=400, detail="texts must contain at least one item"
+        )
     if len(request.texts) > 100:
-        raise HTTPException(status_code=400, detail="maximum 100 texts allowed per request")
+        raise HTTPException(
+            status_code=400, detail="maximum 100 texts allowed per request"
+        )
 
     include_scores = bool((request.options or {}).get("include_scores", False))
     started = perf_counter()
@@ -171,7 +175,9 @@ async def batch_analyze_sentiment(request: BatchRequest) -> BatchResponse:
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"batch sentiment analysis failed: {exc}") from exc
+        raise HTTPException(
+            status_code=500, detail=f"batch sentiment analysis failed: {exc}"
+        ) from exc
 
     normalized_results: list[BatchItemResponse] = []
     for text, result in zip(request.texts, batch_results):
@@ -229,7 +235,9 @@ async def explain_sentiment(request: ExplainRequest) -> ExplainResponse:
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"explainability failed: {exc}") from exc
+        raise HTTPException(
+            status_code=500, detail=f"explainability failed: {exc}"
+        ) from exc
 
     prediction = explanation.get("prediction", {})
     token_weights = explanation.get("top_features", [])
@@ -262,4 +270,3 @@ async def explain_sentiment(request: ExplainRequest) -> ExplainResponse:
             "timestamp": _utc_now_iso(),
         },
     )
-

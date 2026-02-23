@@ -21,6 +21,7 @@ from .price_service import PriceService
 
 try:
     from statsmodels.tsa.stattools import grangercausalitytests
+
     HAS_STATSMODELS = True
 except ImportError:
     HAS_STATSMODELS = False
@@ -87,9 +88,9 @@ class CorrelationAnalyzer:
                     "positive_ratio": positive_count / total if total else 0,
                     "negative_ratio": negative_count / total if total else 0,
                     "neutral_ratio": neutral_count / total if total else 0,
-                    "net_sentiment": (positive_count - negative_count) / total
-                    if total
-                    else 0,
+                    "net_sentiment": (
+                        (positive_count - negative_count) / total if total else 0
+                    ),
                 }
             )
 
@@ -271,7 +272,11 @@ class CorrelationAnalyzer:
             sent_clean = sent[valid]
             price_clean = price[valid]
 
-            if len(sent_clean) < 5 or np.std(sent_clean) == 0 or np.std(price_clean) == 0:
+            if (
+                len(sent_clean) < 5
+                or np.std(sent_clean) == 0
+                or np.std(price_clean) == 0
+            ):
                 lag_results.append(
                     {
                         "lag_days": lag,
@@ -343,7 +348,7 @@ class CorrelationAnalyzer:
             return {
                 "ticker": ticker,
                 "error": "statsmodels is required for Granger causality testing. "
-                         "Install with: pip install statsmodels",
+                "Install with: pip install statsmodels",
             }
 
         merged = self.get_merged_timeseries(ticker, period=period)
@@ -352,7 +357,7 @@ class CorrelationAnalyzer:
             return {
                 "ticker": ticker,
                 "error": f"Insufficient data for Granger causality "
-                         f"(need at least {max_lag + 10} data points, have {len(merged)})",
+                f"(need at least {max_lag + 10} data points, have {len(merged)})",
             }
 
         sentiment_values = merged[sentiment_metric].values
@@ -387,12 +392,14 @@ class CorrelationAnalyzer:
             for lag in range(1, max_lag + 1):
                 f_stat = gc_sp[lag][0]["ssr_ftest"][0]
                 p_value = gc_sp[lag][0]["ssr_ftest"][1]
-                results["sentiment_to_price"].append({
-                    "lag": lag,
-                    "f_statistic": round(float(f_stat), 4),
-                    "p_value": round(float(p_value), 6),
-                    "significant": p_value < 0.05,
-                })
+                results["sentiment_to_price"].append(
+                    {
+                        "lag": lag,
+                        "f_statistic": round(float(f_stat), 4),
+                        "p_value": round(float(p_value), 6),
+                        "significant": p_value < 0.05,
+                    }
+                )
         except Exception as e:
             logger.warning(f"Granger test (sentiment->price) failed for {ticker}: {e}")
             results["sentiment_to_price"] = [{"error": str(e)}]
@@ -407,23 +414,27 @@ class CorrelationAnalyzer:
             for lag in range(1, max_lag + 1):
                 f_stat = gc_ps[lag][0]["ssr_ftest"][0]
                 p_value = gc_ps[lag][0]["ssr_ftest"][1]
-                results["price_to_sentiment"].append({
-                    "lag": lag,
-                    "f_statistic": round(float(f_stat), 4),
-                    "p_value": round(float(p_value), 6),
-                    "significant": p_value < 0.05,
-                })
+                results["price_to_sentiment"].append(
+                    {
+                        "lag": lag,
+                        "f_statistic": round(float(f_stat), 4),
+                        "p_value": round(float(p_value), 6),
+                        "significant": p_value < 0.05,
+                    }
+                )
         except Exception as e:
             logger.warning(f"Granger test (price->sentiment) failed for {ticker}: {e}")
             results["price_to_sentiment"] = [{"error": str(e)}]
 
         # Summary: find the best (most significant) lag for each direction
         sp_significant = [
-            r for r in results["sentiment_to_price"]
+            r
+            for r in results["sentiment_to_price"]
             if isinstance(r, dict) and r.get("significant")
         ]
         ps_significant = [
-            r for r in results["price_to_sentiment"]
+            r
+            for r in results["price_to_sentiment"]
             if isinstance(r, dict) and r.get("significant")
         ]
 
@@ -432,11 +443,13 @@ class CorrelationAnalyzer:
             "price_predicts_sentiment": len(ps_significant) > 0,
             "best_sentiment_to_price_lag": (
                 min(sp_significant, key=lambda x: x["p_value"])
-                if sp_significant else None
+                if sp_significant
+                else None
             ),
             "best_price_to_sentiment_lag": (
                 min(ps_significant, key=lambda x: x["p_value"])
-                if ps_significant else None
+                if ps_significant
+                else None
             ),
             "interpretation": self._interpret_granger(sp_significant, ps_significant),
         }
@@ -452,17 +465,25 @@ class CorrelationAnalyzer:
         ps = len(ps_significant) > 0
 
         if sp and ps:
-            return ("Bidirectional: sentiment and price returns appear to "
-                    "Granger-cause each other (feedback loop).")
+            return (
+                "Bidirectional: sentiment and price returns appear to "
+                "Granger-cause each other (feedback loop)."
+            )
         elif sp:
-            return ("Sentiment Granger-causes price returns: past sentiment "
-                    "contains information useful for predicting future price movements.")
+            return (
+                "Sentiment Granger-causes price returns: past sentiment "
+                "contains information useful for predicting future price movements."
+            )
         elif ps:
-            return ("Price returns Granger-cause sentiment: past price movements "
-                    "appear to influence subsequent sentiment (reactive sentiment).")
+            return (
+                "Price returns Granger-cause sentiment: past price movements "
+                "appear to influence subsequent sentiment (reactive sentiment)."
+            )
         else:
-            return ("No significant Granger causality detected in either direction "
-                    "at the tested lag periods.")
+            return (
+                "No significant Granger causality detected in either direction "
+                "at the tested lag periods."
+            )
 
     def rolling_correlation(
         self,
@@ -492,7 +513,7 @@ class CorrelationAnalyzer:
                 "ticker": ticker,
                 "window": window,
                 "error": f"Insufficient data (need at least {window + 2} days, "
-                         f"have {len(merged)})",
+                f"have {len(merged)})",
                 "series": [],
             }
 
@@ -505,11 +526,15 @@ class CorrelationAnalyzer:
         for i, (_, row) in enumerate(merged.iterrows()):
             corr_val = rolling_corr.iloc[i]
             if pd.notna(corr_val):
-                series.append({
-                    "date": row["date"].strftime("%Y-%m-%d"),
-                    "correlation": round(float(corr_val), 4),
-                    "window_start": merged.iloc[max(0, i - window + 1)]["date"].strftime("%Y-%m-%d"),
-                })
+                series.append(
+                    {
+                        "date": row["date"].strftime("%Y-%m-%d"),
+                        "correlation": round(float(corr_val), 4),
+                        "window_start": merged.iloc[max(0, i - window + 1)][
+                            "date"
+                        ].strftime("%Y-%m-%d"),
+                    }
+                )
 
         # Statistics
         valid_corrs = [s["correlation"] for s in series]
@@ -554,9 +579,7 @@ class CorrelationAnalyzer:
                 ticker_counts[ticker] += 1
 
         # Filter tickers with enough mentions
-        qualified_tickers = [
-            t for t, c in ticker_counts.items() if c >= min_mentions
-        ]
+        qualified_tickers = [t for t, c in ticker_counts.items() if c >= min_mentions]
 
         results = []
         for ticker in qualified_tickers:
@@ -610,9 +633,11 @@ class CorrelationAnalyzer:
                 {
                     "date": row["date"].strftime("%Y-%m-%d"),
                     "close": round(float(row["close"]), 2),
-                    "returns": round(float(row["returns"]), 6)
-                    if not np.isnan(row["returns"])
-                    else None,
+                    "returns": (
+                        round(float(row["returns"]), 6)
+                        if not np.isnan(row["returns"])
+                        else None
+                    ),
                     "avg_sentiment_score": round(float(row["avg_score"]), 4),
                     "net_sentiment": round(float(row["net_sentiment"]), 4),
                     "mention_count": int(row["mention_count"]),

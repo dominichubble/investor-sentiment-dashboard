@@ -43,4 +43,3 @@ def test_import_from_records_runs_sentiment_and_saves():
     assert storage.saved_rows[0]["record_type"] == "document"
     assert storage.saved_rows[0]["ticker"] == "AAPL"
     assert storage.saved_rows[0]["sentiment_label"] == "neutral"
-

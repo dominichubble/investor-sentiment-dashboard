@@ -17,7 +17,9 @@ def test_v1_analyze_happy_path(monkeypatch):
         lambda text, return_all_scores=False: {"label": "positive", "score": 0.9},
     )
 
-    response = client.post("/api/v1/sentiment/analyze", json={"text": "Stocks rallied."})
+    response = client.post(
+        "/api/v1/sentiment/analyze", json={"text": "Stocks rallied."}
+    )
     assert response.status_code == 200
     payload = response.json()
     assert payload["text"] == "Stocks rallied."
@@ -61,4 +63,3 @@ def test_v1_batch_empty_list_returns_400():
     """Batch endpoint should reject empty inputs."""
     response = client.post("/api/v1/sentiment/batch", json={"texts": []})
     assert response.status_code == 400
-

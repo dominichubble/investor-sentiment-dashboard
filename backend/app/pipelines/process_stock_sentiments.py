@@ -11,12 +11,14 @@ import argparse
 import logging
 from typing import Dict
 
+from app.stocks import StockSentimentAnalyzer
 from app.storage.database import SentimentRecordRow, get_session
 from app.storage.record_ids import make_record_id
 from app.storage.sqlite_storage import SQLiteSentimentStorage
-from app.stocks import StockSentimentAnalyzer
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
+)
 logger = logging.getLogger(__name__)
 
 MAX_TEXT_LEN = 2000
@@ -85,7 +87,10 @@ def process_documents(
                     "spaCy model unavailable (%s). Run: python -m spacy download en_core_web_sm",
                     exc,
                 )
-                return {"processed_documents": processed_docs, "stock_rows_written": stock_rows_written}
+                return {
+                    "processed_documents": processed_docs,
+                    "stock_rows_written": stock_rows_written,
+                }
             except Exception as exc:
                 logger.warning("Failed stock analysis for doc %s: %s", document_id, exc)
                 continue
@@ -112,8 +117,12 @@ def process_documents(
                         "text": text,
                         "ticker": ticker,
                         "mentioned_as": stock.get("mentioned_as", ""),
-                        "sentiment_label": stock.get("sentiment", {}).get("label", row.sentiment_label),
-                        "sentiment_score": float(stock.get("sentiment", {}).get("score", row.sentiment_score)),
+                        "sentiment_label": stock.get("sentiment", {}).get(
+                            "label", row.sentiment_label
+                        ),
+                        "sentiment_score": float(
+                            stock.get("sentiment", {}).get("score", row.sentiment_score)
+                        ),
                         "context": context,
                         "source": row.source or "",
                         "source_id": row.source_id or "",

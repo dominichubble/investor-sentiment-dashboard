@@ -24,7 +24,9 @@ def test_v1_explain_happy_path(monkeypatch):
         },
     )
 
-    response = client.post("/api/v1/sentiment/explain", json={"text": "Stocks surged on earnings."})
+    response = client.post(
+        "/api/v1/sentiment/explain", json={"text": "Stocks surged on earnings."}
+    )
     assert response.status_code == 200
     payload = response.json()
     assert payload["prediction"]["label"] == "positive"
@@ -37,4 +39,3 @@ def test_v1_explain_empty_text_returns_400():
     response = client.post("/api/v1/sentiment/explain", json={"text": ""})
     assert response.status_code == 400
     assert "non-empty" in response.json()["detail"]
-

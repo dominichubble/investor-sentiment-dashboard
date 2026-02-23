@@ -142,7 +142,9 @@ class ImportService:
             text = row["text"]
             db_rows.append(
                 {
-                    "id": make_record_id("doc", source, source_id, timestamp, text[:120]),
+                    "id": make_record_id(
+                        "doc", source, source_id, timestamp, text[:120]
+                    ),
                     "record_type": "document",
                     "document_id": source_id or None,
                     "text": text,
@@ -220,8 +222,10 @@ class ImportService:
         # Support Unix timestamp fields from Reddit-like payloads.
         created_utc = row.get("created_utc")
         if isinstance(created_utc, (int, float)):
-            return datetime.fromtimestamp(created_utc, tz=timezone.utc).isoformat().replace(
-                "+00:00", "Z"
+            return (
+                datetime.fromtimestamp(created_utc, tz=timezone.utc)
+                .isoformat()
+                .replace("+00:00", "Z")
             )
 
         for key in self.TIMESTAMP_KEYS:
@@ -245,4 +249,3 @@ class ImportService:
                     continue
 
         return datetime.now(tz=timezone.utc).isoformat().replace("+00:00", "Z")
-

@@ -68,4 +68,3 @@ def test_v1_predictions_invalid_page():
     """Validation should reject invalid page values."""
     response = client.get("/api/v1/data/predictions?page=0")
     assert response.status_code == 422
-

@@ -56,4 +56,3 @@ def test_v1_statistics_shape(monkeypatch):
     assert "top_stocks" in payload
     assert "recent_activity" in payload
     assert "date_range" in payload
-

@@ -148,4 +148,3 @@ async def get_statistics() -> StatisticsResponse:
     """Return aggregated dashboard statistics from SQLite."""
     stats = statistics_service.get_statistics()
     return StatisticsResponse(**stats)
-

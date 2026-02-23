@@ -28,7 +28,9 @@ class StatisticsService:
         """Return statistics payload aligned with frontend expectations."""
         session = get_session()
         try:
-            total_predictions = session.query(func.count(SentimentRecordRow.id)).scalar() or 0
+            total_predictions = (
+                session.query(func.count(SentimentRecordRow.id)).scalar() or 0
+            )
 
             sentiment_rows = (
                 session.query(
@@ -48,21 +50,25 @@ class StatisticsService:
                 "positive": sentiment_counts["positive"],
                 "negative": sentiment_counts["negative"],
                 "neutral": sentiment_counts["neutral"],
-                "positive_percentage": round(
-                    (sentiment_counts["positive"] / total_with_sentiment) * 100, 2
-                )
-                if total_with_sentiment
-                else 0.0,
-                "negative_percentage": round(
-                    (sentiment_counts["negative"] / total_with_sentiment) * 100, 2
-                )
-                if total_with_sentiment
-                else 0.0,
-                "neutral_percentage": round(
-                    (sentiment_counts["neutral"] / total_with_sentiment) * 100, 2
-                )
-                if total_with_sentiment
-                else 0.0,
+                "positive_percentage": (
+                    round(
+                        (sentiment_counts["positive"] / total_with_sentiment) * 100, 2
+                    )
+                    if total_with_sentiment
+                    else 0.0
+                ),
+                "negative_percentage": (
+                    round(
+                        (sentiment_counts["negative"] / total_with_sentiment) * 100, 2
+                    )
+                    if total_with_sentiment
+                    else 0.0
+                ),
+                "neutral_percentage": (
+                    round((sentiment_counts["neutral"] / total_with_sentiment) * 100, 2)
+                    if total_with_sentiment
+                    else 0.0
+                ),
             }
 
             stock_rows = (
@@ -146,4 +152,3 @@ class StatisticsService:
             }
         finally:
             session.close()
-

@@ -35,7 +35,9 @@ class RedditRawRecord(BaseModel):
 class RedditPostRecord(BaseModel):
     """Schema for a processed Reddit record ready for sentiment analysis."""
 
-    text: str = Field(..., min_length=15, max_length=2000, description="Cleaned text for analysis")
+    text: str = Field(
+        ..., min_length=15, max_length=2000, description="Cleaned text for analysis"
+    )
     source: str = Field(default="reddit", description="Data source identifier")
     timestamp: str = Field(..., description="ISO format timestamp")
     source_id: str = Field(default="", description="Original Reddit post ID")

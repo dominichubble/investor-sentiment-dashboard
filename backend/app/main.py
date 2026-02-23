@@ -43,4 +43,3 @@ app.include_router(api_router, prefix="/api/v1")
 async def health_check() -> dict[str, str]:
     """Minimal health endpoint required for bootstrap ticket."""
     return {"status": "ok"}
-
