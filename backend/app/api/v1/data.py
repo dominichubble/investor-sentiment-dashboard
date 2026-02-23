@@ -6,10 +6,12 @@ from typing import Any
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
+from app.services.statistics_service import StatisticsService
 from app.storage.sqlite_storage import SQLiteSentimentStorage
 
 router = APIRouter(prefix="/data", tags=["data"])
 storage = SQLiteSentimentStorage()
+statistics_service = StatisticsService()
 
 
 class SentimentInfo(BaseModel):
@@ -39,6 +41,39 @@ class PredictionsResponse(BaseModel):
     page: int
     page_size: int
     has_more: bool
+
+
+class SentimentBreakdown(BaseModel):
+    """Aggregate sentiment counts and percentages."""
+
+    positive: int
+    negative: int
+    neutral: int
+    positive_percentage: float
+    negative_percentage: float
+    neutral_percentage: float
+
+
+class StockInfo(BaseModel):
+    """Top-stock aggregate item."""
+
+    ticker: str
+    company_name: str
+    count: int
+    positive: int
+    negative: int
+    neutral: int
+
+
+class StatisticsResponse(BaseModel):
+    """Dashboard statistics payload."""
+
+    total_predictions: int
+    total_stocks_analyzed: int
+    sentiment_distribution: SentimentBreakdown
+    top_stocks: list[StockInfo]
+    recent_activity: dict[str, int]
+    date_range: dict[str, str | None]
 
 
 @router.get("/_ping")
@@ -106,4 +141,11 @@ async def get_predictions(
         page_size=page_size,
         has_more=(offset + page_size) < total,
     )
+
+
+@router.get("/statistics", response_model=StatisticsResponse)
+async def get_statistics() -> StatisticsResponse:
+    """Return aggregated dashboard statistics from SQLite."""
+    stats = statistics_service.get_statistics()
+    return StatisticsResponse(**stats)
 

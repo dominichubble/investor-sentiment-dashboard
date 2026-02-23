@@ -164,3 +164,7 @@ Optional secondary novelty if time:
 - 2026-02-23: Legacy raw-file stock processing removed from runtime path:
   - `process_stock_sentiments.py` converted to DB-native enrichment (reads document rows from SQLite and writes stock rows back to SQLite),
   - removed tracked raw placeholder files (`data/raw/*/.gitkeep`) and removed now-unused legacy data directories.
+- 2026-02-23: Ticket 2 completed with DB-backed statistics endpoint:
+  - `GET /api/v1/data/statistics` implemented in canonical router,
+  - aggregation logic moved into `backend/app/services/statistics_service.py`,
+  - payload aligned with frontend `StatisticsResponse` shape.

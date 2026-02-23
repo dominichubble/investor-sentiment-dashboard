@@ -27,6 +27,10 @@
 - 2026-02-23: Local raw data artifacts removed after migration verification.
 - 2026-02-23: Removed additional legacy local data artifacts (`data/predictions/*`, `data/stock_sentiments/*`) and aligned docs/ignore rules to DB-first operation.
 - 2026-02-23: Converted `process_stock_sentiments.py` to DB-native enrichment and removed tracked raw placeholder files/directories.
+- 2026-02-23: Ticket 2 implemented in canonical app path:
+  - added DB-backed statistics aggregation service (`backend/app/services/statistics_service.py`),
+  - added `GET /api/v1/data/statistics` in `backend/app/api/v1/data.py`,
+  - added canonical endpoint tests (`backend/tests/api/test_v1_statistics.py`).
 
 ## Ticket 1 — Bootstrapping FastAPI + Health + Versioning
 **Status**
@@ -62,6 +66,9 @@ Create a runnable FastAPI backend with `/health` and base API versioning at `/ap
 
 
 ## Ticket 2 — Implement /data/statistics to Match Frontend
+**Status**
+Completed (2026-02-23)
+
 **Goal**
 Implement `GET /api/v1/data/statistics` returning the exact shape expected by `StatisticsResponse` in `frontend/src/services/api.ts`.
 
@@ -85,6 +92,7 @@ Implement `GET /api/v1/data/statistics` returning the exact shape expected by `S
 **Notes**
 - This is the fastest “end-to-end demo unlock” for your dashboard.
 - Data source decision: back with SQLite-backed aggregation (no mock-only stopgap).
+- Implemented with DB-first aggregation and frontend-compatible response shape.
 
 
 ## Ticket 3 — Implement /sentiment/analyze + /sentiment/batch (FinBERT wiring)
