@@ -9,7 +9,7 @@ Usage:
     python ingest_twitter.py --max-tweets 30
     python ingest_twitter.py --keywords "earnings" "fed rate" --min-engagement 10
     python ingest_twitter.py --query "stock market OR bitcoin" --max-results 200
-    python ingest_twitter.py --output ../data/raw/twitter --run-id 2025-10-28
+    python ingest_twitter.py --write-files --output ../data/artifacts/twitter --run-id 2025-10-28
 """
 
 import argparse
@@ -30,6 +30,8 @@ except ImportError:
 
 import tweepy
 from tweepy.errors import TweepyException
+
+from app.services.import_service import ImportService
 
 # Configure logging
 logging.basicConfig(
@@ -411,6 +413,8 @@ def run_ingestion(
     min_engagement: int,
     output_dir: str,
     run_id: Optional[str] = None,
+    store_db: bool = True,
+    write_files: bool = False,
 ) -> str:
     """
     Run the complete Twitter data ingestion pipeline.
@@ -422,6 +426,8 @@ def run_ingestion(
         min_engagement: Minimum engagement threshold
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
+        store_db: If True, persist records directly to SQLite
+        write_files: If True, also export CSV files to local data directory
 
     Returns:
         Path to the output CSV file
@@ -447,12 +453,22 @@ def run_ingestion(
         logger.warning("No quality tweets collected!")
         return ""
 
-    # Export to CSV
-    output_file = export_to_csv(tweets, output_dir, run_id)
+    if store_db:
+        import_result = ImportService().import_from_records(tweets)
+        logger.info(
+            "Imported into DB: loaded=%s inserted=%s",
+            import_result["records_loaded"],
+            import_result["records_inserted"],
+        )
+
+    output_file = ""
+    if write_files:
+        output_file = export_to_csv(tweets, output_dir, run_id)
 
     logger.info("✓ Pipeline completed successfully")
-
-    return output_file
+    if write_files:
+        return output_file
+    return "db://sentiment_records" if store_db else ""
 
 
 def parse_args():
@@ -505,8 +521,20 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/raw/twitter",
-        help="Output directory (default: data/raw/twitter)",
+        default="data/artifacts/twitter",
+        help="Output directory for optional file artifacts (default: data/artifacts/twitter)",
+    )
+    parser.add_argument(
+        "--store-db",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Store ingested records in SQLite (default: True)",
+    )
+    parser.add_argument(
+        "--write-files",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Write CSV artifacts under --output (default: False)",
     )
 
     parser.add_argument(
@@ -538,6 +566,8 @@ def main():
             min_engagement=args.min_engagement,
             output_dir=args.output,
             run_id=args.run_id,
+            store_db=args.store_db,
+            write_files=args.write_files,
         )
 
         if output_file:

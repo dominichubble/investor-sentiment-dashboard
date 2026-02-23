@@ -13,7 +13,7 @@ data/raw/**/*.json
 data/raw/**/*.csv
 data/raw/**/*.txt
 
-# SQLite database (rebuilt by process_stock_sentiments.py)
+# SQLite database (daily source of truth)
 data/db/*.db
 
 # Legacy / removed directories
@@ -21,10 +21,7 @@ data/processed/
 data/predictions/
 data/stock_sentiments/
 
-# Keep directory structure via .gitkeep
-!data/raw/reddit/.gitkeep
-!data/raw/news/.gitkeep
-!data/raw/twitter/.gitkeep
+# Keep DB directory placeholder only
 !data/db/.gitkeep
 
 # Generated explainability examples

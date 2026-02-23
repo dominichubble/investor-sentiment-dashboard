@@ -9,7 +9,7 @@ $RootDir = Get-Location
 
 # Check if backend exists
 Write-Host "Checking backend..." -ForegroundColor Cyan
-if (-not (Test-Path "backend\api\main.py")) {
+if (-not (Test-Path "backend\app\main.py")) {
     Write-Host "Backend not found!" -ForegroundColor Red
     exit 1
 }
@@ -36,7 +36,7 @@ Write-Host ""
 # Start backend in new window
 Write-Host "Starting backend on http://localhost:8000" -ForegroundColor Cyan
 $BackendPath = Join-Path $RootDir "backend"
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$BackendPath'; Write-Host 'Backend API Server' -ForegroundColor Green; python -m uvicorn api.main:app --reload --host localhost --port 8000"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$BackendPath'; Write-Host 'Backend API Server' -ForegroundColor Green; python -m uvicorn app.main:app --reload --host localhost --port 8000"
 
 # Wait for backend to start
 Write-Host "Waiting for backend to initialize..." -ForegroundColor Yellow

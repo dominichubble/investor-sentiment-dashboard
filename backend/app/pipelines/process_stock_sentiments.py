@@ -1,36 +1,23 @@
-"""
-Stock-sentiment processing pipeline.
+"""DB-native stock enrichment pipeline.
 
-Reads raw Reddit and News data, computes document-level and per-stock sentiment
-using StockSentimentAnalyzer, and stores unified sentiment records in SQLite
-(`data/db/sentiments.db`).
-
-Usage:
-    cd backend
-    python -m app.pipelines.process_stock_sentiments
+This job reads existing document-level sentiment rows from SQLite, runs stock
+entity analysis, and writes stock-level sentiment rows back into the same DB.
+It no longer depends on local `data/raw/*` files.
 """
 
 from __future__ import annotations
 
 import argparse
-import json
 import logging
-import re
-import sys
-from datetime import datetime
-from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict
 
-from pydantic import ValidationError
-
-from app.schemas.sentiment import SentimentRecord
-from app.storage import StockSentimentStorage
-from app.storage.record_ids import make_record_id
 from app.stocks import StockSentimentAnalyzer
+from app.storage.database import SentimentRecordRow, get_session
+from app.storage.record_ids import make_record_id
+from app.storage.sqlite_storage import SQLiteSentimentStorage
 
 logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s [%(levelname)s] %(message)s",
+    level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
 )
 logger = logging.getLogger(__name__)
 
@@ -38,373 +25,168 @@ MAX_TEXT_LEN = 2000
 MAX_CONTEXT_LEN = 500
 
 
-def _date_from_filename(filepath: Path) -> Optional[str]:
-    match = re.search(r"(\d{4}-\d{2}-\d{2})", filepath.name)
-    if match:
-        return f"{match.group(1)}T12:00:00"
-    return None
-
-
-def _find_source_files(data_dir: Path, source: str, pattern: str) -> List[Path]:
-    """Find data files for a source in data/raw/."""
-    source_dir = data_dir / "raw" / source
-    if not source_dir.exists():
-        logger.warning("Directory not found: %s", source_dir)
-        return []
-
-    found = sorted(source_dir.rglob(pattern))
-    found = [f for f in found if "_meta" not in f.name]
-    if found:
-        logger.info("  Found %d %s files in raw/%s/", len(found), source, source)
-    return found
-
-
-def load_reddit_file(filepath: Path) -> List[Dict]:
-    """Load a Reddit data file and extract records."""
+def _existing_stock_document_ids() -> set[str]:
+    session = get_session()
     try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
-        logger.warning("Error loading %s: %s", filepath, e)
-        return []
-
-    records = data.get("data", data) if isinstance(data, dict) else data
-    if not isinstance(records, list):
-        return []
-
-    results = []
-    for item in records:
-        title = item.get("title", "")
-        selftext = item.get("selftext", "")
-
-        text = title
-        if selftext and len(selftext) > 10:
-            text = f"{title}. {selftext}" if title else selftext
-
-        if not text or len(text) < 15:
-            continue
-
-        created_utc = item.get("created_utc")
-        timestamp = None
-        if created_utc:
-            try:
-                timestamp = datetime.fromtimestamp(created_utc).isoformat()
-            except (ValueError, OSError, OverflowError):
-                timestamp = None
-
-        if not timestamp:
-            timestamp = _date_from_filename(filepath)
-
-        if not timestamp:
-            continue
-
-        results.append(
-            {
-                "text": text[:MAX_TEXT_LEN],
-                "source": "reddit",
-                "timestamp": timestamp,
-                "source_id": item.get("id", ""),
-                "subreddit": item.get("subreddit", ""),
-                "permalink": item.get("permalink", ""),
-            }
+        rows = (
+            session.query(SentimentRecordRow.document_id)
+            .filter(SentimentRecordRow.record_type == "stock")
+            .filter(SentimentRecordRow.document_id.isnot(None))
+            .distinct()
+            .all()
         )
-
-    return results
-
-
-def load_news_file(filepath: Path) -> List[Dict]:
-    """Load a news data file and extract records."""
-    try:
-        with open(filepath, "r", encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
-        logger.warning("Error loading %s: %s", filepath, e)
-        return []
-
-    records = data.get("data", data) if isinstance(data, dict) else data
-    if not isinstance(records, list):
-        return []
-
-    results = []
-    for item in records:
-        title = item.get("clean_title") or item.get("title", "")
-        description = item.get("clean_description") or item.get("description", "")
-        content = item.get("clean_content") or item.get("content", "")
-
-        text = title
-        if description and len(description) > 20:
-            text = f"{title}. {description}" if title else description
-        elif content and len(content) > 20:
-            text = f"{title}. {content}" if title else content
-
-        if not text or len(text) < 15:
-            continue
-
-        published_at = item.get("published_at") or item.get("publishedAt")
-        timestamp = None
-        if published_at:
-            try:
-                parsed = published_at.replace("Z", "+00:00")
-                dt = datetime.fromisoformat(parsed)
-                timestamp = dt.strftime("%Y-%m-%dT%H:%M:%S")
-            except (ValueError, TypeError):
-                timestamp = None
-
-        if not timestamp:
-            timestamp = _date_from_filename(filepath)
-
-        if not timestamp:
-            continue
-
-        source_id = item.get("url") or item.get("source_id") or ""
-
-        results.append(
-            {
-                "text": text[:MAX_TEXT_LEN],
-                "source": "news",
-                "timestamp": timestamp,
-                "source_id": source_id,
-                "source_name": item.get("source_name", ""),
-            }
-        )
-
-    return results
+        return {r[0] for r in rows if r[0]}
+    finally:
+        session.close()
 
 
-def process_all_data(data_dir: Path, max_records: Optional[int] = None) -> Dict:
-    """
-    Process all available data files and generate unified sentiment records.
-
-    Args:
-        data_dir: Path to the data directory.
-        max_records: Optional cap for debugging.
-
-    Returns:
-        Statistics about processing.
-    """
-    all_records: List[Dict] = []
-
-    # 1. Load Reddit data
-    reddit_files = _find_source_files(data_dir, "reddit", "reddit_finance_*.json")
-    logger.info("Found %d Reddit data files total", len(reddit_files))
-    for filepath in reddit_files:
-        records = load_reddit_file(filepath)
-        all_records.extend(records)
-        if records:
-            logger.info("  Loaded %d records from %s", len(records), filepath.name)
-
-    # 2. Load News data
-    news_files = _find_source_files(data_dir, "news", "news_finance_*.json")
-    logger.info("Found %d News data files total", len(news_files))
-    for filepath in news_files:
-        records = load_news_file(filepath)
-        all_records.extend(records)
-        if records:
-            logger.info("  Loaded %d records from %s", len(records), filepath.name)
-
-    logger.info("\nTotal records loaded: %d", len(all_records))
-
-    # Initialize analyzer and storage
-    try:
-        analyzer = StockSentimentAnalyzer()
-    except Exception as e:
-        logger.error("Failed to initialize StockSentimentAnalyzer: %s", e)
-        sys.exit(1)
-
-    storage = StockSentimentStorage()
+def process_documents(
+    max_records: int | None = None,
+    batch_size: int = 100,
+    reprocess: bool = False,
+) -> Dict[str, int]:
+    """Generate stock-level rows from document rows already in SQLite."""
+    storage = SQLiteSentimentStorage()
     storage.load()
+    analyzer = StockSentimentAnalyzer()
 
-    unified_records: List[Dict] = []
-    ticker_stats: Dict[str, int] = {}
-    processed = 0
-    doc_records = 0
-    stock_records = 0
-    validation_errors = 0
+    existing_stock_docs = _existing_stock_document_ids() if not reprocess else set()
+    session = get_session()
 
-    for record in all_records:
-        if max_records is not None and processed >= max_records:
-            break
+    processed_docs = 0
+    stock_rows_written = 0
+    stock_batch: list[dict] = []
+    ticker_stats: dict[str, int] = {}
 
-        text = record["text"]
-
-        try:
-            analysis = analyzer.analyze(
-                text=text,
-                extract_context=True,
-                include_movements=True,
-            )
-        except OSError as e:
-            logger.error(
-                "spaCy model not available (%s). Run: python -m spacy download en_core_web_sm",
-                e,
-            )
-            sys.exit(1)
-        except Exception as e:
-            logger.warning("Failed analysis for record: %s", e)
-            continue
-
-        overall = analysis.get("overall_sentiment", {}) or {}
-        timestamp = record.get("timestamp") or datetime.utcnow().isoformat()
-        source = record.get("source", "")
-        source_id = record.get("source_id", "")
-
-        document_id = make_record_id(
-            "doc",
-            source,
-            source_id,
-            timestamp,
-            text[:200],
+    try:
+        query = (
+            session.query(SentimentRecordRow)
+            .filter(SentimentRecordRow.record_type == "document")
+            .order_by(SentimentRecordRow.timestamp.desc())
         )
+        if max_records is not None:
+            query = query.limit(max_records)
 
-        document_record = {
-            "id": document_id,
-            "record_type": "document",
-            "document_id": document_id,
-            "text": text[:MAX_TEXT_LEN],
-            "ticker": None,
-            "mentioned_as": "",
-            "sentiment_label": overall.get("label", "neutral"),
-            "sentiment_score": float(overall.get("score", 0.5)),
-            "context": "",
-            "source": source,
-            "source_id": source_id,
-            "position_start": None,
-            "position_end": None,
-            "timestamp": timestamp,
-            "sentiment_mode": "finbert",
-        }
-
-        try:
-            validated = SentimentRecord(**document_record)
-            unified_records.append(validated.model_dump())
-        except ValidationError:
-            validation_errors += 1
-            unified_records.append(document_record)
-        doc_records += 1
-
-        for stock in analysis.get("stocks", []):
-            ticker = stock.get("ticker")
-            if not ticker:
+        for row in query.yield_per(batch_size):
+            document_id = row.document_id or row.id
+            if not reprocess and document_id in existing_stock_docs:
                 continue
 
-            position = stock.get("position") or {}
-            context = (stock.get("context") or "")[:MAX_CONTEXT_LEN]
-
-            record_data = {
-                "id": make_record_id(
-                    "stock",
-                    document_id,
-                    ticker,
-                    stock.get("mentioned_as", ""),
-                    str(position.get("start")),
-                    str(position.get("end")),
-                ),
-                "record_type": "stock",
-                "document_id": document_id,
-                "text": text[:MAX_TEXT_LEN],
-                "ticker": ticker,
-                "mentioned_as": stock.get("mentioned_as", ""),
-                "sentiment_label": stock.get("sentiment", {}).get("label", "neutral"),
-                "sentiment_score": float(
-                    stock.get("sentiment", {}).get("score", 0.5)
-                ),
-                "context": context,
-                "source": source,
-                "source_id": source_id,
-                "position_start": position.get("start"),
-                "position_end": position.get("end"),
-                "timestamp": timestamp,
-                "sentiment_mode": "finbert",
-            }
+            text = (row.text or "").strip()[:MAX_TEXT_LEN]
+            if len(text) < 10:
+                continue
 
             try:
-                validated = SentimentRecord(**record_data)
-                unified_records.append(validated.model_dump())
-            except ValidationError:
-                validation_errors += 1
-                unified_records.append(record_data)
+                analysis = analyzer.analyze(
+                    text=text,
+                    extract_context=True,
+                    include_movements=True,
+                )
+            except OSError as exc:
+                logger.error(
+                    "spaCy model unavailable (%s). Run: python -m spacy download en_core_web_sm",
+                    exc,
+                )
+                return {
+                    "processed_documents": processed_docs,
+                    "stock_rows_written": stock_rows_written,
+                }
+            except Exception as exc:
+                logger.warning("Failed stock analysis for doc %s: %s", document_id, exc)
+                continue
 
-            ticker_stats[ticker] = ticker_stats.get(ticker, 0) + 1
-            stock_records += 1
+            for stock in analysis.get("stocks", []):
+                ticker = stock.get("ticker")
+                if not ticker:
+                    continue
+                position = stock.get("position") or {}
+                context = (stock.get("context") or "")[:MAX_CONTEXT_LEN]
 
-        processed += 1
+                stock_batch.append(
+                    {
+                        "id": make_record_id(
+                            "stock",
+                            document_id,
+                            ticker,
+                            stock.get("mentioned_as", ""),
+                            str(position.get("start")),
+                            str(position.get("end")),
+                        ),
+                        "record_type": "stock",
+                        "document_id": document_id,
+                        "text": text,
+                        "ticker": ticker,
+                        "mentioned_as": stock.get("mentioned_as", ""),
+                        "sentiment_label": stock.get("sentiment", {}).get(
+                            "label", row.sentiment_label
+                        ),
+                        "sentiment_score": float(
+                            stock.get("sentiment", {}).get("score", row.sentiment_score)
+                        ),
+                        "context": context,
+                        "source": row.source or "",
+                        "source_id": row.source_id or "",
+                        "position_start": position.get("start"),
+                        "position_end": position.get("end"),
+                        "timestamp": row.timestamp,
+                        "sentiment_mode": "finbert",
+                    }
+                )
+                ticker_stats[ticker] = ticker_stats.get(ticker, 0) + 1
 
-        if len(unified_records) >= 1000:
-            storage.save_records_batch(unified_records)
-            unified_records.clear()
+            processed_docs += 1
 
-    if validation_errors:
-        logger.warning("Validation errors (records kept as-is): %d", validation_errors)
+            if len(stock_batch) >= 1000:
+                stock_rows_written += storage.save_records_batch(stock_batch)
+                stock_batch.clear()
 
-    if unified_records:
-        storage.save_records_batch(unified_records)
+        if stock_batch:
+            stock_rows_written += storage.save_records_batch(stock_batch)
 
-    top_tickers = sorted(ticker_stats.items(), key=lambda x: x[1], reverse=True)[:20]
-    logger.info("\nProcessing complete")
-    logger.info("  Documents stored: %d", doc_records)
-    logger.info("  Stock mentions stored: %d", stock_records)
-    logger.info("  Unique tickers: %d", len(ticker_stats))
+    finally:
+        session.close()
 
-    if top_tickers:
-        logger.info("\nTop 20 tickers by mentions:")
-        for ticker, count in top_tickers:
-            logger.info("  %s: %d mentions", ticker, count)
-
+    logger.info("Processed documents: %d", processed_docs)
+    logger.info("Stock rows written: %d", stock_rows_written)
+    logger.info("Unique tickers found: %d", len(ticker_stats))
     return {
-        "total_records": len(all_records),
-        "documents": doc_records,
-        "stock_mentions": stock_records,
+        "processed_documents": processed_docs,
+        "stock_rows_written": stock_rows_written,
         "unique_tickers": len(ticker_stats),
-        "top_tickers": dict(top_tickers),
     }
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Process stock sentiment from collected data.",
-    )
-    parser.add_argument(
-        "--data-dir",
-        type=Path,
-        default=None,
-        help="Override the data directory (default: project-root/data)",
+        description="Enrich document records with stock-level sentiment rows.",
     )
     parser.add_argument(
         "--max-records",
         type=int,
         default=None,
-        help="Limit the number of records processed (debugging).",
+        help="Limit number of documents processed (debugging).",
     )
     parser.add_argument(
-        "--use-finbert",
-        action="store_true",
-        help="(Deprecated) FinBERT is now always used.",
+        "--batch-size",
+        type=int,
+        default=100,
+        help="DB streaming batch size (default: 100).",
     )
     parser.add_argument(
-        "--fast",
+        "--reprocess",
         action="store_true",
-        help="(Deprecated) Keyword mode has been removed.",
+        help="Re-run stock extraction for documents that already have stock rows.",
     )
-
     args = parser.parse_args()
 
-    if args.use_finbert or args.fast:
-        logger.warning("Legacy flags --use-finbert/--fast are ignored.")
-
-    backend_dir = Path(__file__).parent.parent.parent
-    data_dir = args.data_dir or (backend_dir.parent / "data")
-
-    if not data_dir.exists():
-        logger.error("Data directory not found: %s", data_dir)
-        return 1
-
     logger.info("=" * 60)
-    logger.info("Stock Sentiment Processing Pipeline")
-    logger.info("  Mode: StockSentimentAnalyzer (FinBERT)")
+    logger.info("Stock Sentiment Enrichment Pipeline (DB-first)")
     logger.info("=" * 60)
-    logger.info("Data directory: %s", data_dir)
-
-    process_all_data(data_dir, max_records=args.max_records)
+    process_documents(
+        max_records=args.max_records,
+        batch_size=args.batch_size,
+        reprocess=args.reprocess,
+    )
     return 0
 
 

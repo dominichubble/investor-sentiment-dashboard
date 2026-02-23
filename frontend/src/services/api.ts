@@ -25,6 +25,32 @@ export interface SentimentInfo {
   score: number;
 }
 
+export interface ExplanationToken {
+  token: string;
+  weight: number;
+}
+
+export interface ExplainSentimentResponse {
+  text: string;
+  prediction: {
+    label: string;
+    score: number;
+    scores?: {
+      positive: number;
+      negative: number;
+      neutral: number;
+    };
+  };
+  tokens: ExplanationToken[];
+  metadata: {
+    method: string;
+    num_features: number;
+    num_samples: number;
+    processing_time_ms: number;
+    timestamp: string;
+  };
+}
+
 export interface SentimentBreakdown {
   positive: number;
   negative: number;
@@ -179,6 +205,11 @@ export const apiService = {
 
   async batchAnalyzeSentiment(texts: string[], options?: any): Promise<any> {
     const response = await api.post('/sentiment/batch', { texts, options });
+    return response.data;
+  },
+
+  async explainSentiment(text: string, options?: any): Promise<ExplainSentimentResponse> {
+    const response = await api.post<ExplainSentimentResponse>('/sentiment/explain', { text, options });
     return response.data;
   },
 

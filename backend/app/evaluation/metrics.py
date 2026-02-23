@@ -55,9 +55,7 @@ def _per_class_metrics(
     }
 
 
-def evaluate_predictions(
-    true_labels: List[str], pred_labels: List[str]
-) -> Dict:
+def evaluate_predictions(true_labels: List[str], pred_labels: List[str]) -> Dict:
     """
     Full evaluation of predicted vs true labels.
 
@@ -69,9 +67,9 @@ def evaluate_predictions(
         Dictionary with accuracy, per-class metrics, macro averages,
         and confusion matrix.
     """
-    assert len(true_labels) == len(pred_labels), (
-        f"Length mismatch: {len(true_labels)} true vs {len(pred_labels)} pred"
-    )
+    assert len(true_labels) == len(
+        pred_labels
+    ), f"Length mismatch: {len(true_labels)} true vs {len(pred_labels)} pred"
 
     n = len(true_labels)
     correct = sum(1 for t, p in zip(true_labels, pred_labels) if t == p)

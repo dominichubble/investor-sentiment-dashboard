@@ -7,7 +7,7 @@ malformed records from propagating through the pipeline.
 
 from .news import NewsArticleRecord, NewsRawRecord
 from .reddit import RedditPostRecord, RedditRawRecord
-from .sentiment import StockSentimentRecord, SentimentMetadata
+from .sentiment import SentimentMetadata, StockSentimentRecord
 
 __all__ = [
     "RedditRawRecord",
