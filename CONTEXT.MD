@@ -1,0 +1,134 @@
+# Investor Sentiment Dashboard — Project Context (FYP)
+
+## One-liner
+Build an end-to-end Investor Sentiment Dashboard that ingests finance text data (Reddit, X/Twitter, News), runs financial sentiment classification using FinBERT, provides explainable AI (SHAP/LIME) for transparency, and visualises insights in a React dashboard backed by a FastAPI API.
+
+## What “Done” Means (MVP Definition)
+The MVP is complete when ALL are true:
+
+1) Backend API exists and can be run locally:
+- `uvicorn ...` starts successfully.
+- Health endpoint returns OK.
+- Core endpoints return correctly shaped JSON matching the frontend contract.
+
+2) Frontend is wired to real API data:
+- Homepage loads without mock data.
+- Statistics cards show real counts/distributions.
+- Correlation overview panel renders from real endpoint (even if limited scope).
+
+3) Novelty delivered:
+- At least ONE explainability method is integrated end-to-end:
+  - An API endpoint generates an explanation for a given text (LIME or SHAP).
+  - Frontend displays it (token highlights or ranked tokens).
+
+4) Evaluation artifacts exist:
+- Quantitative: at least one metrics table (accuracy/F1 or similar) on a labeled dataset or a justified proxy evaluation.
+- Qualitative: at least 3 explanation examples (screenshots or saved outputs) demonstrating interpretability.
+
+## Current State (Dev Branch)
+### Implemented / Partially Implemented
+- Ingestion pipelines exist:
+  - `backend/app/pipelines/ingest_reddit.py`, `ingest_twitter.py`, `ingest_news.py`
+- FinBERT model wrapper + inference utilities exist:
+  - `backend/app/models/finbert_model.py`
+  - `backend/app/models/sentiment_inference.py`
+  - Tokenizer helper: `backend/app/preprocessing/finbert_tokenizer.py`
+- Frontend exists (React + TS + Vite):
+  - Dashboard components and Homepage exist.
+  - Context/provider exists and calls API endpoints.
+  - API contract is defined in `frontend/src/services/api.ts`.
+
+### Missing / Major Gaps
+- FastAPI bootstrap is implemented at `backend/app/main.py` with `/health`, `/api/v1`, and CORS for Vite.
+- No runtime persistence layer (DB) or aggregation services powering stats/trending/correlation endpoints.
+- No correlation analytics module (price data fetching, correlation, lag analysis, rolling windows, etc).
+- Explainability (SHAP/LIME) is listed as dependencies but not implemented in code.
+- Evaluation scripts/notebooks for metrics + explainability examples are not finalized.
+
+## Key Constraints
+- Timeline: ~2 months to submission.
+- Prioritise end-to-end demonstrable slices over perfect architecture.
+- Keep API stable to match frontend contract first, then improve internals.
+
+## API Contract (Reference)
+The backend should align with frontend expectations while allowing documented evolution.
+Primary contract file:
+- `frontend/src/services/api.ts`
+
+Expected base URL:
+- Default: `http://localhost:8000/api/v1`
+
+Key endpoints used by frontend today include:
+- `GET /data/statistics`
+- `GET /correlation/overview/all`
+…and several others already defined in `api.ts` (correlation detail, lag analysis, rolling correlation, stock info, etc).
+
+## Repo Map (Important Paths)
+### Frontend
+- `frontend/src/services/api.ts` — API client + expected routes
+- `frontend/src/context/DashboardContext.tsx` — data fetching orchestration
+- `frontend/src/pages/Homepage/Homepage.tsx` — main dashboard UI
+
+### Backend
+- `backend/app/pipelines/*` — ingestion + preprocessing scripts
+- `backend/app/models/*` — FinBERT model wrapper + inference
+- `backend/app/preprocessing/*` — tokenizer/text processing utilities
+- `backend/app/storage/prediction_storage.py` — file-based storage helpers (legacy/utility)
+
+## Planned MVP Architecture
+- FastAPI app:
+  - `backend/app/main.py` (canonical)
+- Routers:
+  - `/api/v1/data/*`
+  - `/api/v1/sentiment/*`
+  - `/api/v1/stocks/*`
+  - `/api/v1/correlation/*`
+  - `/health` (non-versioned)
+
+- Persistence:
+  - Start with SQLite (fast to implement, enough for MVP)
+  - Use SQLAlchemy (already in requirements)
+  - Optionally migrate to Postgres later.
+
+## Novelty (Pick & Ship)
+Primary novelty (must ship):
+1) Explainability integrated into the product:
+- LIME or SHAP explanation endpoint + UI display on a prediction
+
+Optional secondary novelty if time:
+2) Sentiment–price correlation + lag analysis:
+- Correlation overview + per-ticker analysis page
+
+## “How to Work With Me” (for LLM assistants)
+- Use `frontend/src/services/api.ts` as a strong reference, not an immutable contract.
+- Implement the smallest slice that enables a demo, then iterate.
+- Prefer file-by-file diffs and explicit commands.
+- Include at least minimal tests for critical functions/endpoints.
+- When uncertain: ask for the current API response types or paste the file.
+
+## Confirmed Project Decisions (2026-02-23)
+- Backend entrypoint choice: use `backend/app/main.py` as the canonical app entrypoint (simple and conventional for FastAPI projects).
+- `frontend/src/services/api.ts` is a strong reference, but NOT strict source-of-truth. Backend can evolve where needed with documented alignment changes.
+- Persistence strategy: go straight to SQLite (no temporary mock/seed-only architecture).
+- Timestamp/date consistency: use UTC ISO-8601 strings consistently across API responses.
+- Correlation scope: real implementations required (not stubs), as this is a final-year project with real outputs.
+- Sentiment endpoint response detail: return the most practical shape (top label + score by default, extensible options for extra scores when useful).
+- Explainability novelty scope: focus on LIME first; SHAP is optional stretch work.
+- Evaluation artifacts: generate as part of code tasks (scripts + saved outputs in-repo), not ad-hoc manual-only outputs.
+- Testing level: pytest minimum focused on critical API happy-path and key validation failures.
+
+## Progress Log
+- 2026-02-23: Initial project context and top-5 ticket plan documented in-repo.
+- 2026-02-23: Requirements clarified with project owner:
+  - confirmed SQLite-first implementation,
+  - confirmed UTC date/time consistency,
+  - confirmed real correlation implementation (no stubs),
+  - confirmed LIME-first explainability focus,
+  - confirmed evaluation artifacts should be generated by code tasks,
+  - confirmed pytest minimum strategy.
+- 2026-02-23: Ticket 1 implemented:
+  - canonical app created at `backend/app/main.py`,
+  - `/health` returns `{ "status": "ok" }`,
+  - `/api/v1` mount established via `backend/app/api/v1/router.py`,
+  - CORS allows `http://localhost:5173` and `http://127.0.0.1:5173`,
+  - uvicorn startup validated and bootstrap tests pass.
