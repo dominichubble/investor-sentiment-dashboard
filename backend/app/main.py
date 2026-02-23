@@ -1,13 +1,25 @@
 """Canonical FastAPI application entrypoint."""
 
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
+from app.storage.database import get_engine
+
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    """Initialize core services when the app boots."""
+    get_engine()
+    yield
+
 
 app = FastAPI(
     title="Investor Sentiment Dashboard API",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 # Vite dev server origin (plus localhost alias).

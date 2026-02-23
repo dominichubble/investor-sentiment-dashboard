@@ -8,7 +8,7 @@ cleans and normalizes the data, and exports to JSON format.
 Usage:
     python ingest_reddit.py --time-filter week --limit 400
     python ingest_reddit.py --subreddits wallstreetbets stocks --keywords "stock" "market"
-    python ingest_reddit.py --output ../data/raw/reddit --run-id 2025-10-28
+    python ingest_reddit.py --write-files --output ../data/artifacts/reddit --run-id 2025-10-28
 """
 
 import argparse
@@ -29,6 +29,8 @@ except ImportError:
 
 import praw
 from praw.exceptions import PRAWException
+
+from app.services.import_service import ImportService
 
 # Configure logging
 logging.basicConfig(
@@ -207,6 +209,8 @@ def run_ingestion(
     limit_per_subreddit: int,
     output_dir: str,
     run_id: Optional[str] = None,
+    store_db: bool = True,
+    write_files: bool = False,
 ) -> str:
     """
     Run the complete Reddit data ingestion pipeline.
@@ -218,6 +222,8 @@ def run_ingestion(
         limit_per_subreddit: Maximum posts per subreddit
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
+        store_db: If True, persist records directly to SQLite
+        write_files: If True, also export JSON files to local data directory
 
     Returns:
         Path to the output JSON file
@@ -236,10 +242,7 @@ def run_ingestion(
     if not run_id:
         run_id = datetime.utcnow().strftime("%Y-%m-%d")
 
-    # Create output directory
     run_dir = Path(output_dir) / run_id
-    run_dir.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Output directory: {run_dir}")
 
     # Fetch posts from all subreddits
     all_rows: List[Dict[str, Any]] = []
@@ -269,14 +272,25 @@ def run_ingestion(
     deduped.sort(key=lambda x: x.get("created_utc", 0), reverse=True)
     logger.info(f"Total unique posts: {len(deduped)}")
 
-    # Write to JSON
-    out_path = run_dir / f"reddit_finance_{run_id}.json"
-    with open(out_path, "w", encoding="utf-8") as f:
-        json.dump(deduped, f, ensure_ascii=False, indent=2)
+    # Persist to DB-first storage path.
+    if store_db:
+        import_result = ImportService().import_from_records(deduped)
+        logger.info(
+            "Imported into DB: loaded=%s inserted=%s",
+            import_result["records_loaded"],
+            import_result["records_inserted"],
+        )
 
-    logger.info(f"Successfully wrote {len(deduped)} posts to {out_path}")
+    out_path = None
+    if write_files:
+        run_dir.mkdir(parents=True, exist_ok=True)
+        logger.info(f"Output directory: {run_dir}")
+        out_path = run_dir / f"reddit_finance_{run_id}.json"
+        with open(out_path, "w", encoding="utf-8") as f:
+            json.dump(deduped, f, ensure_ascii=False, indent=2)
+        logger.info(f"Successfully wrote {len(deduped)} posts to {out_path}")
 
-    # Write metadata
+    # Write metadata (saved with file output only).
     meta_path = run_dir / f"reddit_finance_{run_id}_meta.json"
     metadata = {
         "run_id": run_id,
@@ -286,14 +300,17 @@ def run_ingestion(
         "time_filter": time_filter,
         "limit_per_subreddit": limit_per_subreddit,
         "total_posts": len(deduped),
+        "store_db": store_db,
+        "write_files": write_files,
         "errors": errors,
     }
-    with open(meta_path, "w", encoding="utf-8") as f:
-        json.dump(metadata, f, ensure_ascii=False, indent=2)
+    if write_files:
+        with open(meta_path, "w", encoding="utf-8") as f:
+            json.dump(metadata, f, ensure_ascii=False, indent=2)
+        logger.info(f"Wrote metadata to {meta_path}")
+        return str(out_path)
 
-    logger.info(f"Wrote metadata to {meta_path}")
-
-    return str(out_path)
+    return "db://sentiment_records" if store_db else ""
 
 
 def parse_args():
@@ -347,8 +364,20 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/raw/reddit",
-        help="Output directory (default: data/raw/reddit)",
+        default="data/artifacts/reddit",
+        help="Output directory for optional file artifacts (default: data/artifacts/reddit)",
+    )
+    parser.add_argument(
+        "--store-db",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Store ingested records in SQLite (default: True)",
+    )
+    parser.add_argument(
+        "--write-files",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Write JSON artifacts under --output (default: False)",
     )
 
     parser.add_argument(
@@ -380,6 +409,8 @@ def main():
             limit_per_subreddit=args.limit,
             output_dir=args.output,
             run_id=args.run_id,
+            store_db=args.store_db,
+            write_files=args.write_files,
         )
 
         if output_file:

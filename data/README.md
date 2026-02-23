@@ -2,6 +2,16 @@
 
 This directory contains sample cleaned and annotated datasets for the Investor Sentiment Dashboard project.
 
+## Current Storage Model (DB-First)
+
+The project now runs in **DB-first mode** for daily operations:
+
+- Daily ingestion writes directly into `data/db/sentiments.db`.
+- Local `data/raw/`, `data/predictions/`, and `data/stock_sentiments/` are legacy paths and are not required for runtime.
+- Local file artifacts (for debugging or audit) are optional and disabled by default in ingestion scripts.
+
+If any older sections below reference raw/processed folder workflows, treat them as historical notes rather than the primary execution path.
+
 ## Overview
 
 The datasets in this repository represent **cleaned and preprocessed** financial sentiment data from multiple sources:

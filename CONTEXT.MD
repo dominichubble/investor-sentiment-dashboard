@@ -116,6 +116,14 @@ Optional secondary novelty if time:
 - Explainability novelty scope: focus on LIME first; SHAP is optional stretch work.
 - Evaluation artifacts: generate as part of code tasks (scripts + saved outputs in-repo), not ad-hoc manual-only outputs.
 - Testing level: pytest minimum focused on critical API happy-path and key validation failures.
+- Directional architecture preference: move toward DB-first storage with clear separation between ingestion, processing, storage, and frontend; avoid long-term reliance on local `data/` files for runtime behavior.
+
+## Architecture Direction (DB-First Separation)
+- Ingestion layer: fetches external data (Reddit, X/Twitter, News) and does source-level cleaning only.
+- Processing layer: runs sentiment/classification logic independently of transport/storage concerns.
+- Storage layer: persists canonical records in SQLite via service/storage adapters (source of truth).
+- API/frontend layer: reads aggregated/queryable state from DB; does not depend on local raw files.
+- Local `data/` exports are now optional artifacts for debugging/audit, not required runtime dependencies.
 
 ## Progress Log
 - 2026-02-23: Initial project context and top-5 ticket plan documented in-repo.
@@ -132,3 +140,27 @@ Optional secondary novelty if time:
   - `/api/v1` mount established via `backend/app/api/v1/router.py`,
   - CORS allows `http://localhost:5173` and `http://127.0.0.1:5173`,
   - uvicorn startup validated and bootstrap tests pass.
+- 2026-02-23: Ticket 4 implemented in canonical app path:
+  - SQLite DB initialization added on startup via `backend/app/main.py`,
+  - `/api/v1/data/predictions` implemented in `backend/app/api/v1/data.py`,
+  - import service added at `backend/app/services/import_service.py`,
+  - CLI import job added at `backend/scripts/import_to_db.py`,
+  - tests added for canonical predictions endpoint and import service wiring.
+- 2026-02-23: DB-first hardening applied to ingestion pipelines:
+  - `ingest_reddit.py`, `ingest_news.py`, and `ingest_twitter.py` now support DB storage as default path,
+  - file output is optional via CLI flag (`--write-files`) and no longer required for successful ingestion runs,
+  - pipeline behavior now aligns with separation between ingestion, processing, storage, and frontend access.
+- 2026-02-23: GitHub Actions daily collection workflow updated for DB-first operation:
+  - `collect-data.yml` now runs ingestion with `--store-db --no-write-files`,
+  - removed scheduled dependency on local raw-data artifacts and file-count reporting,
+  - summary now reports DB mode and `sentiment_records` row count.
+- 2026-02-23: One-time local data cleanup performed:
+  - verified import script path over `data/raw` loads existing records and inserts no new rows,
+  - removed legacy local raw JSON/meta artifacts after migration verification.
+- 2026-02-23: Additional legacy local-storage cleanup:
+  - removed legacy `data/predictions/*` artifacts,
+  - removed legacy `data/stock_sentiments/stock_sentiments.json`,
+  - updated ignore rules/docs to reflect DB-first source-of-truth.
+- 2026-02-23: Legacy raw-file stock processing removed from runtime path:
+  - `process_stock_sentiments.py` converted to DB-native enrichment (reads document rows from SQLite and writes stock rows back to SQLite),
+  - removed tracked raw placeholder files (`data/raw/*/.gitkeep`) and removed now-unused legacy data directories.

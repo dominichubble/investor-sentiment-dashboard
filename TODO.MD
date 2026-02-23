@@ -10,11 +10,23 @@
 - Explainability scope: LIME first.
 - Evaluation outputs: generate through code tasks/scripts and save artifacts.
 - Testing bar: pytest minimum for critical endpoints/paths.
+- Architecture direction: DB-first source-of-truth with separation across ingestion, processing, storage, and frontend/API. Local `data/` files are optional artifacts, not runtime dependency.
 
 ## Progress Log
 - 2026-02-23: Added and confirmed project-wide implementation decisions from stakeholder Q&A.
 - 2026-02-23: Ready to begin Ticket 1 with canonical structure and constraints locked.
 - 2026-02-23: Ticket 1 completed and validated (health endpoint, v1 mount, CORS, uvicorn startup check, pytest checks).
+- 2026-02-23: Ticket 4 implemented in canonical app path with SQLite startup initialization, `/api/v1/data/predictions`, and import job scaffolding for DB ingestion.
+- 2026-02-23: DB-first hardening completed for ingestion pipelines (`reddit`, `news`, `twitter`):
+  - default flow stores directly to DB,
+  - optional local artifacts are gated behind `--write-files`,
+  - pipeline success no longer depends on writing to `data/`.
+- 2026-02-23: Daily GitHub Actions collection moved to DB-first mode:
+  - workflow now ingests directly to DB with `--store-db --no-write-files`,
+  - database summary includes `sentiment_records` row count.
+- 2026-02-23: Local raw data artifacts removed after migration verification.
+- 2026-02-23: Removed additional legacy local data artifacts (`data/predictions/*`, `data/stock_sentiments/*`) and aligned docs/ignore rules to DB-first operation.
+- 2026-02-23: Converted `process_stock_sentiments.py` to DB-native enrichment and removed tracked raw placeholder files/directories.
 
 ## Ticket 1 — Bootstrapping FastAPI + Health + Versioning
 **Status**
@@ -98,6 +110,9 @@ Expose FinBERT inference through the API.
 
 
 ## Ticket 4 — Persistence + Prediction Ingest into DB (SQLite first)
+**Status**
+Completed (2026-02-23)
+
 **Goal**
 Store predictions in SQLite and make them queryable for stats/trending.
 
@@ -120,6 +135,10 @@ Store predictions in SQLite and make them queryable for stats/trending.
 **Notes**
 - Start with SQLite to ship MVP; you can mention scalability and future migration in dissertation.
 - Confirmed: SQLite is required now (not deferred).
+- Implementation decision used: reuse/adapt existing SQLAlchemy + SQLite storage layer (`sentiment_records`) rather than creating a second parallel DB stack.
+- Added canonical endpoint implementation at `backend/app/api/v1/data.py` for paginated predictions.
+- Added import job service at `backend/app/services/import_service.py` and CLI entry script `backend/scripts/import_to_db.py`.
+- Ingestion scripts now use DB-first persistence through `ImportService.import_from_records(...)` with optional file export.
 
 
 ## Ticket 5 — Novelty Slice: Explainability (LIME first) + UI Display
