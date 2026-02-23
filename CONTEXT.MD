@@ -168,3 +168,7 @@ Optional secondary novelty if time:
   - `GET /api/v1/data/statistics` implemented in canonical router,
   - aggregation logic moved into `backend/app/services/statistics_service.py`,
   - payload aligned with frontend `StatisticsResponse` shape.
+- 2026-02-23: Ticket 3 completed with canonical sentiment API endpoints:
+  - `/api/v1/sentiment/analyze` and `/api/v1/sentiment/batch` implemented in `backend/app/api/v1/sentiment.py`,
+  - endpoints use existing FinBERT inference utilities and preserve batch input order,
+  - empty input handling returns HTTP 400 with clear validation message.

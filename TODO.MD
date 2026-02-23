@@ -31,6 +31,10 @@
   - added DB-backed statistics aggregation service (`backend/app/services/statistics_service.py`),
   - added `GET /api/v1/data/statistics` in `backend/app/api/v1/data.py`,
   - added canonical endpoint tests (`backend/tests/api/test_v1_statistics.py`).
+- 2026-02-23: Ticket 3 implemented in canonical app path:
+  - added real `/api/v1/sentiment/analyze` and `/api/v1/sentiment/batch` endpoints in `backend/app/api/v1/sentiment.py`,
+  - wired endpoints to existing FinBERT inference utilities,
+  - added canonical endpoint tests (`backend/tests/api/test_v1_sentiment.py`) including required empty-input 400 behavior.
 
 ## Ticket 1 — Bootstrapping FastAPI + Health + Versioning
 **Status**
@@ -96,6 +100,9 @@ Implement `GET /api/v1/data/statistics` returning the exact shape expected by `S
 
 
 ## Ticket 3 — Implement /sentiment/analyze + /sentiment/batch (FinBERT wiring)
+**Status**
+Completed (2026-02-23)
+
 **Goal**
 Expose FinBERT inference through the API.
 
@@ -115,6 +122,7 @@ Expose FinBERT inference through the API.
 **Notes**
 - Keep latency acceptable: reuse singleton model (already in `get_model()`).
 - Response-shape decision: keep default concise and add optional extended score payload when requested.
+- Empty-input validation is implemented as HTTP 400 with clear message (per project decision for this ticket).
 
 
 ## Ticket 4 — Persistence + Prediction Ingest into DB (SQLite first)
