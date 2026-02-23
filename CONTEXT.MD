@@ -172,3 +172,9 @@ Optional secondary novelty if time:
   - `/api/v1/sentiment/analyze` and `/api/v1/sentiment/batch` implemented in `backend/app/api/v1/sentiment.py`,
   - endpoints use existing FinBERT inference utilities and preserve batch input order,
   - empty input handling returns HTTP 400 with clear validation message.
+- 2026-02-23: Ticket 5 completed with LIME explainability integration:
+  - `POST /api/v1/sentiment/explain` added in canonical sentiment router,
+  - response returns token-level importance list (no HTML payload),
+  - frontend Homepage now includes inline modal flow for explainability output.
+- 2026-02-23: Local developer startup commands aligned to canonical backend app path:
+  - `start-dev.ps1` and root `package.json` now start `app.main:app` rather than legacy `api.main:app`.

@@ -162,6 +162,149 @@
   background: #4c6ef5;
 }
 
+.explainability-inline {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e8e8e8;
+  width: 100%;
+  max-width: 1240px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.explainability-inline h3 {
+  margin: 0 0 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.explainability-inline p {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #666;
+}
+
+.explain-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.explain-modal {
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  overflow: auto;
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.explain-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.explain-modal-header h3 {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
+  color: #333;
+}
+
+.explain-close-btn {
+  border: none;
+  background: transparent;
+  color: #555;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.explain-input {
+  width: 100%;
+  min-height: 130px;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.explain-actions {
+  margin-top: 12px;
+}
+
+.explain-error {
+  margin-top: 12px;
+  font-family: 'Roboto', sans-serif;
+  color: #cb6e68;
+  font-size: 13px;
+}
+
+.explain-result {
+  margin-top: 16px;
+  border-top: 1px solid #ededed;
+  padding-top: 14px;
+}
+
+.explain-prediction {
+  margin: 0 0 10px;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+}
+
+.token-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.token-row {
+  display: flex;
+  justify-content: space-between;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 8px 10px;
+}
+
+.token {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #333;
+}
+
+.weight {
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.weight.positive {
+  color: #2f9e44;
+}
+
+.weight.negative {
+  color: #c92a2a;
+}
+
 /* Responsive Design */
 @media (max-width: 1400px) {
   .homepage {

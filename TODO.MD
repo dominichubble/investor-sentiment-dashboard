@@ -35,6 +35,12 @@
   - added real `/api/v1/sentiment/analyze` and `/api/v1/sentiment/batch` endpoints in `backend/app/api/v1/sentiment.py`,
   - wired endpoints to existing FinBERT inference utilities,
   - added canonical endpoint tests (`backend/tests/api/test_v1_sentiment.py`) including required empty-input 400 behavior.
+- 2026-02-23: Ticket 5 implemented (LIME-first explainability):
+  - added `POST /api/v1/sentiment/explain` returning token-level importance list only,
+  - integrated inline explainability modal on Homepage,
+  - added canonical backend tests for explainability endpoint behavior.
+- 2026-02-23: Dev-runner alignment fix:
+  - updated local startup commands to run canonical backend app (`app.main:app`) instead of legacy app path.
 
 ## Ticket 1 — Bootstrapping FastAPI + Health + Versioning
 **Status**
@@ -158,6 +164,9 @@ Store predictions in SQLite and make them queryable for stats/trending.
 
 
 ## Ticket 5 — Novelty Slice: Explainability (LIME first) + UI Display
+**Status**
+Completed (2026-02-23)
+
 **Goal**
 Deliver your novelty: explainability integrated into the product.
 
@@ -180,3 +189,4 @@ Deliver your novelty: explainability integrated into the product.
 - LIME is usually quicker for text explanations than SHAP on transformers.
 - SHAP can be a stretch goal; implement later if time.
 - Confirmed: prioritize LIME for MVP novelty delivery.
+- Implemented on canonical sentiment API path (`/api/v1/sentiment/explain`) with token list response and inline modal UI.

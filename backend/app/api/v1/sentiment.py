@@ -7,6 +7,7 @@ from typing import Any
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
+from app.explainability.lime_explainer import get_lime_explainer
 from app.models.sentiment_inference import (
     analyze_batch as run_batch_sentiment,
 )
@@ -69,6 +70,29 @@ class BatchResponse(BaseModel):
     metadata: dict[str, Any]
 
 
+class ExplainRequest(BaseModel):
+    """LIME explainability request payload."""
+
+    text: str | None = Field(default=None)
+    options: dict[str, Any] | None = Field(default=None)
+
+
+class ExplanationToken(BaseModel):
+    """Token-level LIME weight."""
+
+    token: str
+    weight: float
+
+
+class ExplainResponse(BaseModel):
+    """LIME explainability response payload."""
+
+    text: str
+    prediction: SentimentResult
+    tokens: list[ExplanationToken]
+    metadata: dict[str, Any]
+
+
 @router.get("/_ping")
 async def ping_sentiment() -> dict[str, str]:
     """Temporary v1 sentiment route proving router mount."""
@@ -77,6 +101,16 @@ async def ping_sentiment() -> dict[str, str]:
 
 def _utc_now_iso() -> str:
     return datetime.utcnow().isoformat() + "Z"
+
+
+def run_lime_explain(
+    text: str,
+    num_features: int = 12,
+    num_samples: int = 1000,
+) -> dict[str, Any]:
+    """Run LIME explanation using shared explainer singleton."""
+    explainer = get_lime_explainer()
+    return explainer.explain(text=text, num_features=num_features, num_samples=num_samples)
 
 
 @router.post("/analyze", response_model=AnalyzeResponse)
@@ -168,6 +202,62 @@ async def batch_analyze_sentiment(request: BatchRequest) -> BatchResponse:
         results=normalized_results,
         metadata={
             "model": "finbert",
+            "processing_time_ms": round((perf_counter() - started) * 1000, 2),
+            "timestamp": _utc_now_iso(),
+        },
+    )
+
+
+@router.post("/explain", response_model=ExplainResponse)
+async def explain_sentiment(request: ExplainRequest) -> ExplainResponse:
+    """Generate token-level LIME explanation for a single text."""
+    text = request.text if isinstance(request.text, str) else ""
+    if not text.strip():
+        raise HTTPException(status_code=400, detail="text must be a non-empty string")
+
+    options = request.options or {}
+    num_features = int(options.get("num_features", 12))
+    num_samples = int(options.get("num_samples", 1000))
+
+    started = perf_counter()
+    try:
+        explanation = run_lime_explain(
+            text=text,
+            num_features=num_features,
+            num_samples=num_samples,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"explainability failed: {exc}") from exc
+
+    prediction = explanation.get("prediction", {})
+    token_weights = explanation.get("top_features", [])
+    tokens = [
+        ExplanationToken(token=str(token), weight=float(weight))
+        for token, weight in token_weights
+    ]
+
+    scores_payload = None
+    if isinstance(prediction.get("scores"), dict):
+        scores_payload = SentimentScores(
+            positive=float(prediction["scores"].get("positive", 0.0)),
+            negative=float(prediction["scores"].get("negative", 0.0)),
+            neutral=float(prediction["scores"].get("neutral", 0.0)),
+        )
+
+    return ExplainResponse(
+        text=text,
+        prediction=SentimentResult(
+            label=str(prediction.get("label", "neutral")),
+            score=float(prediction.get("score", 0.0)),
+            scores=scores_payload,
+        ),
+        tokens=tokens,
+        metadata={
+            "method": "LIME",
+            "num_features": len(tokens),
+            "num_samples": num_samples,
             "processing_time_ms": round((perf_counter() - started) * 1000, 2),
             "timestamp": _utc_now_iso(),
         },

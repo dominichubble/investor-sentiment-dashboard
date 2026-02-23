@@ -7,6 +7,7 @@ import { MiniLineChart, SentimentBarChart, MiniAreaChart, CorrelationHeatmap } f
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import { DropdownOption } from '../../components/DropdownButton';
 import { useDashboard } from '../../context/DashboardContext';
+import { apiService, ExplainSentimentResponse } from '../../services/api';
 import './Homepage.css';
 
 
@@ -40,6 +41,11 @@ const Homepage: React.FC = () => {
 
   const [selectedAsset, setSelectedAsset] = useState<DropdownOption>(assetOptions[0]);
   const [selectedTimeframe, setSelectedTimeframe] = useState<DropdownOption>(timeframeOptions[0]);
+  const [isExplainOpen, setIsExplainOpen] = useState(false);
+  const [explainText, setExplainText] = useState('');
+  const [explainResult, setExplainResult] = useState<ExplainSentimentResponse | null>(null);
+  const [isExplaining, setIsExplaining] = useState(false);
+  const [explainError, setExplainError] = useState<string | null>(null);
 
   const handleAssetChange = (option: DropdownOption) => {
     setSelectedAsset(option);
@@ -59,6 +65,36 @@ const Homepage: React.FC = () => {
 
   const handleStockClick = (ticker: string) => {
     navigate('/correlation');
+  };
+
+  const openExplainModal = () => {
+    setIsExplainOpen(true);
+    setExplainError(null);
+  };
+
+  const closeExplainModal = () => {
+    setIsExplainOpen(false);
+    setExplainError(null);
+  };
+
+  const handleExplain = async () => {
+    if (!explainText.trim()) {
+      setExplainError('Please enter text to explain.');
+      return;
+    }
+
+    setIsExplaining(true);
+    setExplainError(null);
+    try {
+      const response = await apiService.explainSentiment(explainText, { num_features: 12 });
+      setExplainResult(response);
+    } catch (err: any) {
+      setExplainError(
+        err?.response?.data?.detail || 'Failed to generate explanation. Please try again.'
+      );
+    } finally {
+      setIsExplaining(false);
+    }
   };
 
   const formatNumber = (num: number): string => {
@@ -254,6 +290,16 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
         }
       />
 
+      <div className="explainability-inline">
+        <div className="explainability-inline-content">
+          <h3>LIME Explainability</h3>
+          <p>Generate token-level importance to understand why FinBERT made a sentiment prediction.</p>
+        </div>
+        <button className="view-all-btn" onClick={openExplainModal}>
+          Explain Text
+        </button>
+      </div>
+
       {/* Correlation Overview Section */}
       {correlationOverview.length > 0 && (
         <ErrorBoundary fallbackTitle="Failed to load correlation overview">
@@ -275,6 +321,50 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
             />
           </div>
         </ErrorBoundary>
+      )}
+
+      {isExplainOpen && (
+        <div className="explain-modal-overlay" onClick={closeExplainModal}>
+          <div className="explain-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="explain-modal-header">
+              <h3>Sentiment Explanation (LIME)</h3>
+              <button className="explain-close-btn" onClick={closeExplainModal}>X</button>
+            </div>
+
+            <textarea
+              className="explain-input"
+              placeholder="Paste financial text here..."
+              value={explainText}
+              onChange={(e) => setExplainText(e.target.value)}
+            />
+
+            <div className="explain-actions">
+              <button className="retry-button" onClick={handleExplain} disabled={isExplaining}>
+                {isExplaining ? 'Explaining...' : 'Run Explanation'}
+              </button>
+            </div>
+
+            {explainError && <p className="explain-error">{explainError}</p>}
+
+            {explainResult && (
+              <div className="explain-result">
+                <p className="explain-prediction">
+                  Prediction: <strong>{explainResult.prediction.label}</strong> ({(explainResult.prediction.score * 100).toFixed(1)}%)
+                </p>
+                <div className="token-list">
+                  {explainResult.tokens.map((item) => (
+                    <div key={`${item.token}-${item.weight}`} className="token-row">
+                      <span className="token">{item.token}</span>
+                      <span className={`weight ${item.weight >= 0 ? 'positive' : 'negative'}`}>
+                        {item.weight >= 0 ? '+' : ''}{item.weight.toFixed(4)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );
