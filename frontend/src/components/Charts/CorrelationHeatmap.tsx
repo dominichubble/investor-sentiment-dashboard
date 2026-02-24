@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CorrelationOverviewItem } from '../../types';
+import './CorrelationHeatmap.css';
 
 interface CorrelationHeatmapProps {
   data: CorrelationOverviewItem[];
@@ -12,7 +13,7 @@ const CorrelationHeatmap: React.FC<CorrelationHeatmapProps> = ({
 }) => {
   if (!data || data.length === 0) {
     return (
-      <div style={{ padding: 40, textAlign: 'center', color: '#999' }}>
+      <div className="heatmap-empty">
         No correlation data available. Ensure stocks have sufficient sentiment and price data.
       </div>
     );
@@ -36,64 +37,39 @@ const CorrelationHeatmap: React.FC<CorrelationHeatmapProps> = ({
   };
 
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(data.length, 6)}, 1fr)`, gap: 8 }}>
-        {data.map((item) => (
-          <div
-            key={item.ticker}
-            onClick={() => onStockClick?.(item.ticker)}
-            style={{
-              background: getColor(item.pearson_r, item.significant),
-              borderRadius: 8,
-              padding: '16px 12px',
-              textAlign: 'center',
-              cursor: onStockClick ? 'pointer' : 'default',
-              transition: 'transform 0.2s, box-shadow 0.2s',
-              border: `1px solid ${item.significant ? '#e0e0e0' : '#eee'}`,
-              minWidth: 120,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-          >
-            <div style={{
-              fontWeight: 700,
-              fontSize: 16,
-              color: getTextColor(item.pearson_r, item.significant),
-              marginBottom: 4,
-            }}>
-              {item.ticker}
+    <div className="heatmap-container">
+      <div
+        className="heatmap-grid"
+        style={{ gridTemplateColumns: `repeat(${Math.min(data.length, 6)}, 1fr)` }}
+      >
+        {data.map((item) => {
+          const textColor = getTextColor(item.pearson_r, item.significant);
+          return (
+            <div
+              key={item.ticker}
+              className="heatmap-tile"
+              onClick={() => onStockClick?.(item.ticker)}
+              style={{
+                background: getColor(item.pearson_r, item.significant),
+                cursor: onStockClick ? 'pointer' : 'default',
+                borderColor: item.significant ? '#e0e0e0' : '#eee',
+              }}
+            >
+              <div className="heatmap-ticker" style={{ color: textColor }}>
+                {item.ticker}
+              </div>
+              <div className="heatmap-value" style={{ color: textColor }}>
+                {item.pearson_r >= 0 ? '+' : ''}{item.pearson_r.toFixed(2)}
+              </div>
+              <div className="heatmap-mentions" style={{ color: textColor }}>
+                {item.mentions} mentions
+              </div>
+              <div className="heatmap-significance" style={{ color: textColor }}>
+                {item.significant ? 'p < 0.05' : 'n.s.'}
+              </div>
             </div>
-            <div style={{
-              fontSize: 24,
-              fontWeight: 700,
-              color: getTextColor(item.pearson_r, item.significant),
-              marginBottom: 4,
-            }}>
-              {item.pearson_r >= 0 ? '+' : ''}{item.pearson_r.toFixed(2)}
-            </div>
-            <div style={{
-              fontSize: 11,
-              color: getTextColor(item.pearson_r, item.significant),
-              opacity: 0.8,
-            }}>
-              {item.mentions} mentions
-            </div>
-            <div style={{
-              fontSize: 10,
-              color: getTextColor(item.pearson_r, item.significant),
-              opacity: 0.7,
-              marginTop: 2,
-            }}>
-              {item.significant ? 'p < 0.05' : 'n.s.'}
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

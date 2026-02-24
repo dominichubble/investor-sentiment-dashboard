@@ -7,6 +7,7 @@ import {
   CorrelationHeatmap,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
+import Navbar from '../../components/Navbar';
 import { apiService } from '../../services/api';
 import { useDashboard } from '../../context/DashboardContext';
 import type {
@@ -132,6 +133,8 @@ const StockAnalysis: React.FC = () => {
 
   return (
     <div className="stock-analysis">
+      <Navbar title="COC251 Sentiment Analysis" />
+
       {/* Header / Search */}
       <div className="sa-header">
         <h1 className="sa-title">Sentiment-Price Correlation Analysis</h1>
@@ -447,27 +450,28 @@ function RollingCorrelationChart({ data, height = 300 }: {
   return (
     <RechartsPrimitive.ResponsiveContainer width="100%" height={height} minWidth={0}>
       <RechartsPrimitive.LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" stroke="#e8e8e8" />
         <RechartsPrimitive.XAxis
           dataKey="date"
-          tick={{ fontSize: 11, fill: '#8e94a0' }}
+          tick={{ fontSize: 11, fill: '#888' }}
           tickFormatter={(v: string) => v.slice(5)}
         />
         <RechartsPrimitive.YAxis
           domain={[-1, 1]}
-          tick={{ fontSize: 11, fill: '#8e94a0' }}
+          tick={{ fontSize: 11, fill: '#888' }}
           tickFormatter={(v: number) => v.toFixed(1)}
         />
         <RechartsPrimitive.Tooltip
           contentStyle={{
-            background: '#1e1e2e',
-            border: '1px solid rgba(255,255,255,0.1)',
+            background: 'white',
+            border: '1px solid #e0e0e0',
             borderRadius: '8px',
             fontSize: '12px',
+            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
           }}
           formatter={(value: number) => [value.toFixed(4), 'Correlation']}
         />
-        <RechartsPrimitive.ReferenceLine y={0} stroke="rgba(255,255,255,0.2)" strokeDasharray="3 3" />
+        <RechartsPrimitive.ReferenceLine y={0} stroke="#ccc" strokeDasharray="3 3" />
         <RechartsPrimitive.Line
           type="monotone"
           dataKey="correlation"

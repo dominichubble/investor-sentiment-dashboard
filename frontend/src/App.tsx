@@ -32,17 +32,18 @@ function NotFound() {
       alignItems: 'center',
       justifyContent: 'center',
       height: '80vh',
-      color: '#8e94a0',
+      color: '#666',
       textAlign: 'center' as const,
+      fontFamily: "'Roboto', sans-serif",
     }}>
       <h1 style={{ fontSize: '72px', marginBottom: '8px', color: '#5c7cfa' }}>404</h1>
-      <h2 style={{ marginBottom: '16px', color: '#e0e0e0' }}>Page Not Found</h2>
+      <h2 style={{ marginBottom: '16px', color: '#333' }}>Page Not Found</h2>
       <p style={{ marginBottom: '24px' }}>The page you are looking for does not exist.</p>
       <a href="/" style={{
         padding: '10px 24px',
         borderRadius: '8px',
-        background: 'rgba(92, 124, 250, 0.15)',
-        color: '#5c7cfa',
+        background: '#5c7cfa',
+        color: 'white',
         textDecoration: 'none',
         fontWeight: 500,
       }}>

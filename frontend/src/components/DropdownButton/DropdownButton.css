@@ -4,7 +4,7 @@
 
 .dropdown-button {
   background-color: #fafafa;
-  border: 2px solid #838383;
+  border: 1px solid #e0e0e0;
   display: flex;
   gap: 8px;
   height: 35px;
@@ -18,7 +18,7 @@
 
 .dropdown-button:hover {
   background-color: #f0f0f0;
-  border-color: #666;
+  border-color: #ccc;
 }
 
 .dropdown-button:active {
@@ -73,9 +73,9 @@
   left: 0;
   right: 0;
   background-color: white;
-  border: 2px solid #838383;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   z-index: 1000;
   max-height: 300px;
   overflow-y: auto;
