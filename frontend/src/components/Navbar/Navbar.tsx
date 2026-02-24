@@ -8,6 +8,8 @@ interface NavbarProps {
   assetOptions?: DropdownOption[];
   selectedAsset?: DropdownOption;
   onAssetChange?: (option: DropdownOption) => void;
+  assetDisabled?: boolean;
+  assetDisabledMessage?: string;
   timeframeOptions?: DropdownOption[];
   selectedTimeframe?: DropdownOption;
   onTimeframeChange?: (option: DropdownOption) => void;
@@ -19,6 +21,8 @@ const Navbar: React.FC<NavbarProps> = ({
   assetOptions,
   selectedAsset,
   onAssetChange,
+  assetDisabled = false,
+  assetDisabledMessage,
   timeframeOptions,
   selectedTimeframe,
   onTimeframeChange,
@@ -56,6 +60,8 @@ const Navbar: React.FC<NavbarProps> = ({
             options={assetOptions}
             selectedOption={selectedAsset}
             onSelect={onAssetChange}
+            disabled={assetDisabled}
+            disabledMessage={assetDisabledMessage}
           />
           <DropdownButton
             label="Timeframe"

@@ -5,9 +5,9 @@ import './SummaryCard.css';
 interface SummaryCardProps {
   title: string;
   summary: string;
-  embeddedCardTitle?: string;
-  embeddedCardValue?: string;
-  embeddedCardDescription?: string;
+  embeddedCardTitle: string;
+  embeddedCardValue: string;
+  embeddedCardDescription: string;
   embeddedCardChart?: React.ReactNode;
   className?: string;
 }
@@ -15,9 +15,9 @@ interface SummaryCardProps {
 const SummaryCard: React.FC<SummaryCardProps> = ({
   title,
   summary,
-  embeddedCardTitle = "SENTIMENT DISTRIBUTION",
-  embeddedCardValue = "+0.38",
-  embeddedCardDescription = "Mildly Positive (Normalized -1 to +1)",
+  embeddedCardTitle,
+  embeddedCardValue,
+  embeddedCardDescription,
   embeddedCardChart,
   className
 }) => {

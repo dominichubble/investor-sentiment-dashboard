@@ -17,6 +17,9 @@
 - 2026-02-24: Historical dataset integration prep (stock_tweets.csv, ~80k tweets, 25 tickers, Sep 2021 – Sep 2022).
 - 2026-02-24: Frontend design unification completed (consistent Navbar, card borders, dark-theme fixes, padding).
 - 2026-02-24: FE-2 and FE-3 completed — replaced random synthetic mini-chart data with real daily trend from statistics API, using `useMemo` for deterministic renders.
+- 2026-02-25: FE-4 completed — LIME endpoint responsiveness: reduced num_samples default 1000→500, run computation in asyncio.to_thread, frontend timeout extended to 120 s with elapsed-time counter and cancel button.
+- 2026-02-25: FE-5 completed — Timeframe filter already wired to statistics/correlation APIs via DashboardContext. Asset filter disabled with "Coming Soon" badge (no backend support yet).
+- 2026-02-25: FE-6 completed — Removed misleading SummaryCard default props (+0.38, Mildly Positive); improved defensive fallback copy.
 - 2026-02-23: Ready to begin Ticket 1 with canonical structure and constraints locked.
 - 2026-02-23: Ticket 1 completed and validated (health endpoint, v1 mount, CORS, uvicorn startup check, pytest checks).
 - 2026-02-23: Ticket 4 implemented in canonical app path with SQLite startup initialization, `/api/v1/data/predictions`, and import job scaffolding for DB ingestion.
@@ -274,6 +277,9 @@ Completed (2026-02-24)
 **Priority**
 High
 
+**Status**
+Completed (2026-02-25)
+
 **Problem**
 - Live endpoint check for `POST /api/v1/sentiment/explain` timed out in local verification.
 - Existing tests mock explainer path; no integration check validates end-to-end latency/responsiveness.
@@ -286,9 +292,21 @@ High
 - Add backend integration smoke check for explain endpoint response under a defined timeout budget.
 - Frontend shows clear progress and actionable error states for long-running explain requests.
 
+**Resolution**
+- Root cause: LIME perturbs text `num_samples` times → each perturbation runs FinBERT inference; ~1000 inferences on CPU is slow.
+- Reduced default `num_samples` from 1000 to 500 in `sentiment.py` for faster response while retaining explanation accuracy.
+- Wrapped `run_lime_explain()` call in `asyncio.to_thread()` so the async event loop stays responsive.
+- Frontend `explainSentiment()` timeout extended from 30 s to 120 s.
+- Added `AbortController` support for request cancellation.
+- LIME modal now shows elapsed-time counter ("Analysing token importance… Ns elapsed") with contextual helper text after 10 s.
+- Added Cancel button alongside Run Explanation during processing.
+
 ### FE-5 — Navbar filters are mostly cosmetic today
 **Priority**
 Medium
+
+**Status**
+Completed (2026-02-25)
 
 **Problem**
 - Asset/timeframe selections update context state, but data fetch does not use these selections in API requests.
@@ -302,9 +320,18 @@ Medium
 - For unsupported filters, disable with "coming soon" state or remove until implemented.
 - Filter changes produce observable deterministic changes in fetched data.
 
+**Resolution**
+- Timeframe filter was already wired in DashboardContext: `selectedTimeframe` → `days` param for statistics and `period` for correlation overview. Re-fetches on change.
+- Asset filter has no backend support; disabled `DropdownButton` with `disabled` prop + "Coming Soon" badge.
+- Added `disabled`, `disabledMessage` props to `DropdownButton` component.
+- Added `assetDisabled`, `assetDisabledMessage` pass-through props to `Navbar`.
+
 ### FE-6 — Placeholder/default copy and fallback values need cleanup
 **Priority**
 Medium
+
+**Status**
+Completed (2026-02-25)
 
 **Problem**
 - Some components still carry template defaults (e.g., `SummaryCard` fallback values) and generic instructional text.
@@ -317,3 +344,8 @@ Medium
 - Remove or replace static fallback values that can leak into UI.
 - Audit and revise copy to reflect real system behavior and known limitations.
 - Add empty-state messaging that is specific, actionable, and endpoint-aware.
+
+**Resolution**
+- Removed misleading `SummaryCard` default props (`+0.38`, `Mildly Positive`, `SENTIMENT DISTRIBUTION`) — made `embeddedCardTitle`, `embeddedCardValue`, `embeddedCardDescription` required (no defaults).
+- Improved defensive fallback copy in Homepage: `'Loading...'` → `'Awaiting data'`, `'Loading data...'` → `'Fetching sentiment data from the backend…'`.
+- Audited all N/A and empty-state messages across components; existing fallbacks are appropriate for missing-data scenarios.

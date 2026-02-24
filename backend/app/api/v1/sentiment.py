@@ -1,5 +1,6 @@
 """Sentiment endpoints for API v1."""
 
+import asyncio
 from datetime import datetime
 from time import perf_counter
 from typing import Any
@@ -102,9 +103,13 @@ def _utc_now_iso() -> str:
 def run_lime_explain(
     text: str,
     num_features: int = 12,
-    num_samples: int = 1000,
+    num_samples: int = 500,
 ) -> dict[str, Any]:
-    """Run LIME explanation using shared explainer singleton."""
+    """Run LIME explanation using shared explainer singleton.
+
+    Default num_samples reduced from 1000 to 500 for faster CPU response
+    while retaining sufficient explanation accuracy.
+    """
     explainer = get_lime_explainer()
     return explainer.explain(
         text=text, num_features=num_features, num_samples=num_samples
@@ -223,11 +228,14 @@ async def explain_sentiment(request: ExplainRequest) -> ExplainResponse:
 
     options = request.options or {}
     num_features = int(options.get("num_features", 12))
-    num_samples = int(options.get("num_samples", 1000))
+    num_samples = int(options.get("num_samples", 500))
 
     started = perf_counter()
     try:
-        explanation = run_lime_explain(
+        # Run CPU-heavy LIME computation in a background thread so the
+        # async event loop stays responsive for other requests.
+        explanation = await asyncio.to_thread(
+            run_lime_explain,
             text=text,
             num_features=num_features,
             num_samples=num_samples,

@@ -250,6 +250,40 @@
 
 .explain-actions {
   margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.explain-cancel-btn {
+  background: transparent;
+  color: #cb6e68;
+  border: 1px solid #cb6e68;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.explain-cancel-btn:hover {
+  background: #cb6e68;
+  color: white;
+}
+
+.explain-progress {
+  margin-top: 10px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #5c7cfa;
+  animation: pulse-text 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .explain-error {
@@ -269,6 +303,12 @@
   margin: 0 0 10px;
   font-family: 'Roboto', sans-serif;
   color: #333;
+}
+
+.explain-time {
+  font-size: 12px;
+  font-weight: 400;
+  color: #888;
 }
 
 .token-list {

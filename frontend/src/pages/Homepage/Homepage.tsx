@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import MetricCard from '../../components/MetricCard';
@@ -49,6 +49,9 @@ const Homepage: React.FC = () => {
   const [explainResult, setExplainResult] = useState<ExplainSentimentResponse | null>(null);
   const [isExplaining, setIsExplaining] = useState(false);
   const [explainError, setExplainError] = useState<string | null>(null);
+  const [explainElapsed, setExplainElapsed] = useState(0);
+  const abortRef = useRef<AbortController | null>(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const handleAssetChange = (option: DropdownOption) => {
     setSelectedAsset(option);
@@ -76,9 +79,28 @@ const Homepage: React.FC = () => {
   };
 
   const closeExplainModal = () => {
+    // Cancel any in-flight LIME request when closing the modal
+    if (abortRef.current) {
+      abortRef.current.abort();
+      abortRef.current = null;
+    }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     setIsExplainOpen(false);
+    setIsExplaining(false);
     setExplainError(null);
+    setExplainElapsed(0);
   };
+
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+      if (abortRef.current) abortRef.current.abort();
+    };
+  }, []);
 
   const handleExplain = async () => {
     if (!explainText.trim()) {
@@ -86,17 +108,48 @@ const Homepage: React.FC = () => {
       return;
     }
 
+    // Abort any previous in-flight request
+    if (abortRef.current) abortRef.current.abort();
+    const controller = new AbortController();
+    abortRef.current = controller;
+
     setIsExplaining(true);
     setExplainError(null);
+    setExplainResult(null);
+    setExplainElapsed(0);
+
+    // Start elapsed timer (ticks every second)
+    const start = Date.now();
+    timerRef.current = setInterval(() => {
+      setExplainElapsed(Math.floor((Date.now() - start) / 1000));
+    }, 1000);
+
     try {
-      const response = await apiService.explainSentiment(explainText, { num_features: 12 });
+      const response = await apiService.explainSentiment(
+        explainText,
+        { num_features: 12 },
+        controller.signal,
+      );
       setExplainResult(response);
     } catch (err: any) {
-      setExplainError(
-        err?.response?.data?.detail || 'Failed to generate explanation. Please try again.'
-      );
+      if (err?.code === 'ERR_CANCELED' || controller.signal.aborted) {
+        // User cancelled — no error to show
+      } else if (err?.code === 'ECONNABORTED') {
+        setExplainError(
+          'The explanation timed out. Try shorter text or try again later.'
+        );
+      } else {
+        setExplainError(
+          err?.response?.data?.detail || 'Failed to generate explanation. Please try again.'
+        );
+      }
     } finally {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
       setIsExplaining(false);
+      abortRef.current = null;
     }
   };
 
@@ -127,7 +180,7 @@ const Homepage: React.FC = () => {
   };
 
   const getSentimentDescription = (): string => {
-    if (!statistics) return 'Loading...';
+    if (!statistics) return 'Awaiting data';
     const score = parseFloat(calculateNetSentiment());
     if (score > 0.5) return 'Strongly Positive';
     if (score > 0.2) return 'Moderately Positive';
@@ -137,7 +190,7 @@ const Homepage: React.FC = () => {
   };
 
   const generateSummaryText = (): string => {
-    if (!statistics) return 'Loading data...';
+    if (!statistics) return 'Fetching sentiment data from the backend…';
     
     const dist = statistics.sentiment_distribution;
     const score = calculateNetSentiment();
@@ -166,6 +219,8 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
           assetOptions={assetOptions}
           selectedAsset={selectedAsset}
           onAssetChange={handleAssetChange}
+          assetDisabled
+          assetDisabledMessage="Coming Soon"
           timeframeOptions={timeframeOptions}
           selectedTimeframe={selectedTimeframe}
           onTimeframeChange={handleTimeframeChange}
@@ -188,6 +243,8 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
           assetOptions={assetOptions}
           selectedAsset={selectedAsset}
           onAssetChange={handleAssetChange}
+          assetDisabled
+          assetDisabledMessage="Coming Soon"
           timeframeOptions={timeframeOptions}
           selectedTimeframe={selectedTimeframe}
           onTimeframeChange={handleTimeframeChange}
@@ -210,6 +267,8 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
         assetOptions={assetOptions}
         selectedAsset={selectedAsset}
         onAssetChange={handleAssetChange}
+        assetDisabled
+        assetDisabledMessage="Coming Soon"
         timeframeOptions={timeframeOptions}
         selectedTimeframe={selectedTimeframe}
         onTimeframeChange={handleTimeframeChange}
@@ -336,7 +395,22 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
               <button className="retry-button" onClick={handleExplain} disabled={isExplaining}>
                 {isExplaining ? 'Explaining...' : 'Run Explanation'}
               </button>
+              {isExplaining && (
+                <button
+                  className="explain-cancel-btn"
+                  onClick={() => { if (abortRef.current) abortRef.current.abort(); }}
+                >
+                  Cancel
+                </button>
+              )}
             </div>
+
+            {isExplaining && (
+              <p className="explain-progress">
+                Analysing token importance… {explainElapsed}s elapsed
+                {explainElapsed >= 10 && ' — LIME generates hundreds of perturbations; this is normal.'}
+              </p>
+            )}
 
             {explainError && <p className="explain-error">{explainError}</p>}
 
@@ -344,6 +418,7 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
               <div className="explain-result">
                 <p className="explain-prediction">
                   Prediction: <strong>{explainResult.prediction.label}</strong> ({(explainResult.prediction.score * 100).toFixed(1)}%)
+                  <span className="explain-time"> — {(explainResult.metadata.processing_time_ms / 1000).toFixed(1)}s</span>
                 </p>
                 <div className="token-list">
                   {explainResult.tokens.map((item) => (

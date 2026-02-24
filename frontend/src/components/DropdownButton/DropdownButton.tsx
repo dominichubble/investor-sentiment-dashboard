@@ -15,6 +15,8 @@ interface DropdownButtonProps {
   selectedOption: DropdownOption;
   onSelect: (option: DropdownOption) => void;
   className?: string;
+  disabled?: boolean;
+  disabledMessage?: string;
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({
@@ -22,7 +24,9 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   options,
   selectedOption,
   onSelect,
-  className
+  className,
+  disabled = false,
+  disabledMessage,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,7 +43,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   }, []);
 
   const handleToggle = () => {
-    setIsOpen(!isOpen);
+    if (!disabled) setIsOpen(!isOpen);
   };
 
   const handleOptionClick = (option: DropdownOption) => {
@@ -48,16 +52,21 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   };
 
   return (
-    <div className={`dropdown-container ${className || ''}`} ref={dropdownRef}>
+    <div className={`dropdown-container ${disabled ? 'disabled' : ''} ${className || ''}`} ref={dropdownRef}>
       <button
         className="dropdown-button"
         onClick={handleToggle}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        disabled={disabled}
+        title={disabled ? disabledMessage : undefined}
       >
         <p className="dropdown-text">
           <span className="dropdown-label">{label}:</span>
           <span className="dropdown-value"> {selectedOption.label}</span>
+          {disabled && disabledMessage && (
+            <span className="dropdown-badge">{disabledMessage}</span>
+          )}
         </p>
         <div className="dropdown-icon">
           <div className={`polygon-wrapper ${isOpen ? 'open' : ''}`}>

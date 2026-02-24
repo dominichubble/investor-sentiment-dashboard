@@ -118,3 +118,27 @@
 .dropdown-menu-item:not(:last-child) {
   border-bottom: 1px solid #e0e0e0;
 }
+
+/* Disabled state */
+.dropdown-container.disabled .dropdown-button {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.dropdown-container.disabled .dropdown-button:hover {
+  background-color: #fafafa;
+  border-color: #e0e0e0;
+}
+
+.dropdown-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: #5c7cfa;
+  background: #e8edff;
+  border-radius: 4px;
+  vertical-align: middle;
+}

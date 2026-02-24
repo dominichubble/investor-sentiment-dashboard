@@ -215,8 +215,16 @@ export const apiService = {
     return response.data;
   },
 
-  async explainSentiment(text: string, options?: any): Promise<ExplainSentimentResponse> {
-    const response = await api.post<ExplainSentimentResponse>('/sentiment/explain', { text, options });
+  async explainSentiment(
+    text: string,
+    options?: any,
+    signal?: AbortSignal,
+  ): Promise<ExplainSentimentResponse> {
+    const response = await api.post<ExplainSentimentResponse>(
+      '/sentiment/explain',
+      { text, options },
+      { timeout: 120_000, signal },   // 120 s budget for CPU-heavy LIME
+    );
     return response.data;
   },
 

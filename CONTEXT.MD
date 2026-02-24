@@ -207,3 +207,18 @@ Optional secondary novelty if time:
   - removed `generateTrendData()` (Math.random) from Homepage,
   - Net Sentiment and Total Records mini-charts now use real daily data via `useMemo`,
   - chart data is deterministic across re-renders — typing in LIME modal no longer causes chart changes.
+- 2026-02-25: FE-4 fix (LIME endpoint responsiveness):
+  - root cause: LIME calls `_predict_proba` ~num_samples times, each running FinBERT inference on CPU — very slow at 1000 samples,
+  - reduced default `num_samples` from 1000 to 500 in `sentiment.py` explain endpoint,
+  - wrapped `run_lime_explain()` in `asyncio.to_thread()` to avoid blocking the async event loop,
+  - frontend `explainSentiment()` timeout extended from 30 s to 120 s with `AbortController` support,
+  - LIME modal now displays elapsed-time counter during processing with contextual helper text after 10 s,
+  - added Cancel button alongside Run Explanation during LIME processing.
+- 2026-02-25: FE-5 fix (navbar filters):
+  - timeframe filter confirmed already wired: DashboardContext passes `days` to statistics API and `period` to correlation overview, re-fetches on change,
+  - asset filter disabled with "Coming Soon" badge — no backend filtering support yet,
+  - added `disabled`/`disabledMessage` props to `DropdownButton`, piped through `Navbar` via `assetDisabled`/`assetDisabledMessage`.
+- 2026-02-25: FE-6 fix (placeholder copy cleanup):
+  - removed misleading `SummaryCard` default props (`+0.38`, `Mildly Positive`, `SENTIMENT DISTRIBUTION`) — made embedded card props required,
+  - improved defensive fallback copy in Homepage (`'Awaiting data'`, `'Fetching sentiment data from the backend…'`),
+  - audited all N/A and empty-state messages — existing fallbacks are appropriate.
