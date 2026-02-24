@@ -178,3 +178,8 @@ Optional secondary novelty if time:
   - frontend Homepage now includes inline modal flow for explainability output.
 - 2026-02-23: Local developer startup commands aligned to canonical backend app path:
   - `start-dev.ps1` and root `package.json` now start `app.main:app` rather than legacy `api.main:app`.
+- 2026-02-24: Frontend debugging audit completed and converted into actionable backlog:
+  - confirmed canonical backend currently lacks mounted `/api/v1/correlation/*` routes (frontend receives 404 on correlation overview),
+  - confirmed Homepage metric mini-charts use synthetic random data causing non-deterministic visuals,
+  - confirmed LIME modal typing triggers homepage re-render side-effects (charts appear to change while typing),
+  - observed explain endpoint responsiveness issue requiring dedicated backend/frontend stabilization work.

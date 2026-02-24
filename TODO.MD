@@ -190,3 +190,104 @@ Deliver your novelty: explainability integrated into the product.
 - SHAP can be a stretch goal; implement later if time.
 - Confirmed: prioritize LIME for MVP novelty delivery.
 - Implemented on canonical sentiment API path (`/api/v1/sentiment/explain`) with token list response and inline modal UI.
+
+
+## Frontend Stabilization Backlog (Post-MVP Findings)
+These are evidence-based issues found during a targeted frontend debugging pass.
+
+### FE-1 — Correlation API is not wired in canonical backend app
+**Priority**
+Critical
+
+**Problem**
+- Frontend calls `/api/v1/correlation/*`, but canonical app router (`backend/app/api/v1/router.py`) currently mounts only `data` and `sentiment`.
+- Live check returns `404` on `/api/v1/correlation/overview/all`.
+
+**Impact**
+- Correlation overview and correlation analysis page cannot load real data on canonical startup path.
+
+**Acceptance Criteria**
+- Add canonical correlation router under `backend/app/api/v1` and include it in `api_router`.
+- `GET /api/v1/correlation/overview/all` returns `200` in canonical app.
+- Stock analysis page renders correlation sections without endpoint-not-found failures.
+
+### FE-2 — Homepage mini-trend charts use random synthetic data
+**Priority**
+High
+
+**Problem**
+- `Homepage.tsx` uses `generateTrendData()` with `Math.random()` for metric-card charts.
+- This data is not from DB/API time-series.
+
+**Impact**
+- Charts do not represent true time-series behavior.
+- Dashboard appears inconsistent and non-deterministic.
+
+**Acceptance Criteria**
+- Remove random chart generation from Homepage.
+- Replace with real backend-derived trend series (or hide trend charts until real series endpoint is available).
+- Chart values are stable across re-renders for unchanged data.
+
+### FE-3 — Typing in LIME modal causes charts to change
+**Priority**
+High
+
+**Problem**
+- Every keystroke updates component state (`explainText`) which re-renders Homepage.
+- Re-render re-executes random chart data generation, so unrelated graphs visually change.
+
+**Impact**
+- Severe UX trust issue ("dashboard moves while typing").
+
+**Acceptance Criteria**
+- Ensure typing in explainability modal does not mutate metric chart data.
+- Use memoized/derived deterministic chart data only.
+- Manual test: typing 20+ chars in modal leaves metric charts unchanged.
+
+### FE-4 — LIME explainability endpoint is not reliably responsive
+**Priority**
+High
+
+**Problem**
+- Live endpoint check for `POST /api/v1/sentiment/explain` timed out in local verification.
+- Existing tests mock explainer path; no integration check validates end-to-end latency/responsiveness.
+
+**Impact**
+- Explainability feature appears broken to end users.
+
+**Acceptance Criteria**
+- Identify root cause of timeout (model load, LIME runtime, dependency/runtime issue) and fix.
+- Add backend integration smoke check for explain endpoint response under a defined timeout budget.
+- Frontend shows clear progress and actionable error states for long-running explain requests.
+
+### FE-5 — Navbar filters are mostly cosmetic today
+**Priority**
+Medium
+
+**Problem**
+- Asset/timeframe selections update context state, but data fetch does not use these selections in API requests.
+- Dashboard context currently fetches fixed params for correlation overview and unparameterized statistics.
+
+**Impact**
+- Controls appear as placeholders/non-functional filters.
+
+**Acceptance Criteria**
+- Wire selected timeframe/asset into backend query parameters where supported.
+- For unsupported filters, disable with "coming soon" state or remove until implemented.
+- Filter changes produce observable deterministic changes in fetched data.
+
+### FE-6 — Placeholder/default copy and fallback values need cleanup
+**Priority**
+Medium
+
+**Problem**
+- Some components still carry template defaults (e.g., `SummaryCard` fallback values) and generic instructional text.
+- Copy does not always reflect current live data or feature state.
+
+**Impact**
+- Product polish and credibility are reduced.
+
+**Acceptance Criteria**
+- Remove or replace static fallback values that can leak into UI.
+- Audit and revise copy to reflect real system behavior and known limitations.
+- Add empty-state messaging that is specific, actionable, and endpoint-aware.
