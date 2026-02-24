@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
-from sqlalchemy import func
+from sqlalchemy import func, case, cast, Date
 
 from app.entities.stock_database import StockDatabase
 from app.storage.database import SentimentRecordRow, get_session
@@ -169,6 +169,38 @@ class StatisticsService:
                 or 0,
             }
 
+            # ---- Daily trend time-series for mini-charts ----
+            day_col = func.date(SentimentRecordRow.timestamp).label("day")
+            daily_rows = (
+                _apply_window(
+                    session.query(
+                        day_col,
+                        func.count(SentimentRecordRow.id).label("count"),
+                        func.sum(
+                            case(
+                                (SentimentRecordRow.sentiment_label == "positive", 1),
+                                else_=0,
+                            )
+                        ).label("pos"),
+                        func.sum(
+                            case(
+                                (SentimentRecordRow.sentiment_label == "negative", 1),
+                                else_=0,
+                            )
+                        ).label("neg"),
+                    )
+                )
+                .group_by(day_col)
+                .order_by(day_col)
+                .all()
+            )
+            daily_trend = []
+            for day, count, pos, neg in daily_rows:
+                net = round(((pos or 0) - (neg or 0)) / max(count, 1), 4)
+                daily_trend.append(
+                    {"date": str(day), "count": int(count), "net_sentiment": net}
+                )
+
             return {
                 "total_predictions": int(total_predictions),
                 "total_stocks_analyzed": int(total_stocks_analyzed),
@@ -183,6 +215,7 @@ class StatisticsService:
                     "earliest": _to_utc_iso(earliest),
                     "latest": _to_utc_iso(latest),
                 },
+                "daily_trend": daily_trend,
             }
         finally:
             session.close()

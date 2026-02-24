@@ -14,6 +14,9 @@
 
 ## Progress Log
 - 2026-02-23: Added and confirmed project-wide implementation decisions from stakeholder Q&A.
+- 2026-02-24: Historical dataset integration prep (stock_tweets.csv, ~80k tweets, 25 tickers, Sep 2021 – Sep 2022).
+- 2026-02-24: Frontend design unification completed (consistent Navbar, card borders, dark-theme fixes, padding).
+- 2026-02-24: FE-2 and FE-3 completed — replaced random synthetic mini-chart data with real daily trend from statistics API, using `useMemo` for deterministic renders.
 - 2026-02-23: Ready to begin Ticket 1 with canonical structure and constraints locked.
 - 2026-02-23: Ticket 1 completed and validated (health endpoint, v1 mount, CORS, uvicorn startup check, pytest checks).
 - 2026-02-23: Ticket 4 implemented in canonical app path with SQLite startup initialization, `/api/v1/data/predictions`, and import job scaffolding for DB ingestion.
@@ -219,6 +222,9 @@ Completed (2026-02-24)
 **Priority**
 High
 
+**Status**
+Completed (2026-02-24)
+
 **Problem**
 - `Homepage.tsx` uses `generateTrendData()` with `Math.random()` for metric-card charts.
 - This data is not from DB/API time-series.
@@ -232,9 +238,21 @@ High
 - Replace with real backend-derived trend series (or hide trend charts until real series endpoint is available).
 - Chart values are stable across re-renders for unchanged data.
 
+**Resolution**
+- Added `daily_trend` field to `GET /api/v1/data/statistics` response: array of `{date, count, net_sentiment}` per day.
+- Backend aggregates daily sentiment counts via `func.date()` grouping with `case()` expressions.
+- Frontend `StatisticsResponse` type extended with `DailyTrendPoint[]`.
+- Removed `generateTrendData()` (Math.random) from Homepage.
+- Net Sentiment mini-chart now uses `statistics.daily_trend[].net_sentiment` via `useMemo`.
+- Total Records mini-chart now uses `statistics.daily_trend[].count` via `useMemo`.
+- Chart data is deterministic and stable across re-renders.
+
 ### FE-3 — Typing in LIME modal causes charts to change
 **Priority**
 High
+
+**Status**
+Completed (2026-02-24)
 
 **Problem**
 - Every keystroke updates component state (`explainText`) which re-renders Homepage.
@@ -247,6 +265,10 @@ High
 - Ensure typing in explainability modal does not mutate metric chart data.
 - Use memoized/derived deterministic chart data only.
 - Manual test: typing 20+ chars in modal leaves metric charts unchanged.
+
+**Resolution**
+- Root cause eliminated by FE-2 fix: `generateTrendData()` (Math.random) removed entirely.
+- Chart data now derived from `statistics.daily_trend` via `useMemo`, so re-renders from typing do not change chart values.
 
 ### FE-4 — LIME explainability endpoint is not reliably responsive
 **Priority**

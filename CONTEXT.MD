@@ -194,3 +194,16 @@ Optional secondary novelty if time:
   - frontend `DashboardContext` passes selected timeframe to statistics API and re-fetches on timeframe change,
   - timeframe dropdown expanded: "All Time" (default), 7d, 14d, 30d, 90d, 6 Months, 1 Year,
   - legacy `api/routers/data.py` statistics recent_activity also anchored to latest data timestamp.
+- 2026-02-24: Frontend design unification (both pages consistent):
+  - added Navbar to StockAnalysis page for consistent navigation,
+  - standardized all card/component borders to 1px solid #e0e0e0, 12px radius, 0.04 opacity shadows,
+  - fixed dark-theme remnants in Granger causality cards, rolling stats, RollingCorrelation tooltip, ErrorBoundary, and NotFound page,
+  - standardized page padding (40px) across Homepage and StockAnalysis,
+  - extracted CorrelationHeatmap from inline styles to CSS file,
+  - set color-scheme to light-only in index.css.
+- 2026-02-24: FE-2 + FE-3 fix (deterministic mini-charts):
+  - added `daily_trend` field to statistics API response (per-day count + net_sentiment via SQLAlchemy date grouping + case expressions),
+  - added `DailyTrendPoint` interface to frontend API types,
+  - removed `generateTrendData()` (Math.random) from Homepage,
+  - Net Sentiment and Total Records mini-charts now use real daily data via `useMemo`,
+  - chart data is deterministic across re-renders — typing in LIME modal no longer causes chart changes.

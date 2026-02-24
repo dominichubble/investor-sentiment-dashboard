@@ -69,6 +69,12 @@ export interface StockInfo {
   neutral: number;
 }
 
+export interface DailyTrendPoint {
+  date: string;
+  count: number;
+  net_sentiment: number;
+}
+
 export interface StatisticsResponse {
   total_predictions: number;
   total_stocks_analyzed: number;
@@ -83,6 +89,7 @@ export interface StatisticsResponse {
     earliest: string | null;
     latest: string | null;
   };
+  daily_trend: DailyTrendPoint[];
 }
 
 export interface TrendingStock {

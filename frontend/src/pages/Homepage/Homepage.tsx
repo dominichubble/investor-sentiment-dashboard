@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import MetricCard from '../../components/MetricCard';
@@ -108,22 +108,16 @@ const Homepage: React.FC = () => {
     return `${num.toFixed(1)}%`;
   };
 
-  const generateTrendData = (days: number, trend: 'up' | 'down' | 'stable'): number[] => {
-    const data: number[] = [];
-    let value = 0.2 + Math.random() * 0.3;
-    
-    for (let i = 0; i < days; i++) {
-      if (trend === 'up') {
-        value += (Math.random() * 0.1 - 0.03);
-      } else if (trend === 'down') {
-        value += (Math.random() * 0.1 - 0.07);
-      } else {
-        value += (Math.random() * 0.1 - 0.05);
-      }
-      data.push(Math.max(0.1, Math.min(0.9, value)));
-    }
-    return data;
-  };
+  // Derive mini-chart data from real daily_trend (deterministic, memoized)
+  const sentimentTrendData = useMemo(() => {
+    if (!statistics?.daily_trend || statistics.daily_trend.length === 0) return [];
+    return statistics.daily_trend.map(d => d.net_sentiment);
+  }, [statistics?.daily_trend]);
+
+  const volumeTrendData = useMemo(() => {
+    if (!statistics?.daily_trend || statistics.daily_trend.length === 0) return [];
+    return statistics.daily_trend.map(d => d.count);
+  }, [statistics?.daily_trend]);
 
   const calculateNetSentiment = (): string => {
     if (!statistics) return '0.00';
@@ -158,9 +152,6 @@ Recent activity shows ${recentActivity.last_24h} predictions in the last 24 hour
 
 The system has analyzed ${formatNumber(statistics.total_predictions)} records across ${statistics.total_stocks_analyzed} unique stocks, providing comprehensive coverage of market sentiment.`;
   };
-
-  const sentimentTrendData = generateTrendData(20, 'up');
-  const documentTrendData = generateTrendData(20, 'up');
 
   // Get the top correlated stock for the summary card
   const getTopCorrelation = () => {
@@ -260,7 +251,7 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
           onClick={() => handleCardClick('total-records')}
           chart={
             <MiniAreaChart 
-              data={documentTrendData.map(v => v * statistics.total_predictions)} 
+              data={volumeTrendData} 
               color="#5c7cfa"
             />
           }
