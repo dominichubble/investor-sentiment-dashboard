@@ -19,10 +19,13 @@ const assetOptions: DropdownOption[] = [
 ];
 
 const timeframeOptions: DropdownOption[] = [
+  { id: 'all', label: 'All Time', value: 'all' },
   { id: '7d', label: '7 Days', value: '7' },
   { id: '14d', label: '14 Days', value: '14' },
   { id: '30d', label: '30 Days', value: '30' },
-  { id: '90d', label: '90 Days', value: '90' }
+  { id: '90d', label: '90 Days', value: '90' },
+  { id: '180d', label: '6 Months', value: '180' },
+  { id: '365d', label: '1 Year', value: '365' },
 ];
 
 const Homepage: React.FC = () => {

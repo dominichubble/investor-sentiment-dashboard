@@ -23,7 +23,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [statistics, setStatistics] = useState<StatisticsResponse | null>(null);
   const [correlationOverview, setCorrelationOverview] = useState<CorrelationOverviewItem[]>([]);
   const [selectedAssetType, setSelectedAssetType] = useState('all');
-  const [selectedTimeframe, setSelectedTimeframe] = useState('7');
+  const [selectedTimeframe, setSelectedTimeframe] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,9 +31,13 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
     setError(null);
     try {
+      // Convert timeframe to days param (or undefined for 'all')
+      const daysParam = selectedTimeframe === 'all' ? undefined : Number(selectedTimeframe);
+      const corrPeriod = selectedTimeframe === 'all' ? '365d' : `${selectedTimeframe}d`;
+
       const [stats, corrOverview] = await Promise.allSettled([
-        apiService.getStatistics(),
-        apiService.getCorrelationOverview({ min_mentions: 2, period: '90d' }),
+        apiService.getStatistics(daysParam ? { days: daysParam } : undefined),
+        apiService.getCorrelationOverview({ min_mentions: 2, period: corrPeriod }),
       ]);
 
       if (stats.status === 'fulfilled') {
@@ -53,7 +57,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [selectedTimeframe]);
 
   useEffect(() => {
     fetchData();

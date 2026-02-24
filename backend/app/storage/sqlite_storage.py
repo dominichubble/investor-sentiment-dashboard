@@ -316,14 +316,25 @@ class SQLiteSentimentStorage:
         return self.get_stock_sentiment(ticker)
 
     def get_trending_stocks(self, min_mentions: int = 5, hours: int = 24) -> List[Dict]:
-        """Get stocks with most mentions in recent period."""
+        """Get stocks with most mentions in recent period.
+
+        Uses the latest record timestamp as the reference point so that
+        historical datasets show meaningful trending results.
+        """
         if not self._loaded:
             self.load()
 
-        cutoff_dt = datetime.utcnow() - timedelta(hours=hours)
-
         session = get_session()
         try:
+            # Anchor to newest record so historical data works.
+            latest = (
+                session.query(func.max(SentimentRecordRow.timestamp))
+                .filter(SentimentRecordRow.record_type == "stock")
+                .scalar()
+            )
+            anchor = latest if latest else datetime.utcnow()
+            cutoff_dt = anchor - timedelta(hours=hours)
+
             results = (
                 session.query(
                     SentimentRecordRow.ticker,

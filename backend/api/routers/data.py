@@ -450,6 +450,7 @@ async def get_statistics() -> StatisticsResponse:
         )[:10]
 
         # Calculate date range
+        timestamps_dt: list[datetime] = []
         if timestamps:
             timestamps_dt = [
                 datetime.fromisoformat(ts.replace("Z", "")) for ts in timestamps
@@ -461,11 +462,15 @@ async def get_statistics() -> StatisticsResponse:
         else:
             date_range = {"earliest": None, "latest": None}
 
-        # Recent activity (last 24 hours, 7 days, 30 days)
-        now = datetime.utcnow()
-        day_ago = now - timedelta(days=1)
-        week_ago = now - timedelta(days=7)
-        month_ago = now - timedelta(days=30)
+        # Recent activity — anchor to the latest data point so that
+        # historical datasets (e.g. 2021-2022) show meaningful numbers.
+        if timestamps_dt:
+            anchor = max(timestamps_dt)
+        else:
+            anchor = datetime.utcnow()
+        day_ago = anchor - timedelta(days=1)
+        week_ago = anchor - timedelta(days=7)
+        month_ago = anchor - timedelta(days=30)
 
         recent_counts = {"last_24h": 0, "last_7d": 0, "last_30d": 0}
         for ts in timestamps:

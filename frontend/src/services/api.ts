@@ -129,8 +129,8 @@ export interface StockSentimentResponse {
 // API Service
 export const apiService = {
   // Data endpoints
-  async getStatistics(): Promise<StatisticsResponse> {
-    const response = await api.get<StatisticsResponse>('/data/statistics');
+  async getStatistics(params?: { days?: number }): Promise<StatisticsResponse> {
+    const response = await api.get<StatisticsResponse>('/data/statistics', { params });
     return response.data;
   },
 

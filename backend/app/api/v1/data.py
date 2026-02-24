@@ -144,7 +144,13 @@ async def get_predictions(
 
 
 @router.get("/statistics", response_model=StatisticsResponse)
-async def get_statistics() -> StatisticsResponse:
+async def get_statistics(
+    days: int | None = Query(
+        None,
+        description="Limit to the last N days relative to the newest record. Omit for all data.",
+        ge=1,
+    ),
+) -> StatisticsResponse:
     """Return aggregated dashboard statistics from SQLite."""
-    stats = statistics_service.get_statistics()
+    stats = statistics_service.get_statistics(days=days)
     return StatisticsResponse(**stats)

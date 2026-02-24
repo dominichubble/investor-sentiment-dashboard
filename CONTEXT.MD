@@ -187,3 +187,10 @@ Optional secondary novelty if time:
   - mounted correlation router into canonical API v1 assembly (`backend/app/api/v1/router.py`),
   - added lazy analyzer initialization in correlation router to avoid heavy startup-time initialization side effects,
   - added bootstrap test asserting correlation route presence in OpenAPI for canonical app.
+- 2026-02-24: Historical dataset integration prep (stock_tweets.csv, ~80k tweets, 25 tickers, Sep 2021 – Sep 2022):
+  - created `backend/scripts/import_tweets.py` with FinBERT batch processing, progress/resume support, and dual document+stock record creation,
+  - backend "recent activity" and "trending" calculations now anchor to latest DB record instead of `datetime.utcnow()`, so historical data shows meaningful numbers,
+  - `GET /api/v1/data/statistics` now accepts optional `?days=N` query param to filter to the last N days relative to newest record,
+  - frontend `DashboardContext` passes selected timeframe to statistics API and re-fetches on timeframe change,
+  - timeframe dropdown expanded: "All Time" (default), 7d, 14d, 30d, 90d, 6 Months, 1 Year,
+  - legacy `api/routers/data.py` statistics recent_activity also anchored to latest data timestamp.

@@ -24,18 +24,41 @@ class StatisticsService:
         self.stock_db = StockDatabase()
         self.stock_db.load()
 
-    def get_statistics(self) -> dict[str, Any]:
-        """Return statistics payload aligned with frontend expectations."""
+    def get_statistics(self, days: int | None = None) -> dict[str, Any]:
+        """Return statistics payload aligned with frontend expectations.
+
+        Args:
+            days: If provided, only include records from the last N days
+                  relative to the latest record timestamp. None means all data.
+        """
         session = get_session()
         try:
+            # Determine the anchor (latest record) for relative calculations.
+            latest_ts = (
+                session.query(func.max(SentimentRecordRow.timestamp)).scalar()
+            )
+            anchor = latest_ts if latest_ts else datetime.utcnow()
+
+            # Base query filter: optionally restrict to the last N days.
+            def _apply_window(query):
+                if days is not None:
+                    cutoff = anchor - timedelta(days=days)
+                    return query.filter(SentimentRecordRow.timestamp >= cutoff)
+                return query
+
             total_predictions = (
-                session.query(func.count(SentimentRecordRow.id)).scalar() or 0
+                _apply_window(
+                    session.query(func.count(SentimentRecordRow.id))
+                ).scalar()
+                or 0
             )
 
             sentiment_rows = (
-                session.query(
-                    SentimentRecordRow.sentiment_label,
-                    func.count(SentimentRecordRow.id).label("count"),
+                _apply_window(
+                    session.query(
+                        SentimentRecordRow.sentiment_label,
+                        func.count(SentimentRecordRow.id).label("count"),
+                    )
                 )
                 .group_by(SentimentRecordRow.sentiment_label)
                 .all()
@@ -72,13 +95,15 @@ class StatisticsService:
             }
 
             stock_rows = (
-                session.query(
-                    SentimentRecordRow.ticker,
-                    SentimentRecordRow.sentiment_label,
-                    func.count(SentimentRecordRow.id).label("count"),
+                _apply_window(
+                    session.query(
+                        SentimentRecordRow.ticker,
+                        SentimentRecordRow.sentiment_label,
+                        func.count(SentimentRecordRow.id).label("count"),
+                    )
+                    .filter(SentimentRecordRow.record_type == "stock")
+                    .filter(SentimentRecordRow.ticker.isnot(None))
                 )
-                .filter(SentimentRecordRow.record_type == "stock")
-                .filter(SentimentRecordRow.ticker.isnot(None))
                 .group_by(SentimentRecordRow.ticker, SentimentRecordRow.sentiment_label)
                 .all()
             )
@@ -107,31 +132,40 @@ class StatisticsService:
             )[:10]
 
             total_stocks_analyzed = (
-                session.query(func.count(func.distinct(SentimentRecordRow.ticker)))
-                .filter(SentimentRecordRow.record_type == "stock")
-                .filter(SentimentRecordRow.ticker.isnot(None))
-                .scalar()
+                _apply_window(
+                    session.query(func.count(func.distinct(SentimentRecordRow.ticker)))
+                    .filter(SentimentRecordRow.record_type == "stock")
+                    .filter(SentimentRecordRow.ticker.isnot(None))
+                ).scalar()
                 or 0
             )
 
-            earliest, latest = session.query(
-                func.min(SentimentRecordRow.timestamp),
-                func.max(SentimentRecordRow.timestamp),
-            ).one()
+            earliest_q = _apply_window(
+                session.query(
+                    func.min(SentimentRecordRow.timestamp),
+                    func.max(SentimentRecordRow.timestamp),
+                )
+            )
+            earliest, latest = earliest_q.one()
 
-            now = datetime.utcnow()
+            # Use the latest record timestamp as the reference point so that
+            # historical datasets (e.g. 2021-2022) show meaningful activity.
+            recent_anchor = latest if latest else anchor
             recent_activity = {
-                "last_24h": session.query(func.count(SentimentRecordRow.id))
-                .filter(SentimentRecordRow.timestamp >= now - timedelta(days=1))
-                .scalar()
+                "last_24h": _apply_window(
+                    session.query(func.count(SentimentRecordRow.id))
+                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=1))
+                ).scalar()
                 or 0,
-                "last_7d": session.query(func.count(SentimentRecordRow.id))
-                .filter(SentimentRecordRow.timestamp >= now - timedelta(days=7))
-                .scalar()
+                "last_7d": _apply_window(
+                    session.query(func.count(SentimentRecordRow.id))
+                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=7))
+                ).scalar()
                 or 0,
-                "last_30d": session.query(func.count(SentimentRecordRow.id))
-                .filter(SentimentRecordRow.timestamp >= now - timedelta(days=30))
-                .scalar()
+                "last_30d": _apply_window(
+                    session.query(func.count(SentimentRecordRow.id))
+                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=30))
+                ).scalar()
                 or 0,
             }
 
