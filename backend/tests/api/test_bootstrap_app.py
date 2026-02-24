@@ -21,3 +21,12 @@ def test_api_v1_router_is_mounted():
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
+
+
+def test_correlation_routes_are_mounted_in_openapi():
+    """Canonical app should expose correlation endpoints under /api/v1."""
+    response = client.get("/openapi.json")
+
+    assert response.status_code == 200
+    paths = response.json().get("paths", {})
+    assert "/api/v1/correlation/overview/all" in paths

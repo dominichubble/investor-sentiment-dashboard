@@ -46,3 +46,4 @@ yarn-error.log*
 .env
 .env.local
 .env.production
+stock_tweets.csv

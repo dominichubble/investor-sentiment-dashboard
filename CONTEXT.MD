@@ -183,3 +183,7 @@ Optional secondary novelty if time:
   - confirmed Homepage metric mini-charts use synthetic random data causing non-deterministic visuals,
   - confirmed LIME modal typing triggers homepage re-render side-effects (charts appear to change while typing),
   - observed explain endpoint responsiveness issue requiring dedicated backend/frontend stabilization work.
+- 2026-02-24: FE-1 fix completed (canonical correlation routing):
+  - mounted correlation router into canonical API v1 assembly (`backend/app/api/v1/router.py`),
+  - added lazy analyzer initialization in correlation router to avoid heavy startup-time initialization side effects,
+  - added bootstrap test asserting correlation route presence in OpenAPI for canonical app.

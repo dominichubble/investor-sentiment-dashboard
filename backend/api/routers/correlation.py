@@ -8,6 +8,7 @@ Includes TTL caching for expensive operations to reduce response times.
 """
 
 import logging
+from functools import lru_cache
 from typing import List, Optional
 
 from cachetools import TTLCache
@@ -21,7 +22,11 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/correlation", tags=["correlation"])
 
-analyzer = CorrelationAnalyzer()
+
+@lru_cache(maxsize=1)
+def get_analyzer() -> CorrelationAnalyzer:
+    """Lazily initialize heavy analyzer state on first correlation request."""
+    return CorrelationAnalyzer()
 
 # --- TTL Caches ---
 # Correlation results: cache for 1 hour (3600 seconds)
@@ -246,7 +251,7 @@ async def get_correlation(
         return cached
 
     try:
-        result = analyzer.calculate_correlation(
+        result = get_analyzer().calculate_correlation(
             ticker=ticker.upper(),
             period=period,
             sentiment_metric=sentiment_metric,
@@ -281,7 +286,7 @@ async def get_correlation_timeseries(
         return cached
 
     try:
-        result = analyzer.get_timeseries_response(
+        result = get_analyzer().get_timeseries_response(
             ticker=ticker.upper(), period=period
         )
         response = TimeSeriesResponse(**result)
@@ -316,7 +321,7 @@ async def get_lag_analysis(
     ```
     """
     try:
-        result = analyzer.lag_analysis(
+        result = get_analyzer().lag_analysis(
             ticker=ticker.upper(),
             max_lag_days=max_lag_days,
             period=period,
@@ -353,7 +358,7 @@ async def get_granger_causality(
         return cached
 
     try:
-        result = analyzer.granger_causality(
+        result = get_analyzer().granger_causality(
             ticker=ticker.upper(),
             max_lag=max_lag,
             period=period,
@@ -395,7 +400,7 @@ async def get_rolling_correlation(
         return cached
 
     try:
-        result = analyzer.rolling_correlation(
+        result = get_analyzer().rolling_correlation(
             ticker=ticker.upper(),
             window=window,
             period=period,
@@ -431,7 +436,7 @@ async def get_correlation_overview(
         return cached
 
     try:
-        results = analyzer.get_correlation_overview(
+        results = get_analyzer().get_correlation_overview(
             min_mentions=min_mentions, period=period
         )
         response = [CorrelationOverviewItem(**r) for r in results]

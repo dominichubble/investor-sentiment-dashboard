@@ -199,6 +199,9 @@ These are evidence-based issues found during a targeted frontend debugging pass.
 **Priority**
 Critical
 
+**Status**
+Completed (2026-02-24)
+
 **Problem**
 - Frontend calls `/api/v1/correlation/*`, but canonical app router (`backend/app/api/v1/router.py`) currently mounts only `data` and `sentiment`.
 - Live check returns `404` on `/api/v1/correlation/overview/all`.
@@ -210,6 +213,7 @@ Critical
 - Add canonical correlation router under `backend/app/api/v1` and include it in `api_router`.
 - `GET /api/v1/correlation/overview/all` returns `200` in canonical app.
 - Stock analysis page renders correlation sections without endpoint-not-found failures.
+- Implemented by mounting correlation routes in canonical v1 router and lazy-loading analyzer initialization to avoid heavy startup-time blocking.
 
 ### FE-2 — Homepage mini-trend charts use random synthetic data
 **Priority**
