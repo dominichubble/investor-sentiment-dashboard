@@ -354,27 +354,34 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
       </div>
 
       {/* Correlation Overview Section */}
-      {correlationOverview.length > 0 && (
-        <ErrorBoundary fallbackTitle="Failed to load correlation overview">
-          <div className="correlation-section">
-            <div className="correlation-section-header">
-              <div>
-                <h2 className="correlation-section-title">Sentiment-Price Correlations</h2>
-                <p className="correlation-section-desc">
-                  How sentiment aligns with actual stock price movements. Click a stock for detailed analysis.
-                </p>
-              </div>
-              <button className="view-all-btn" onClick={() => navigate('/correlation')}>
-                View Full Analysis
-              </button>
+      <ErrorBoundary fallbackTitle="Failed to load correlation overview">
+        <div className="correlation-section">
+          <div className="correlation-section-header">
+            <div>
+              <h2 className="correlation-section-title">Sentiment-Price Correlations</h2>
+              <p className="correlation-section-desc">
+                How sentiment aligns with actual stock price movements. Click a stock for detailed analysis.
+              </p>
             </div>
+            <button className="view-all-btn" onClick={() => navigate('/correlation')}>
+              View Full Analysis
+            </button>
+          </div>
+          {correlationOverview.length > 0 ? (
             <CorrelationHeatmap
               data={correlationOverview.slice(0, 12)}
               onStockClick={handleStockClick}
             />
-          </div>
-        </ErrorBoundary>
-      )}
+          ) : (
+            <div className="correlation-empty">
+              <p>No correlation data available for the selected timeframe.</p>
+              <p className="correlation-empty-hint">
+                Ensure the backend is running and sentiment data has been ingested, then try a broader timeframe.
+              </p>
+            </div>
+          )}
+        </div>
+      </ErrorBoundary>
 
       {isExplainOpen && (
         <div className="explain-modal-overlay" onClick={closeExplainModal}>
@@ -395,6 +402,14 @@ The system has analyzed ${formatNumber(statistics.total_predictions)} records ac
               <button className="retry-button" onClick={handleExplain} disabled={isExplaining}>
                 {isExplaining ? 'Explaining...' : 'Run Explanation'}
               </button>
+              {!isExplaining && !explainResult && (
+                <button
+                  className="explain-try-btn"
+                  onClick={() => setExplainText('Tesla reported record quarterly revenue and raised its full-year guidance, sending shares up 12% in after-hours trading.')}
+                >
+                  Try Example
+                </button>
+              )}
               {isExplaining && (
                 <button
                   className="explain-cancel-btn"

@@ -273,6 +273,40 @@
   color: white;
 }
 
+.explain-try-btn {
+  background: transparent;
+  color: #5c7cfa;
+  border: 1px solid #5c7cfa;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.explain-try-btn:hover {
+  background: #5c7cfa;
+  color: white;
+}
+
+.correlation-empty {
+  text-align: center;
+  padding: 32px 20px;
+}
+
+.correlation-empty p {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 6px;
+}
+
+.correlation-empty-hint {
+  font-size: 13px !important;
+  color: #999 !important;
+}
+
 .explain-progress {
   margin-top: 10px;
   font-family: 'Roboto', sans-serif;
