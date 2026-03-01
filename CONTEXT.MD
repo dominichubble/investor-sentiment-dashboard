@@ -222,3 +222,19 @@ Optional secondary novelty if time:
   - removed misleading `SummaryCard` default props (`+0.38`, `Mildly Positive`, `SENTIMENT DISTRIBUTION`) — made embedded card props required,
   - improved defensive fallback copy in Homepage (`'Awaiting data'`, `'Fetching sentiment data from the backend…'`),
   - audited all N/A and empty-state messages — existing fallbacks are appropriate.
+- 2026-03-01: Custom date range filtering added to correlation analysis (full-stack):
+  - backend: `PriceService.get_price_history` now accepts `start_date`/`end_date` and uses yfinance `start`/`end` instead of `period`,
+  - backend: all `CorrelationAnalyzer` public methods (`calculate_correlation`, `lag_analysis`, `granger_causality`, `rolling_correlation`, `get_timeseries_response`) forward `start_date`/`end_date`,
+  - backend: all per-ticker correlation API endpoints accept `start_date`/`end_date` query params (YYYY-MM-DD),
+  - frontend: API service type signatures updated with optional `start_date`/`end_date`,
+  - frontend: "Custom" option added to period selector with From/To date inputs and Apply button,
+  - verified: TSLA 2022-01-01 to 2022-12-31 returns 186 merged data points (Jan 4 – Sep 29, 2022).
+- 2026-03-01: Evaluation artifacts generated (MVP requirement 4):
+  - quantitative: ran `benchmark.py --all`, saved to `backend/data/evaluation/benchmark_results.json`,
+  - keyword baseline: 68.5% accuracy, 67.9% macro F1,
+  - FinBERT: 82.0% accuracy, 80.3% macro F1 (+13.5% accuracy, +12.4% F1 over keyword),
+  - evaluated on 200-sample curated labeled dataset (70 pos, 70 neg, 60 neu),
+  - qualitative: ran `generate_lime_examples.py`, saved 10 PNG + 10 HTML files to `data/processed/explanations/lime_examples/`,
+  - examples cover positive (4), negative (5), and neutral (1) predictions with token-level feature weights.
+- 2026-03-01: Fixed external Figma URL dependency in `DropdownButton.tsx`:
+  - replaced remote `figma.com/api/mcp/asset/...` image URL with inline SVG data URI for dropdown chevron arrow.

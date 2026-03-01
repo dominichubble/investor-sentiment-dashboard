@@ -17,15 +17,17 @@ data/raw/**/*.txt
 data/db/*.db
 
 # Legacy / removed directories
-data/processed/
 data/predictions/
 data/stock_sentiments/
 
 # Keep DB directory placeholder only
 !data/db/.gitkeep
 
-# Generated explainability examples
-**/lime_examples/
+# Processed data — allow evaluation artifacts (LIME examples) through
+data/processed/*
+!data/processed/explanations/
+data/processed/explanations/*
+!data/processed/explanations/lime_examples/
 
 # Logs
 logs/

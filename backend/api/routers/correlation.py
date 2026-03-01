@@ -8,6 +8,7 @@ Includes TTL caching for expensive operations to reduce response times.
 """
 
 import logging
+from datetime import datetime
 from functools import lru_cache
 from typing import List, Optional
 
@@ -41,6 +42,16 @@ _rolling_cache: TTLCache = TTLCache(maxsize=128, ttl=3600)
 _timeseries_cache: TTLCache = TTLCache(maxsize=128, ttl=1800)
 # Statistics: cache for 5 minutes
 _statistics_cache: TTLCache = TTLCache(maxsize=16, ttl=300)
+
+
+def _parse_date(value: Optional[str]) -> Optional[datetime]:
+    """Parse a YYYY-MM-DD string into a naive datetime, or return None."""
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, "%Y-%m-%d")
+    except ValueError:
+        return None
 
 
 # --- Response Models ---
@@ -223,7 +234,7 @@ async def get_correlation(
     ticker: str,
     period: str = Query(
         "90d",
-        description="Price data period (7d, 30d, 90d, 6mo, 1y)",
+        description="Price data period (7d, 30d, 90d, 6mo, 1y). Ignored when start_date/end_date are set.",
     ),
     sentiment_metric: str = Query(
         "net_sentiment",
@@ -233,19 +244,18 @@ async def get_correlation(
         "returns",
         description="Price metric to correlate (returns, close)",
     ),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
 ) -> CorrelationResponse:
     """
     Calculate correlation between sentiment and stock price for a ticker.
 
     Returns Pearson and Spearman correlation coefficients with p-values
     and statistical significance.
-
-    **Example:**
-    ```
-    GET /api/v1/correlation/AAPL?period=90d&sentiment_metric=net_sentiment
-    ```
     """
-    cache_key = f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}"
+    sd = _parse_date(start_date)
+    ed = _parse_date(end_date)
+    cache_key = f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}:{start_date}:{end_date}"
     cached = _correlation_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -256,6 +266,8 @@ async def get_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
+            start_date=sd,
+            end_date=ed,
         )
         response = CorrelationResponse(**result)
         _correlation_cache[cache_key] = response
@@ -268,26 +280,25 @@ async def get_correlation(
 async def get_correlation_timeseries(
     ticker: str,
     period: str = Query("90d", description="Price data period"),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
 ) -> TimeSeriesResponse:
     """
     Get merged sentiment + price time-series data for charting.
 
     Returns daily data points with both sentiment scores and price data,
     suitable for dual-axis visualization.
-
-    **Example:**
-    ```
-    GET /api/v1/correlation/AAPL/timeseries?period=90d
-    ```
     """
-    cache_key = f"ts:{ticker.upper()}:{period}"
+    sd = _parse_date(start_date)
+    ed = _parse_date(end_date)
+    cache_key = f"ts:{ticker.upper()}:{period}:{start_date}:{end_date}"
     cached = _timeseries_cache.get(cache_key)
     if cached is not None:
         return cached
 
     try:
         result = get_analyzer().get_timeseries_response(
-            ticker=ticker.upper(), period=period
+            ticker=ticker.upper(), period=period, start_date=sd, end_date=ed,
         )
         response = TimeSeriesResponse(**result)
         _timeseries_cache[cache_key] = response
@@ -304,28 +315,24 @@ async def get_lag_analysis(
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
 ) -> LagAnalysisResponse:
     """
     Perform lag correlation analysis.
 
     Tests whether sentiment at time t predicts price at time t+lag.
-    Helps determine if sentiment is a leading indicator for price.
-
-    - Positive lag: sentiment leads price
-    - Negative lag: price leads sentiment
-    - Zero lag: same-day correlation
-
-    **Example:**
-    ```
-    GET /api/v1/correlation/AAPL/lag-analysis?max_lag_days=5
-    ```
     """
+    sd = _parse_date(start_date)
+    ed = _parse_date(end_date)
     try:
         result = get_analyzer().lag_analysis(
             ticker=ticker.upper(),
             max_lag_days=max_lag_days,
             period=period,
             sentiment_metric=sentiment_metric,
+            start_date=sd,
+            end_date=ed,
         )
         return LagAnalysisResponse(**result)
     except Exception as e:
@@ -340,19 +347,17 @@ async def get_granger_causality(
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
 ) -> GrangerCausalityResponse:
     """
     Test Granger causality between sentiment and price returns.
 
     Tests whether past sentiment helps predict future price (and vice versa).
-    This is a key test for the research question of whether sentiment leads price.
-
-    **Example:**
-    ```
-    GET /api/v1/correlation/AAPL/granger?max_lag=5
-    ```
     """
-    cache_key = f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}"
+    sd = _parse_date(start_date)
+    ed = _parse_date(end_date)
+    cache_key = f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}:{start_date}:{end_date}"
     cached = _granger_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -363,6 +368,8 @@ async def get_granger_causality(
             max_lag=max_lag,
             period=period,
             sentiment_metric=sentiment_metric,
+            start_date=sd,
+            end_date=ed,
         )
         response = GrangerCausalityResponse(**result)
         _granger_cache[cache_key] = response
@@ -382,19 +389,17 @@ async def get_rolling_correlation(
     price_metric: str = Query(
         "returns", description="Price metric to use"
     ),
+    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
+    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
 ) -> RollingCorrelationResponse:
     """
     Calculate rolling windowed correlation between sentiment and price.
 
     Shows how the correlation changes over time using a sliding window.
-    Reveals whether correlation strengthens during certain market periods.
-
-    **Example:**
-    ```
-    GET /api/v1/correlation/AAPL/rolling?window=14&period=90d
-    ```
     """
-    cache_key = f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}"
+    sd = _parse_date(start_date)
+    ed = _parse_date(end_date)
+    cache_key = f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}:{start_date}:{end_date}"
     cached = _rolling_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -406,6 +411,8 @@ async def get_rolling_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
+            start_date=sd,
+            end_date=ed,
         )
         response = RollingCorrelationResponse(**result)
         _rolling_cache[cache_key] = response

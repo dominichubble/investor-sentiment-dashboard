@@ -28,19 +28,20 @@ class PriceService:
         ticker: str,
         period: str = "90d",
         interval: str = "1d",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> pd.DataFrame:
         """
         Fetch historical price data for a stock.
 
-        Args:
-            ticker: Stock ticker symbol (e.g. "AAPL").
-            period: yfinance period string (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, max).
-            interval: Data interval (1m, 2m, 5m, 15m, 30m, 60m, 90m, 1h, 1d, 5d, 1wk, 1mo).
-
-        Returns:
-            DataFrame with columns: Date, Open, High, Low, Close, Volume, Returns.
+        When *start_date* and *end_date* are both provided the explicit date
+        window is used and *period* is ignored.  Otherwise *period* is forwarded
+        to yfinance as before.
         """
-        cache_key = f"{ticker}_{period}_{interval}"
+        if start_date and end_date:
+            cache_key = f"{ticker}_{start_date.date()}_{end_date.date()}_{interval}"
+        else:
+            cache_key = f"{ticker}_{period}_{interval}"
         now = datetime.now()
 
         if (
@@ -53,7 +54,16 @@ class PriceService:
 
         try:
             stock = yf.Ticker(ticker)
-            df = stock.history(period=period, interval=interval)
+            if start_date and end_date:
+                # Add one day buffer to end_date so the end day is included
+                end_plus = end_date + timedelta(days=1)
+                df = stock.history(
+                    start=start_date.strftime("%Y-%m-%d"),
+                    end=end_plus.strftime("%Y-%m-%d"),
+                    interval=interval,
+                )
+            else:
+                df = stock.history(period=period, interval=interval)
 
             if df.empty:
                 logger.warning(f"No price data found for {ticker}")
@@ -102,7 +112,9 @@ class PriceService:
         Returns:
             DataFrame with columns: date, close, returns.
         """
-        df = cls.get_price_history(ticker, period=period)
+        df = cls.get_price_history(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if df.empty:
             return pd.DataFrame()
@@ -110,12 +122,14 @@ class PriceService:
         result = df[["date", "Close", "returns"]].copy()
         result = result.rename(columns={"Close": "close"})
 
+        # When dates were already used in get_price_history, no further
+        # filtering is needed, but we still apply it as a safety net.
         if start_date:
-            start_date = pd.Timestamp(start_date).normalize()
-            result = result[result["date"] >= start_date]
+            start_ts = pd.Timestamp(start_date).normalize()
+            result = result[result["date"] >= start_ts]
         if end_date:
-            end_date = pd.Timestamp(end_date).normalize()
-            result = result[result["date"] <= end_date]
+            end_ts = pd.Timestamp(end_date).normalize()
+            result = result[result["date"] <= end_ts]
 
         return result.dropna(subset=["returns"])
 

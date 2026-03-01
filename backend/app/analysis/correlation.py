@@ -132,20 +132,26 @@ class CorrelationAnalyzer:
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
         price_metric: str = "returns",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Calculate Pearson and Spearman correlations between sentiment and price.
 
         Args:
             ticker: Stock ticker symbol.
-            period: Price data period.
+            period: Price data period (ignored when start_date/end_date given).
             sentiment_metric: Column to use for sentiment (net_sentiment, avg_score).
             price_metric: Column to use for price (returns, close).
+            start_date: Optional absolute start date.
+            end_date: Optional absolute end date.
 
         Returns:
             Dictionary with correlation results and statistical significance.
         """
-        merged = self.get_merged_timeseries(ticker, period=period)
+        merged = self.get_merged_timeseries(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if merged.empty or len(merged) < 5:
             return {
@@ -230,6 +236,8 @@ class CorrelationAnalyzer:
         max_lag_days: int = 5,
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Analyze correlation at different lag periods.
@@ -240,7 +248,9 @@ class CorrelationAnalyzer:
         Returns:
             Dictionary with lag correlation results.
         """
-        merged = self.get_merged_timeseries(ticker, period=period)
+        merged = self.get_merged_timeseries(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if merged.empty or len(merged) < max_lag_days + 5:
             return {
@@ -327,6 +337,8 @@ class CorrelationAnalyzer:
         max_lag: int = 5,
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Test Granger causality between sentiment and price returns.
@@ -338,8 +350,10 @@ class CorrelationAnalyzer:
         Args:
             ticker: Stock ticker symbol.
             max_lag: Maximum number of lag days to test.
-            period: Price data period.
+            period: Price data period (ignored when start_date/end_date given).
             sentiment_metric: Sentiment column to use.
+            start_date: Optional absolute start date.
+            end_date: Optional absolute end date.
 
         Returns:
             Dictionary with Granger causality test results for both directions.
@@ -351,7 +365,9 @@ class CorrelationAnalyzer:
                 "Install with: pip install statsmodels",
             }
 
-        merged = self.get_merged_timeseries(ticker, period=period)
+        merged = self.get_merged_timeseries(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if merged.empty or len(merged) < max_lag + 10:
             return {
@@ -492,6 +508,8 @@ class CorrelationAnalyzer:
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
         price_metric: str = "returns",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Calculate rolling windowed correlation between sentiment and price.
@@ -499,14 +517,18 @@ class CorrelationAnalyzer:
         Args:
             ticker: Stock ticker symbol.
             window: Rolling window size in days.
-            period: Price data period.
+            period: Price data period (ignored when start_date/end_date given).
             sentiment_metric: Sentiment column.
             price_metric: Price column.
+            start_date: Optional absolute start date.
+            end_date: Optional absolute end date.
 
         Returns:
             Dictionary with time-series of rolling correlation values.
         """
-        merged = self.get_merged_timeseries(ticker, period=period)
+        merged = self.get_merged_timeseries(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if merged.empty or len(merged) < window + 2:
             return {
@@ -612,13 +634,17 @@ class CorrelationAnalyzer:
         self,
         ticker: str,
         period: str = "90d",
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Get formatted time-series data for API response.
 
         Returns dictionary suitable for JSON serialization and frontend charting.
         """
-        merged = self.get_merged_timeseries(ticker, period=period)
+        merged = self.get_merged_timeseries(
+            ticker, period=period, start_date=start_date, end_date=end_date
+        )
 
         if merged.empty:
             return {

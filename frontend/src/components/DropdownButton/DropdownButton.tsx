@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './DropdownButton.css';
 
-const imgPolygon1 = "https://www.figma.com/api/mcp/asset/ff420626-346a-48b3-9b6d-7bf7460bd5a6";
+const imgPolygon1 =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M5 6L0 0h10z' fill='%23555'/%3E%3C/svg%3E";
 
 export interface DropdownOption {
   id: string;

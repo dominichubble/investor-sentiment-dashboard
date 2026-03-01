@@ -26,12 +26,15 @@ const PERIOD_OPTIONS = [
   { label: '90 Days', value: '90d' },
   { label: '6 Months', value: '6mo' },
   { label: '1 Year', value: '1y' },
+  { label: 'Custom', value: 'custom' },
 ];
 
 const StockAnalysis: React.FC = () => {
   const [ticker, setTicker] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [period, setPeriod] = useState('90d');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   // Data states
   const [correlation, setCorrelation] = useState<CorrelationResponse | null>(null);
@@ -48,22 +51,31 @@ const StockAnalysis: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const analyzeStock = useCallback(async (stockTicker: string, analysisPeriod: string) => {
+  const analyzeStock = useCallback(async (
+    stockTicker: string,
+    analysisPeriod: string,
+    sd?: string,
+    ed?: string,
+  ) => {
     if (!stockTicker) return;
 
     setIsLoading(true);
     setError(null);
     setTicker(stockTicker);
 
+    const isCustom = analysisPeriod === 'custom' && sd && ed;
+    const dateParams = isCustom
+      ? { start_date: sd, end_date: ed, period: 'max' }
+      : { period: analysisPeriod };
+
     try {
-      // Fetch all data in parallel
       const [corrData, tsData, lagData, infoData, grangerResult, rollingResult] = await Promise.allSettled([
-        apiService.getCorrelation(stockTicker, { period: analysisPeriod }),
-        apiService.getCorrelationTimeseries(stockTicker, { period: analysisPeriod }),
-        apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, period: analysisPeriod }),
+        apiService.getCorrelation(stockTicker, { ...dateParams }),
+        apiService.getCorrelationTimeseries(stockTicker, { ...dateParams }),
+        apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, ...dateParams }),
         apiService.getStockInfo(stockTicker),
-        apiService.getGrangerCausality(stockTicker, { max_lag: 5, period: analysisPeriod }),
-        apiService.getRollingCorrelation(stockTicker, { window: 14, period: analysisPeriod }),
+        apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...dateParams }),
+        apiService.getRollingCorrelation(stockTicker, { window: 14, ...dateParams }),
       ]);
 
       if (corrData.status === 'fulfilled') setCorrelation(corrData.value);
@@ -99,20 +111,26 @@ const StockAnalysis: React.FC = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchInput.trim()) {
-      analyzeStock(searchInput.trim().toUpperCase(), period);
+      analyzeStock(searchInput.trim().toUpperCase(), period, startDate, endDate);
     }
   };
 
   const handleStockClick = (clickedTicker: string) => {
     setSearchInput(clickedTicker);
-    analyzeStock(clickedTicker, period);
+    analyzeStock(clickedTicker, period, startDate, endDate);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handlePeriodChange = (newPeriod: string) => {
     setPeriod(newPeriod);
-    if (ticker) {
+    if (newPeriod !== 'custom' && ticker) {
       analyzeStock(ticker, newPeriod);
+    }
+  };
+
+  const handleCustomDateApply = () => {
+    if (ticker && startDate && endDate) {
+      analyzeStock(ticker, 'custom', startDate, endDate);
     }
   };
 
@@ -166,6 +184,39 @@ const StockAnalysis: React.FC = () => {
             </button>
           ))}
         </div>
+
+        {period === 'custom' && (
+          <div className="sa-date-range">
+            <div className="sa-date-inputs">
+              <label className="sa-date-label">
+                From
+                <input
+                  type="date"
+                  className="sa-date-input"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                />
+              </label>
+              <span className="sa-date-separator">—</span>
+              <label className="sa-date-label">
+                To
+                <input
+                  type="date"
+                  className="sa-date-input"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                />
+              </label>
+              <button
+                className="sa-date-apply-btn"
+                disabled={!startDate || !endDate || !ticker || isLoading}
+                onClick={handleCustomDateApply}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Error */}

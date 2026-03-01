@@ -120,6 +120,80 @@
   border-color: #5c7cfa;
 }
 
+/* Custom Date Range */
+.sa-date-range {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+.sa-date-inputs {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  background: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.sa-date-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #888;
+}
+
+.sa-date-input {
+  padding: 8px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sa-date-input:focus {
+  border-color: #5c7cfa;
+}
+
+.sa-date-separator {
+  font-size: 16px;
+  color: #bbb;
+  padding-bottom: 8px;
+}
+
+.sa-date-apply-btn {
+  padding: 8px 20px;
+  background: #5c7cfa;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.sa-date-apply-btn:hover:not(:disabled) {
+  background: #4c6ef5;
+}
+
+.sa-date-apply-btn:disabled {
+  background: #b0b0b0;
+  cursor: not-allowed;
+}
+
 /* Info Bar */
 .sa-info-bar {
   width: 100%;
@@ -479,5 +553,14 @@
 
   .sa-granger-results {
     grid-template-columns: 1fr;
+  }
+
+  .sa-date-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sa-date-separator {
+    display: none;
   }
 }
