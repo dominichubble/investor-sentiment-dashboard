@@ -1,0 +1,109 @@
+{
+  "data": [
+    {
+      "source_id": "bloomberg",
+      "source_name": "Bloomberg",
+      "author": "Bloomberg",
+      "title": "Bitcoin recovers above $68,000 after death of Iranian leader",
+      "description": "Bitcoin surges past $68,000 following the death of Iran's supreme leader, amid geopolitical tensions and market recovery.",
+      "url": "https://www.bloomberg.com/news/articles/2026-02-28/bitcoin-slides-below-64-000-after-explosions-reported-in-tehran-mm60ajtz",
+      "url_to_image": "https://bl-i.thgim.com/public/incoming/maip8j/article70690887.ece/alternates/LANDSCAPE_1200/2026-02-23T170612Z_112976312_RC22PGALFTIJ_RTRMADP_3_FINTECH-CRYPTO-PROCAP.JPG",
+      "published_at": "2026-03-01T06:34:38Z",
+      "content": "Bitcoin and other cryptocurrencies rebounded sharply in early Asia trading on Sunday after Iran confirmed that the countrys supreme leader had been killed during a military campaign by the US and Isr… [+3275 chars]",
+      "clean_title": "Bitcoin recovers above $68,000 after death of Iranian leader",
+      "clean_description": "Bitcoin surges past $68,000 following the death of Iran's supreme leader, amid geopolitical tensions and market recovery.",
+      "clean_content": "Bitcoin and other cryptocurrencies rebounded sharply in early Asia trading on Sunday after Iran confirmed that the countrys supreme leader had been killed during a military campaign by the US and Isr…",
+      "clean_title_tokens": [
+        "Bitcoin",
+        "recovers",
+        "above",
+        "$",
+        "68000",
+        "after",
+        "death",
+        "of",
+        "Iranian",
+        "leader"
+      ],
+      "clean_title_processed": "Bitcoin recovers above $ 68000 after death of Iranian leader",
+      "clean_description_tokens": [
+        "Bitcoin",
+        "surges",
+        "past",
+        "$",
+        "68000",
+        "following",
+        "the",
+        "death",
+        "of",
+        "Irans",
+        "supreme",
+        "leader",
+        "amid",
+        "geopolitical",
+        "tensions",
+        "and",
+        "market",
+        "recovery",
+        "."
+      ],
+      "clean_description_processed": "Bitcoin surges past $ 68000 following the death of Irans supreme leader amid geopolitical tensions and market recovery .",
+      "clean_content_tokens": [
+        "Bitcoin",
+        "and",
+        "other",
+        "cryptocurrencies",
+        "rebounded",
+        "sharply",
+        "in",
+        "early",
+        "Asia",
+        "trading",
+        "on",
+        "Sunday",
+        "after",
+        "Iran",
+        "confirmed",
+        "that",
+        "the",
+        "countrys",
+        "supreme",
+        "leader",
+        "had",
+        "been",
+        "killed",
+        "during",
+        "a",
+        "military",
+        "campaign",
+        "by",
+        "the",
+        "US",
+        "and",
+        "Isr…"
+      ],
+      "clean_content_processed": "Bitcoin and other cryptocurrencies rebounded sharply in early Asia trading on Sunday after Iran confirmed that the countrys supreme leader had been killed during a military campaign by the US and Isr…"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-03-02T06:54:52.628176",
+      "source_file": "news_finance_2026-03-02.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 61,
+        "avg_tokens_per_record": 61.0
+      }
+    }
+  }
+}
