@@ -1,0 +1,106 @@
+{
+  "data": [
+    {
+      "source_id": "bloomberg",
+      "source_name": "Bloomberg",
+      "author": "Bloomberg",
+      "title": "OpenAI releases AI agent security tool for research preview",
+      "description": "The agent, called Codex Security, works by identifying cybersecurity flaws and proposing solutions before fixing the bugs",
+      "url": "https://www.bloomberg.com/news/articles/2026-03-06/openai-releases-ai-agent-security-tool-for-research-preview",
+      "url_to_image": "https://bl-i.thgim.com/public/incoming/h2t88b/article70714914.ece/alternates/LANDSCAPE_1200/2025-08-06T021942Z_1374809076_RC2LU7AYUNM6_RTRMADP_3_OPENAI-SHARE-SALE.JPG",
+      "published_at": "2026-03-07T05:56:34Z",
+      "content": "OpenAI is introducing an AI agent thats meant to help security teams find and patch vulnerabilities in large databases, potentially cutting into demand for legacy cyber firms.\r\nThe agent, called Code… [+1262 chars]",
+      "clean_title": "OpenAI releases AI agent security tool for research preview",
+      "clean_description": "The agent, called Codex Security, works by identifying cybersecurity flaws and proposing solutions before fixing the bugs",
+      "clean_content": "OpenAI is introducing an AI agent thats meant to help security teams find and patch vulnerabilities in large databases, potentially cutting into demand for legacy cyber firms. The agent, called Code…",
+      "clean_title_tokens": [
+        "OpenAI",
+        "releases",
+        "AI",
+        "agent",
+        "security",
+        "tool",
+        "for",
+        "research",
+        "preview"
+      ],
+      "clean_title_processed": "OpenAI releases AI agent security tool for research preview",
+      "clean_description_tokens": [
+        "The",
+        "agent",
+        "called",
+        "Codex",
+        "Security",
+        "works",
+        "by",
+        "identifying",
+        "cybersecurity",
+        "flaws",
+        "and",
+        "proposing",
+        "solutions",
+        "before",
+        "fixing",
+        "the",
+        "bugs"
+      ],
+      "clean_description_processed": "The agent called Codex Security works by identifying cybersecurity flaws and proposing solutions before fixing the bugs",
+      "clean_content_tokens": [
+        "OpenAI",
+        "is",
+        "introducing",
+        "an",
+        "AI",
+        "agent",
+        "thats",
+        "meant",
+        "to",
+        "help",
+        "security",
+        "teams",
+        "find",
+        "and",
+        "patch",
+        "vulnerabilities",
+        "in",
+        "large",
+        "databases",
+        "potentially",
+        "cutting",
+        "into",
+        "demand",
+        "for",
+        "legacy",
+        "cyber",
+        "firms",
+        ".",
+        "The",
+        "agent",
+        "called",
+        "Code…"
+      ],
+      "clean_content_processed": "OpenAI is introducing an AI agent thats meant to help security teams find and patch vulnerabilities in large databases potentially cutting into demand for legacy cyber firms . The agent called Code…"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-03-08T06:39:42.188150",
+      "source_file": "news_finance_2026-03-08.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 58,
+        "avg_tokens_per_record": 58.0
+      }
+    }
+  }
+}
