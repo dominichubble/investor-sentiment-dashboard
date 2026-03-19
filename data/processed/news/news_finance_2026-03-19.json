@@ -1,0 +1,111 @@
+{
+  "data": [
+    {
+      "source_id": "business-insider",
+      "source_name": "Business Insider",
+      "author": "Jordan Hart",
+      "title": "Get ready for fewer sales: Lululemon has a new 'obsession' with full price and minimal discounting",
+      "description": "Lululemon plans to reduce markdowns in 2026 to boost full-price sales, following revenue challenges in the Americas region.",
+      "url": "https://www.businessinsider.com/lululemon-plans-to-cut-markdowns-to-boost-revenue-in-2026-2026-3",
+      "url_to_image": "https://i.insider.com/69b9d052d387710cb9e45a90?width=1200&format=jpeg",
+      "published_at": "2026-03-18T00:48:31Z",
+      "content": "Lululemon is cutting back on sales.Peter Dazeley/Getty Images\r\n<ul><li>Lululemon announced plans to boost full-price sales by reducing markdowns.</li><li>The move is one step in the brand's plan to r… [+2729 chars]",
+      "clean_title": "Get ready for fewer sales: Lululemon has a new 'obsession' with full price and minimal discounting",
+      "clean_description": "Lululemon plans to reduce markdowns in 2026 to boost full-price sales, following revenue challenges in the Americas region.",
+      "clean_content": "Lululemon is cutting back on sales.Peter Dazeley/Getty Images Lululemon announced plans to boost full-price sales by reducing markdowns.The move is one step in the brand's plan to r…",
+      "clean_title_tokens": [
+        "Get",
+        "ready",
+        "for",
+        "fewer",
+        "sales",
+        "Lululemon",
+        "has",
+        "a",
+        "new",
+        "obsession",
+        "with",
+        "full",
+        "price",
+        "and",
+        "minimal",
+        "discounting"
+      ],
+      "clean_title_processed": "Get ready for fewer sales Lululemon has a new obsession with full price and minimal discounting",
+      "clean_description_tokens": [
+        "Lululemon",
+        "plans",
+        "to",
+        "reduce",
+        "markdowns",
+        "in",
+        "2026",
+        "to",
+        "boost",
+        "fullprice",
+        "sales",
+        "following",
+        "revenue",
+        "challenges",
+        "in",
+        "the",
+        "Americas",
+        "region",
+        "."
+      ],
+      "clean_description_processed": "Lululemon plans to reduce markdowns in 2026 to boost fullprice sales following revenue challenges in the Americas region .",
+      "clean_content_tokens": [
+        "Lululemon",
+        "is",
+        "cutting",
+        "back",
+        "on",
+        "sales.Peter",
+        "DazeleyGetty",
+        "Images",
+        "Lululemon",
+        "announced",
+        "plans",
+        "to",
+        "boost",
+        "fullprice",
+        "sales",
+        "by",
+        "reducing",
+        "markdowns.The",
+        "move",
+        "is",
+        "one",
+        "step",
+        "in",
+        "the",
+        "brands",
+        "plan",
+        "to",
+        "r…"
+      ],
+      "clean_content_processed": "Lululemon is cutting back on sales.Peter DazeleyGetty Images Lululemon announced plans to boost fullprice sales by reducing markdowns.The move is one step in the brands plan to r…"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-03-19T06:55:53.358474",
+      "source_file": "news_finance_2026-03-19.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 63,
+        "avg_tokens_per_record": 63.0
+      }
+    }
+  }
+}

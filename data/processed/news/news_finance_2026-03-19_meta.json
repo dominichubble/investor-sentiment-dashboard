@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "run_id": "2026-03-19",
+      "timestamp": "2026-03-19T06:55:45.122573",
+      "total_articles": 1,
+      "sources": [
+        "Business Insider"
+      ]
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-03-19T06:55:53.329884",
+      "source_file": "news_finance_2026-03-19_meta.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 0,
+        "avg_tokens_per_record": 0.0
+      }
+    }
+  }
+}
