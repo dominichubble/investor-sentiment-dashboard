@@ -1,0 +1,108 @@
+{
+  "data": [
+    {
+      "source_id": "business-insider",
+      "source_name": "Business Insider",
+      "author": "Aditi Bharade",
+      "title": "Labubu's wide, toothy grin is coming to the silver screen",
+      "description": "Fans can look forward to a \"live‑action and CGI hybrid\" Labubu movie, produced by big-name Hollywood talent.",
+      "url": "https://www.businessinsider.com/labubu-toothy-grin-movie-hollywood-sony-pictures-2026-3",
+      "url_to_image": "https://i.insider.com/69bb5964d387710cb9e46176?width=1200&format=jpeg",
+      "published_at": "2026-03-19T04:01:08Z",
+      "content": "Labubu will be making its way to Hollywood.Pop Mart\r\n<ul><li>Pop Mart and Sony Pictures are bringing Labubu to the big screens.</li><li>Fans can look forward to a \"live‑action and CGI hybrid\" Labubu … [+2080 chars]",
+      "clean_title": "Labubu's wide, toothy grin is coming to the silver screen",
+      "clean_description": "Fans can look forward to a \"live‑action and CGI hybrid\" Labubu movie, produced by big-name Hollywood talent.",
+      "clean_content": "Labubu will be making its way to Hollywood.Pop Mart Pop Mart and Sony Pictures are bringing Labubu to the big screens.Fans can look forward to a \"live‑action and CGI hybrid\" Labubu …",
+      "clean_title_tokens": [
+        "Labubus",
+        "wide",
+        "toothy",
+        "grin",
+        "is",
+        "coming",
+        "to",
+        "the",
+        "silver",
+        "screen"
+      ],
+      "clean_title_processed": "Labubus wide toothy grin is coming to the silver screen",
+      "clean_description_tokens": [
+        "Fans",
+        "can",
+        "look",
+        "forward",
+        "to",
+        "a",
+        "live‑action",
+        "and",
+        "CGI",
+        "hybrid",
+        "Labubu",
+        "movie",
+        "produced",
+        "by",
+        "bigname",
+        "Hollywood",
+        "talent",
+        "."
+      ],
+      "clean_description_processed": "Fans can look forward to a live‑action and CGI hybrid Labubu movie produced by bigname Hollywood talent .",
+      "clean_content_tokens": [
+        "Labubu",
+        "will",
+        "be",
+        "making",
+        "its",
+        "way",
+        "to",
+        "Hollywood.Pop",
+        "Mart",
+        "Pop",
+        "Mart",
+        "and",
+        "Sony",
+        "Pictures",
+        "are",
+        "bringing",
+        "Labubu",
+        "to",
+        "the",
+        "big",
+        "screens.Fans",
+        "can",
+        "look",
+        "forward",
+        "to",
+        "a",
+        "live‑action",
+        "and",
+        "CGI",
+        "hybrid",
+        "Labubu",
+        "…"
+      ],
+      "clean_content_processed": "Labubu will be making its way to Hollywood.Pop Mart Pop Mart and Sony Pictures are bringing Labubu to the big screens.Fans can look forward to a live‑action and CGI hybrid Labubu …"
+    }
+  ],
+  "metadata": {
+    "preprocessing": {
+      "processed_at": "2026-03-20T06:51:54.563113",
+      "source_file": "news_finance_2026-03-20.json",
+      "source_type": "news",
+      "config": {
+        "lowercase": false,
+        "remove_urls": true,
+        "remove_stopwords": false,
+        "lemmatize": false,
+        "preserve_financial": true,
+        "preserve_financial_punctuation": true,
+        "handle_negations": true
+      },
+      "stats": {
+        "total_records": 1,
+        "total_tokens": 60,
+        "avg_tokens_per_record": 60.0
+      }
+    }
+  }
+}
