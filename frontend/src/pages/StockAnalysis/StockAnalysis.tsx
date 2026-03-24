@@ -1,20 +1,18 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import * as RechartsPrimitive from 'recharts';
 import {
   SentimentPriceChart,
   CorrelationScatter,
   LagChart,
-  CorrelationHeatmap,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
 import { apiService } from '../../services/api';
-import { useDashboard } from '../../context/DashboardContext';
 import type {
   CorrelationResponse,
   LagAnalysisResponse,
   TimeSeriesResponse,
-  CorrelationOverviewItem,
   StockInfoResponse,
   GrangerCausalityResponse,
   RollingCorrelationResponse,
@@ -29,12 +27,29 @@ const PERIOD_OPTIONS = [
   { label: 'Custom', value: 'custom' },
 ];
 
+function toISODate(d: Date): string {
+  return d.toISOString().slice(0, 10);
+}
+
+function defaultCustomRange(): { start: string; end: string } {
+  const end = new Date();
+  const start = new Date();
+  start.setDate(start.getDate() - 90);
+  return { start: toISODate(start), end: toISODate(end) };
+}
+
+type CustomRangePayload = { start_date: string; end_date: string } | null;
+
 const StockAnalysis: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const didRunUrlInit = useRef(false);
+
   const [ticker, setTicker] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [period, setPeriod] = useState('90d');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [dateRangeMode, setDateRangeMode] = useState<'preset' | 'custom'>('preset');
+  const [customStart, setCustomStart] = useState(() => defaultCustomRange().start);
+  const [customEnd, setCustomEnd] = useState(() => defaultCustomRange().end);
 
   // Data states
   const [correlation, setCorrelation] = useState<CorrelationResponse | null>(null);
@@ -44,38 +59,38 @@ const StockAnalysis: React.FC = () => {
   const [rollingData, setRollingData] = useState<RollingCorrelationResponse | null>(null);
   const [stockInfo, setStockInfo] = useState<StockInfoResponse | null>(null);
 
-  // Use shared context for overview data
-  const { correlationOverview: overview, isLoading: isOverviewLoading } = useDashboard();
-
   // UI states
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const analyzeStock = useCallback(async (
-    stockTicker: string,
-    analysisPeriod: string,
-    sd?: string,
-    ed?: string,
-  ) => {
+  const analyzeStock = useCallback(
+    async (
+      stockTicker: string,
+      analysisPeriod: string,
+      customRange: CustomRangePayload,
+    ) => {
     if (!stockTicker) return;
 
     setIsLoading(true);
     setError(null);
     setTicker(stockTicker);
 
-    const isCustom = analysisPeriod === 'custom' && sd && ed;
-    const dateParams = isCustom
-      ? { start_date: sd, end_date: ed, period: 'max' }
+    const rangeParams = customRange
+      ? {
+          period: analysisPeriod,
+          start_date: customRange.start_date,
+          end_date: customRange.end_date,
+        }
       : { period: analysisPeriod };
 
     try {
       const [corrData, tsData, lagData, infoData, grangerResult, rollingResult] = await Promise.allSettled([
-        apiService.getCorrelation(stockTicker, { ...dateParams }),
-        apiService.getCorrelationTimeseries(stockTicker, { ...dateParams }),
-        apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, ...dateParams }),
+        apiService.getCorrelation(stockTicker, rangeParams),
+        apiService.getCorrelationTimeseries(stockTicker, rangeParams),
+        apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, ...rangeParams }),
         apiService.getStockInfo(stockTicker),
-        apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...dateParams }),
-        apiService.getRollingCorrelation(stockTicker, { window: 14, ...dateParams }),
+        apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...rangeParams }),
+        apiService.getRollingCorrelation(stockTicker, { window: 14, ...rangeParams }),
       ]);
 
       if (corrData.status === 'fulfilled') setCorrelation(corrData.value);
@@ -108,31 +123,106 @@ const StockAnalysis: React.FC = () => {
     }
   }, []);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchInput.trim()) {
-      analyzeStock(searchInput.trim().toUpperCase(), period, startDate, endDate);
+  const syncUrl = (sym: string, p: string, custom: CustomRangePayload) => {
+    if (custom) {
+      setSearchParams({ ticker: sym, start: custom.start_date, end: custom.end_date });
+    } else {
+      setSearchParams({ ticker: sym, period: p });
     }
   };
 
-  const handleStockClick = (clickedTicker: string) => {
-    setSearchInput(clickedTicker);
-    analyzeStock(clickedTicker, period, startDate, endDate);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Load ticker (and optional range) from URL on first mount
+  useEffect(() => {
+    if (didRunUrlInit.current) return;
+    didRunUrlInit.current = true;
+
+    const raw = searchParams.get('ticker')?.trim();
+    const start = searchParams.get('start')?.trim();
+    const end = searchParams.get('end')?.trim();
+    const urlPeriod = searchParams.get('period')?.trim();
+
+    const effectivePeriod =
+      urlPeriod && PERIOD_OPTIONS.some((o) => o.value === urlPeriod) ? urlPeriod : '90d';
+    if (urlPeriod && PERIOD_OPTIONS.some((o) => o.value === urlPeriod)) {
+      setPeriod(urlPeriod);
+    }
+
+    if (start && end) {
+      setDateRangeMode('custom');
+      setCustomStart(start);
+      setCustomEnd(end);
+    }
+
+    if (raw) {
+      const sym = raw.toUpperCase();
+      setSearchInput(sym);
+      const custom: CustomRangePayload =
+        start && end ? { start_date: start, end_date: end } : null;
+      analyzeStock(sym, effectivePeriod, custom);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- intentional: run once on mount
+  }, []);
+
+  const validateCustomRange = (): string | null => {
+    if (!customStart || !customEnd) {
+      return 'Select both start and end dates for a custom range.';
+    }
+    if (customStart > customEnd) {
+      return 'Start date must be on or before end date.';
+    }
+    return null;
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!searchInput.trim()) return;
+
+    const sym = searchInput.trim().toUpperCase();
+    if (dateRangeMode === 'custom') {
+      const msg = validateCustomRange();
+      if (msg) {
+        setError(msg);
+        return;
+      }
+      const custom: CustomRangePayload = {
+        start_date: customStart,
+        end_date: customEnd,
+      };
+      syncUrl(sym, period, custom);
+      analyzeStock(sym, period, custom);
+      return;
+    }
+
+    syncUrl(sym, period, null);
+    analyzeStock(sym, period, null);
   };
 
   const handlePeriodChange = (newPeriod: string) => {
+    setDateRangeMode('preset');
     setPeriod(newPeriod);
-    if (newPeriod !== 'custom' && ticker) {
-      analyzeStock(ticker, newPeriod);
+    if (ticker) {
+      setSearchParams({ ticker, period: newPeriod });
+      analyzeStock(ticker, newPeriod, null);
     }
   };
 
-  const handleCustomDateApply = () => {
-    if (ticker && startDate && endDate) {
-      analyzeStock(ticker, 'custom', startDate, endDate);
+  const handleCustomRangeApply = () => {
+    const msg = validateCustomRange();
+    if (msg) {
+      setError(msg);
+      return;
     }
+    setError(null);
+    if (!ticker) return;
+    const custom: CustomRangePayload = {
+      start_date: customStart,
+      end_date: customEnd,
+    };
+    syncUrl(ticker, period, custom);
+    analyzeStock(ticker, period, custom);
   };
+
+  const todayISO = toISODate(new Date());
 
   const getCorrelationColor = (r: number | undefined): string => {
     if (r === undefined) return '#8e94a0';
@@ -151,13 +241,16 @@ const StockAnalysis: React.FC = () => {
 
   return (
     <div className="stock-analysis">
-      <Navbar title="COC251 Sentiment Analysis" />
+      <Navbar
+        title="Sentiment–price correlation"
+        subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window."
+      />
 
       {/* Header / Search */}
       <div className="sa-header">
-        <h1 className="sa-title">Sentiment-Price Correlation Analysis</h1>
+        <h1 className="sa-title">Analyze a stock</h1>
         <p className="sa-subtitle">
-          Analyze the relationship between investor sentiment and stock price movements
+          Enter a ticker, pick how far back to look, then run the analysis. Custom ranges use inclusive start and end dates.
         </p>
 
         <form className="sa-search-form" onSubmit={handleSearch}>
@@ -173,48 +266,75 @@ const StockAnalysis: React.FC = () => {
           </button>
         </form>
 
-        <div className="sa-period-selector">
-          {PERIOD_OPTIONS.map(opt => (
-            <button
-              key={opt.value}
-              className={`sa-period-btn ${period === opt.value ? 'active' : ''}`}
-              onClick={() => handlePeriodChange(opt.value)}
-            >
-              {opt.label}
-            </button>
-          ))}
+        <div className="sa-range-mode" role="radiogroup" aria-label="Time window type">
+          <label className="sa-range-mode-option">
+            <input
+              type="radio"
+              name="rangeMode"
+              checked={dateRangeMode === 'preset'}
+              onChange={() => setDateRangeMode('preset')}
+            />
+            <span>Preset period</span>
+          </label>
+          <label className="sa-range-mode-option">
+            <input
+              type="radio"
+              name="rangeMode"
+              checked={dateRangeMode === 'custom'}
+              onChange={() => setDateRangeMode('custom')}
+            />
+            <span>Custom date range</span>
+          </label>
         </div>
 
-        {period === 'custom' && (
-          <div className="sa-date-range">
-            <div className="sa-date-inputs">
-              <label className="sa-date-label">
-                From
-                <input
-                  type="date"
-                  className="sa-date-input"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                />
-              </label>
-              <span className="sa-date-separator">—</span>
-              <label className="sa-date-label">
-                To
-                <input
-                  type="date"
-                  className="sa-date-input"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                />
-              </label>
+        {dateRangeMode === 'preset' && (
+          <div className="sa-period-selector">
+            {PERIOD_OPTIONS.map(opt => (
               <button
-                className="sa-date-apply-btn"
-                disabled={!startDate || !endDate || !ticker || isLoading}
-                onClick={handleCustomDateApply}
+                key={opt.value}
+                type="button"
+                className={`sa-period-btn ${period === opt.value ? 'active' : ''}`}
+                onClick={() => handlePeriodChange(opt.value)}
               >
-                Apply
+                {opt.label}
               </button>
-            </div>
+            ))}
+          </div>
+        )}
+
+        {dateRangeMode === 'custom' && (
+          <div className="sa-custom-dates">
+            <label className="sa-date-field">
+              <span className="sa-date-label">From</span>
+              <input
+                type="date"
+                className="sa-date-input"
+                value={customStart}
+                max={customEnd || todayISO}
+                onChange={(e) => setCustomStart(e.target.value)}
+              />
+            </label>
+            <label className="sa-date-field">
+              <span className="sa-date-label">To</span>
+              <input
+                type="date"
+                className="sa-date-input"
+                value={customEnd}
+                min={customStart}
+                max={todayISO}
+                onChange={(e) => setCustomEnd(e.target.value)}
+              />
+            </label>
+            {ticker && (
+              <button
+                type="button"
+                className="sa-apply-range-btn"
+                disabled={isLoading}
+                onClick={handleCustomRangeApply}
+              >
+                Apply range
+              </button>
+            )}
           </div>
         )}
       </div>
@@ -231,6 +351,12 @@ const StockAnalysis: React.FC = () => {
         <div className="sa-loading">
           <div className="sa-spinner" />
           <p>Fetching price data and calculating correlations for {ticker}...</p>
+        </div>
+      )}
+
+      {!isLoading && ticker && !correlation && error && (
+        <div className="sa-results sa-results-partial">
+          <p className="sa-partial-message">{error}</p>
         </div>
       )}
 
@@ -465,31 +591,6 @@ const StockAnalysis: React.FC = () => {
           </div>
         </div>
       )}
-
-      {/* Overview / Heatmap Section */}
-      <div className="sa-overview-section">
-        <h3 className="sa-section-title">Correlation Overview - All Tracked Stocks</h3>
-        <p className="sa-section-desc">
-          Click on any stock to analyze its sentiment-price relationship in detail.
-          Color intensity reflects correlation strength; grey indicates insufficient data.
-        </p>
-
-        {isOverviewLoading ? (
-          <div className="sa-loading" style={{ minHeight: 100 }}>
-            <div className="sa-spinner" />
-            <p>Loading correlation overview...</p>
-          </div>
-        ) : overview.length > 0 ? (
-          <CorrelationHeatmap data={overview} onStockClick={handleStockClick} />
-        ) : (
-          <div className="sa-empty-overview">
-            <p>No stocks with sufficient sentiment data for correlation analysis.</p>
-            <p style={{ fontSize: 13, color: '#999' }}>
-              Run the data ingestion pipelines and sentiment analysis to populate data.
-            </p>
-          </div>
-        )}
-      </div>
     </div>
   );
 };

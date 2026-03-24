@@ -140,17 +140,20 @@ class CorrelationAnalyzer:
 
         Args:
             ticker: Stock ticker symbol.
-            period: Price data period (ignored when start_date/end_date given).
+            period: Price data period (used when start_date/end_date not both set).
             sentiment_metric: Column to use for sentiment (net_sentiment, avg_score).
             price_metric: Column to use for price (returns, close).
-            start_date: Optional absolute start date.
-            end_date: Optional absolute end date.
+            start_date: Inclusive range start (optional, with end_date).
+            end_date: Inclusive range end (optional, with start_date).
 
         Returns:
             Dictionary with correlation results and statistical significance.
         """
         merged = self.get_merged_timeseries(
-            ticker, period=period, start_date=start_date, end_date=end_date
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         if merged.empty or len(merged) < 5:
@@ -210,10 +213,15 @@ class CorrelationAnalyzer:
             else:
                 return "No significant correlation"
 
+        period_label = (
+            "custom"
+            if start_date is not None and end_date is not None
+            else period
+        )
         return {
             "ticker": ticker,
             "data_points": int(len(sentiment_clean)),
-            "period": period,
+            "period": period_label,
             "sentiment_metric": sentiment_metric,
             "price_metric": price_metric,
             "pearson": {
@@ -249,7 +257,10 @@ class CorrelationAnalyzer:
             Dictionary with lag correlation results.
         """
         merged = self.get_merged_timeseries(
-            ticker, period=period, start_date=start_date, end_date=end_date
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         if merged.empty or len(merged) < max_lag_days + 5:
@@ -262,7 +273,7 @@ class CorrelationAnalyzer:
         sentiment_values = merged[sentiment_metric].values
         price_returns = merged["returns"].values
 
-        lag_results = []
+        lag_results: List[Dict] = []
 
         for lag in range(-max_lag_days, max_lag_days + 1):
             if lag > 0:
@@ -366,7 +377,10 @@ class CorrelationAnalyzer:
             }
 
         merged = self.get_merged_timeseries(
-            ticker, period=period, start_date=start_date, end_date=end_date
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         if merged.empty or len(merged) < max_lag + 10:
@@ -389,7 +403,7 @@ class CorrelationAnalyzer:
                 "error": "Insufficient valid data after NaN removal",
             }
 
-        results = {
+        results: Dict = {
             "ticker": ticker,
             "max_lag": max_lag,
             "data_points": int(len(sentiment_clean)),
@@ -527,7 +541,10 @@ class CorrelationAnalyzer:
             Dictionary with time-series of rolling correlation values.
         """
         merged = self.get_merged_timeseries(
-            ticker, period=period, start_date=start_date, end_date=end_date
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         if merged.empty or len(merged) < window + 2:
@@ -543,6 +560,12 @@ class CorrelationAnalyzer:
         price_series = merged[price_metric]
 
         rolling_corr = sent_series.rolling(window=window).corr(price_series)
+
+        period_label = (
+            "custom"
+            if start_date is not None and end_date is not None
+            else period
+        )
 
         series = []
         for i, (_, row) in enumerate(merged.iterrows()):
@@ -574,7 +597,7 @@ class CorrelationAnalyzer:
         return {
             "ticker": ticker,
             "window": window,
-            "period": period,
+            "period": period_label,
             "data_points": len(series),
             "series": series,
             "statistics": stats_summary,
@@ -643,7 +666,10 @@ class CorrelationAnalyzer:
         Returns dictionary suitable for JSON serialization and frontend charting.
         """
         merged = self.get_merged_timeseries(
-            ticker, period=period, start_date=start_date, end_date=end_date
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
         )
 
         if merged.empty:

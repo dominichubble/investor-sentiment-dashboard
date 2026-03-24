@@ -8,9 +8,9 @@ Includes TTL caching for expensive operations to reduce response times.
 """
 
 import logging
-from datetime import datetime
+from datetime import date, datetime, time
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Query
@@ -29,6 +29,37 @@ def get_analyzer() -> CorrelationAnalyzer:
     """Lazily initialize heavy analyzer state on first correlation request."""
     return CorrelationAnalyzer()
 
+
+def _optional_range_datetimes(
+    start_date: Optional[date],
+    end_date: Optional[date],
+) -> Tuple[Optional[datetime], Optional[datetime]]:
+    """Validate optional calendar range and return inclusive UTC-naive datetimes."""
+    if start_date is None and end_date is None:
+        return None, None
+    if start_date is None or end_date is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Both start_date and end_date are required for a custom range.",
+        )
+    if start_date > end_date:
+        raise HTTPException(
+            status_code=400,
+            detail="start_date must be on or before end_date.",
+        )
+    start_dt = datetime.combine(start_date, time.min)
+    end_dt = datetime.combine(end_date, time.max.replace(microsecond=0))
+    return start_dt, end_dt
+
+
+def _range_cache_suffix(
+    start_date: Optional[date], end_date: Optional[date]
+) -> str:
+    if start_date is not None and end_date is not None:
+        return f":{start_date.isoformat()}:{end_date.isoformat()}"
+    return ""
+
+
 # --- TTL Caches ---
 # Correlation results: cache for 1 hour (3600 seconds)
 _correlation_cache: TTLCache = TTLCache(maxsize=256, ttl=3600)
@@ -42,16 +73,6 @@ _rolling_cache: TTLCache = TTLCache(maxsize=128, ttl=3600)
 _timeseries_cache: TTLCache = TTLCache(maxsize=128, ttl=1800)
 # Statistics: cache for 5 minutes
 _statistics_cache: TTLCache = TTLCache(maxsize=16, ttl=300)
-
-
-def _parse_date(value: Optional[str]) -> Optional[datetime]:
-    """Parse a YYYY-MM-DD string into a naive datetime, or return None."""
-    if not value:
-        return None
-    try:
-        return datetime.strptime(value, "%Y-%m-%d")
-    except ValueError:
-        return None
 
 
 # --- Response Models ---
@@ -234,7 +255,7 @@ async def get_correlation(
     ticker: str,
     period: str = Query(
         "90d",
-        description="Price data period (7d, 30d, 90d, 6mo, 1y). Ignored when start_date/end_date are set.",
+        description="Price data period (7d, 30d, 90d, 6mo, 1y); ignored if start_date+end_date set",
     ),
     sentiment_metric: str = Query(
         "net_sentiment",
@@ -244,8 +265,12 @@ async def get_correlation(
         "returns",
         description="Price metric to correlate (returns, close)",
     ),
-    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
-    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+    start_date: Optional[date] = Query(
+        None, description="Custom range start (inclusive), requires end_date"
+    ),
+    end_date: Optional[date] = Query(
+        None, description="Custom range end (inclusive), requires start_date"
+    ),
 ) -> CorrelationResponse:
     """
     Calculate correlation between sentiment and stock price for a ticker.
@@ -253,9 +278,11 @@ async def get_correlation(
     Returns Pearson and Spearman correlation coefficients with p-values
     and statistical significance.
     """
-    sd = _parse_date(start_date)
-    ed = _parse_date(end_date)
-    cache_key = f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}:{start_date}:{end_date}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _correlation_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -266,8 +293,8 @@ async def get_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
-            start_date=sd,
-            end_date=ed,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = CorrelationResponse(**result)
         _correlation_cache[cache_key] = response
@@ -280,8 +307,12 @@ async def get_correlation(
 async def get_correlation_timeseries(
     ticker: str,
     period: str = Query("90d", description="Price data period"),
-    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
-    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+    start_date: Optional[date] = Query(
+        None, description="Custom range start (inclusive), requires end_date"
+    ),
+    end_date: Optional[date] = Query(
+        None, description="Custom range end (inclusive), requires start_date"
+    ),
 ) -> TimeSeriesResponse:
     """
     Get merged sentiment + price time-series data for charting.
@@ -289,16 +320,20 @@ async def get_correlation_timeseries(
     Returns daily data points with both sentiment scores and price data,
     suitable for dual-axis visualization.
     """
-    sd = _parse_date(start_date)
-    ed = _parse_date(end_date)
-    cache_key = f"ts:{ticker.upper()}:{period}:{start_date}:{end_date}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"ts:{ticker.upper()}:{period}{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _timeseries_cache.get(cache_key)
     if cached is not None:
         return cached
 
     try:
         result = get_analyzer().get_timeseries_response(
-            ticker=ticker.upper(), period=period, start_date=sd, end_date=ed,
+            ticker=ticker.upper(),
+            period=period,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = TimeSeriesResponse(**result)
         _timeseries_cache[cache_key] = response
@@ -315,24 +350,23 @@ async def get_lag_analysis(
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
-    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
-    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
 ) -> LagAnalysisResponse:
     """
     Perform lag correlation analysis.
 
     Tests whether sentiment at time t predicts price at time t+lag.
     """
-    sd = _parse_date(start_date)
-    ed = _parse_date(end_date)
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
     try:
         result = get_analyzer().lag_analysis(
             ticker=ticker.upper(),
             max_lag_days=max_lag_days,
             period=period,
             sentiment_metric=sentiment_metric,
-            start_date=sd,
-            end_date=ed,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         return LagAnalysisResponse(**result)
     except Exception as e:
@@ -347,17 +381,19 @@ async def get_granger_causality(
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
-    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
-    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
 ) -> GrangerCausalityResponse:
     """
     Test Granger causality between sentiment and price returns.
 
     Tests whether past sentiment helps predict future price (and vice versa).
     """
-    sd = _parse_date(start_date)
-    ed = _parse_date(end_date)
-    cache_key = f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}:{start_date}:{end_date}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _granger_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -368,8 +404,8 @@ async def get_granger_causality(
             max_lag=max_lag,
             period=period,
             sentiment_metric=sentiment_metric,
-            start_date=sd,
-            end_date=ed,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = GrangerCausalityResponse(**result)
         _granger_cache[cache_key] = response
@@ -389,17 +425,19 @@ async def get_rolling_correlation(
     price_metric: str = Query(
         "returns", description="Price metric to use"
     ),
-    start_date: Optional[str] = Query(None, description="Start date YYYY-MM-DD"),
-    end_date: Optional[str] = Query(None, description="End date YYYY-MM-DD"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
 ) -> RollingCorrelationResponse:
     """
     Calculate rolling windowed correlation between sentiment and price.
 
     Shows how the correlation changes over time using a sliding window.
     """
-    sd = _parse_date(start_date)
-    ed = _parse_date(end_date)
-    cache_key = f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}:{start_date}:{end_date}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _rolling_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -411,8 +449,8 @@ async def get_rolling_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
-            start_date=sd,
-            end_date=ed,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = RollingCorrelationResponse(**result)
         _rolling_cache[cache_key] = response

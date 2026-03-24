@@ -89,6 +89,98 @@
   cursor: not-allowed;
 }
 
+.sa-range-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto 12px;
+  max-width: 640px;
+}
+
+.sa-range-mode-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sa-range-mode-option input {
+  accent-color: #5c7cfa;
+  width: 16px;
+  height: 16px;
+}
+
+.sa-custom-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 0 auto 8px;
+  max-width: 720px;
+}
+
+.sa-date-field {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.sa-date-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.sa-date-input {
+  padding: 10px 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  color: #222;
+  background: white;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.sa-date-input:focus {
+  outline: none;
+  border-color: #5c7cfa;
+}
+
+.sa-apply-range-btn {
+  padding: 10px 20px;
+  background: #5c7cfa;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  height: fit-content;
+}
+
+.sa-apply-range-btn:hover:not(:disabled) {
+  background: #4c6ef5;
+}
+
+.sa-apply-range-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* Period Selector */
 .sa-period-selector {
   display: flex;
@@ -376,28 +468,20 @@
   margin-bottom: 0;
 }
 
-/* Overview Section */
-.sa-overview-section {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  border: 1px solid #e0e0e0;
-  width: 100%;
+.sa-results-partial {
   max-width: 1240px;
+  width: 100%;
+  padding: 24px;
   box-sizing: border-box;
 }
 
-.sa-empty-overview {
-  text-align: center;
-  padding: 40px 20px;
-}
-
-.sa-empty-overview p {
+.sa-partial-message {
+  margin: 0;
   font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  color: #666;
-  margin: 0 0 8px;
+  font-size: 15px;
+  color: #555;
+  text-align: center;
+  line-height: 1.5;
 }
 
 /* Loading */

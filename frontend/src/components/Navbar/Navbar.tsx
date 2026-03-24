@@ -1,10 +1,10 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import DropdownButton, { DropdownOption } from '../DropdownButton';
 import './Navbar.css';
 
 interface NavbarProps {
   title?: string;
+  subtitle?: string;
   assetOptions?: DropdownOption[];
   selectedAsset?: DropdownOption;
   onAssetChange?: (option: DropdownOption) => void;
@@ -17,7 +17,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({
-  title = "COC251 Sentiment Analysis",
+  title = 'Investor Sentiment — Correlation Analysis',
+  subtitle,
   assetOptions,
   selectedAsset,
   onAssetChange,
@@ -28,28 +29,12 @@ const Navbar: React.FC<NavbarProps> = ({
   onTimeframeChange,
   className
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const navItems = [
-    { path: '/', label: 'Overview' },
-    { path: '/correlation', label: 'Correlation Analysis' },
-  ];
-
   return (
     <nav className={`navbar ${className || ''}`}>
       <div className="navbar-top">
-        <h1 className="navbar-title">{title}</h1>
-        <div className="navbar-nav">
-          {navItems.map(item => (
-            <button
-              key={item.path}
-              className={`navbar-nav-item ${location.pathname === item.path ? 'active' : ''}`}
-              onClick={() => navigate(item.path)}
-            >
-              {item.label}
-            </button>
-          ))}
+        <div className="navbar-brand">
+          <h1 className="navbar-title">{title}</h1>
+          {subtitle && <p className="navbar-subtitle">{subtitle}</p>}
         </div>
       </div>
 

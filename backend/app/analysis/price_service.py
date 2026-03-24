@@ -99,6 +99,61 @@ class PriceService:
             return pd.DataFrame()
 
     @classmethod
+    def get_price_history_range(
+        cls,
+        ticker: str,
+        start_date: datetime,
+        end_date: datetime,
+        interval: str = "1d",
+    ) -> pd.DataFrame:
+        """
+        Fetch daily prices between start_date and end_date (inclusive on both ends).
+
+        Uses yfinance start/end; end is passed as exclusive upper bound internally.
+        """
+        cache_key = (
+            f"{ticker}_range_{start_date.date().isoformat()}_"
+            f"{end_date.date().isoformat()}_{interval}"
+        )
+        now = datetime.now()
+        if (
+            cache_key in cls._cache
+            and cache_key in cls._cache_expiry
+            and cls._cache_expiry[cache_key] > now
+        ):
+            logger.debug(f"Using cached range price data for {ticker}")
+            return cls._cache[cache_key]
+
+        try:
+            stock = yf.Ticker(ticker)
+            start_s = pd.Timestamp(start_date).normalize().strftime("%Y-%m-%d")
+            end_exclusive = (
+                pd.Timestamp(end_date).normalize() + timedelta(days=1)
+            ).strftime("%Y-%m-%d")
+            df = stock.history(start=start_s, end=end_exclusive, interval=interval)
+
+            if df.empty:
+                logger.warning(f"No price data found for {ticker} in range")
+                return pd.DataFrame()
+
+            df = df.reset_index()
+            df = df.rename(columns={"Date": "date"})
+            if hasattr(df["date"].dtype, "tz") and df["date"].dtype.tz is not None:
+                df["date"] = df["date"].dt.tz_localize(None)
+            df["date"] = pd.to_datetime(df["date"]).dt.normalize()
+            df["returns"] = df["Close"].pct_change()
+
+            cls._cache[cache_key] = df
+            cls._cache_expiry[cache_key] = now + timedelta(
+                minutes=cls.CACHE_TTL_MINUTES
+            )
+            logger.info(f"Fetched {len(df)} price records for {ticker} (custom range)")
+            return df
+        except Exception as e:
+            logger.error(f"Error fetching range price data for {ticker}: {e}")
+            return pd.DataFrame()
+
+    @classmethod
     def get_daily_returns(
         cls,
         ticker: str,
@@ -108,6 +163,9 @@ class PriceService:
     ) -> pd.DataFrame:
         """
         Get daily returns for a stock within a date range.
+
+        When both start_date and end_date are set, fetches that window directly.
+        Otherwise uses period-based history and optional start/end filters.
 
         Returns:
             DataFrame with columns: date, close, returns.
