@@ -29,7 +29,7 @@ except ImportError:
     pass
 
 import tweepy
-from tweepy.errors import TweepyException
+from tweepy.errors import Forbidden, TweepyException, Unauthorized
 
 from app.services.import_service import ImportService
 
@@ -342,6 +342,15 @@ def fetch_tweets(
 
         return filtered_engagement
 
+    except (Forbidden, Unauthorized) as e:
+        # Common in CI: legacy standalone app token, or app not linked to a Developer Portal project.
+        logger.warning(
+            "Twitter recent search unavailable (API rejected this token). "
+            "Use an app inside a Project with v2 access, or unset TWITTER_BEARER_TOKEN to skip. %s",
+            e,
+        )
+        return []
+
     except TweepyException as e:
         logger.error(f"Error fetching tweets: {e}")
         raise
@@ -573,9 +582,13 @@ def main():
         if output_file:
             logger.info("✓ Pipeline completed successfully")
             return 0
-        else:
-            logger.error("✗ Pipeline failed: No data collected")
-            return 1
+        if os.environ.get("CI", "").lower() == "true":
+            logger.warning(
+                "No Twitter rows ingested; exiting 0 under CI so Reddit/News DB updates are not blocked."
+            )
+            return 0
+        logger.error("✗ Pipeline failed: No data collected")
+        return 1
 
     except Exception as e:
         logger.error(f"✗ Pipeline failed with error: {e}", exc_info=True)
