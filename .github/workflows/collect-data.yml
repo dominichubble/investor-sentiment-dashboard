@@ -75,7 +75,6 @@ jobs:
             exit 0
           fi
           python -m app.pipelines.ingest_twitter --max-tweets 80 --store-db --no-write-files
-        continue-on-error: true
 
       - name: Commit and push sentiments.db
         run: |
@@ -85,11 +84,14 @@ jobs:
             echo "::error::data/db/sentiments.db missing after ingest steps"
             exit 1
           fi
+          ROWS="$(python -c "import sqlite3; c=sqlite3.connect('data/db/sentiments.db').cursor(); print(c.execute('SELECT COUNT(*) FROM sentiment_records').fetchone()[0])")"
+          echo "sentiment_records row count after ingest: ${ROWS}"
           git add data/db/sentiments.db
           if git diff --staged --quiet; then
-            echo "No database changes to commit."
+            echo "No database file change vs HEAD (duplicate run or INSERT OR IGNORE skipped all rows)."
           else
-            git commit -m "chore(data): daily sentiment ingest $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git diff --staged --stat
+            git commit -m "chore(data): daily sentiment ingest $(date -u +'%Y-%m-%d %H:%M UTC') (rows=${ROWS})"
             git pull --rebase origin "${GITHUB_REF_NAME}"
             git push origin "${GITHUB_REF_NAME}"
           fi
