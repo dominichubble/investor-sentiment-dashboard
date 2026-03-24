@@ -234,6 +234,8 @@ export const apiService = {
     ticker: string,
     params?: {
       period?: string;
+      start_date?: string;
+      end_date?: string;
       sentiment_metric?: string;
       price_metric?: string;
     }
@@ -247,7 +249,11 @@ export const apiService = {
 
   async getCorrelationTimeseries(
     ticker: string,
-    params?: { period?: string }
+    params?: {
+      period?: string;
+      start_date?: string;
+      end_date?: string;
+    }
   ): Promise<TimeSeriesResponse> {
     const response = await api.get<TimeSeriesResponse>(
       `/correlation/${ticker}/timeseries`,
@@ -261,6 +267,8 @@ export const apiService = {
     params?: {
       max_lag_days?: number;
       period?: string;
+      start_date?: string;
+      end_date?: string;
       sentiment_metric?: string;
     }
   ): Promise<LagAnalysisResponse> {
@@ -322,6 +330,8 @@ export const apiService = {
     params?: {
       window?: number;
       period?: string;
+      start_date?: string;
+      end_date?: string;
       sentiment_metric?: string;
       price_metric?: string;
     }

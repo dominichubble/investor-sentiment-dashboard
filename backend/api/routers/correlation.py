@@ -8,8 +8,9 @@ Includes TTL caching for expensive operations to reduce response times.
 """
 
 import logging
+from datetime import date, datetime, time
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Query
@@ -27,6 +28,37 @@ router = APIRouter(prefix="/correlation", tags=["correlation"])
 def get_analyzer() -> CorrelationAnalyzer:
     """Lazily initialize heavy analyzer state on first correlation request."""
     return CorrelationAnalyzer()
+
+
+def _optional_range_datetimes(
+    start_date: Optional[date],
+    end_date: Optional[date],
+) -> Tuple[Optional[datetime], Optional[datetime]]:
+    """Validate optional calendar range and return inclusive UTC-naive datetimes."""
+    if start_date is None and end_date is None:
+        return None, None
+    if start_date is None or end_date is None:
+        raise HTTPException(
+            status_code=400,
+            detail="Both start_date and end_date are required for a custom range.",
+        )
+    if start_date > end_date:
+        raise HTTPException(
+            status_code=400,
+            detail="start_date must be on or before end_date.",
+        )
+    start_dt = datetime.combine(start_date, time.min)
+    end_dt = datetime.combine(end_date, time.max.replace(microsecond=0))
+    return start_dt, end_dt
+
+
+def _range_cache_suffix(
+    start_date: Optional[date], end_date: Optional[date]
+) -> str:
+    if start_date is not None and end_date is not None:
+        return f":{start_date.isoformat()}:{end_date.isoformat()}"
+    return ""
+
 
 # --- TTL Caches ---
 # Correlation results: cache for 1 hour (3600 seconds)
@@ -223,7 +255,13 @@ async def get_correlation(
     ticker: str,
     period: str = Query(
         "90d",
-        description="Price data period (7d, 30d, 90d, 6mo, 1y)",
+        description="Price data period (7d, 30d, 90d, 6mo, 1y); ignored if start_date+end_date set",
+    ),
+    start_date: Optional[date] = Query(
+        None, description="Custom range start (inclusive), requires end_date"
+    ),
+    end_date: Optional[date] = Query(
+        None, description="Custom range end (inclusive), requires start_date"
     ),
     sentiment_metric: str = Query(
         "net_sentiment",
@@ -245,7 +283,11 @@ async def get_correlation(
     GET /api/v1/correlation/AAPL?period=90d&sentiment_metric=net_sentiment
     ```
     """
-    cache_key = f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _correlation_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -256,6 +298,8 @@ async def get_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = CorrelationResponse(**result)
         _correlation_cache[cache_key] = response
@@ -280,14 +324,20 @@ async def get_correlation_timeseries(
     GET /api/v1/correlation/AAPL/timeseries?period=90d
     ```
     """
-    cache_key = f"ts:{ticker.upper()}:{period}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"ts:{ticker.upper()}:{period}{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _timeseries_cache.get(cache_key)
     if cached is not None:
         return cached
 
     try:
         result = get_analyzer().get_timeseries_response(
-            ticker=ticker.upper(), period=period
+            ticker=ticker.upper(),
+            period=period,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = TimeSeriesResponse(**result)
         _timeseries_cache[cache_key] = response
@@ -301,6 +351,8 @@ async def get_lag_analysis(
     ticker: str,
     max_lag_days: int = Query(5, ge=1, le=14, description="Maximum lag in days"),
     period: str = Query("90d", description="Price data period"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
@@ -337,6 +389,8 @@ async def get_granger_causality(
     ticker: str,
     max_lag: int = Query(5, ge=1, le=10, description="Maximum lag in days"),
     period: str = Query("90d", description="Price data period"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
@@ -352,7 +406,11 @@ async def get_granger_causality(
     GET /api/v1/correlation/AAPL/granger?max_lag=5
     ```
     """
-    cache_key = f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _granger_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -363,6 +421,8 @@ async def get_granger_causality(
             max_lag=max_lag,
             period=period,
             sentiment_metric=sentiment_metric,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = GrangerCausalityResponse(**result)
         _granger_cache[cache_key] = response
@@ -376,6 +436,8 @@ async def get_rolling_correlation(
     ticker: str,
     window: int = Query(14, ge=5, le=60, description="Rolling window size in days"),
     period: str = Query("90d", description="Price data period"),
+    start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
+    end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
     sentiment_metric: str = Query(
         "net_sentiment", description="Sentiment metric to use"
     ),
@@ -394,7 +456,11 @@ async def get_rolling_correlation(
     GET /api/v1/correlation/AAPL/rolling?window=14&period=90d
     ```
     """
-    cache_key = f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}"
+    start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
+    cache_key = (
+        f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}"
+        f"{_range_cache_suffix(start_date, end_date)}"
+    )
     cached = _rolling_cache.get(cache_key)
     if cached is not None:
         return cached
@@ -406,6 +472,8 @@ async def get_rolling_correlation(
             period=period,
             sentiment_metric=sentiment_metric,
             price_metric=price_metric,
+            start_date=start_dt,
+            end_date=end_dt,
         )
         response = RollingCorrelationResponse(**result)
         _rolling_cache[cache_key] = response
