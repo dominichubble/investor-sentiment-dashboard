@@ -13,8 +13,9 @@ data/raw/**/*.json
 data/raw/**/*.csv
 data/raw/**/*.txt
 
-# SQLite database (daily source of truth)
+# SQLite databases under data/db (daily ingest uses sentiments.db — tracked on main)
 data/db/*.db
+!data/db/sentiments.db
 
 # Legacy / removed directories
 data/predictions/
