@@ -3,13 +3,7 @@ Process Existing Data with Sentiment Analysis
 
 This script reads existing data from your data collection pipelines
 (Reddit, Twitter, News) and processes it through sentiment analysis,
-then saves the predictions using the storage module.
-
-Features:
-- Comprehensive error handling and logging
-- Tracks failed items and saves to failed_items.json
-- Robust batch processing with individual fallback
-- Progress tracking and detailed reporting
+then saves the predictions to SQLite storage.
 
 Usage:
     python process_existing_data.py --input data/twitter_finance_*.csv --source twitter
@@ -19,7 +13,7 @@ Usage:
 
 import argparse
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import pandas as pd
@@ -27,160 +21,178 @@ import pandas as pd
 # Add backend to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.logging_config import get_logger, log_exception, setup_logging
 from app.models import analyze_batch
-from app.storage import save_predictions_batch
-
-# Setup logging
-setup_logging()
-logger = get_logger(__name__)
+from app.storage import StockSentimentStorage
+from app.storage.record_ids import make_record_id
 
 
-def process_csv_file(input_file: Path, source: str, text_column: str = "text") -> dict:
+def _coerce_timestamp(value) -> str | None:
+    """Best-effort parse of timestamps into ISO-8601 (UTC) with Z suffix."""
+    if value is None or (isinstance(value, float) and pd.isna(value)):
+        return None
+
+    # Numeric timestamps (assume Unix seconds or milliseconds)
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        try:
+            ts_val = float(value)
+            if ts_val > 1e12:  # likely milliseconds
+                ts_val = ts_val / 1000.0
+            dt = datetime.utcfromtimestamp(ts_val)
+            return dt.isoformat() + "Z"
+        except (ValueError, OSError, OverflowError):
+            return None
+
+    # String timestamps
+    try:
+        dt = pd.to_datetime(value, utc=True, errors="coerce")
+        if pd.isna(dt):
+            return None
+        dt = dt.to_pydatetime()
+        if dt.tzinfo is not None:
+            dt = dt.astimezone(timezone.utc).replace(tzinfo=None)
+        return dt.isoformat() + "Z"
+    except Exception:
+        return None
+
+
+def _extract_timestamp(row: pd.Series) -> str:
+    """Extract a stable timestamp from a row, with fallback to now."""
+    candidates = [
+        "timestamp",
+        "created_at",
+        "created_utc",
+        "published_at",
+        "date",
+        "datetime",
+    ]
+    for key in candidates:
+        if key in row:
+            value = row[key]
+            if value is None:
+                continue
+            if isinstance(value, float) and pd.isna(value):
+                continue
+            parsed = _coerce_timestamp(value)
+            if parsed:
+                return parsed
+    return datetime.utcnow().isoformat() + "Z"
+
+
+def _extract_source_id(row: pd.Series) -> str:
+    """Extract a stable source identifier from a row if available."""
+    candidates = [
+        "id",
+        "source_id",
+        "url",
+        "permalink",
+        "reddit_id",
+        "tweet_id",
+        "post_id",
+    ]
+    for key in candidates:
+        if key in row:
+            value = row[key]
+            if value is None:
+                continue
+            if isinstance(value, float) and pd.isna(value):
+                continue
+            value = str(value).strip()
+            if value:
+                return value
+    return ""
+
+
+def process_csv_file(
+    input_file: Path,
+    source: str,
+    storage: StockSentimentStorage,
+    text_column: str = "text",
+) -> int:
     """
     Process a CSV file through sentiment analysis and save predictions.
 
     Args:
         input_file: Path to input CSV file
         source: Data source identifier (reddit, twitter, news)
+        storage: SQLite storage instance
         text_column: Name of column containing text to analyze
 
     Returns:
-        Dictionary with processing statistics:
-            - total: Total records in file
-            - processed: Successfully processed records
-            - failed: Failed records
-            - skipped: Skipped records (empty text)
-            - saved: Successfully saved predictions
+        Number of predictions saved
     """
-    logger.info(f"Processing file: {input_file}")
-    
-    stats = {
-        "total": 0,
-        "processed": 0,
-        "failed": 0,
-        "skipped": 0,
-        "saved": 0,
-        "file": str(input_file)
-    }
+    print(f"Reading {input_file}...")
 
     # Read CSV
     try:
         df = pd.read_csv(input_file)
-        stats["total"] = len(df)
-        logger.info(f"Loaded {len(df)} records from {input_file}")
-    except FileNotFoundError:
-        logger.error(f"File not found: {input_file}")
-        return stats
     except Exception as e:
-        log_exception(logger, e, f"Error reading file {input_file}")
-        return stats
+        print(f"Error reading file: {e}")
+        return 0
 
     # Check if text column exists
     if text_column not in df.columns:
-        logger.error(f"Column '{text_column}' not found in CSV")
-        logger.info(f"Available columns: {', '.join(df.columns)}")
-        return stats
+        print(f"Error: Column '{text_column}' not found in CSV")
+        print(f"Available columns: {', '.join(df.columns)}")
+        return 0
 
-    # Get texts (drop nulls and empty strings)
-    texts = df[text_column].dropna().tolist()
-    original_count = len(texts)
-    texts = [str(t).strip() for t in texts if t and str(t).strip()]
-    stats["skipped"] = original_count - len(texts)
+    # Get valid rows (drop nulls and empty strings)
+    valid_rows = df[df[text_column].notna()].copy()
+    valid_rows["__text__"] = valid_rows[text_column].astype(str).str.strip()
+    valid_rows = valid_rows[valid_rows["__text__"] != ""].reset_index(drop=True)
+    texts = valid_rows["__text__"].tolist()
 
     if not texts:
-        logger.warning("No valid texts found in file")
-        return stats
+        print("No valid texts found in file")
+        return 0
 
-    logger.info(f"Found {len(texts)} valid texts to analyze ({stats['skipped']} skipped)")
+    print(f"Found {len(texts)} texts to analyze")
 
     # Analyze sentiment in batches
-    logger.info("Starting sentiment analysis...")
+    print("Analyzing sentiment...")
     try:
-        results, failures = analyze_batch(
-            texts, 
-            batch_size=32, 
-            skip_errors=True, 
-            track_failures=True
-        )
-        
-        # Count successful analyses
-        successful_results = [r for r in results if r is not None]
-        stats["processed"] = len(successful_results)
-        stats["failed"] = failures.count() if failures else 0
-        
-        logger.info(
-            f"Analysis complete: {stats['processed']} successful, "
-            f"{stats['failed']} failed"
-        )
-        
+        results = analyze_batch(texts, batch_size=32)
     except Exception as e:
-        log_exception(logger, e, "Critical error during sentiment analysis")
-        # Save failures if any were tracked
-        if 'failures' in locals() and failures and failures.count() > 0:
-            failed_file = Path("data") / "failed_items" / f"{source}_failed_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            try:
-                count = failures.save(failed_file)
-                logger.info(f"Saved {count} failed items to {failed_file}")
-            except Exception as save_error:
-                logger.error(f"Could not save failures: {save_error}")
-        return stats
+        print(f"Error during sentiment analysis: {e}")
+        return 0
 
-    # Save failures if any
-    if failures and failures.count() > 0:
-        failed_file = Path("data") / "failed_items" / f"{source}_failed_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-        try:
-            failed_file.parent.mkdir(parents=True, exist_ok=True)
-            count = failures.save(failed_file)
-            logger.info(f"✓ Saved {count} failed items to {failed_file}")
-        except Exception as e:
-            log_exception(logger, e, f"Error saving failed items to {failed_file}")
+    # Prepare records for SQLite storage
+    print("Preparing records for SQLite...")
+    records = []
 
-    # Prepare predictions for storage
-    logger.info("Preparing predictions for storage...")
-    timestamp = datetime.utcnow().isoformat()
-    predictions = []
+    for idx, (text, result) in enumerate(zip(texts, results)):
+        row = valid_rows.iloc[idx]
+        timestamp = _extract_timestamp(row)
+        source_id = _extract_source_id(row)
+        record_id = make_record_id("doc", source, source_id, timestamp, text[:200])
+        records.append(
+            {
+                "id": record_id,
+                "record_type": "document",
+                "document_id": record_id,
+                "text": text[:2000],
+                "ticker": None,
+                "mentioned_as": "",
+                "sentiment_label": result["label"],
+                "sentiment_score": result["score"],
+                "context": "",
+                "source": source,
+                "source_id": source_id,
+                "position_start": None,
+                "position_end": None,
+                "timestamp": timestamp,
+                "sentiment_mode": "finbert",
+            }
+        )
 
-    for text, result in zip(texts, results):
-        if result is not None:  # Only save successful predictions
-            try:
-                predictions.append({
-                    "text": text[:500],  # Limit text length for storage
-                    "source": source,
-                    "timestamp": timestamp,
-                    "label": result["label"],
-                    "confidence": result["score"],
-                })
-            except KeyError as e:
-                logger.error(f"Missing key in result: {e}")
-                stats["failed"] += 1
-
-    if not predictions:
-        logger.warning("No predictions to save")
-        return stats
-
-    # Save predictions
-    output_dir = Path("data") / "predictions"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    output_file = output_dir / f"{source}_predictions_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
-    
-    logger.info(f"Saving {len(predictions)} predictions to {output_file}...")
+    print(f"Saving {len(records)} predictions to SQLite...")
 
     try:
-        count = save_predictions_batch(
-            predictions, 
-            output_file, 
-            format="csv", 
-            append=False
-        )
-        stats["saved"] = count
-        logger.info(f"✓ Successfully saved {count} predictions!")
-        
+        count = storage.save_records_batch(records)
+        print(f"âœ“ Saved {count} predictions successfully!")
+        return count
     except Exception as e:
-        log_exception(logger, e, f"Error saving predictions to {output_file}")
-        return stats
-
-    return stats
+        print(f"Error saving predictions: {e}")
+        return 0
 
 
 def main():
@@ -204,13 +216,6 @@ def main():
 
     args = parser.parse_args()
 
-    logger.info("="*60)
-    logger.info("Starting sentiment analysis processing")
-    logger.info(f"Source: {args.source}")
-    logger.info(f"Input pattern: {args.input}")
-    logger.info(f"Text column: {args.text_column}")
-    logger.info("="*60)
-
     # Handle wildcards
     input_path = Path(args.input)
     if "*" in args.input:
@@ -222,80 +227,25 @@ def main():
         files = [input_path]
 
     if not files:
-        logger.error(f"No files found matching: {args.input}")
-        print(f"ERROR: No files found matching: {args.input}")
+        print(f"No files found matching: {args.input}")
         return
 
-    logger.info(f"Found {len(files)} file(s) to process")
-    
-    # Track overall statistics
-    overall_stats = {
-        "files_processed": 0,
-        "files_failed": 0,
-        "total_records": 0,
-        "total_processed": 0,
-        "total_failed": 0,
-        "total_skipped": 0,
-        "total_saved": 0,
-    }
+    storage = StockSentimentStorage()
+    storage.load()
 
-    for file_idx, file in enumerate(files, 1):
-        logger.info("")
-        logger.info(f"Processing file {file_idx}/{len(files)}: {file}")
-        logger.info("-" * 60)
-        
+    print(f"Found {len(files)} file(s) to process")
+    total_saved = 0
+
+    for file in files:
         if not file.exists():
-            logger.warning(f"File does not exist, skipping: {file}")
-            overall_stats["files_failed"] += 1
+            print(f"Skipping {file} (does not exist)")
             continue
 
-        try:
-            stats = process_csv_file(file, args.source, args.text_column)
-            
-            # Update overall stats
-            overall_stats["files_processed"] += 1
-            overall_stats["total_records"] += stats["total"]
-            overall_stats["total_processed"] += stats["processed"]
-            overall_stats["total_failed"] += stats["failed"]
-            overall_stats["total_skipped"] += stats["skipped"]
-            overall_stats["total_saved"] += stats["saved"]
-            
-            # Log file summary
-            logger.info("-" * 60)
-            logger.info(f"File summary for {file.name}:")
-            logger.info(f"  Total records: {stats['total']}")
-            logger.info(f"  Processed: {stats['processed']}")
-            logger.info(f"  Failed: {stats['failed']}")
-            logger.info(f"  Skipped: {stats['skipped']}")
-            logger.info(f"  Saved: {stats['saved']}")
-            
-        except Exception as e:
-            log_exception(logger, e, f"Unexpected error processing {file}")
-            overall_stats["files_failed"] += 1
+        count = process_csv_file(file, args.source, storage, args.text_column)
+        total_saved += count
+        print()
 
-    # Final summary
-    logger.info("")
-    logger.info("="*60)
-    logger.info("FINAL SUMMARY")
-    logger.info("="*60)
-    logger.info(f"Files processed: {overall_stats['files_processed']}/{len(files)}")
-    logger.info(f"Files failed: {overall_stats['files_failed']}")
-    logger.info(f"Total records: {overall_stats['total_records']}")
-    logger.info(f"Successfully processed: {overall_stats['total_processed']}")
-    logger.info(f"Failed: {overall_stats['total_failed']}")
-    logger.info(f"Skipped (empty): {overall_stats['total_skipped']}")
-    logger.info(f"Predictions saved: {overall_stats['total_saved']}")
-    logger.info("="*60)
-    
-    # Also print summary to console for visibility
-    print("\n" + "="*60)
-    print("PROCESSING COMPLETE")
-    print("="*60)
-    print(f"Files processed: {overall_stats['files_processed']}/{len(files)}")
-    print(f"Total predictions saved: {overall_stats['total_saved']}")
-    print(f"Failed items: {overall_stats['total_failed']}")
-    print(f"Check logs/ directory for detailed logs and failed_items.json")
-    print("="*60)
+    print(f"Total predictions saved: {total_saved}")
 
 
 if __name__ == "__main__":

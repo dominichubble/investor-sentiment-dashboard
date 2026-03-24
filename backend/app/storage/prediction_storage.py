@@ -1,8 +1,8 @@
 """
-Sentiment Prediction Storage Module
+Legacy Sentiment Prediction Storage Module
 
-Provides functionality to save and load sentiment predictions in structured formats
-(CSV and JSON). Ensures data integrity with validation for all required fields.
+Provides CSV/JSON import/export utilities for sentiment predictions.
+SQLite is the primary store for runtime data.
 
 Usage:
     from app.storage import save_prediction, load_predictions

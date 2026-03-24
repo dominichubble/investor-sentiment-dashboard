@@ -27,12 +27,39 @@ nltk>=3.8.0
 transformers>=4.35.0
 torch>=2.1.0
 
+# Statistical analysis
+scipy>=1.11.0
+statsmodels>=0.14.0
+
+# Explainable AI
+shap>=0.44.0
+lime>=0.2.0.1
+matplotlib>=3.8.0
+seaborn>=0.13.0
+
 # Testing
 pytest>=7.4.0
 pytest-cov>=4.1.0
+httpx>=0.27.0
 
 # Code quality
 black>=23.12.0
 isort>=5.13.0
 flake8>=7.0.0
 mypy>=1.8.0
+
+# Entity extraction (FYP-203)
+spacy>=3.7.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Caching
+cachetools>=5.3.0
+
+# Financial data (FYP-203)
+yfinance>=0.2.0
+
+# Fuzzy matching (FYP-203)
+fuzzywuzzy>=0.18.0
+python-Levenshtein>=0.25.0

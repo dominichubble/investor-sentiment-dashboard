@@ -8,7 +8,7 @@ filters low-quality content, and exports to JSON format.
 Usage:
     python ingest_news.py --max-articles 100
     python ingest_news.py --keywords "earnings" "fed rate" --sources bloomberg reuters
-    python ingest_news.py --output ../data/raw/news --run-id 2025-11-02
+    python ingest_news.py --write-files --output ../data/artifacts/news --run-id 2025-11-02
 """
 
 import argparse
@@ -30,6 +30,8 @@ except ImportError:
 
 from newsapi import NewsApiClient
 from newsapi.newsapi_exception import NewsAPIException
+
+from app.services.import_service import ImportService
 
 # Configure logging
 logging.basicConfig(
@@ -381,6 +383,8 @@ def run_ingestion(
     language: str,
     output_dir: str,
     run_id: Optional[str] = None,
+    store_db: bool = True,
+    write_files: bool = False,
 ) -> str:
     """
     Run the complete News API data ingestion pipeline.
@@ -393,6 +397,8 @@ def run_ingestion(
         language: Language code
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
+        store_db: If True, persist records directly to SQLite
+        write_files: If True, also export JSON files to local data directory
 
     Returns:
         Path to the output JSON file
@@ -422,12 +428,22 @@ def run_ingestion(
         logger.warning("No quality articles collected!")
         return ""
 
-    # Export to JSON
-    output_file = export_to_json(articles, output_dir, run_id)
+    if store_db:
+        import_result = ImportService().import_from_records(articles)
+        logger.info(
+            "Imported into DB: loaded=%s inserted=%s",
+            import_result["records_loaded"],
+            import_result["records_inserted"],
+        )
+
+    output_file = ""
+    if write_files:
+        output_file = export_to_json(articles, output_dir, run_id)
 
     logger.info("✓ Pipeline completed successfully")
-
-    return output_file
+    if write_files:
+        return output_file
+    return "db://sentiment_records" if store_db else ""
 
 
 def parse_args():
@@ -490,8 +506,20 @@ Examples:
 
     parser.add_argument(
         "--output",
-        default="data/raw/news",
-        help="Output directory (default: data/raw/news)",
+        default="data/artifacts/news",
+        help="Output directory for optional file artifacts (default: data/artifacts/news)",
+    )
+    parser.add_argument(
+        "--store-db",
+        action=argparse.BooleanOptionalAction,
+        default=True,
+        help="Store ingested records in SQLite (default: True)",
+    )
+    parser.add_argument(
+        "--write-files",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Write JSON artifacts under --output (default: False)",
     )
 
     parser.add_argument(
@@ -524,6 +552,8 @@ def main():
             language=args.language,
             output_dir=args.output,
             run_id=args.run_id,
+            store_db=args.store_db,
+            write_files=args.write_files,
         )
 
         if output_file:

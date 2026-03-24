@@ -1,0 +1,58 @@
+.heatmap-container {
+  overflow-x: auto;
+}
+
+.heatmap-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.heatmap-empty {
+  padding: 40px;
+  text-align: center;
+  color: #999;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+}
+
+.heatmap-tile {
+  border-radius: 10px;
+  padding: 16px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 1px solid #e0e0e0;
+  min-width: 120px;
+}
+
+.heatmap-tile:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.heatmap-ticker {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.heatmap-value {
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.heatmap-mentions {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.heatmap-significance {
+  font-family: 'Roboto', sans-serif;
+  font-size: 10px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
