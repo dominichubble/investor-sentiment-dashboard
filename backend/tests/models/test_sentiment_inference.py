@@ -92,7 +92,7 @@ class TestAnalyzeBatch:
             "Company faces bankruptcy",
             "Earnings meet expectations",
         ]
-        results = analyze_batch(texts)
+        results, _ = analyze_batch(texts)
 
         assert len(results) == len(texts)
         assert all(r is not None for r in results)
@@ -103,7 +103,7 @@ class TestAnalyzeBatch:
     def test_batch_analysis_single_text(self):
         """Test batch analysis with single text."""
         texts = ["Market conditions improving"]
-        results = analyze_batch(texts)
+        results, _ = analyze_batch(texts)
 
         assert len(results) == 1
         assert results[0]["label"] in ["positive", "negative", "neutral"]
@@ -111,7 +111,7 @@ class TestAnalyzeBatch:
     def test_batch_analysis_custom_batch_size(self):
         """Test batch analysis with custom batch size."""
         texts = ["Text " + str(i) for i in range(10)]
-        results = analyze_batch(texts, batch_size=5)
+        results, _ = analyze_batch(texts, batch_size=5)
 
         assert len(results) == len(texts)
         assert all(r is not None for r in results)
@@ -119,7 +119,7 @@ class TestAnalyzeBatch:
     def test_batch_analysis_with_all_scores(self):
         """Test batch analysis returns all scores when requested."""
         texts = ["Good news", "Bad news"]
-        results = analyze_batch(texts, return_all_scores=True)
+        results, _ = analyze_batch(texts, return_all_scores=True)
 
         assert len(results) == 2
         assert all("scores" in r for r in results)
@@ -143,7 +143,7 @@ class TestAnalyzeBatch:
     def test_batch_with_empty_strings(self):
         """Test batch analysis handles empty strings gracefully."""
         texts = ["Valid text", "", "Another valid text", "   "]
-        results = analyze_batch(texts)
+        results, _ = analyze_batch(texts)
 
         assert len(results) == 4
         assert results[0] is not None  # Valid
@@ -152,9 +152,9 @@ class TestAnalyzeBatch:
         assert results[3] is None  # Whitespace only
 
     def test_all_empty_strings_raises_error(self):
-        """Test that all empty strings raises ValueError."""
+        """With skip_errors=False, all-empty input raises ValueError."""
         with pytest.raises(ValueError, match="No valid"):
-            analyze_batch(["", "  ", ""])
+            analyze_batch(["", "  ", ""], skip_errors=False)
 
 
 class TestAnalyzeWithMetadata:
@@ -306,7 +306,7 @@ class TestIntegration:
         ]
 
         # Analyze batch
-        results = analyze_batch(texts)
+        results, _ = analyze_batch(texts)
         assert len(results) == 4
         assert all(r is not None for r in results)
 

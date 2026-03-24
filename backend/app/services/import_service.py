@@ -130,7 +130,9 @@ class ImportService:
             from app.models.sentiment_inference import analyze_batch as analyzer
 
         texts = [row["text"] for row in prepared_rows]
-        sentiments = analyzer(texts, batch_size=32, return_all_scores=False)
+        batch_out = analyzer(texts, batch_size=32, return_all_scores=False)
+        # analyze_batch returns (results, failures); support plain list for tests/mocks.
+        sentiments = batch_out[0] if isinstance(batch_out, tuple) else batch_out
 
         db_rows: list[dict[str, Any]] = []
         for row, sentiment in zip(prepared_rows, sentiments):

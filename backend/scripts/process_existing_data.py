@@ -150,7 +150,7 @@ def process_csv_file(
     # Analyze sentiment in batches
     print("Analyzing sentiment...")
     try:
-        results = analyze_batch(texts, batch_size=32)
+        results, _ = analyze_batch(texts, batch_size=32)
     except Exception as e:
         print(f"Error during sentiment analysis: {e}")
         return 0

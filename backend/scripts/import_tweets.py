@@ -223,7 +223,9 @@ def main() -> None:
         batch_rows = rows[batch_start:batch_end]
 
         texts = [r["text"] for r in batch_rows]
-        sentiments = analyze_batch(texts, batch_size=batch_size, return_all_scores=False)
+        sentiments, _ = analyze_batch(
+            texts, batch_size=batch_size, return_all_scores=False
+        )
 
         db_rows = _build_db_rows(batch_rows, sentiments)
         inserted = storage.save_records_batch(db_rows)
