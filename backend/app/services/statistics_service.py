@@ -101,7 +101,6 @@ class StatisticsService:
                         SentimentRecordRow.sentiment_label,
                         func.count(SentimentRecordRow.id).label("count"),
                     )
-                    .filter(SentimentRecordRow.record_type == "stock")
                     .filter(SentimentRecordRow.ticker.isnot(None))
                 )
                 .group_by(SentimentRecordRow.ticker, SentimentRecordRow.sentiment_label)
@@ -134,7 +133,6 @@ class StatisticsService:
             total_stocks_analyzed = (
                 _apply_window(
                     session.query(func.count(func.distinct(SentimentRecordRow.ticker)))
-                    .filter(SentimentRecordRow.record_type == "stock")
                     .filter(SentimentRecordRow.ticker.isnot(None))
                 ).scalar()
                 or 0

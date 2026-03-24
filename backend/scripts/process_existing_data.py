@@ -167,20 +167,14 @@ def process_csv_file(
         records.append(
             {
                 "id": record_id,
-                "record_type": "document",
-                "document_id": record_id,
                 "text": text[:2000],
                 "ticker": None,
                 "mentioned_as": "",
                 "sentiment_label": result["label"],
                 "sentiment_score": result["score"],
-                "context": "",
                 "source": source,
                 "source_id": source_id,
-                "position_start": None,
-                "position_end": None,
                 "timestamp": timestamp,
-                "sentiment_mode": "finbert",
             }
         )
 

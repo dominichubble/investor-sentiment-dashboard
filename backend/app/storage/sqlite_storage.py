@@ -2,6 +2,7 @@
 SQLite-backed unified sentiment storage.
 
 Stores both document-level predictions and per-stock mentions in a single table.
+Stock rows are identified by having a non-null ticker column.
 """
 
 from __future__ import annotations
@@ -14,7 +15,7 @@ from typing import Dict, List, Optional, Sequence, Tuple
 from sqlalchemy import func
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
-from .database import SentimentRecordRow, get_engine, get_session, migrate_legacy_data
+from .database import SentimentRecordRow, get_engine, get_session
 from .record_ids import make_record_id
 
 logger = logging.getLogger(__name__)
@@ -29,27 +30,10 @@ class SQLiteSentimentStorage:
             storage_dir = backend_dir.parent / "data"
 
         self.storage_dir = Path(storage_dir)
-        self._loaded = False
-
-        # Initialize engine (creates tables if needed)
         get_engine()
 
     def load(self) -> None:
-        """Load storage and run one-time migration if empty."""
-        if self._loaded:
-            return
-
-        session = get_session()
-        try:
-            count = session.query(SentimentRecordRow).count()
-        finally:
-            session.close()
-
-        if count == 0:
-            logger.info("SQLite storage is empty. Running legacy migration...")
-            migrate_legacy_data()
-
-        self._loaded = True
+        """No-op kept for backward compatibility."""
 
     # ---- Save helpers ----
 
@@ -92,10 +76,7 @@ class SQLiteSentimentStorage:
             session.close()
 
     def save_records_batch(self, records: List[Dict]) -> int:
-        """Save multiple sentiment records (document or stock)."""
-        if not self._loaded:
-            self.load()
-
+        """Save multiple sentiment records."""
         normalized: List[Dict] = []
         for record in records:
             ts_val = record.get("timestamp")
@@ -107,94 +88,64 @@ class SQLiteSentimentStorage:
             normalized.append(
                 {
                     "id": record["id"],
-                    "record_type": record["record_type"],
-                    "document_id": record.get("document_id"),
                     "text": record.get("text", "") or "",
                     "ticker": record.get("ticker"),
                     "mentioned_as": record.get("mentioned_as", "") or "",
                     "sentiment_label": record.get("sentiment_label", "neutral"),
                     "sentiment_score": float(record.get("sentiment_score", 0.5)),
-                    "context": record.get("context", "") or "",
                     "source": record.get("source", "") or "",
                     "source_id": record.get("source_id", "") or "",
-                    "position_start": record.get("position_start"),
-                    "position_end": record.get("position_end"),
                     "timestamp": ts,
-                    "sentiment_mode": record.get("sentiment_mode", "keyword"),
                 }
             )
 
         return self._insert_records(normalized)
 
-    def save_document_sentiment(
-        self,
-        record: Dict,
-    ) -> str:
+    def save_document_sentiment(self, record: Dict) -> str:
         """Save a single document-level sentiment record."""
-        count = self.save_records_batch([record])
-        return record["id"] if count else record["id"]
+        self.save_records_batch([record])
+        return record["id"]
 
-    def save_stock_sentiment(
-        self,
-        record: Dict,
-    ) -> str:
+    def save_stock_sentiment(self, record: Dict) -> str:
         """Save a single stock mention sentiment record."""
-        count = self.save_records_batch([record])
-        return record["id"] if count else record["id"]
+        self.save_records_batch([record])
+        return record["id"]
 
     def save_analysis_result(
         self, result: Dict, source: Optional[str] = None
     ) -> List[str]:
-        """
-        Save a StockSentimentAnalyzer result.
-
-        Stores:
-        - One document record (overall sentiment)
-        - One stock record per mention
-        """
-        if not self._loaded:
-            self.load()
-
+        """Save a StockSentimentAnalyzer result (one document + stock mentions)."""
         text = result.get("text", "")
         overall = result.get("overall_sentiment", {}) or {}
         timestamp = datetime.utcnow().isoformat() + "Z"
 
         source_id = result.get("source_id", "")
-        document_id = result.get("document_id")
-        if not document_id:
-            document_id = make_record_id(
-                "doc", source or "", source_id, timestamp, text[:200]
-            )
+        doc_id = result.get("document_id") or make_record_id(
+            "doc", source or "", source_id, timestamp, text[:200]
+        )
 
         document_record = {
-            "id": document_id,
-            "record_type": "document",
-            "document_id": document_id,
+            "id": doc_id,
             "text": text,
+            "ticker": None,
             "sentiment_label": overall.get("label", "neutral"),
             "sentiment_score": overall.get("score", 0.5),
-            "context": "",
             "source": source or "",
             "source_id": source_id,
             "timestamp": timestamp,
-            "sentiment_mode": "finbert",
         }
 
         stock_records = []
         for stock in result.get("stocks", []):
-            position = stock.get("position") or {}
             stock_records.append(
                 {
                     "id": make_record_id(
                         "stock",
-                        document_id,
+                        source or "",
+                        source_id,
                         stock.get("ticker", ""),
                         stock.get("mentioned_as", ""),
-                        str(position.get("start")),
-                        str(position.get("end")),
                     ),
-                    "record_type": "stock",
-                    "document_id": document_id,
                     "text": text,
                     "ticker": stock.get("ticker"),
                     "mentioned_as": stock.get("mentioned_as", ""),
@@ -202,44 +153,39 @@ class SQLiteSentimentStorage:
                         "label", "neutral"
                     ),
                     "sentiment_score": stock.get("sentiment", {}).get("score", 0.5),
-                    "context": stock.get("context", "") or "",
                     "source": source or "",
                     "source_id": source_id,
-                    "position_start": position.get("start"),
-                    "position_end": position.get("end"),
                     "timestamp": timestamp,
-                    "sentiment_mode": "finbert",
                 }
             )
 
         self.save_records_batch([document_record] + stock_records)
-        return [document_id] + [r["id"] for r in stock_records]
+        return [doc_id] + [r["id"] for r in stock_records]
 
     # ---- Query helpers ----
 
     def query_records(
         self,
-        record_types: Optional[Sequence[str]] = None,
         source: Optional[str] = None,
         sentiment: Optional[str] = None,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         ticker: Optional[str] = None,
-        document_id: Optional[str] = None,
+        stocks_only: bool = False,
+        documents_only: bool = False,
         limit: Optional[int] = None,
         offset: Optional[int] = None,
         order_desc: bool = True,
     ) -> Tuple[List[Dict], int]:
         """Query sentiment records with filters and pagination."""
-        if not self._loaded:
-            self.load()
-
         session = get_session()
         try:
             query = session.query(SentimentRecordRow)
 
-            if record_types:
-                query = query.filter(SentimentRecordRow.record_type.in_(record_types))
+            if stocks_only:
+                query = query.filter(SentimentRecordRow.ticker.isnot(None))
+            elif documents_only:
+                query = query.filter(SentimentRecordRow.ticker.is_(None))
             if source:
                 query = query.filter(SentimentRecordRow.source == source)
             if sentiment:
@@ -250,8 +196,6 @@ class SQLiteSentimentStorage:
                 query = query.filter(SentimentRecordRow.timestamp <= end_date)
             if ticker:
                 query = query.filter(SentimentRecordRow.ticker == ticker)
-            if document_id:
-                query = query.filter(SentimentRecordRow.document_id == document_id)
 
             total = query.order_by(None).count()
 
@@ -277,9 +221,6 @@ class SQLiteSentimentStorage:
 
     def get_record_by_id(self, record_id: str) -> Optional[Dict]:
         """Fetch a single record by ID."""
-        if not self._loaded:
-            self.load()
-
         session = get_session()
         try:
             row = (
@@ -301,13 +242,11 @@ class SQLiteSentimentStorage:
         """Get sentiment records for a specific stock."""
         ticker = ticker.upper()
         records, _ = self.query_records(
-            record_types=["stock"],
             ticker=ticker,
             start_date=start_date,
             end_date=end_date,
             source=source,
-            limit=None,
-            offset=None,
+            stocks_only=True,
         )
         return records
 
@@ -316,20 +255,12 @@ class SQLiteSentimentStorage:
         return self.get_stock_sentiment(ticker)
 
     def get_trending_stocks(self, min_mentions: int = 5, hours: int = 24) -> List[Dict]:
-        """Get stocks with most mentions in recent period.
-
-        Uses the latest record timestamp as the reference point so that
-        historical datasets show meaningful trending results.
-        """
-        if not self._loaded:
-            self.load()
-
+        """Get stocks with most mentions in recent period."""
         session = get_session()
         try:
-            # Anchor to newest record so historical data works.
             latest = (
                 session.query(func.max(SentimentRecordRow.timestamp))
-                .filter(SentimentRecordRow.record_type == "stock")
+                .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
             )
             anchor = latest if latest else datetime.utcnow()
@@ -340,7 +271,7 @@ class SQLiteSentimentStorage:
                     SentimentRecordRow.ticker,
                     func.count(SentimentRecordRow.id).label("mentions"),
                 )
-                .filter(SentimentRecordRow.record_type == "stock")
+                .filter(SentimentRecordRow.ticker.isnot(None))
                 .filter(SentimentRecordRow.timestamp >= cutoff_dt)
                 .group_by(SentimentRecordRow.ticker)
                 .having(func.count(SentimentRecordRow.id) >= min_mentions)
@@ -358,13 +289,9 @@ class SQLiteSentimentStorage:
         end_date: Optional[datetime] = None,
     ) -> Dict:
         """Aggregate sentiment for a ticker."""
-        if not self._loaded:
-            self.load()
-
         session = get_session()
         try:
             query = session.query(SentimentRecordRow).filter(
-                SentimentRecordRow.record_type == "stock",
                 SentimentRecordRow.ticker == ticker,
             )
             if start_date:
@@ -387,10 +314,7 @@ class SQLiteSentimentStorage:
 
             avg_query = session.query(
                 func.avg(SentimentRecordRow.sentiment_score)
-            ).filter(
-                SentimentRecordRow.record_type == "stock",
-                SentimentRecordRow.ticker == ticker,
-            )
+            ).filter(SentimentRecordRow.ticker == ticker)
             if start_date:
                 avg_query = avg_query.filter(SentimentRecordRow.timestamp >= start_date)
             if end_date:
@@ -400,10 +324,7 @@ class SQLiteSentimentStorage:
             dist_query = session.query(
                 SentimentRecordRow.sentiment_label,
                 func.count(SentimentRecordRow.id),
-            ).filter(
-                SentimentRecordRow.record_type == "stock",
-                SentimentRecordRow.ticker == ticker,
-            )
+            ).filter(SentimentRecordRow.ticker == ticker)
             if start_date:
                 dist_query = dist_query.filter(
                     SentimentRecordRow.timestamp >= start_date
@@ -427,26 +348,23 @@ class SQLiteSentimentStorage:
 
     def get_statistics(self) -> Dict:
         """Get overall stock sentiment statistics (stock records only)."""
-        if not self._loaded:
-            self.load()
-
         session = get_session()
         try:
             total = (
                 session.query(func.count(SentimentRecordRow.id))
-                .filter(SentimentRecordRow.record_type == "stock")
+                .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
                 or 0
             )
             unique_tickers = (
                 session.query(func.count(func.distinct(SentimentRecordRow.ticker)))
-                .filter(SentimentRecordRow.record_type == "stock")
+                .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
                 or 0
             )
             last_updated = (
                 session.query(func.max(SentimentRecordRow.timestamp))
-                .filter(SentimentRecordRow.record_type == "stock")
+                .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
             )
             last_updated_str = last_updated.isoformat() + "Z" if last_updated else None

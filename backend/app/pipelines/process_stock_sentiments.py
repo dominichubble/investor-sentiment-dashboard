@@ -1,8 +1,7 @@
 """DB-native stock enrichment pipeline.
 
-This job reads existing document-level sentiment rows from SQLite, runs stock
+Reads existing document-level sentiment rows from SQLite, runs stock
 entity analysis, and writes stock-level sentiment rows back into the same DB.
-It no longer depends on local `data/raw/*` files.
 """
 
 from __future__ import annotations
@@ -22,22 +21,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 MAX_TEXT_LEN = 2000
-MAX_CONTEXT_LEN = 500
-
-
-def _existing_stock_document_ids() -> set[str]:
-    session = get_session()
-    try:
-        rows = (
-            session.query(SentimentRecordRow.document_id)
-            .filter(SentimentRecordRow.record_type == "stock")
-            .filter(SentimentRecordRow.document_id.isnot(None))
-            .distinct()
-            .all()
-        )
-        return {r[0] for r in rows if r[0]}
-    finally:
-        session.close()
 
 
 def process_documents(
@@ -45,12 +28,14 @@ def process_documents(
     batch_size: int = 100,
     reprocess: bool = False,
 ) -> Dict[str, int]:
-    """Generate stock-level rows from document rows already in SQLite."""
+    """Generate stock-level rows from document rows already in SQLite.
+
+    Uses INSERT OR IGNORE with stable record IDs for natural dedup,
+    so reprocessing the same documents is safe and idempotent.
+    """
     storage = SQLiteSentimentStorage()
-    storage.load()
     analyzer = StockSentimentAnalyzer()
 
-    existing_stock_docs = _existing_stock_document_ids() if not reprocess else set()
     session = get_session()
 
     processed_docs = 0
@@ -61,17 +46,13 @@ def process_documents(
     try:
         query = (
             session.query(SentimentRecordRow)
-            .filter(SentimentRecordRow.record_type == "document")
+            .filter(SentimentRecordRow.ticker.is_(None))
             .order_by(SentimentRecordRow.timestamp.desc())
         )
         if max_records is not None:
             query = query.limit(max_records)
 
         for row in query.yield_per(batch_size):
-            document_id = row.document_id or row.id
-            if not reprocess and document_id in existing_stock_docs:
-                continue
-
             text = (row.text or "").strip()[:MAX_TEXT_LEN]
             if len(text) < 10:
                 continue
@@ -92,28 +73,23 @@ def process_documents(
                     "stock_rows_written": stock_rows_written,
                 }
             except Exception as exc:
-                logger.warning("Failed stock analysis for doc %s: %s", document_id, exc)
+                logger.warning("Failed stock analysis for doc %s: %s", row.id, exc)
                 continue
 
             for stock in analysis.get("stocks", []):
                 ticker = stock.get("ticker")
                 if not ticker:
                     continue
-                position = stock.get("position") or {}
-                context = (stock.get("context") or "")[:MAX_CONTEXT_LEN]
 
                 stock_batch.append(
                     {
                         "id": make_record_id(
                             "stock",
-                            document_id,
+                            row.source or "",
+                            row.source_id or "",
                             ticker,
                             stock.get("mentioned_as", ""),
-                            str(position.get("start")),
-                            str(position.get("end")),
                         ),
-                        "record_type": "stock",
-                        "document_id": document_id,
                         "text": text,
                         "ticker": ticker,
                         "mentioned_as": stock.get("mentioned_as", ""),
@@ -123,13 +99,9 @@ def process_documents(
                         "sentiment_score": float(
                             stock.get("sentiment", {}).get("score", row.sentiment_score)
                         ),
-                        "context": context,
                         "source": row.source or "",
                         "source_id": row.source_id or "",
-                        "position_start": position.get("start"),
-                        "position_end": position.get("end"),
                         "timestamp": row.timestamp,
-                        "sentiment_mode": "finbert",
                     }
                 )
                 ticker_stats[ticker] = ticker_stats.get(ticker, 0) + 1

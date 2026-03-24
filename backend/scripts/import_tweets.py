@@ -118,49 +118,19 @@ def _build_db_rows(
 
         doc_id = make_record_id("doc", src, src_id, ts, text[:120])
 
-        # Document-level record
         db_rows.append(
             {
                 "id": doc_id,
-                "record_type": "document",
-                "document_id": doc_id,
                 "text": text,
                 "ticker": ticker,
                 "mentioned_as": f"${ticker}" if ticker else "",
                 "sentiment_label": sentiment["label"],
                 "sentiment_score": float(sentiment["score"]),
-                "context": "",
                 "source": src,
                 "source_id": src_id,
-                "position_start": None,
-                "position_end": None,
                 "timestamp": ts,
-                "sentiment_mode": "finbert",
             }
         )
-
-        # Stock-level record (if ticker present)
-        if ticker:
-            stock_id = make_record_id("stock", doc_id, ticker, ts)
-            db_rows.append(
-                {
-                    "id": stock_id,
-                    "record_type": "stock",
-                    "document_id": doc_id,
-                    "text": text,
-                    "ticker": ticker,
-                    "mentioned_as": f"${ticker}",
-                    "sentiment_label": sentiment["label"],
-                    "sentiment_score": float(sentiment["score"]),
-                    "context": text[:200],
-                    "source": src,
-                    "source_id": src_id,
-                    "position_start": None,
-                    "position_end": None,
-                    "timestamp": ts,
-                    "sentiment_mode": "finbert",
-                }
-            )
 
     return db_rows
 

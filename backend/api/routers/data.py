@@ -65,7 +65,7 @@ class StockSentimentRecord(BaseModel):
     ticker: str = Field(..., description="Stock ticker symbol")
     company_name: str = Field(..., description="Company name")
     sentiment: SentimentInfo = Field(..., description="Sentiment for this stock")
-    context: str = Field(..., description="Text context around stock mention")
+    text: str = Field("", description="Analyzed text")
     timestamp: str = Field(..., description="Analysis timestamp")
 
 
@@ -136,7 +136,6 @@ async def get_predictions(
         source_filter = source.lower() if source else None
 
         records, total = storage.query_records(
-            record_types=None,
             source=source_filter,
             sentiment=sentiment_filter,
             start_date=start_dt,
@@ -147,27 +146,17 @@ async def get_predictions(
 
         prediction_records = []
         for record in records:
-            text_val = record.get("text", "")
-            if record.get("record_type") == "stock" and record.get("context"):
-                text_val = record.get("context", "")
-
-            metadata = {"record_type": record.get("record_type")}
-            if record.get("record_type") == "stock":
-                metadata.update(
-                    {
-                        "ticker": record.get("ticker"),
-                        "mentioned_as": record.get("mentioned_as"),
-                        "document_id": record.get("document_id"),
-                    }
-                )
-            else:
-                metadata.update({"document_id": record.get("document_id")})
+            record_type = record.get("record_type", "document")
+            metadata = {"record_type": record_type}
+            if record.get("ticker"):
+                metadata["ticker"] = record["ticker"]
+                metadata["mentioned_as"] = record.get("mentioned_as")
 
             prediction_records.append(
                 PredictionRecord(
                     id=record.get("id"),
-                    record_type=record.get("record_type", "document"),
-                    text=text_val,
+                    record_type=record_type,
+                    text=record.get("text", ""),
                     sentiment=SentimentInfo(
                         label=record.get("sentiment_label", "neutral"),
                         score=record.get("sentiment_score", 0.0),
@@ -217,35 +206,16 @@ async def get_prediction(prediction_id: str) -> PredictionRecord:
                 detail=f"Prediction with ID '{prediction_id}' not found",
             )
 
-        text_val = record.get("text", "")
-        if record.get("record_type") == "stock" and record.get("context"):
-            text_val = record.get("context", "")
-
-        metadata = {"record_type": record.get("record_type")}
-        if record.get("record_type") == "document":
-            stocks, _ = storage.query_records(
-                record_types=["stock"], document_id=record.get("id")
-            )
-            metadata.update(
-                {
-                    "document_id": record.get("document_id"),
-                    "num_stocks": len(stocks),
-                    "stocks": stocks,
-                }
-            )
-        else:
-            metadata.update(
-                {
-                    "ticker": record.get("ticker"),
-                    "mentioned_as": record.get("mentioned_as"),
-                    "document_id": record.get("document_id"),
-                }
-            )
+        record_type = record.get("record_type", "document")
+        metadata = {"record_type": record_type}
+        if record.get("ticker"):
+            metadata["ticker"] = record["ticker"]
+            metadata["mentioned_as"] = record.get("mentioned_as")
 
         return PredictionRecord(
             id=record.get("id"),
-            record_type=record.get("record_type", "document"),
-            text=text_val,
+            record_type=record_type,
+            text=record.get("text", ""),
             sentiment=SentimentInfo(
                 label=record.get("sentiment_label", "neutral"),
                 score=record.get("sentiment_score", 0.0),
@@ -321,7 +291,7 @@ async def get_stock_sentiment(
                         label=item.get("sentiment_label", "neutral"),
                         score=item.get("sentiment_score", 0.0),
                     ),
-                    context=item.get("context", ""),
+                    text=item.get("text", ""),
                     timestamp=item.get("timestamp", ""),
                 )
             )
@@ -418,8 +388,8 @@ async def get_statistics() -> StatisticsResponse:
             label = item.get("sentiment_label", "neutral")
             sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
 
-            if item.get("record_type") == "stock":
-                ticker = item.get("ticker", "")
+            ticker = item.get("ticker")
+            if ticker:
                 if ticker:
                     if ticker not in stock_mentions:
                         company_info = stock_db.get_by_ticker(ticker) or {}

@@ -147,20 +147,14 @@ class ImportService:
                     "id": make_record_id(
                         "doc", source, source_id, timestamp, text[:120]
                     ),
-                    "record_type": "document",
-                    "document_id": source_id or None,
                     "text": text,
                     "ticker": row["ticker"],
                     "mentioned_as": "",
                     "sentiment_label": sentiment["label"],
                     "sentiment_score": float(sentiment["score"]),
-                    "context": "",
                     "source": source,
                     "source_id": source_id,
-                    "position_start": None,
-                    "position_end": None,
                     "timestamp": timestamp,
-                    "sentiment_mode": "finbert",
                 }
             )
 

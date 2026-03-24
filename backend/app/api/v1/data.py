@@ -97,7 +97,6 @@ async def get_predictions(
     offset = (page - 1) * page_size
 
     rows, total = storage.query_records(
-        record_types=None,
         source=(source.lower() if source else None),
         sentiment=(sentiment.lower() if sentiment else None),
         start_date=start_dt,
@@ -110,14 +109,11 @@ async def get_predictions(
     for row in rows:
         record_type = row.get("record_type", "document")
         metadata: dict[str, Any] = {}
-        if record_type == "stock":
+        if row.get("ticker"):
             metadata = {
-                "ticker": row.get("ticker"),
+                "ticker": row["ticker"],
                 "mentioned_as": row.get("mentioned_as"),
-                "document_id": row.get("document_id"),
             }
-        elif row.get("document_id"):
-            metadata = {"document_id": row.get("document_id")}
 
         predictions.append(
             PredictionRecord(
