@@ -90,28 +90,39 @@ _BARE_TICKER_BLACKLIST: Set[str] = {
     "FAQ", "BTW", "LOL", "ATH", "OTC", "ITM", "OTM", "NAV", "APR", "APY",
     # Reddit / social-media jargon
     "LMAO", "YOLO", "FOMO", "HODL", "MOASS",
+    # Ambiguous 2-3 letter tickers that commonly appear as abbreviations
+    "ET", "III", "PM", "RE", "TV", "UK", "EU", "DC", "LA", "NY",
+    "GDP", "DOJ", "DOD", "IRS", "ICE", "DHS", "NSA", "CDC",
+    "GP", "IP", "IT", "HR", "PR", "PC", "AI", "AR", "VR",
 }
 
-_COMPANY_NAME_BLACKLIST: Set[str] = {
-    # Generic corporate suffixes / structure words
-    "the", "a", "an", "inc", "corp", "co", "ltd", "group", "holdings",
-    "technologies", "international", "global", "first", "new", "american",
-    "national", "united", "general", "capital", "energy", "health",
-    "financial", "solutions", "services", "systems", "digital",
-    "trust", "growth", "fund", "select", "income", "power", "partners",
-    "frontier", "summit", "liberty", "eagle", "atlas", "core", "alpha",
-    "prime", "peak", "bridge", "harbor", "beacon", "vanguard",
-    # Common English words that happen to start company names
-    "bullish", "bearish", "stock", "rally", "lunar", "diamond",
-    "clear", "just", "pure", "ready", "smart", "vital", "exact",
-    "service", "golden", "silver", "super", "comfort", "natural",
-    "southern", "northern", "western", "eastern", "pacific", "atlantic",
-    "premier", "standard", "modern", "creative", "dynamic", "direct",
-    "simply", "senior", "public", "private", "market", "performance",
-    "independent", "strategic", "professional", "century", "community",
-    "universal", "central", "advanced", "applied", "critical",
-    "essential", "optimal", "precision", "superior", "ultimate",
-    "legacy", "heritage", "evolent", "innovative", "emerging",
+# Curated mapping of well-known company names / brands to their tickers.
+# Only distinctive names that are unlikely to be common English words.
+# This avoids the massive false-positive problem from auto-extracting
+# the first word of every company name in the 10k+ stock database.
+_WELL_KNOWN_NAMES: Dict[str, str] = {
+    # Mega-cap / household names
+    "apple": "AAPL", "tesla": "TSLA", "nvidia": "NVDA", "microsoft": "MSFT",
+    "amazon": "AMZN", "google": "GOOGL", "alphabet": "GOOGL", "meta": "META",
+    "netflix": "NFLX", "disney": "DIS", "boeing": "BA", "intel": "INTC",
+    "qualcomm": "QCOM", "broadcom": "AVGO", "oracle": "ORCL", "adobe": "ADBE",
+    "salesforce": "CRM", "cisco": "CSCO", "ibm": "IBM", "samsung": "SSNLF",
+    "toyota": "TM", "sony": "SONY", "walmart": "WMT", "costco": "COST",
+    "starbucks": "SBUX", "mcdonald": "MCD", "mcdonalds": "MCD",
+    "coca-cola": "KO", "pepsi": "PEP", "pepsico": "PEP",
+    "nike": "NKE", "visa": "V", "mastercard": "MA", "paypal": "PYPL",
+    "jpmorgan": "JPM", "goldman": "GS", "blackrock": "BLK",
+    "berkshire": "BRK-B", "morgan stanley": "MS",
+    # Popular tech / fintech / retail investor favourites
+    "coinbase": "COIN", "robinhood": "HOOD", "palantir": "PLTR",
+    "gamestop": "GME", "shopify": "SHOP", "spotify": "SPOT",
+    "airbnb": "ABNB", "uber": "UBER", "lyft": "LYFT",
+    "snowflake": "SNOW", "crowdstrike": "CRWD", "datadog": "DDOG",
+    "rivian": "RIVN", "lucid": "LCID", "nio": "NIO",
+    "sofi": "SOFI", "affirm": "AFRM", "roblox": "RBLX",
+    "microstrategy": "MSTR", "supermicro": "SMCI",
+    # Major ETFs often discussed as tickers
+    "spdr": "SPY",
 }
 
 
@@ -141,27 +152,12 @@ class TickerDetector:
         with db_path.open("r", encoding="utf-8") as f:
             data = json.load(f)
 
-        for ticker, info in data.get("stocks", {}).items():
-            ticker_upper = ticker.upper()
-            self._valid_tickers.add(ticker_upper)
+        for ticker in data.get("stocks", {}):
+            self._valid_tickers.add(ticker.upper())
 
-            company_name = info.get("company_name", "")
-            for raw_name in info.get("common_names", []) + [company_name]:
-                name = raw_name.strip().rstrip(".,;")
-                if not name or name.upper() == ticker_upper:
-                    continue
-
-                words = name.lower().split()
-                if len(words) == 1 and len(words[0]) >= 5:
-                    if words[0] not in _COMPANY_NAME_BLACKLIST:
-                        self._name_to_ticker.setdefault(words[0], ticker_upper)
-                elif len(words) >= 2:
-                    # Use the leading word of multi-word names only when it
-                    # is long enough to be distinctive (e.g. "Microsoft" from
-                    # "Microsoft Corp", "Nvidia" from "NVIDIA CORP").
-                    lead = words[0]
-                    if len(lead) >= 6 and lead not in _COMPANY_NAME_BLACKLIST:
-                        self._name_to_ticker.setdefault(lead, ticker_upper)
+        # Use the curated well-known name list rather than auto-extracting
+        # first-words from 10k+ company names (too many false positives).
+        self._name_to_ticker = dict(_WELL_KNOWN_NAMES)
 
         logger.info(
             "TickerDetector loaded %d tickers, %d name→ticker mappings",
