@@ -136,6 +136,7 @@ class ImportService:
         detector = TickerDetector.get_instance()
 
         db_rows: list[dict[str, Any]] = []
+        skipped = 0
         for row, sentiment in zip(prepared_rows, sentiments):
             if not sentiment:
                 continue
@@ -146,26 +147,11 @@ class ImportService:
             label = sentiment["label"]
             score = float(sentiment["score"])
 
-            # Always save the document-level row (ticker=None).
-            db_rows.append(
-                {
-                    "id": make_record_id(
-                        "doc", source, source_id, timestamp, text[:120]
-                    ),
-                    "text": text,
-                    "ticker": None,
-                    "mentioned_as": "",
-                    "sentiment_label": label,
-                    "sentiment_score": score,
-                    "source": source,
-                    "source_id": source_id,
-                    "timestamp": timestamp,
-                }
-            )
-
-            # Detect tickers mentioned in the text and create one stock row
-            # per ticker so that per-stock sentiment is available immediately.
             tickers = detector.detect(text)
+            if not tickers:
+                skipped += 1
+                continue
+
             for ticker, mentioned_as in tickers:
                 db_rows.append(
                     {
@@ -184,12 +170,12 @@ class ImportService:
                 )
 
         total = self.storage.save_records_batch(db_rows)
-        stock_count = sum(1 for r in db_rows if r["ticker"])
-        if stock_count:
+        if db_rows:
             logger.info(
-                "Ticker detection: %d stock rows created from %d documents",
-                stock_count,
+                "Ticker detection: %d stock rows from %d documents (%d skipped, no ticker found)",
+                len(db_rows),
                 len(prepared_rows),
+                skipped,
             )
         return total
 

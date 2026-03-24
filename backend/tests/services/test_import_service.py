@@ -1,7 +1,5 @@
 """Tests for import service record normalization and persistence wiring."""
 
-from unittest.mock import patch
-
 from app.services.import_service import ImportService
 
 
@@ -25,8 +23,8 @@ def _make_service(storage=None):
     )
 
 
-def test_import_creates_document_and_stock_rows():
-    """Text mentioning a ticker should produce both a document row and a stock row."""
+def test_import_creates_stock_rows_per_ticker():
+    """Text mentioning tickers should produce one stock row per ticker."""
     storage = DummyStorage()
     service = _make_service(storage)
 
@@ -43,20 +41,16 @@ def test_import_creates_document_and_stock_rows():
     )
 
     assert result["records_loaded"] == 1
-    doc_rows = [r for r in storage.saved_rows if r["ticker"] is None]
-    stock_rows = [r for r in storage.saved_rows if r["ticker"] is not None]
+    assert all(r["ticker"] is not None for r in storage.saved_rows)
 
-    assert len(doc_rows) == 1
-    assert doc_rows[0]["sentiment_label"] == "neutral"
-    assert doc_rows[0]["ticker"] is None
-
-    tickers_found = {r["ticker"] for r in stock_rows}
-    # Both AAPL (bare) and TSLA ($TSLA cashtag) should be detected.
+    tickers_found = {r["ticker"] for r in storage.saved_rows}
     assert "TSLA" in tickers_found
+    for r in storage.saved_rows:
+        assert r["sentiment_label"] == "neutral"
 
 
-def test_import_no_ticker_still_creates_document():
-    """Generic text with no recognisable ticker creates a document row only."""
+def test_import_no_ticker_skips_row():
+    """Text with no recognisable ticker is not stored."""
     storage = DummyStorage()
     service = _make_service(storage)
 
@@ -71,7 +65,8 @@ def test_import_no_ticker_still_creates_document():
     )
 
     assert result["records_loaded"] == 1
-    assert all(r["ticker"] is None for r in storage.saved_rows)
+    assert result["records_inserted"] == 0
+    assert len(storage.saved_rows) == 0
 
 
 def test_import_multiple_tickers_produce_separate_rows():
@@ -89,8 +84,6 @@ def test_import_multiple_tickers_produce_separate_rows():
         ]
     )
 
-    stock_rows = [r for r in storage.saved_rows if r["ticker"] is not None]
-    tickers = {r["ticker"] for r in stock_rows}
+    tickers = {r["ticker"] for r in storage.saved_rows}
     assert {"AAPL", "MSFT", "GOOGL"}.issubset(tickers)
-    for sr in stock_rows:
-        assert sr["sentiment_label"] == "neutral"
+    assert all(r["ticker"] is not None for r in storage.saved_rows)
