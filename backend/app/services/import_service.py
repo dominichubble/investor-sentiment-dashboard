@@ -11,6 +11,7 @@ from typing import Any
 
 from app.storage.record_ids import make_record_id
 from app.storage.sqlite_storage import SQLiteSentimentStorage
+from app.utils.ticker_detection import TickerDetector
 
 logger = logging.getLogger(__name__)
 
@@ -126,13 +127,13 @@ class ImportService:
 
         analyzer = self.analyzer
         if analyzer is None:
-            # Lazy import to avoid loading heavy ML dependencies unless this job runs.
             from app.models.sentiment_inference import analyze_batch as analyzer
 
         texts = [row["text"] for row in prepared_rows]
         batch_out = analyzer(texts, batch_size=32, return_all_scores=False)
-        # analyze_batch returns (results, failures); support plain list for tests/mocks.
         sentiments = batch_out[0] if isinstance(batch_out, tuple) else batch_out
+
+        detector = TickerDetector.get_instance()
 
         db_rows: list[dict[str, Any]] = []
         for row, sentiment in zip(prepared_rows, sentiments):
@@ -142,23 +143,55 @@ class ImportService:
             source = row["source"]
             source_id = row["source_id"]
             text = row["text"]
+            label = sentiment["label"]
+            score = float(sentiment["score"])
+
+            # Always save the document-level row (ticker=None).
             db_rows.append(
                 {
                     "id": make_record_id(
                         "doc", source, source_id, timestamp, text[:120]
                     ),
                     "text": text,
-                    "ticker": row["ticker"],
+                    "ticker": None,
                     "mentioned_as": "",
-                    "sentiment_label": sentiment["label"],
-                    "sentiment_score": float(sentiment["score"]),
+                    "sentiment_label": label,
+                    "sentiment_score": score,
                     "source": source,
                     "source_id": source_id,
                     "timestamp": timestamp,
                 }
             )
 
-        return self.storage.save_records_batch(db_rows)
+            # Detect tickers mentioned in the text and create one stock row
+            # per ticker so that per-stock sentiment is available immediately.
+            tickers = detector.detect(text)
+            for ticker, mentioned_as in tickers:
+                db_rows.append(
+                    {
+                        "id": make_record_id(
+                            "stock", source, source_id, ticker, mentioned_as
+                        ),
+                        "text": text,
+                        "ticker": ticker,
+                        "mentioned_as": mentioned_as,
+                        "sentiment_label": label,
+                        "sentiment_score": score,
+                        "source": source,
+                        "source_id": source_id,
+                        "timestamp": timestamp,
+                    }
+                )
+
+        total = self.storage.save_records_batch(db_rows)
+        stock_count = sum(1 for r in db_rows if r["ticker"])
+        if stock_count:
+            logger.info(
+                "Ticker detection: %d stock rows created from %d documents",
+                stock_count,
+                len(prepared_rows),
+            )
+        return total
 
     def _normalize_record(self, row: dict[str, Any]) -> dict[str, Any] | None:
         text = self._extract_text(row)
