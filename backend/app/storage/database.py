@@ -1,16 +1,16 @@
 """
-SQLite database module using SQLAlchemy.
+PostgreSQL (Neon) database module using SQLAlchemy.
 
-Provides the database engine, session factory, and ORM model
-for unified sentiment record storage.
+Reads DATABASE_URL from the environment and provides the engine,
+session factory, and ORM model for unified sentiment record storage.
 """
 
 from __future__ import annotations
 
 import logging
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import Dict, Optional
+import os
+from datetime import datetime
+from typing import Dict
 
 from sqlalchemy import (
     Column,
@@ -85,28 +85,19 @@ _engine = None
 _SessionLocal = None
 
 
-def get_db_path() -> Path:
-    """Get the default database path."""
-    backend_dir = Path(__file__).parent.parent.parent
-    db_dir = backend_dir.parent / "data" / "db"
-    db_dir.mkdir(parents=True, exist_ok=True)
-    return db_dir / "sentiments.db"
-
-
-def get_engine(db_path: Optional[Path] = None):
+def get_engine():
     """Get or create the SQLAlchemy engine (singleton)."""
     global _engine
     if _engine is None:
-        if db_path is None:
-            db_path = get_db_path()
-        db_url = f"sqlite:///{db_path}"
-        _engine = create_engine(
-            db_url,
-            echo=False,
-            connect_args={"check_same_thread": False},
-        )
+        url = os.environ.get("DATABASE_URL")
+        if not url:
+            raise RuntimeError(
+                "DATABASE_URL environment variable is not set. "
+                "Set it to your Neon PostgreSQL connection string."
+            )
+        _engine = create_engine(url, pool_pre_ping=True, echo=False)
         Base.metadata.create_all(_engine)
-        logger.info(f"SQLite database initialized at {db_path}")
+        logger.info("PostgreSQL database initialized via %s", url.split("@")[-1])
     return _engine
 
 

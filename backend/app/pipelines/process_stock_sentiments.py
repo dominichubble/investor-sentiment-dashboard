@@ -13,7 +13,7 @@ from typing import Dict
 from app.stocks import StockSentimentAnalyzer
 from app.storage.database import SentimentRecordRow, get_session
 from app.storage.record_ids import make_record_id
-from app.storage.sqlite_storage import SQLiteSentimentStorage
+from app.storage.sqlite_storage import SentimentStorage
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s"
@@ -33,7 +33,7 @@ def process_documents(
     Uses INSERT OR IGNORE with stable record IDs for natural dedup,
     so reprocessing the same documents is safe and idempotent.
     """
-    storage = SQLiteSentimentStorage()
+    storage = SentimentStorage()
     analyzer = StockSentimentAnalyzer()
 
     session = get_session()

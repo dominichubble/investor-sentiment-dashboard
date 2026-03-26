@@ -8,10 +8,10 @@ from pydantic import BaseModel
 
 from app.api.prediction_metadata import build_prediction_metadata
 from app.services.statistics_service import StatisticsService
-from app.storage.sqlite_storage import SQLiteSentimentStorage
+from app.storage.sqlite_storage import SentimentStorage
 
 router = APIRouter(prefix="/data", tags=["data"])
-storage = SQLiteSentimentStorage()
+storage = SentimentStorage()
 statistics_service = StatisticsService()
 
 

@@ -17,7 +17,7 @@ from app.analysis.financial_sentiment_enrichment import (
     normalized_label_entropy,
 )
 from app.storage.record_ids import make_record_id
-from app.storage.sqlite_storage import SQLiteSentimentStorage
+from app.storage.sqlite_storage import SentimentStorage
 from app.utils.ticker_detection import TickerDetector
 
 logger = logging.getLogger(__name__)
@@ -59,10 +59,10 @@ class ImportService:
 
     def __init__(
         self,
-        storage: SQLiteSentimentStorage | None = None,
+        storage: SentimentStorage | None = None,
         analyzer: Any | None = None,
     ) -> None:
-        self.storage = storage or SQLiteSentimentStorage()
+        self.storage = storage or SentimentStorage()
         self.analyzer = analyzer
 
     def import_from_data_dirs(

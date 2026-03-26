@@ -1,5 +1,5 @@
 """
-SQLite-backed unified sentiment storage.
+PostgreSQL-backed unified sentiment storage (Neon-compatible).
 
 Stores both document-level predictions and per-stock mentions in a single table.
 Stock rows are identified by having a non-null ticker column.
@@ -9,27 +9,23 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timedelta, timezone
-from pathlib import Path
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from sqlalchemy import func
-from sqlalchemy.dialects.sqlite import insert as sqlite_insert
+from sqlalchemy.dialects.postgresql import insert as pg_insert
 
 from .database import SentimentRecordRow, get_engine, get_session
 from .record_ids import make_record_id
 
 logger = logging.getLogger(__name__)
 
+BATCH_SIZE = 500
 
-class SQLiteSentimentStorage:
-    """SQLite-backed storage for unified sentiment records."""
 
-    def __init__(self, storage_dir: Optional[Path] = None):
-        if storage_dir is None:
-            backend_dir = Path(__file__).parent.parent.parent
-            storage_dir = backend_dir.parent / "data"
+class SentimentStorage:
+    """PostgreSQL-backed storage for unified sentiment records."""
 
-        self.storage_dir = Path(storage_dir)
+    def __init__(self) -> None:
         get_engine()
 
     def load(self) -> None:
@@ -54,15 +50,11 @@ class SQLiteSentimentStorage:
             return 0
         session = get_session()
         try:
-            columns = len(records[0])
-            max_vars = 900
-            batch_size = max(1, max_vars // max(columns, 1))
-
             total_inserted = 0
-            for i in range(0, len(records), batch_size):
-                batch = records[i : i + batch_size]
-                stmt = sqlite_insert(SentimentRecordRow).values(batch)
-                stmt = stmt.prefix_with("OR IGNORE")
+            for i in range(0, len(records), BATCH_SIZE):
+                batch = records[i : i + BATCH_SIZE]
+                stmt = pg_insert(SentimentRecordRow).values(batch)
+                stmt = stmt.on_conflict_do_nothing(index_elements=["id"])
                 result = session.execute(stmt)
                 total_inserted += int(result.rowcount or 0)
 
@@ -70,7 +62,7 @@ class SQLiteSentimentStorage:
             return total_inserted
         except Exception as e:
             session.rollback()
-            logger.error(f"Failed to save records: {e}")
+            logger.error("Failed to save records: %s", e)
             raise
         finally:
             session.close()
@@ -390,3 +382,7 @@ class SQLiteSentimentStorage:
             }
         finally:
             session.close()
+
+
+# Backward-compatible alias so existing imports still work.
+SQLiteSentimentStorage = SentimentStorage

@@ -38,7 +38,7 @@ if str(_backend_dir) not in sys.path:
 
 from app.storage.database import get_engine
 from app.storage.record_ids import make_record_id
-from app.storage.sqlite_storage import SQLiteSentimentStorage
+from app.storage.sqlite_storage import SentimentStorage
 
 logging.basicConfig(
     level=logging.INFO,
@@ -184,7 +184,7 @@ def main() -> None:
 
     # --- Init storage ---
     get_engine()
-    storage = SQLiteSentimentStorage()
+    storage = SentimentStorage()
 
     t0 = time.time()
     for batch_idx in range(skip_batches, total_batches):
