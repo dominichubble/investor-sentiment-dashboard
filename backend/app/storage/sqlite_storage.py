@@ -71,7 +71,7 @@ class SentimentStorage:
         """Save multiple sentiment records."""
         normalized: List[Dict] = []
         for record in records:
-            ts_val = record.get("timestamp")
+            ts_val = record.get("published_at")
             if isinstance(ts_val, datetime):
                 ts = ts_val
             else:
@@ -95,7 +95,7 @@ class SentimentStorage:
                     "data_source": record.get("data_source"),
                     "source_id": record.get("source_id", "") or "",
                     "source_meta_json": record.get("source_meta_json"),
-                    "timestamp": ts,
+                    "published_at": ts,
                 }
             )
 
@@ -117,11 +117,11 @@ class SentimentStorage:
         """Save a StockSentimentAnalyzer result (one document + stock mentions)."""
         text = result.get("text", "")
         overall = result.get("overall_sentiment", {}) or {}
-        timestamp = datetime.utcnow().isoformat() + "Z"
+        now_iso = datetime.utcnow().isoformat() + "Z"
 
         source_id = result.get("source_id", "")
         doc_id = result.get("document_id") or make_record_id(
-            "doc", source or "", source_id, timestamp, text[:200]
+            "doc", source or "", source_id, now_iso, text[:200]
         )
 
         document_record = {
@@ -134,7 +134,7 @@ class SentimentStorage:
             "data_source": result.get("data_source"),
             "source_id": source_id,
             "source_meta_json": result.get("source_meta_json"),
-            "timestamp": timestamp,
+            "published_at": now_iso,
         }
 
         stock_records = []
@@ -159,7 +159,7 @@ class SentimentStorage:
                     "data_source": result.get("data_source"),
                     "source_id": source_id,
                     "source_meta_json": result.get("source_meta_json"),
-                    "timestamp": timestamp,
+                    "published_at": now_iso,
                 }
             )
 
@@ -198,18 +198,18 @@ class SentimentStorage:
             if sentiment:
                 query = query.filter(SentimentRecordRow.sentiment_label == sentiment)
             if start_date:
-                query = query.filter(SentimentRecordRow.timestamp >= start_date)
+                query = query.filter(SentimentRecordRow.published_at >= start_date)
             if end_date:
-                query = query.filter(SentimentRecordRow.timestamp <= end_date)
+                query = query.filter(SentimentRecordRow.published_at <= end_date)
             if ticker:
                 query = query.filter(SentimentRecordRow.ticker == ticker)
 
             total = query.order_by(None).count()
 
             if order_desc:
-                query = query.order_by(SentimentRecordRow.timestamp.desc())
+                query = query.order_by(SentimentRecordRow.published_at.desc())
             else:
-                query = query.order_by(SentimentRecordRow.timestamp.asc())
+                query = query.order_by(SentimentRecordRow.published_at.asc())
 
             if offset:
                 query = query.offset(offset)
@@ -266,7 +266,7 @@ class SentimentStorage:
         session = get_session()
         try:
             latest = (
-                session.query(func.max(SentimentRecordRow.timestamp))
+                session.query(func.max(SentimentRecordRow.published_at))
                 .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
             )
@@ -279,7 +279,7 @@ class SentimentStorage:
                     func.count(SentimentRecordRow.id).label("mentions"),
                 )
                 .filter(SentimentRecordRow.ticker.isnot(None))
-                .filter(SentimentRecordRow.timestamp >= cutoff_dt)
+                .filter(SentimentRecordRow.published_at >= cutoff_dt)
                 .group_by(SentimentRecordRow.ticker)
                 .having(func.count(SentimentRecordRow.id) >= min_mentions)
                 .order_by(func.count(SentimentRecordRow.id).desc())
@@ -302,9 +302,9 @@ class SentimentStorage:
                 SentimentRecordRow.ticker == ticker,
             )
             if start_date:
-                query = query.filter(SentimentRecordRow.timestamp >= start_date)
+                query = query.filter(SentimentRecordRow.published_at >= start_date)
             if end_date:
-                query = query.filter(SentimentRecordRow.timestamp <= end_date)
+                query = query.filter(SentimentRecordRow.published_at <= end_date)
 
             total = query.count()
             if total == 0:
@@ -323,9 +323,9 @@ class SentimentStorage:
                 func.avg(SentimentRecordRow.sentiment_score)
             ).filter(SentimentRecordRow.ticker == ticker)
             if start_date:
-                avg_query = avg_query.filter(SentimentRecordRow.timestamp >= start_date)
+                avg_query = avg_query.filter(SentimentRecordRow.published_at >= start_date)
             if end_date:
-                avg_query = avg_query.filter(SentimentRecordRow.timestamp <= end_date)
+                avg_query = avg_query.filter(SentimentRecordRow.published_at <= end_date)
             avg_score = avg_query.scalar()
 
             dist_query = session.query(
@@ -334,10 +334,10 @@ class SentimentStorage:
             ).filter(SentimentRecordRow.ticker == ticker)
             if start_date:
                 dist_query = dist_query.filter(
-                    SentimentRecordRow.timestamp >= start_date
+                    SentimentRecordRow.published_at >= start_date
                 )
             if end_date:
-                dist_query = dist_query.filter(SentimentRecordRow.timestamp <= end_date)
+                dist_query = dist_query.filter(SentimentRecordRow.published_at <= end_date)
             dist_rows = dist_query.group_by(SentimentRecordRow.sentiment_label).all()
 
             distribution = {"positive": 0, "negative": 0, "neutral": 0}
@@ -370,7 +370,7 @@ class SentimentStorage:
                 or 0
             )
             last_updated = (
-                session.query(func.max(SentimentRecordRow.timestamp))
+                session.query(func.max(SentimentRecordRow.published_at))
                 .filter(SentimentRecordRow.ticker.isnot(None))
                 .scalar()
             )

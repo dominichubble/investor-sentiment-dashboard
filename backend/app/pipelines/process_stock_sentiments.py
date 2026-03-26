@@ -47,7 +47,7 @@ def process_documents(
         query = (
             session.query(SentimentRecordRow)
             .filter(SentimentRecordRow.ticker.is_(None))
-            .order_by(SentimentRecordRow.timestamp.desc())
+            .order_by(SentimentRecordRow.published_at.desc())
         )
         if max_records is not None:
             query = query.limit(max_records)
@@ -103,7 +103,7 @@ def process_documents(
                         "data_source": getattr(row, "data_source", None),
                         "source_id": row.source_id or "",
                         "source_meta_json": getattr(row, "source_meta_json", None),
-                        "timestamp": row.timestamp,
+                        "published_at": row.published_at,
                     }
                 )
                 ticker_stats[ticker] = ticker_stats.get(ticker, 0) + 1

@@ -55,7 +55,7 @@ class ImportService:
     )
     SOURCE_KEYS = ("source", "source_name", "subreddit")
     SOURCE_ID_KEYS = ("source_id", "id")
-    TIMESTAMP_KEYS = ("timestamp", "created_at", "published_at", "publishedAt")
+    TIMESTAMP_KEYS = ("published_at", "timestamp", "created_at", "publishedAt")
 
     def __init__(
         self,
@@ -222,7 +222,7 @@ class ImportService:
         db_rows: list[dict[str, Any]] = []
         for item in work_items:
             row = item["row"]
-            timestamp = row["timestamp"]
+            published_at = row["published_at"]
             source = row["source"]
             source_id = row["source_id"]
             data_source = row.get("data_source")
@@ -255,7 +255,7 @@ class ImportService:
                         "data_source": data_source,
                         "source_id": source_id,
                         "source_meta_json": source_meta_json,
-                        "timestamp": timestamp,
+                        "published_at": published_at,
                     }
                 )
 
@@ -291,7 +291,7 @@ class ImportService:
         if not text:
             return None
 
-        timestamp = self._extract_timestamp(row)
+        published_at = self._extract_timestamp(row)
         source = self._extract_source(row)
         source_id = self._extract_source_id(row)
         data_source = self._extract_data_source(row)
@@ -307,7 +307,7 @@ class ImportService:
             "source_id": source_id,
             "data_source": data_source,
             "source_meta_json": self._serialize_source_meta(row),
-            "timestamp": timestamp,
+            "published_at": published_at,
             "ticker": ticker,
         }
         raw_hints = row.get("hint_tickers")

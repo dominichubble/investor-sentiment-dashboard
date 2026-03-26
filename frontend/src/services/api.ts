@@ -109,7 +109,7 @@ export interface PredictionRecord {
   text: string;
   sentiment: SentimentInfo;
   source?: string;
-  timestamp: string;
+  published_at: string;
   metadata?: any;
 }
 

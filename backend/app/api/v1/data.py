@@ -30,7 +30,7 @@ class PredictionRecord(BaseModel):
     text: str
     sentiment: SentimentInfo
     source: str | None = None
-    timestamp: str
+    published_at: str
     metadata: dict[str, Any] | None = None
 
 
@@ -125,7 +125,7 @@ async def get_predictions(
                     score=float(row.get("sentiment_score", 0.0)),
                 ),
                 source=row.get("source"),
-                timestamp=row.get("timestamp", datetime.utcnow().isoformat() + "Z"),
+                published_at=row.get("published_at", datetime.utcnow().isoformat() + "Z"),
                 metadata=metadata,
             )
         )

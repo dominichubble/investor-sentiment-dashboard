@@ -35,7 +35,7 @@ class StatisticsService:
         try:
             # Determine the anchor (latest record) for relative calculations.
             latest_ts = (
-                session.query(func.max(SentimentRecordRow.timestamp)).scalar()
+                session.query(func.max(SentimentRecordRow.published_at)).scalar()
             )
             anchor = latest_ts if latest_ts else datetime.utcnow()
 
@@ -43,7 +43,7 @@ class StatisticsService:
             def _apply_window(query):
                 if days is not None:
                     cutoff = anchor - timedelta(days=days)
-                    return query.filter(SentimentRecordRow.timestamp >= cutoff)
+                    return query.filter(SentimentRecordRow.published_at >= cutoff)
                 return query
 
             total_predictions = (
@@ -140,8 +140,8 @@ class StatisticsService:
 
             earliest_q = _apply_window(
                 session.query(
-                    func.min(SentimentRecordRow.timestamp),
-                    func.max(SentimentRecordRow.timestamp),
+                    func.min(SentimentRecordRow.published_at),
+                    func.max(SentimentRecordRow.published_at),
                 )
             )
             earliest, latest = earliest_q.one()
@@ -152,23 +152,23 @@ class StatisticsService:
             recent_activity = {
                 "last_24h": _apply_window(
                     session.query(func.count(SentimentRecordRow.id))
-                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=1))
+                    .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=1))
                 ).scalar()
                 or 0,
                 "last_7d": _apply_window(
                     session.query(func.count(SentimentRecordRow.id))
-                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=7))
+                    .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=7))
                 ).scalar()
                 or 0,
                 "last_30d": _apply_window(
                     session.query(func.count(SentimentRecordRow.id))
-                    .filter(SentimentRecordRow.timestamp >= recent_anchor - timedelta(days=30))
+                    .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=30))
                 ).scalar()
                 or 0,
             }
 
             # ---- Daily trend time-series for mini-charts ----
-            day_col = func.date(SentimentRecordRow.timestamp).label("day")
+            day_col = func.date(SentimentRecordRow.published_at).label("day")
             daily_rows = (
                 _apply_window(
                     session.query(

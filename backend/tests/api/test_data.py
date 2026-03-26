@@ -40,7 +40,7 @@ class TestPredictionsEndpoint:
             assert "record_type" in prediction
             assert "text" in prediction
             assert "sentiment" in prediction
-            assert "timestamp" in prediction
+            assert "published_at" in prediction
 
             # Check sentiment structure
             sentiment = prediction["sentiment"]

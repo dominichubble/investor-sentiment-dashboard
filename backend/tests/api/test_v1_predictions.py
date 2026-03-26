@@ -20,7 +20,7 @@ class DummyStorage:
                 "sentiment_score": 0.91,
                 "source": "reddit",
                 "source_id": "abc",
-                "timestamp": "2026-02-23T10:00:00Z",
+                "published_at": "2026-02-23T10:00:00Z",
             },
             {
                 "id": "stock_1",
@@ -31,7 +31,7 @@ class DummyStorage:
                 "sentiment_label": "positive",
                 "sentiment_score": 0.88,
                 "source": "news",
-                "timestamp": "2026-02-23T11:00:00Z",
+                "published_at": "2026-02-23T11:00:00Z",
             },
         ]
         return rows, 2
@@ -58,7 +58,7 @@ def test_v1_predictions_shape(monkeypatch):
     assert "record_type" in first
     assert "text" in first
     assert "sentiment" in first
-    assert "timestamp" in first
+    assert "published_at" in first
 
 
 def test_v1_predictions_invalid_page():

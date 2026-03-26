@@ -92,7 +92,7 @@ def _read_csv(csv_path: Path, limit: int | None) -> list[dict]:
                     "text": tweet,
                     "ticker": (row.get("Stock Name") or "").strip().upper() or None,
                     "company_name": (row.get("Company Name") or "").strip(),
-                    "timestamp": _parse_timestamp(row.get("Date", "")),
+                    "published_at": _parse_timestamp(row.get("Date", "")),
                     "source": "twitter",
                     "source_id": hashlib.sha1(
                         f"{row.get('Date','')}{tweet[:80]}".encode()
@@ -110,7 +110,7 @@ def _build_db_rows(
     for row, sentiment in zip(rows, sentiments):
         if not sentiment:
             continue
-        ts = row["timestamp"]
+        ts = row["published_at"]
         src = row["source"]
         src_id = row["source_id"]
         text = row["text"]
@@ -128,7 +128,7 @@ def _build_db_rows(
                 "sentiment_score": float(sentiment["score"]),
                 "source": src,
                 "source_id": src_id,
-                "timestamp": ts,
+                "published_at": ts,
             }
         )
 
