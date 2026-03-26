@@ -14,7 +14,8 @@ from typing import Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
-_CASHTAG_RE = re.compile(r"\$([A-Z]{1,5})\b")
+# Reddit/social text often uses $nvda / $GME — match case-insensitively, normalize to upper.
+_CASHTAG_RE = re.compile(r"\$([A-Za-z]{1,5})\b")
 _BARE_TICKER_RE = re.compile(r"(?<![A-Za-z])([A-Z]{2,5})(?![a-z])")
 
 # Common uppercase words / abbreviations that coincide with real tickers.
@@ -171,6 +172,12 @@ class TickerDetector:
             cls._instance = cls()
         return cls._instance
 
+    def is_valid_ticker(self, symbol: str) -> bool:
+        """True if *symbol* is in the loaded stock universe (uppercase)."""
+        if not symbol:
+            return False
+        return symbol.strip().lstrip("$").upper() in self._valid_tickers
+
     def detect(self, text: str) -> List[Tuple[str, str]]:
         """Return ``[(ticker, mentioned_as), ...]`` found in *text*.
 
@@ -182,9 +189,9 @@ class TickerDetector:
 
         found: Dict[str, str] = {}
 
-        # 1. Cashtags  –  $AAPL, $TSLA  (highest confidence)
+        # 1. Cashtags  –  $AAPL, $aapl  (highest confidence)
         for m in _CASHTAG_RE.finditer(text):
-            sym = m.group(1)
+            sym = m.group(1).upper()
             if sym in self._valid_tickers:
                 found.setdefault(sym, f"${sym}")
 

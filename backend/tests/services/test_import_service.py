@@ -63,6 +63,30 @@ def test_import_creates_stock_rows_per_ticker():
         assert r["data_source"] == "reddit"
 
 
+def test_import_hint_tickers_when_text_has_no_symbol():
+    """Reddit-style search hits can carry hint_tickers so rows still persist."""
+    storage = DummyStorage()
+    service = _make_service(storage)
+
+    result = service.import_from_records(
+        [
+            {
+                "id": "abc123",
+                "title": "Thoughts on this quarter?",
+                "selftext": "Seems overvalued but holding.",
+                "source": "wallstreetbets",
+                "subreddit": "wallstreetbets",
+                "data_source": "reddit",
+                "created_utc": 1764064812,
+                "hint_tickers": ["NVDA"],
+            }
+        ]
+    )
+
+    assert result["records_inserted"] >= 1
+    assert any(r["ticker"] == "NVDA" for r in storage.saved_rows)
+
+
 def test_import_no_ticker_skips_row():
     """Text with no recognisable ticker is not stored."""
     storage = DummyStorage()

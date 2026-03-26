@@ -104,6 +104,23 @@ _TICKER_SEARCH_ALIASES: Dict[str, List[str]] = {
 }
 
 
+def hint_tickers_from_keyword_group(group: List[str]) -> List[str]:
+    """Extract uppercase symbols from a search keyword group (for import hints)."""
+    ordered: List[str] = []
+    seen_syms: Set[str] = set()
+    for raw in group:
+        sym = raw.strip().lstrip("$").upper()
+        if not sym or len(sym) > 5:
+            continue
+        if not sym.replace(".", "").isalnum():
+            continue
+        if sym in seen_syms:
+            continue
+        seen_syms.add(sym)
+        ordered.append(sym)
+    return ordered
+
+
 def keyword_groups_for_tickers(tickers: List[str]) -> List[List[str]]:
     """
     One search batch per ticker: plain symbol + $SYMBOL + optional aliases.
@@ -160,39 +177,45 @@ def fetch_subreddit_bulk(
 ) -> List[Dict[str, Any]]:
     """Collect unique submissions from r/sr_name using multiple feeds + searches."""
     sr = reddit.subreddit(sr_name)
-    seen: Set[str] = set()
-    rows: List[Dict[str, Any]] = []
+    rows_by_id: Dict[str, Dict[str, Any]] = {}
 
-    def add_submission(sub: Any) -> None:
-        sid = sub.id
-        if sid in seen:
+    def add_submission(sub: Any, hint_tickers: Optional[List[str]] = None) -> None:
+        post = normalize_post(sub)
+        if hint_tickers:
+            post["hint_tickers"] = hint_tickers
+        sid = post["id"]
+        if sid not in rows_by_id:
+            rows_by_id[sid] = post
             return
-        seen.add(sid)
-        rows.append(normalize_post(sub))
+        if hint_tickers and not rows_by_id[sid].get("hint_tickers"):
+            rows_by_id[sid]["hint_tickers"] = hint_tickers
+
+    def add_listing(sub: Any) -> None:
+        add_submission(sub, None)
 
     _safe_collect(
         f"r/{sr_name} new",
         lambda: sr.new(limit=limit_per_feed),
-        add_submission,
+        add_listing,
         sleep_seconds,
     )
     _safe_collect(
         f"r/{sr_name} hot",
         lambda: sr.hot(limit=limit_per_feed),
-        add_submission,
+        add_listing,
         sleep_seconds,
     )
     for tf in top_time_filters:
         _safe_collect(
             f"r/{sr_name} top:{tf}",
             lambda tf=tf: sr.top(time_filter=tf, limit=limit_per_feed),
-            add_submission,
+            add_listing,
             sleep_seconds,
         )
     _safe_collect(
         f"r/{sr_name} rising",
         lambda: sr.rising(limit=min(100, limit_per_feed)),
-        add_submission,
+        add_listing,
         sleep_seconds,
     )
 
@@ -202,6 +225,7 @@ def fetch_subreddit_bulk(
                 if not group:
                     continue
                 q = build_query(group)
+                hints = hint_tickers_from_keyword_group(group)
                 _safe_collect(
                     f"r/{sr_name} search sort={sort} ({len(group)} terms)",
                     lambda q=q, sort=sort: sr.search(
@@ -210,10 +234,11 @@ def fetch_subreddit_bulk(
                         time_filter=search_time_filter,
                         limit=search_limit_per_group,
                     ),
-                    add_submission,
+                    lambda sub, h=hints: add_submission(sub, h if h else None),
                     sleep_seconds,
                 )
 
+    rows = list(rows_by_id.values())
     logger.info("r/%s → %d unique posts", sr_name, len(rows))
     return rows
 

@@ -189,6 +189,8 @@ class ImportService:
 
             tickers = detector.detect(text)
             if not tickers:
+                tickers = self._tickers_from_hints(row.get("hint_tickers"), detector)
+            if not tickers:
                 skipped += 1
                 continue
 
@@ -267,6 +269,23 @@ class ImportService:
             )
         return total
 
+    @staticmethod
+    def _tickers_from_hints(
+        hints: Any, detector: TickerDetector
+    ) -> list[tuple[str, str]]:
+        """Use pipeline-provided symbols when text has no cashtag/bare ticker (e.g. Reddit search hits)."""
+        if not isinstance(hints, list) or not hints:
+            return []
+        out: dict[str, str] = {}
+        for h in hints:
+            if not isinstance(h, str):
+                continue
+            sym = h.strip().lstrip("$").upper()
+            if not sym or not detector.is_valid_ticker(sym):
+                continue
+            out.setdefault(sym, sym)
+        return list(out.items())
+
     def _normalize_record(self, row: dict[str, Any]) -> dict[str, Any] | None:
         text = self._extract_text(row)
         if not text:
@@ -282,7 +301,7 @@ class ImportService:
         else:
             ticker = None
 
-        return {
+        out: dict[str, Any] = {
             "text": text,
             "source": source,
             "source_id": source_id,
@@ -291,6 +310,20 @@ class ImportService:
             "timestamp": timestamp,
             "ticker": ticker,
         }
+        raw_hints = row.get("hint_tickers")
+        if isinstance(raw_hints, list) and raw_hints:
+            clean: list[str] = []
+            seen_h: set[str] = set()
+            for h in raw_hints:
+                if not isinstance(h, str):
+                    continue
+                u = h.strip().lstrip("$").upper()
+                if u and u not in seen_h:
+                    seen_h.add(u)
+                    clean.append(u)
+            if clean:
+                out["hint_tickers"] = clean
+        return out
 
     @staticmethod
     def _serialize_source_meta(row: dict[str, Any]) -> str | None:
