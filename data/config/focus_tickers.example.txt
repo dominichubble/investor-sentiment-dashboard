@@ -1,0 +1,8 @@
+# One ticker per line (first word used). Copy to focus_tickers.txt and edit.
+# Narrow list = deeper, comparable evaluation set.
+
+NVDA
+TSLA
+AAPL
+MSFT
+AMD

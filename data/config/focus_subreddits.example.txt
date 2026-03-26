@@ -1,0 +1,7 @@
+# One subreddit per line (no r/). Copy to focus_subreddits.txt and edit.
+
+wallstreetbets
+stocks
+investing
+StockMarket
+options
