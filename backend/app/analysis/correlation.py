@@ -60,7 +60,7 @@ class CorrelationAnalyzer:
         daily: Dict[str, List[Dict]] = defaultdict(list)
 
         for record in records:
-            ts = record.get("timestamp", "")
+            ts = record.get("published_at") or record.get("timestamp") or ""
             if not ts:
                 continue
             try:

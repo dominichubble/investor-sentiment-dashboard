@@ -25,6 +25,9 @@ BATCH_SIZE = 500
 class SentimentStorage:
     """PostgreSQL-backed storage for unified sentiment records."""
 
+    # CorrelationAnalyzer and legacy code expect this flag; DB is always ready.
+    _loaded = True
+
     def __init__(self) -> None:
         get_engine()
 
