@@ -115,6 +115,7 @@ def normalize_tweet(tweet) -> Dict[str, Any]:
 
     return {
         "id": tweet.id,
+        "data_source": "twitter",
         "text": clean_text(tweet.text),
         "raw_text": tweet.text,  # Keep original for reference
         "author_id": author_id,

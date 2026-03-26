@@ -100,6 +100,7 @@ def process_documents(
                             stock.get("sentiment", {}).get("score", row.sentiment_score)
                         ),
                         "source": row.source or "",
+                        "data_source": getattr(row, "data_source", None),
                         "source_id": row.source_id or "",
                         "timestamp": row.timestamp,
                     }

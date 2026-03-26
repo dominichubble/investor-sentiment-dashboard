@@ -207,6 +207,7 @@ class ImportService:
             timestamp = row["timestamp"]
             source = row["source"]
             source_id = row["source_id"]
+            data_source = row.get("data_source")
             text = row["text"]
             aspects_json = (
                 enrich_aspects_with_scores(item["aspects"], snip_sentiment)
@@ -232,6 +233,7 @@ class ImportService:
                         "rationale": item["rationale"],
                         "aspects_json": aspects_json,
                         "source": source,
+                        "data_source": data_source,
                         "source_id": source_id,
                         "timestamp": timestamp,
                     }
@@ -255,6 +257,7 @@ class ImportService:
         timestamp = self._extract_timestamp(row)
         source = self._extract_source(row)
         source_id = self._extract_source_id(row)
+        data_source = self._extract_data_source(row)
         ticker = row.get("ticker")
         if isinstance(ticker, str):
             ticker = ticker.upper()
@@ -265,6 +268,7 @@ class ImportService:
             "text": text,
             "source": source,
             "source_id": source_id,
+            "data_source": data_source,
             "timestamp": timestamp,
             "ticker": ticker,
         }
@@ -290,6 +294,19 @@ class ImportService:
             if isinstance(value, str) and value.strip():
                 return value.strip().lower()
         return "unknown"
+
+    def _extract_data_source(self, row: dict[str, Any]) -> str | None:
+        """Platform channel: reddit | news | twitter (not outlet/subreddit name)."""
+        raw = row.get("data_source")
+        if isinstance(raw, str) and raw.strip():
+            return raw.strip().lower()
+        if row.get("subreddit") is not None:
+            return "reddit"
+        if row.get("author_id") is not None:
+            return "twitter"
+        if row.get("source_name") is not None or row.get("clean_title") is not None:
+            return "news"
+        return None
 
     def _extract_source_id(self, row: dict[str, Any]) -> str:
         for key in self.SOURCE_ID_KEYS:

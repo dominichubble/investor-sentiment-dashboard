@@ -100,6 +100,7 @@ class SQLiteSentimentStorage:
                     "rationale": record.get("rationale"),
                     "aspects_json": record.get("aspects_json"),
                     "source": record.get("source", "") or "",
+                    "data_source": record.get("data_source"),
                     "source_id": record.get("source_id", "") or "",
                     "timestamp": ts,
                 }
@@ -137,6 +138,7 @@ class SQLiteSentimentStorage:
             "sentiment_label": overall.get("label", "neutral"),
             "sentiment_score": overall.get("score", 0.5),
             "source": source or "",
+            "data_source": result.get("data_source"),
             "source_id": source_id,
             "timestamp": timestamp,
         }
@@ -160,6 +162,7 @@ class SQLiteSentimentStorage:
                     ),
                     "sentiment_score": stock.get("sentiment", {}).get("score", 0.5),
                     "source": source or "",
+                    "data_source": result.get("data_source"),
                     "source_id": source_id,
                     "timestamp": timestamp,
                 }
@@ -177,6 +180,7 @@ class SQLiteSentimentStorage:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         ticker: Optional[str] = None,
+        data_source: Optional[str] = None,
         stocks_only: bool = False,
         documents_only: bool = False,
         limit: Optional[int] = None,
@@ -194,6 +198,8 @@ class SQLiteSentimentStorage:
                 query = query.filter(SentimentRecordRow.ticker.is_(None))
             if source:
                 query = query.filter(SentimentRecordRow.source == source)
+            if data_source:
+                query = query.filter(SentimentRecordRow.data_source == data_source)
             if sentiment:
                 query = query.filter(SentimentRecordRow.sentiment_label == sentiment)
             if start_date:

@@ -125,6 +125,7 @@ def normalize_article(article: Dict[str, Any]) -> Dict[str, Any]:
     source = article.get("source", {})
 
     return {
+        "data_source": "news",
         "source_id": source.get("id"),
         "source_name": source.get("name"),
         "author": article.get("author"),

@@ -96,6 +96,7 @@ def normalize_post(submission) -> Dict[str, Any]:
     """
     return {
         "id": submission.id,
+        "data_source": "reddit",
         "title": clean_text(submission.title),
         "selftext": clean_text(submission.selftext),
         "author": str(submission.author) if submission.author else "[deleted]",

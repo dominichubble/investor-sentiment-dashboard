@@ -97,7 +97,14 @@ class StatisticsResponse(BaseModel):
 async def get_predictions(
     page: int = Query(1, description="Page number", ge=1),
     page_size: int = Query(20, description="Items per page", ge=1, le=100),
-    source: Optional[str] = Query(None, description="Filter by source (reddit/twitter/news)"),
+    source: Optional[str] = Query(
+        None,
+        description="Filter by stored source field (e.g. subreddit name or news outlet id)",
+    ),
+    data_source: Optional[str] = Query(
+        None,
+        description="Filter by ingest platform: reddit, news, or twitter",
+    ),
     sentiment: Optional[str] = Query(
         None, description="Filter by sentiment (positive/negative/neutral)"
     ),
@@ -135,9 +142,11 @@ async def get_predictions(
 
         sentiment_filter = sentiment.lower() if sentiment else None
         source_filter = source.lower() if source else None
+        data_source_filter = data_source.lower() if data_source else None
 
         records, total = storage.query_records(
             source=source_filter,
+            data_source=data_source_filter,
             sentiment=sentiment_filter,
             start_date=start_dt,
             end_date=end_dt,

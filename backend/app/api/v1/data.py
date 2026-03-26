@@ -88,6 +88,10 @@ async def get_predictions(
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     source: str | None = Query(None),
+    data_source: str | None = Query(
+        None,
+        description="Ingest channel: reddit, news, or twitter",
+    ),
     sentiment: str | None = Query(None),
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
@@ -99,6 +103,7 @@ async def get_predictions(
 
     rows, total = storage.query_records(
         source=(source.lower() if source else None),
+        data_source=(data_source.lower() if data_source else None),
         sentiment=(sentiment.lower() if sentiment else None),
         start_date=start_dt,
         end_date=end_dt,

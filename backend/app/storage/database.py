@@ -46,6 +46,7 @@ class SentimentRecordRow(Base):
     rationale = Column(Text, nullable=True)
     aspects_json = Column(Text, nullable=True)
     source = Column(String(20), default="")
+    data_source = Column(String(20), nullable=True, index=True)
     source_id = Column(String(100), default="")
     timestamp = Column(DateTime, nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
@@ -53,6 +54,7 @@ class SentimentRecordRow(Base):
     __table_args__ = (
         Index("ix_sentiment_records_ticker_timestamp", "ticker", "timestamp"),
         Index("ix_sentiment_records_ticker_label", "ticker", "sentiment_label"),
+        Index("ix_sentiment_records_data_source_timestamp", "data_source", "timestamp"),
     )
 
     def to_dict(self) -> Dict:
@@ -71,6 +73,7 @@ class SentimentRecordRow(Base):
             "rationale": self.rationale,
             "aspects_json": self.aspects_json,
             "source": self.source,
+            "data_source": self.data_source,
             "source_id": self.source_id,
             "timestamp": self.timestamp.isoformat() + "Z" if self.timestamp else None,
         }
