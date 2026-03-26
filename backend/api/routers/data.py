@@ -12,6 +12,7 @@ from cachetools import TTLCache
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
+from app.api.prediction_metadata import build_prediction_metadata
 from app.entities.stock_database import StockDatabase
 from app.storage import StockSentimentStorage
 
@@ -147,10 +148,7 @@ async def get_predictions(
         prediction_records = []
         for record in records:
             record_type = record.get("record_type", "document")
-            metadata = {"record_type": record_type}
-            if record.get("ticker"):
-                metadata["ticker"] = record["ticker"]
-                metadata["mentioned_as"] = record.get("mentioned_as")
+            metadata = build_prediction_metadata(record)
 
             prediction_records.append(
                 PredictionRecord(
@@ -207,10 +205,7 @@ async def get_prediction(prediction_id: str) -> PredictionRecord:
             )
 
         record_type = record.get("record_type", "document")
-        metadata = {"record_type": record_type}
-        if record.get("ticker"):
-            metadata["ticker"] = record["ticker"]
-            metadata["mentioned_as"] = record.get("mentioned_as")
+        metadata = build_prediction_metadata(record)
 
         return PredictionRecord(
             id=record.get("id"),

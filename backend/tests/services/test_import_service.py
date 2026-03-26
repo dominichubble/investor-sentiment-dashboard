@@ -14,12 +14,21 @@ class DummyStorage:
         return len(rows)
 
 
+def _stub_analyzer(texts, **kwargs):
+    return [
+        {
+            "label": "neutral",
+            "score": 0.5,
+            "scores": {"positive": 0.2, "negative": 0.2, "neutral": 0.6},
+        }
+        for _ in texts
+    ]
+
+
 def _make_service(storage=None):
     return ImportService(
         storage=storage or DummyStorage(),
-        analyzer=lambda texts, **kwargs: [
-            {"label": "neutral", "score": 0.5} for _ in texts
-        ],
+        analyzer=_stub_analyzer,
     )
 
 
@@ -47,6 +56,9 @@ def test_import_creates_stock_rows_per_ticker():
     assert "TSLA" in tickers_found
     for r in storage.saved_rows:
         assert r["sentiment_label"] == "neutral"
+        assert r["score_positive"] == 0.2
+        assert r["rationale"]
+        assert r["sentiment_uncertainty"] is not None
 
 
 def test_import_no_ticker_skips_row():

@@ -39,6 +39,12 @@ class SentimentRecordRow(Base):
     mentioned_as = Column(String(100), default="")
     sentiment_label = Column(String(10), nullable=False, index=True)
     sentiment_score = Column(Float, nullable=False)
+    score_positive = Column(Float, nullable=True)
+    score_negative = Column(Float, nullable=True)
+    score_neutral = Column(Float, nullable=True)
+    sentiment_uncertainty = Column(Float, nullable=True)
+    rationale = Column(Text, nullable=True)
+    aspects_json = Column(Text, nullable=True)
     source = Column(String(20), default="")
     source_id = Column(String(100), default="")
     timestamp = Column(DateTime, nullable=False, index=True)
@@ -58,6 +64,12 @@ class SentimentRecordRow(Base):
             "mentioned_as": self.mentioned_as,
             "sentiment_label": self.sentiment_label,
             "sentiment_score": self.sentiment_score,
+            "score_positive": self.score_positive,
+            "score_negative": self.score_negative,
+            "score_neutral": self.score_neutral,
+            "sentiment_uncertainty": self.sentiment_uncertainty,
+            "rationale": self.rationale,
+            "aspects_json": self.aspects_json,
             "source": self.source,
             "source_id": self.source_id,
             "timestamp": self.timestamp.isoformat() + "Z" if self.timestamp else None,

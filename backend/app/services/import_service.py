@@ -9,6 +9,13 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from app.analysis.financial_sentiment_enrichment import (
+    build_rationale,
+    collect_unique_snippets,
+    enrich_aspects_with_scores,
+    extract_aspect_snippets,
+    normalized_label_entropy,
+)
 from app.storage.record_ids import make_record_id
 from app.storage.sqlite_storage import SQLiteSentimentStorage
 from app.utils.ticker_detection import TickerDetector
@@ -130,29 +137,84 @@ class ImportService:
             from app.models.sentiment_inference import analyze_batch as analyzer
 
         texts = [row["text"] for row in prepared_rows]
-        batch_out = analyzer(texts, batch_size=32, return_all_scores=False)
+        batch_out = analyzer(texts, batch_size=32, return_all_scores=True)
         sentiments = batch_out[0] if isinstance(batch_out, tuple) else batch_out
 
         detector = TickerDetector.get_instance()
 
-        db_rows: list[dict[str, Any]] = []
+        work_items: list[dict[str, Any]] = []
         skipped = 0
         for row, sentiment in zip(prepared_rows, sentiments):
             if not sentiment:
                 continue
-            timestamp = row["timestamp"]
-            source = row["source"]
-            source_id = row["source_id"]
             text = row["text"]
-            label = sentiment["label"]
-            score = float(sentiment["score"])
+            label = str(sentiment.get("label", "neutral"))
+            score = float(sentiment.get("score", 0.5))
+            raw_scores = sentiment.get("scores")
+            if not isinstance(raw_scores, dict) or not raw_scores:
+                rest = (1.0 - score) / 2.0 if score <= 1.0 else 0.0
+                scores = {
+                    "positive": rest,
+                    "negative": rest,
+                    "neutral": rest,
+                }
+                if label in scores:
+                    scores[label] = score
+            else:
+                scores = {
+                    "positive": float(raw_scores.get("positive", 0.0)),
+                    "negative": float(raw_scores.get("negative", 0.0)),
+                    "neutral": float(raw_scores.get("neutral", 0.0)),
+                }
+
+            entropy = normalized_label_entropy(scores)
+            rationale = build_rationale(label, score, scores, entropy)
+            aspects = extract_aspect_snippets(text)
 
             tickers = detector.detect(text)
             if not tickers:
                 skipped += 1
                 continue
 
-            for ticker, mentioned_as in tickers:
+            work_items.append(
+                {
+                    "row": row,
+                    "label": label,
+                    "score": score,
+                    "scores": scores,
+                    "entropy": entropy,
+                    "rationale": rationale,
+                    "aspects": aspects,
+                    "tickers": tickers,
+                }
+            )
+
+        aspect_lists = [w["aspects"] for w in work_items]
+        unique_snips = collect_unique_snippets(aspect_lists)
+        snip_sentiment: dict[str, dict[str, Any]] = {}
+        if unique_snips:
+            snip_batch = analyzer(
+                unique_snips, batch_size=32, return_all_scores=True
+            )
+            snip_results = snip_batch[0] if isinstance(snip_batch, tuple) else snip_batch
+            for snip, res in zip(unique_snips, snip_results):
+                if res:
+                    snip_sentiment[snip] = res
+
+        db_rows: list[dict[str, Any]] = []
+        for item in work_items:
+            row = item["row"]
+            timestamp = row["timestamp"]
+            source = row["source"]
+            source_id = row["source_id"]
+            text = row["text"]
+            aspects_json = (
+                enrich_aspects_with_scores(item["aspects"], snip_sentiment)
+                if item["aspects"]
+                else None
+            )
+
+            for ticker, mentioned_as in item["tickers"]:
                 db_rows.append(
                     {
                         "id": make_record_id(
@@ -161,8 +223,14 @@ class ImportService:
                         "text": text,
                         "ticker": ticker,
                         "mentioned_as": mentioned_as,
-                        "sentiment_label": label,
-                        "sentiment_score": score,
+                        "sentiment_label": item["label"],
+                        "sentiment_score": item["score"],
+                        "score_positive": item["scores"]["positive"],
+                        "score_negative": item["scores"]["negative"],
+                        "score_neutral": item["scores"]["neutral"],
+                        "sentiment_uncertainty": item["entropy"],
+                        "rationale": item["rationale"],
+                        "aspects_json": aspects_json,
                         "source": source,
                         "source_id": source_id,
                         "timestamp": timestamp,

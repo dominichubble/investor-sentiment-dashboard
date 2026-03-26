@@ -6,6 +6,7 @@ from typing import Any
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
+from app.api.prediction_metadata import build_prediction_metadata
 from app.services.statistics_service import StatisticsService
 from app.storage.sqlite_storage import SQLiteSentimentStorage
 
@@ -108,13 +109,7 @@ async def get_predictions(
     predictions: list[PredictionRecord] = []
     for row in rows:
         record_type = row.get("record_type", "document")
-        metadata: dict[str, Any] = {}
-        if row.get("ticker"):
-            metadata = {
-                "ticker": row["ticker"],
-                "mentioned_as": row.get("mentioned_as"),
-            }
-
+        metadata = build_prediction_metadata(row)
         predictions.append(
             PredictionRecord(
                 id=row.get("id", ""),
@@ -126,7 +121,7 @@ async def get_predictions(
                 ),
                 source=row.get("source"),
                 timestamp=row.get("timestamp", datetime.utcnow().isoformat() + "Z"),
-                metadata=(metadata or None),
+                metadata=metadata,
             )
         )
 
