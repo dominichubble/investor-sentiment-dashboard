@@ -14,6 +14,12 @@ def build_prediction_metadata(record: Dict[str, Any]) -> Dict[str, Any]:
         metadata["mentioned_as"] = record.get("mentioned_as")
     if record.get("data_source"):
         metadata["data_source"] = record["data_source"]
+    sm = record.get("source_meta_json")
+    if sm:
+        try:
+            metadata["source_meta"] = json.loads(sm)
+        except (TypeError, json.JSONDecodeError):
+            metadata["source_meta"] = None
     if record.get("score_positive") is not None:
         metadata["finbert_distribution"] = {
             "positive": float(record["score_positive"]),

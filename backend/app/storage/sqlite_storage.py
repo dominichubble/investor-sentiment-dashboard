@@ -102,6 +102,7 @@ class SQLiteSentimentStorage:
                     "source": record.get("source", "") or "",
                     "data_source": record.get("data_source"),
                     "source_id": record.get("source_id", "") or "",
+                    "source_meta_json": record.get("source_meta_json"),
                     "timestamp": ts,
                 }
             )
@@ -140,6 +141,7 @@ class SQLiteSentimentStorage:
             "source": source or "",
             "data_source": result.get("data_source"),
             "source_id": source_id,
+            "source_meta_json": result.get("source_meta_json"),
             "timestamp": timestamp,
         }
 
@@ -164,6 +166,7 @@ class SQLiteSentimentStorage:
                     "source": source or "",
                     "data_source": result.get("data_source"),
                     "source_id": source_id,
+                    "source_meta_json": result.get("source_meta_json"),
                     "timestamp": timestamp,
                 }
             )

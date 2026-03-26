@@ -102,6 +102,7 @@ def process_documents(
                         "source": row.source or "",
                         "data_source": getattr(row, "data_source", None),
                         "source_id": row.source_id or "",
+                        "source_meta_json": getattr(row, "source_meta_json", None),
                         "timestamp": row.timestamp,
                     }
                 )

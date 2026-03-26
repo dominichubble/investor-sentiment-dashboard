@@ -94,6 +94,7 @@ def normalize_post(submission) -> Dict[str, Any]:
     Returns:
         Dictionary with normalized post data
     """
+    flair = getattr(submission, "link_flair_text", None)
     return {
         "id": submission.id,
         "data_source": "reddit",
@@ -107,6 +108,9 @@ def normalize_post(submission) -> Dict[str, Any]:
         "upvote_ratio": getattr(submission, "upvote_ratio", None),
         "url": submission.url,
         "permalink": f"https://www.reddit.com{submission.permalink}",
+        "link_flair_text": flair.strip() if isinstance(flair, str) else None,
+        "is_self": bool(getattr(submission, "is_self", False)),
+        "domain": getattr(submission, "domain", None),
     }
 
 

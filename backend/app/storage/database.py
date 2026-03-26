@@ -48,6 +48,7 @@ class SentimentRecordRow(Base):
     source = Column(String(20), default="")
     data_source = Column(String(20), nullable=True, index=True)
     source_id = Column(String(100), default="")
+    source_meta_json = Column(Text, nullable=True)
     timestamp = Column(DateTime, nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
@@ -75,6 +76,7 @@ class SentimentRecordRow(Base):
             "source": self.source,
             "data_source": self.data_source,
             "source_id": self.source_id,
+            "source_meta_json": self.source_meta_json,
             "timestamp": self.timestamp.isoformat() + "Z" if self.timestamp else None,
         }
 

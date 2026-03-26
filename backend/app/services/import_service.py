@@ -22,6 +22,22 @@ from app.utils.ticker_detection import TickerDetector
 
 logger = logging.getLogger(__name__)
 
+# Serialized into source_meta_json for traceability (Reddit permalink, scores, etc.).
+_SOURCE_META_KEYS = frozenset(
+    {
+        "permalink",
+        "score",
+        "num_comments",
+        "upvote_ratio",
+        "url",
+        "link_flair_text",
+        "is_self",
+        "domain",
+        "author",
+        "subreddit",
+    }
+)
+
 
 class ImportService:
     """Import records from local datasets and persist FinBERT predictions."""
@@ -208,6 +224,7 @@ class ImportService:
             source = row["source"]
             source_id = row["source_id"]
             data_source = row.get("data_source")
+            source_meta_json = row.get("source_meta_json")
             text = row["text"]
             aspects_json = (
                 enrich_aspects_with_scores(item["aspects"], snip_sentiment)
@@ -235,6 +252,7 @@ class ImportService:
                         "source": source,
                         "data_source": data_source,
                         "source_id": source_id,
+                        "source_meta_json": source_meta_json,
                         "timestamp": timestamp,
                     }
                 )
@@ -269,9 +287,27 @@ class ImportService:
             "source": source,
             "source_id": source_id,
             "data_source": data_source,
+            "source_meta_json": self._serialize_source_meta(row),
             "timestamp": timestamp,
             "ticker": ticker,
         }
+
+    @staticmethod
+    def _serialize_source_meta(row: dict[str, Any]) -> str | None:
+        payload: dict[str, Any] = {}
+        for k in _SOURCE_META_KEYS:
+            if k not in row:
+                continue
+            v = row[k]
+            if v is None:
+                continue
+            if isinstance(v, (str, int, float, bool)):
+                payload[k] = v
+            else:
+                payload[k] = str(v)
+        if not payload:
+            return None
+        return json.dumps(payload, ensure_ascii=False)
 
     def _extract_text(self, row: dict[str, Any]) -> str:
         # Reddit entries are best represented as title + body.
