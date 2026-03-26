@@ -12,8 +12,9 @@ Use a descriptive REDDIT_USER_AGENT and stay under ~60 requests/minute.
 
 Usage (from repo root, PYTHONPATH=backend):
   python -m app.pipelines.reddit_bulk_ingest --store-db --no-write-files
-  python -m app.pipelines.reddit_bulk_ingest --limit-per-feed 300 --sleep-seconds 1.2
-  python -m app.pipelines.reddit_bulk_ingest --subreddits-file path/to/subs.txt
+  python -m app.pipelines.reddit_bulk_ingest --tickers NVDA TSLA AAPL --search-time-filter year
+  python -m app.pipelines.reddit_bulk_ingest --subreddits wallstreetbets stocks --tickers MSFT AMD
+  python -m app.pipelines.reddit_bulk_ingest --subreddits-file path/to/subs.txt --tickers-file tickers.txt
 """
 
 from __future__ import annotations
@@ -92,6 +93,34 @@ DEFAULT_KEYWORD_GROUPS: List[List[str]] = [
     ["bankruptcy", "debt", "lawsuit", "sec", "merger"],
 ]
 
+# Optional extra terms per ticker (symbol-only search misses many posts).
+_TICKER_SEARCH_ALIASES: Dict[str, List[str]] = {
+    "GOOGL": ["google", "alphabet"],
+    "GOOG": ["google", "alphabet"],
+    "META": ["facebook", "fb"],
+    "AMZN": ["amazon"],
+    "BRK.B": ["berkshire", "buffett"],
+    "BRK.A": ["berkshire", "buffett"],
+}
+
+
+def keyword_groups_for_tickers(tickers: List[str]) -> List[List[str]]:
+    """
+    One search batch per ticker: plain symbol + $SYMBOL + optional aliases.
+    Keeps OR-queries small so Reddit search returns more focused hits.
+    """
+    groups: List[List[str]] = []
+    for raw in tickers:
+        sym = raw.strip().lstrip("$").upper()
+        if not sym or not sym.replace(".", "").isalnum():
+            continue
+        terms = [sym, f"${sym}"]
+        for alias in _TICKER_SEARCH_ALIASES.get(sym, []):
+            if alias not in terms:
+                terms.append(alias)
+        groups.append(terms)
+    return groups
+
 
 def _sleep(seconds: float, reason: str) -> None:
     if seconds > 0:
@@ -125,6 +154,7 @@ def fetch_subreddit_bulk(
     search_time_filter: str,
     search_limit_per_group: int,
     keyword_groups: List[List[str]],
+    search_sorts: List[str],
     sleep_seconds: float,
     skip_search: bool,
 ) -> List[Dict[str, Any]]:
@@ -167,21 +197,22 @@ def fetch_subreddit_bulk(
     )
 
     if not skip_search:
-        for group in keyword_groups:
-            if not group:
-                continue
-            q = build_query(group)
-            _safe_collect(
-                f"r/{sr_name} search({len(group)} terms)",
-                lambda q=q: sr.search(
-                    q,
-                    sort="new",
-                    time_filter=search_time_filter,
-                    limit=search_limit_per_group,
-                ),
-                add_submission,
-                sleep_seconds,
-            )
+        for sort in search_sorts:
+            for group in keyword_groups:
+                if not group:
+                    continue
+                q = build_query(group)
+                _safe_collect(
+                    f"r/{sr_name} search sort={sort} ({len(group)} terms)",
+                    lambda q=q, sort=sort: sr.search(
+                        q,
+                        sort=sort,
+                        time_filter=search_time_filter,
+                        limit=search_limit_per_group,
+                    ),
+                    add_submission,
+                    sleep_seconds,
+                )
 
     logger.info("r/%s → %d unique posts", sr_name, len(rows))
     return rows
@@ -194,6 +225,7 @@ def run_bulk_ingest(
     top_time_filters: List[str],
     search_time_filter: str,
     search_limit_per_group: int,
+    search_sorts: List[str],
     sleep_seconds: float,
     skip_search: bool,
     store_db: bool,
@@ -218,6 +250,7 @@ def run_bulk_ingest(
                 search_time_filter=search_time_filter,
                 search_limit_per_group=search_limit_per_group,
                 keyword_groups=keyword_groups,
+                search_sorts=search_sorts,
                 sleep_seconds=sleep_seconds,
                 skip_search=skip_search,
             )
@@ -318,6 +351,31 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         help="Pause after each API block (reduce if 429; increase if throttled)",
     )
     p.add_argument(
+        "--tickers",
+        nargs="+",
+        default=None,
+        help="Stock symbols: builds dedicated search batches per ticker ($SYM + aliases). "
+        "When set, default search uses multiple sorts unless --search-sorts is given.",
+    )
+    p.add_argument(
+        "--tickers-file",
+        type=Path,
+        default=None,
+        help="One ticker per line (# comments ok); same as --tickers",
+    )
+    p.add_argument(
+        "--merge-default-keywords",
+        action="store_true",
+        help="With --tickers, also run DEFAULT_KEYWORD_GROUPS (more breadth, many API calls)",
+    )
+    p.add_argument(
+        "--search-sorts",
+        nargs="+",
+        default=None,
+        choices=["new", "relevance", "hot", "top", "comments"],
+        help="Reddit search sort per keyword batch (default: new; with --tickers: new relevance hot)",
+    )
+    p.add_argument(
         "--skip-search",
         action="store_true",
         help="Only use new/hot/top/rising (no search queries)",
@@ -348,6 +406,17 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     return p.parse_args(argv)
 
 
+def _load_tickers_file(path: Path) -> List[str]:
+    lines = path.read_text(encoding="utf-8").splitlines()
+    out: List[str] = []
+    for ln in lines:
+        s = ln.strip()
+        if not s or s.startswith("#"):
+            continue
+        out.append(s.split()[0])
+    return out
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     args = parse_args(argv)
     run_id = args.run_id or datetime.utcnow().strftime("%Y-%m-%d-%H%M")
@@ -363,6 +432,42 @@ def main(argv: Optional[List[str]] = None) -> int:
         logger.error("No subreddits to fetch")
         return 1
 
+    ticker_list: List[str] = []
+    if args.tickers_file:
+        ticker_list.extend(_load_tickers_file(args.tickers_file))
+    if args.tickers:
+        ticker_list.extend(args.tickers)
+
+    if ticker_list:
+        seen_sym: Set[str] = set()
+        deduped_tickers: List[str] = []
+        for t in ticker_list:
+            sym = t.strip().lstrip("$").upper()
+            if not sym or sym in seen_sym:
+                continue
+            seen_sym.add(sym)
+            deduped_tickers.append(t.strip())
+        kw_groups = keyword_groups_for_tickers(deduped_tickers)
+        if args.merge_default_keywords:
+            kw_groups = kw_groups + list(DEFAULT_KEYWORD_GROUPS)
+        if not kw_groups:
+            logger.error("No valid tickers after parsing")
+            return 1
+        search_sorts = (
+            list(args.search_sorts)
+            if args.search_sorts is not None
+            else ["new", "relevance", "hot"]
+        )
+        logger.info(
+            "Stock-targeted search: %d tickers → %d keyword batches, sorts=%s",
+            len(deduped_tickers),
+            len([g for g in kw_groups if g]),
+            search_sorts,
+        )
+    else:
+        kw_groups = list(DEFAULT_KEYWORD_GROUPS)
+        search_sorts = list(args.search_sorts) if args.search_sorts is not None else ["new"]
+
     logger.info(
         "Bulk ingest: %d subreddits, limit_per_feed=%d, sleep=%.2fs, search=%s",
         len(subs),
@@ -374,11 +479,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     try:
         summary = run_bulk_ingest(
             subreddits=subs,
-            keyword_groups=DEFAULT_KEYWORD_GROUPS,
+            keyword_groups=kw_groups,
             limit_per_feed=args.limit_per_feed,
             top_time_filters=list(args.top_filters),
             search_time_filter=args.search_time_filter,
             search_limit_per_group=args.search_limit,
+            search_sorts=search_sorts,
             sleep_seconds=args.sleep_seconds,
             skip_search=args.skip_search,
             store_db=args.store_db,
