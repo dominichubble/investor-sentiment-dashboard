@@ -10,6 +10,7 @@ from __future__ import annotations
 import logging
 import os
 from datetime import datetime
+from pathlib import Path
 from typing import Dict
 
 from sqlalchemy import (
@@ -83,12 +84,38 @@ class SentimentRecordRow(Base):
 
 _engine = None
 _SessionLocal = None
+_dotenv_attempted = False
+
+
+def _load_dotenv_if_needed() -> None:
+    """Load repo-root .env when DATABASE_URL is missing (uvicorn workers, IDE runs)."""
+    global _dotenv_attempted
+    if os.environ.get("DATABASE_URL"):
+        return
+    if _dotenv_attempted:
+        return
+    _dotenv_attempted = True
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    here = Path(__file__).resolve().parent
+    for _ in range(6):
+        candidate = here / ".env"
+        if candidate.is_file():
+            load_dotenv(candidate)
+            logger.debug("Loaded environment from %s", candidate)
+            return
+        if here.parent == here:
+            break
+        here = here.parent
 
 
 def get_engine():
     """Get or create the SQLAlchemy engine (singleton)."""
     global _engine
     if _engine is None:
+        _load_dotenv_if_needed()
         url = os.environ.get("DATABASE_URL")
         if not url:
             raise RuntimeError(
