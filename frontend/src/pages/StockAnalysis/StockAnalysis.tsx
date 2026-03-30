@@ -3,14 +3,13 @@ import { useSearchParams } from 'react-router-dom';
 import {
   SentimentPriceChart,
   DailySentimentAggregateChart,
-  GlobalMarketSentimentChart,
   CorrelationScatter,
   LagChart,
   RollingCorrelationChart,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
-import { apiService, type DailyTrendPoint } from '../../services/api';
+import { apiService } from '../../services/api';
 import type {
   CorrelationResponse,
   LagAnalysisResponse,
@@ -64,7 +63,6 @@ const StockAnalysis: React.FC = () => {
   // UI states
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [marketDailyTrend, setMarketDailyTrend] = useState<DailyTrendPoint[]>([]);
   /** Trailing days for net sentiment when comparing to price (causal moving average). */
   const [sentimentMemoryDays, setSentimentMemoryDays] = useState(3);
 
@@ -138,21 +136,6 @@ const StockAnalysis: React.FC = () => {
       setSearchParams({ ticker: sym, period: p });
     }
   };
-
-  useEffect(() => {
-    let cancelled = false;
-    apiService
-      .getStatistics({ days: 90 })
-      .then((s) => {
-        if (!cancelled && Array.isArray(s.daily_trend) && s.daily_trend.length > 0) {
-          setMarketDailyTrend(s.daily_trend);
-        }
-      })
-      .catch(() => {});
-    return () => {
-      cancelled = true;
-    };
-  }, []);
 
   // Load ticker (and optional range) from URL on first mount
   useEffect(() => {
@@ -266,22 +249,8 @@ const StockAnalysis: React.FC = () => {
     <div className="stock-analysis">
       <Navbar
         title="Sentiment–price correlation"
-        subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window."
+        subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window. For market-wide sentiment by source, use Market overview."
       />
-
-      {marketDailyTrend.length > 0 && (
-        <ErrorBoundary fallbackTitle="Failed to render market-wide sentiment chart">
-          <div className="sa-chart-section sa-market-wide">
-            <h3 className="sa-section-title">Market-wide daily sentiment</h3>
-            <p className="sa-section-desc">
-              All stock-mention records in the database, grouped by calendar day (last 90 days relative to
-              the newest record). Bars are total mentions per day; the line is net sentiment
-              (positive minus negative counts, scaled by volume).
-            </p>
-            <GlobalMarketSentimentChart data={marketDailyTrend} height={300} />
-          </div>
-        </ErrorBoundary>
-      )}
 
       {/* Header / Search */}
       <div className="sa-header">

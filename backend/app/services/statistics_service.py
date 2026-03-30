@@ -5,7 +5,8 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
-from sqlalchemy import func, case, cast, Date
+from sqlalchemy import func, case
+from sqlalchemy.orm import Query
 
 from app.entities.stock_database import StockDatabase
 from app.storage.database import SentimentRecordRow, get_session
@@ -17,6 +18,47 @@ def _to_utc_iso(value: datetime | None) -> str | None:
     return value.isoformat() + "Z"
 
 
+def _normalize_data_source_param(raw: str | None) -> str | None:
+    """Map query param to DB ``data_source`` value (reddit, news, twitter)."""
+    if not raw:
+        return None
+    s = raw.strip().lower()
+    if s in ("all", "", "any"):
+        return None
+    if s in ("x", "twitter", "tweet", "tweets"):
+        return "twitter"
+    if s in ("reddit",):
+        return "reddit"
+    if s in ("news", "article", "articles"):
+        return "news"
+    return None
+
+
+def _sentiment_breakdown_from_counts(
+    positive: int, negative: int, neutral: int
+) -> dict[str, Any]:
+    total = positive + negative + neutral
+    if total <= 0:
+        return {
+            "total": 0,
+            "positive": 0,
+            "negative": 0,
+            "neutral": 0,
+            "positive_percentage": 0.0,
+            "negative_percentage": 0.0,
+            "neutral_percentage": 0.0,
+        }
+    return {
+        "total": total,
+        "positive": positive,
+        "negative": negative,
+        "neutral": neutral,
+        "positive_percentage": round((positive / total) * 100, 2),
+        "negative_percentage": round((negative / total) * 100, 2),
+        "neutral_percentage": round((neutral / total) * 100, 2),
+    }
+
+
 class StatisticsService:
     """Build dashboard statistics from persisted sentiment records."""
 
@@ -24,15 +66,25 @@ class StatisticsService:
         self.stock_db = StockDatabase()
         self.stock_db.load()
 
-    def get_statistics(self, days: int | None = None) -> dict[str, Any]:
+    def get_statistics(
+        self,
+        days: int | None = None,
+        data_source: str | None = None,
+        include_source_comparison: bool = True,
+    ) -> dict[str, Any]:
         """Return statistics payload aligned with frontend expectations.
 
         Args:
             days: If provided, only include records from the last N days
                   relative to the latest record timestamp. None means all data.
+            data_source: If set (reddit, news, twitter), restrict to that channel.
+            include_source_comparison: When True and ``data_source`` is unset,
+                include per-channel sentiment breakdown (``source_comparison``).
         """
         session = get_session()
         try:
+            ds_filter = _normalize_data_source_param(data_source)
+
             # Determine the anchor (latest record) for relative calculations.
             latest_ts = (
                 session.query(func.max(SentimentRecordRow.published_at)).scalar()
@@ -40,21 +92,25 @@ class StatisticsService:
             anchor = latest_ts if latest_ts else datetime.utcnow()
 
             # Base query filter: optionally restrict to the last N days.
-            def _apply_window(query):
+            def _apply_window(query: Query) -> Query:
                 if days is not None:
                     cutoff = anchor - timedelta(days=days)
                     return query.filter(SentimentRecordRow.published_at >= cutoff)
                 return query
 
+            def _apply_channel(query: Query) -> Query:
+                query = _apply_window(query)
+                if ds_filter:
+                    query = query.filter(SentimentRecordRow.data_source == ds_filter)
+                return query
+
             total_predictions = (
-                _apply_window(
-                    session.query(func.count(SentimentRecordRow.id))
-                ).scalar()
+                _apply_channel(session.query(func.count(SentimentRecordRow.id))).scalar()
                 or 0
             )
 
             sentiment_rows = (
-                _apply_window(
+                _apply_channel(
                     session.query(
                         SentimentRecordRow.sentiment_label,
                         func.count(SentimentRecordRow.id).label("count"),
@@ -95,7 +151,7 @@ class StatisticsService:
             }
 
             stock_rows = (
-                _apply_window(
+                _apply_channel(
                     session.query(
                         SentimentRecordRow.ticker,
                         SentimentRecordRow.sentiment_label,
@@ -131,14 +187,14 @@ class StatisticsService:
             )[:10]
 
             total_stocks_analyzed = (
-                _apply_window(
+                _apply_channel(
                     session.query(func.count(func.distinct(SentimentRecordRow.ticker)))
                     .filter(SentimentRecordRow.ticker.isnot(None))
                 ).scalar()
                 or 0
             )
 
-            earliest_q = _apply_window(
+            earliest_q = _apply_channel(
                 session.query(
                     func.min(SentimentRecordRow.published_at),
                     func.max(SentimentRecordRow.published_at),
@@ -150,17 +206,17 @@ class StatisticsService:
             # historical datasets (e.g. 2021-2022) show meaningful activity.
             recent_anchor = latest if latest else anchor
             recent_activity = {
-                "last_24h": _apply_window(
+                "last_24h": _apply_channel(
                     session.query(func.count(SentimentRecordRow.id))
                     .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=1))
                 ).scalar()
                 or 0,
-                "last_7d": _apply_window(
+                "last_7d": _apply_channel(
                     session.query(func.count(SentimentRecordRow.id))
                     .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=7))
                 ).scalar()
                 or 0,
-                "last_30d": _apply_window(
+                "last_30d": _apply_channel(
                     session.query(func.count(SentimentRecordRow.id))
                     .filter(SentimentRecordRow.published_at >= recent_anchor - timedelta(days=30))
                 ).scalar()
@@ -170,7 +226,7 @@ class StatisticsService:
             # ---- Daily trend time-series for mini-charts ----
             day_col = func.date(SentimentRecordRow.published_at).label("day")
             daily_rows = (
-                _apply_window(
+                _apply_channel(
                     session.query(
                         day_col,
                         func.count(SentimentRecordRow.id).label("count"),
@@ -199,7 +255,41 @@ class StatisticsService:
                     {"date": str(day), "count": int(count), "net_sentiment": net}
                 )
 
-            return {
+            source_comparison: dict[str, Any] | None = None
+            if include_source_comparison and ds_filter is None:
+                src_rows = (
+                    _apply_window(
+                        session.query(
+                            SentimentRecordRow.data_source,
+                            SentimentRecordRow.sentiment_label,
+                            func.count(SentimentRecordRow.id),
+                        )
+                    )
+                    .group_by(
+                        SentimentRecordRow.data_source,
+                        SentimentRecordRow.sentiment_label,
+                    )
+                    .all()
+                )
+                acc: dict[str, dict[str, int]] = {
+                    "reddit": {"positive": 0, "negative": 0, "neutral": 0},
+                    "news": {"positive": 0, "negative": 0, "neutral": 0},
+                    "twitter": {"positive": 0, "negative": 0, "neutral": 0},
+                }
+                for src, label, cnt in src_rows:
+                    key = (src or "").strip().lower()
+                    if key not in acc:
+                        continue
+                    if label in acc[key]:
+                        acc[key][label] += int(cnt)
+                source_comparison = {
+                    ch: _sentiment_breakdown_from_counts(
+                        v["positive"], v["negative"], v["neutral"]
+                    )
+                    for ch, v in acc.items()
+                }
+
+            out: dict[str, Any] = {
                 "total_predictions": int(total_predictions),
                 "total_stocks_analyzed": int(total_stocks_analyzed),
                 "sentiment_distribution": sentiment_distribution,
@@ -215,5 +305,8 @@ class StatisticsService:
                 },
                 "daily_trend": daily_trend,
             }
+            if source_comparison is not None:
+                out["source_comparison"] = source_comparison
+            return out
         finally:
             session.close()

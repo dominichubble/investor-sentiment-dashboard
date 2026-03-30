@@ -53,7 +53,10 @@ class ImportService:
         "title",
         "raw_text",
     )
-    SOURCE_KEYS = ("source", "source_name", "subreddit")
+    # Prefer specific outlet / subreddit before a generic channel label. Many pipelines
+    # set ``source`` to "news" | "reddit" | "twitter"; NewsAPI rows use ``source_name``
+    # for the publisher (e.g. Reuters). Checking ``source`` first collapsed all news to one value.
+    SOURCE_KEYS = ("source_name", "subreddit", "source")
     SOURCE_ID_KEYS = ("source_id", "id")
     TIMESTAMP_KEYS = ("published_at", "timestamp", "created_at", "publishedAt")
 

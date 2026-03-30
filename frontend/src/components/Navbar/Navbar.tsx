@@ -1,10 +1,13 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import DropdownButton, { DropdownOption } from '../DropdownButton';
 import './Navbar.css';
 
 interface NavbarProps {
   title?: string;
   subtitle?: string;
+  /** Show links to market overview and stock analysis (default: true) */
+  siteNav?: boolean;
   assetOptions?: DropdownOption[];
   selectedAsset?: DropdownOption;
   onAssetChange?: (option: DropdownOption) => void;
@@ -19,6 +22,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({
   title = 'Investor Sentiment — Correlation Analysis',
   subtitle,
+  siteNav = true,
   assetOptions,
   selectedAsset,
   onAssetChange,
@@ -41,6 +45,30 @@ const Navbar: React.FC<NavbarProps> = ({
           </div>
         </div>
       </div>
+
+      {siteNav && (
+        <div className="navbar-site-nav">
+          <div className="navbar-nav" role="navigation" aria-label="Site sections">
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                `navbar-nav-item${isActive ? ' active' : ''}`
+              }
+            >
+              Market overview
+            </NavLink>
+            <NavLink
+              to="/analyze"
+              className={({ isActive }) =>
+                `navbar-nav-item${isActive ? ' active' : ''}`
+              }
+            >
+              Stock analysis
+            </NavLink>
+          </div>
+        </div>
+      )}
 
       {assetOptions && selectedAsset && onAssetChange && timeframeOptions && selectedTimeframe && onTimeframeChange && (
         <div className="navbar-filters">

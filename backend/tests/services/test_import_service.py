@@ -143,3 +143,21 @@ def test_import_news_infers_data_source():
     )
     assert storage.saved_rows
     assert all(r["data_source"] == "news" for r in storage.saved_rows)
+
+
+def test_import_news_source_name_beats_generic_source_key():
+    """Generic ``source: news`` must not hide the publisher in ``source_name``."""
+    storage = DummyStorage()
+    service = _make_service(storage)
+    service.import_from_records(
+        [
+            {
+                "clean_title": "Fed holds rates; $AAPL steady",
+                "source": "news",
+                "source_name": "Bloomberg",
+                "timestamp": "2025-06-01T12:00:00Z",
+            }
+        ]
+    )
+    assert storage.saved_rows
+    assert storage.saved_rows[0]["source"] == "bloomberg"

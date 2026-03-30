@@ -14,6 +14,7 @@ from pydantic import BaseModel, Field
 
 from app.api.prediction_metadata import build_prediction_metadata
 from app.entities.stock_database import StockDatabase
+from app.services.statistics_service import StatisticsService
 from app.storage import StockSentimentStorage
 
 router = APIRouter(prefix="/data", tags=["data"])
@@ -27,7 +28,8 @@ stock_db = StockDatabase()
 stock_db.load()
 
 # Statistics cache (5 minute TTL)
-_stats_cache: TTLCache = TTLCache(maxsize=4, ttl=300)
+_stats_cache: TTLCache = TTLCache(maxsize=64, ttl=300)
+statistics_service = StatisticsService()
 
 
 # Request/Response Models
@@ -79,6 +81,34 @@ class StockSentimentsResponse(BaseModel):
     summary: dict = Field(..., description="Sentiment summary statistics")
 
 
+class SourceSentimentBlock(BaseModel):
+    """Per-channel sentiment counts and percentages."""
+
+    total: int = 0
+    positive: int = 0
+    negative: int = 0
+    neutral: int = 0
+    positive_percentage: float = 0.0
+    negative_percentage: float = 0.0
+    neutral_percentage: float = 0.0
+
+
+class SourceComparisonResponse(BaseModel):
+    """Sentiment breakdown by ingest channel (when viewing all sources)."""
+
+    reddit: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+    news: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+    twitter: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+
+
+class DailyTrendPoint(BaseModel):
+    """One day in the market-wide sentiment series."""
+
+    date: str
+    count: int
+    net_sentiment: float
+
+
 class StatisticsResponse(BaseModel):
     """Response model for aggregate statistics."""
 
@@ -88,6 +118,14 @@ class StatisticsResponse(BaseModel):
     top_stocks: List[dict] = Field(..., description="Most frequently mentioned stocks")
     recent_activity: dict = Field(..., description="Recent activity statistics")
     date_range: dict = Field(..., description="Data date range")
+    daily_trend: List[DailyTrendPoint] = Field(
+        default_factory=list,
+        description="Daily mention volume and net sentiment for charts",
+    )
+    source_comparison: Optional[SourceComparisonResponse] = Field(
+        None,
+        description="Per-source sentiment when data_source filter is not applied",
+    )
 
 
 # Endpoints
@@ -348,146 +386,43 @@ async def get_stock_sentiment(
 
 
 @router.get("/statistics")
-async def get_statistics() -> StatisticsResponse:
+async def get_statistics(
+    days: Optional[int] = Query(
+        None,
+        description="Limit to the last N days relative to the newest record",
+        ge=1,
+    ),
+    data_source: Optional[str] = Query(
+        None,
+        description="Ingest channel: all (omit), reddit, news, twitter (or x)",
+    ),
+) -> StatisticsResponse:
     """
-    Get aggregate statistics across all data.
+    Aggregate statistics from the sentiment database (SQL).
 
-    Provides high-level metrics and insights from the entire dataset.
-
-    **Use Cases:**
-    - Dashboard overview metrics
-    - Understanding overall sentiment trends
-    - Identifying most active stocks
-    - Monitoring system activity
-
-    **Response includes:**
-    - Total predictions and stocks analyzed
-    - Overall sentiment distribution
-    - Top mentioned stocks
-    - Recent activity metrics
-    - Data date range
-
-    **Example:**
-    ```
-    GET /api/v1/data/statistics
-    ```
+    Optional ``data_source`` filters all aggregates to one channel. When omitted,
+    ``source_comparison`` includes Reddit vs news vs X side-by-side sentiment.
     """
-    cached = _stats_cache.get("statistics")
+    cache_key = ("statistics", days, (data_source or "").lower() or None)
+    cached = _stats_cache.get(cache_key)
     if cached is not None:
         return cached
 
     try:
-        # Get all data
-        all_data = storage.get_all_sentiments()
-
-        # Calculate statistics
-        total_predictions = len(all_data)
-
-        # Count sentiments
-        sentiment_counts = {"positive": 0, "negative": 0, "neutral": 0}
-        stock_mentions = {}
-        timestamps = []
-
-        for item in all_data:
-            label = item.get("sentiment_label", "neutral")
-            sentiment_counts[label] = sentiment_counts.get(label, 0) + 1
-
-            ticker = item.get("ticker")
-            if ticker:
-                if ticker:
-                    if ticker not in stock_mentions:
-                        company_info = stock_db.get_by_ticker(ticker) or {}
-                        company_name = company_info.get(
-                            "company_name", item.get("mentioned_as", ticker)
-                        )
-                        stock_mentions[ticker] = {
-                            "ticker": ticker,
-                            "company_name": company_name,
-                            "count": 0,
-                            "positive": 0,
-                            "negative": 0,
-                            "neutral": 0,
-                        }
-                    stock_mentions[ticker]["count"] += 1
-                    stock_mentions[ticker][label] = stock_mentions[ticker].get(label, 0) + 1
-
-            # Collect timestamps
-            ts = item.get("timestamp")
-            if ts:
-                timestamps.append(ts)
-
-        # Get top stocks
-        top_stocks = sorted(
-            stock_mentions.values(),
-            key=lambda x: x["count"],
-            reverse=True,
-        )[:10]
-
-        # Calculate date range
-        timestamps_dt: list[datetime] = []
-        if timestamps:
-            timestamps_dt = [
-                datetime.fromisoformat(ts.replace("Z", "")) for ts in timestamps
-            ]
-            date_range = {
-                "earliest": min(timestamps_dt).isoformat() + "Z",
-                "latest": max(timestamps_dt).isoformat() + "Z",
-            }
-        else:
-            date_range = {"earliest": None, "latest": None}
-
-        # Recent activity — anchor to the latest data point so that
-        # historical datasets (e.g. 2021-2022) show meaningful numbers.
-        if timestamps_dt:
-            anchor = max(timestamps_dt)
-        else:
-            anchor = datetime.utcnow()
-        day_ago = anchor - timedelta(days=1)
-        week_ago = anchor - timedelta(days=7)
-        month_ago = anchor - timedelta(days=30)
-
-        recent_counts = {"last_24h": 0, "last_7d": 0, "last_30d": 0}
-        for ts in timestamps:
-            ts_dt = datetime.fromisoformat(ts.replace("Z", ""))
-            if ts_dt >= day_ago:
-                recent_counts["last_24h"] += 1
-            if ts_dt >= week_ago:
-                recent_counts["last_7d"] += 1
-            if ts_dt >= month_ago:
-                recent_counts["last_30d"] += 1
-
-        # Calculate sentiment distribution percentages
-        total_with_sentiment = sum(sentiment_counts.values())
-        sentiment_distribution = {
-            "positive": sentiment_counts["positive"],
-            "negative": sentiment_counts["negative"],
-            "neutral": sentiment_counts["neutral"],
-            "positive_percentage": (
-                round((sentiment_counts["positive"] / total_with_sentiment) * 100, 2)
-                if total_with_sentiment > 0
-                else 0
-            ),
-            "negative_percentage": (
-                round((sentiment_counts["negative"] / total_with_sentiment) * 100, 2)
-                if total_with_sentiment > 0
-                else 0
-            ),
-            "neutral_percentage": (
-                round((sentiment_counts["neutral"] / total_with_sentiment) * 100, 2)
-                if total_with_sentiment > 0
-                else 0
-            ),
-        }
-
-        response = StatisticsResponse(
-            total_predictions=total_predictions,
-            total_stocks_analyzed=len(stock_mentions),
-            sentiment_distribution=sentiment_distribution,
-            top_stocks=top_stocks,
-            recent_activity=recent_counts,
-            date_range=date_range,
+        raw = statistics_service.get_statistics(
+            days=days,
+            data_source=data_source,
+            include_source_comparison=data_source is None,
         )
-        _stats_cache["statistics"] = response
+        sc = raw.pop("source_comparison", None)
+        source_model = (
+            SourceComparisonResponse(**sc) if isinstance(sc, dict) else None
+        )
+        response = StatisticsResponse(
+            **raw,
+            source_comparison=source_model,
+        )
+        _stats_cache[cache_key] = response
         return response
 
     except Exception as e:

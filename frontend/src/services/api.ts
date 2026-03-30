@@ -75,6 +75,25 @@ export interface DailyTrendPoint {
   net_sentiment: number;
 }
 
+/** Per-channel totals for comparing Reddit vs news vs X */
+export interface SourceSentimentBlock {
+  total: number;
+  positive: number;
+  negative: number;
+  neutral: number;
+  positive_percentage: number;
+  negative_percentage: number;
+  neutral_percentage: number;
+}
+
+export interface SourceComparison {
+  reddit: SourceSentimentBlock;
+  news: SourceSentimentBlock;
+  twitter: SourceSentimentBlock;
+}
+
+export type SentimentSourceFilter = 'all' | 'reddit' | 'news' | 'twitter';
+
 export interface StatisticsResponse {
   total_predictions: number;
   total_stocks_analyzed: number;
@@ -90,6 +109,8 @@ export interface StatisticsResponse {
     latest: string | null;
   };
   daily_trend: DailyTrendPoint[];
+  /** Present when no data_source filter is applied */
+  source_comparison?: SourceComparison | null;
 }
 
 export interface TrendingStock {
@@ -136,7 +157,11 @@ export interface StockSentimentResponse {
 // API Service
 export const apiService = {
   // Data endpoints
-  async getStatistics(params?: { days?: number }): Promise<StatisticsResponse> {
+  async getStatistics(params?: {
+    days?: number;
+    /** reddit | news | twitter | x — omit for all sources */
+    data_source?: string;
+  }): Promise<StatisticsResponse> {
     const response = await api.get<StatisticsResponse>('/data/statistics', { params });
     return response.data;
   },

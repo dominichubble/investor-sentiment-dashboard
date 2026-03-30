@@ -4,7 +4,7 @@ from datetime import date, datetime, time
 from typing import Any
 
 from fastapi import APIRouter, Query
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from app.api.prediction_metadata import build_prediction_metadata
 from app.services.statistics_service import StatisticsService
@@ -66,6 +66,30 @@ class StockInfo(BaseModel):
     neutral: int
 
 
+class DailyTrendPoint(BaseModel):
+    """One day in the market-wide sentiment series."""
+
+    date: str
+    count: int
+    net_sentiment: float
+
+
+class SourceSentimentBlock(BaseModel):
+    total: int = 0
+    positive: int = 0
+    negative: int = 0
+    neutral: int = 0
+    positive_percentage: float = 0.0
+    negative_percentage: float = 0.0
+    neutral_percentage: float = 0.0
+
+
+class SourceComparisonResponse(BaseModel):
+    reddit: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+    news: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+    twitter: SourceSentimentBlock = Field(default_factory=SourceSentimentBlock)
+
+
 class StatisticsResponse(BaseModel):
     """Dashboard statistics payload."""
 
@@ -75,6 +99,8 @@ class StatisticsResponse(BaseModel):
     top_stocks: list[StockInfo]
     recent_activity: dict[str, int]
     date_range: dict[str, str | None]
+    daily_trend: list[DailyTrendPoint] = Field(default_factory=list)
+    source_comparison: SourceComparisonResponse | None = None
 
 
 @router.get("/_ping")
@@ -146,7 +172,19 @@ async def get_statistics(
         description="Limit to the last N days relative to the newest record. Omit for all data.",
         ge=1,
     ),
+    data_source: str | None = Query(
+        None,
+        description="Ingest channel: reddit, news, twitter (omit for all)",
+    ),
 ) -> StatisticsResponse:
     """Return aggregated dashboard statistics from the database."""
-    stats = statistics_service.get_statistics(days=days)
-    return StatisticsResponse(**stats)
+    raw = statistics_service.get_statistics(
+        days=days,
+        data_source=data_source,
+        include_source_comparison=data_source is None,
+    )
+    sc = raw.pop("source_comparison", None)
+    source_model = (
+        SourceComparisonResponse(**sc) if isinstance(sc, dict) else None
+    )
+    return StatisticsResponse(**raw, source_comparison=source_model)

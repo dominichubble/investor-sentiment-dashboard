@@ -892,6 +892,184 @@
   line-height: 1.65;
 }
 
+/* Sentiment source filter (Reddit / News / X) */
+.sa-source-panel {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+.sa-source-panel__loading,
+.sa-source-panel__empty {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 12px 0 0;
+  text-align: center;
+}
+
+.sa-source-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 20px 0 24px;
+}
+
+.sa-source-filter__btn {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.sa-source-filter__btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.sa-source-filter__btn.is-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
+}
+
+.sa-source-filter-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+}
+
+.sa-source-filter-summary__sep {
+  opacity: 0.45;
+}
+
+.sa-subsection-title {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 650;
+  color: var(--color-text);
+  margin: 28px 0 8px;
+  text-align: center;
+}
+
+.sa-section-desc--tight {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.sa-source-compare {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 900px) {
+  .sa-source-compare {
+    grid-template-columns: 1fr;
+  }
+}
+
+.sa-source-compare__card {
+  padding: 16px 18px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-xs);
+}
+
+.sa-source-compare__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.sa-source-compare__title {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+}
+
+.sa-source-compare__n {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.sa-source-compare__bar-wrap {
+  margin-bottom: 8px;
+}
+
+.sa-source-compare__bar {
+  display: flex;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--color-border);
+}
+
+.sa-source-compare__seg {
+  height: 100%;
+  min-width: 0;
+  transition: width 0.25s ease;
+}
+
+.sa-source-compare__seg--pos {
+  background: var(--color-positive, #16a34a);
+}
+
+.sa-source-compare__seg--neu {
+  background: var(--color-text-subtle, #94a3b8);
+}
+
+.sa-source-compare__seg--neg {
+  background: var(--color-negative, #dc2626);
+}
+
+.sa-source-compare__legend {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.sa-source-compare__legend-pos {
+  color: var(--color-positive, #16a34a);
+}
+
+.sa-source-compare__legend-neu {
+  color: var(--color-text-secondary);
+}
+
+.sa-source-compare__legend-neg {
+  color: var(--color-negative, #dc2626);
+}
+
+.sa-source-compare__empty {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .stock-analysis {

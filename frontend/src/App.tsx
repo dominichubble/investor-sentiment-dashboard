@@ -1,7 +1,26 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Link,
+  useSearchParams,
+} from 'react-router-dom';
+import MarketOverview from './pages/MarketOverview/MarketOverview';
 import StockAnalysis from './pages/StockAnalysis';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
+
+/** Legacy links to `/?ticker=…` (and related query params) go to stock analysis. */
+function RootRoute() {
+  const [searchParams] = useSearchParams();
+  const ticker = searchParams.get('ticker')?.trim();
+  if (ticker) {
+    const q = searchParams.toString();
+    return <Navigate to={q ? `/analyze?${q}` : '/analyze'} replace />;
+  }
+  return <MarketOverview />;
+}
 
 function App() {
   return (
@@ -9,8 +28,9 @@ function App() {
       <Router>
         <div className="App">
           <Routes>
-            <Route path="/" element={<StockAnalysis />} />
-            <Route path="/correlation" element={<Navigate to="/" replace />} />
+            <Route path="/" element={<RootRoute />} />
+            <Route path="/analyze" element={<StockAnalysis />} />
+            <Route path="/correlation" element={<Navigate to="/analyze" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
@@ -27,9 +47,14 @@ function NotFound() {
       <p className="not-found__text">
         The page you are looking for does not exist or has been moved.
       </p>
-      <Link to="/" className="not-found__link">
-        Back to analysis
-      </Link>
+      <div className="not-found__links">
+        <Link to="/" className="not-found__link">
+          Market overview
+        </Link>
+        <Link to="/analyze" className="not-found__link">
+          Stock analysis
+        </Link>
+      </div>
     </div>
   );
 }

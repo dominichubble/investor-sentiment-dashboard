@@ -3,7 +3,8 @@
 # Reddit API
 praw>=7.7.0
 
-# Twitter/X API
+# Twitter/X: default ingest uses snscrape (no official API key). Optional: tweepy for TWITTER_INGEST_BACKEND=api.
+snscrape>=0.7.0
 tweepy>=4.14.0
 
 # News API

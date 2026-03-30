@@ -10,7 +10,7 @@ client = TestClient(app)
 class DummyStatisticsService:
     """Stub service returning deterministic statistics payload."""
 
-    def get_statistics(self):
+    def get_statistics(self, *args, **kwargs):
         return {
             "total_predictions": 12,
             "total_stocks_analyzed": 3,
@@ -36,6 +36,38 @@ class DummyStatisticsService:
             "date_range": {
                 "earliest": "2026-01-01T00:00:00Z",
                 "latest": "2026-02-23T00:00:00Z",
+            },
+            "daily_trend": [
+                {"date": "2026-02-01", "count": 3, "net_sentiment": 0.1},
+            ],
+            "source_comparison": {
+                "reddit": {
+                    "total": 4,
+                    "positive": 2,
+                    "negative": 1,
+                    "neutral": 1,
+                    "positive_percentage": 50.0,
+                    "negative_percentage": 25.0,
+                    "neutral_percentage": 25.0,
+                },
+                "news": {
+                    "total": 4,
+                    "positive": 2,
+                    "negative": 1,
+                    "neutral": 1,
+                    "positive_percentage": 50.0,
+                    "negative_percentage": 25.0,
+                    "neutral_percentage": 25.0,
+                },
+                "twitter": {
+                    "total": 4,
+                    "positive": 2,
+                    "negative": 1,
+                    "neutral": 1,
+                    "positive_percentage": 50.0,
+                    "negative_percentage": 25.0,
+                    "neutral_percentage": 25.0,
+                },
             },
         }
 
