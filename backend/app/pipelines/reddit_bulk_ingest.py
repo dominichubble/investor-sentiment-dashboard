@@ -331,7 +331,7 @@ def _load_subreddits_file(path: Path) -> List[str]:
 
 
 def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Bulk Reddit → SQLite sentiment ingest")
+    p = argparse.ArgumentParser(description="Bulk Reddit → database sentiment ingest")
     p.add_argument(
         "--subreddits",
         nargs="+",

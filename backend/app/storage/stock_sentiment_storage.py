@@ -1,7 +1,7 @@
 """
 Legacy JSON-based storage for stock-sentiment pairs.
 
-Retained for migration/reference; SQLite is the primary store.
+Retained for migration/reference; PostgreSQL (Neon) is the primary store.
 """
 
 import json

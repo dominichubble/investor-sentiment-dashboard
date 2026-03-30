@@ -1,5 +1,6 @@
-# Daily: Reddit, NewsAPI, X/Twitter -> FinBERT -> SQLite (data/db/sentiments.db).
-# Secrets: REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT, NEWS_API_KEY, TWITTER_BEARER_TOKEN
+# Daily: Reddit, NewsAPI, X/Twitter -> FinBERT -> Neon PostgreSQL (DATABASE_URL).
+# Secrets: DATABASE_URL (Neon), REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USER_AGENT,
+#          NEWS_API_KEY, TWITTER_BEARER_TOKEN (optional)
 
 name: Daily sentiment ingestion
 
@@ -9,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: sentiment-ingest-${{ github.ref }}
@@ -17,6 +18,7 @@ concurrency:
 
 env:
   PYTHONPATH: ${{ github.workspace }}/backend
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
   collect-and-store:
@@ -49,8 +51,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install --no-cache-dir -r backend/requirements.txt
 
-      - name: Ensure database directory exists
-        run: mkdir -p data/db
+      - name: Require Neon DATABASE_URL
+        run: |
+          if [ -z "${DATABASE_URL:-}" ]; then
+            echo "::error::Add the DATABASE_URL repository secret (Neon PostgreSQL connection string)."
+            exit 1
+          fi
 
       - name: Reddit to sentiment to DB
         env:
@@ -76,26 +82,6 @@ jobs:
           fi
           python -m app.pipelines.ingest_twitter --max-tweets 80 --store-db --no-write-files
 
-      - name: Commit and push sentiments.db
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ ! -f data/db/sentiments.db ]; then
-            echo "::error::data/db/sentiments.db missing after ingest steps"
-            exit 1
-          fi
-          ROWS="$(python -c "import sqlite3; c=sqlite3.connect('data/db/sentiments.db').cursor(); print(c.execute('SELECT COUNT(*) FROM sentiment_records').fetchone()[0])")"
-          echo "sentiment_records row count after ingest: ${ROWS}"
-          git add data/db/sentiments.db
-          if git diff --staged --quiet; then
-            echo "No database file change vs HEAD (duplicate run or INSERT OR IGNORE skipped all rows)."
-          else
-            git diff --staged --stat
-            git commit -m "chore(data): daily sentiment ingest $(date -u +'%Y-%m-%d %H:%M UTC') (rows=${ROWS})"
-            git pull --rebase origin "${GITHUB_REF_NAME}"
-            git push origin "${GITHUB_REF_NAME}"
-          fi
-
       - name: Summary
         if: always()
         run: |
@@ -104,12 +90,13 @@ jobs:
             echo ""
             echo "- Runner time (UTC): $(date -u)"
             echo "- Branch: ${GITHUB_REF_NAME}"
+            echo "- Target: Neon PostgreSQL"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
-          if [ -f data/db/sentiments.db ]; then
-            echo "### sentiments.db" >> "$GITHUB_STEP_SUMMARY"
-            ls -lh data/db/sentiments.db >> "$GITHUB_STEP_SUMMARY"
-            python -c "import sqlite3; c=sqlite3.connect('data/db/sentiments.db').cursor(); c.execute('SELECT COUNT(*) FROM sentiment_records'); print('- rows:', c.fetchone()[0])" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "${DATABASE_URL:-}" ]; then
+            ROWS="$(python -c "from sqlalchemy import text; from app.storage.database import get_engine; c=get_engine().connect(); print(c.execute(text(\"SELECT COUNT(*) FROM sentiment_records\")).scalar()); c.close()")"
+            echo "### sentiment_records" >> "$GITHUB_STEP_SUMMARY"
+            echo "- rows: ${ROWS}" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "_No sentiments.db_" >> "$GITHUB_STEP_SUMMARY"
+            echo "_DATABASE_URL not set — row count skipped_" >> "$GITHUB_STEP_SUMMARY"
           fi

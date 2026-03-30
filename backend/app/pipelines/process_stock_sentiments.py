@@ -1,6 +1,6 @@
 """DB-native stock enrichment pipeline.
 
-Reads existing document-level sentiment rows from SQLite, runs stock
+Reads existing document-level sentiment rows from the database, runs stock
 entity analysis, and writes stock-level sentiment rows back into the same DB.
 """
 
@@ -28,7 +28,7 @@ def process_documents(
     batch_size: int = 100,
     reprocess: bool = False,
 ) -> Dict[str, int]:
-    """Generate stock-level rows from document rows already in SQLite.
+    """Generate stock-level rows from document rows already in the database.
 
     Uses INSERT OR IGNORE with stable record IDs for natural dedup,
     so reprocessing the same documents is safe and idempotent.

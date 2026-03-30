@@ -387,5 +387,5 @@ class SentimentStorage:
             session.close()
 
 
-# Backward-compatible alias so existing imports still work.
+# Backward-compatible alias (legacy name; implementation is PostgreSQL-only).
 SQLiteSentimentStorage = SentimentStorage

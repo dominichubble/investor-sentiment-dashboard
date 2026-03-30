@@ -1,6 +1,6 @@
 # Storage Module
 
-**Note:** The primary store is now SQLite (`data/db/sentiments.db`) using the unified
+**Note:** The primary store is PostgreSQL (Neon) via `DATABASE_URL`, unified
 `sentiment_records` table. The CSV/JSON helpers in `prediction_storage.py` are legacy
 import/export utilities and are no longer used as the system of record.
 

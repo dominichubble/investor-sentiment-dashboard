@@ -11,7 +11,8 @@ services:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
-      - DATABASE_URL=${DATABASE_URL:-sqlite:///./sentiment.db}
+      # Neon or other Postgres — set in repo-root .env (see .env.example)
+      - DATABASE_URL=${DATABASE_URL}
     volumes:
       - ./backend:/app
       - ./data:/app/data

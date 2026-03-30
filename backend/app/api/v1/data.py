@@ -96,7 +96,7 @@ async def get_predictions(
     start_date: date | None = Query(None),
     end_date: date | None = Query(None),
 ) -> PredictionsResponse:
-    """Return paginated predictions from SQLite storage."""
+    """Return paginated predictions from database storage."""
     start_dt = datetime.combine(start_date, time.min) if start_date else None
     end_dt = datetime.combine(end_date, time.max) if end_date else None
     offset = (page - 1) * page_size
@@ -147,6 +147,6 @@ async def get_statistics(
         ge=1,
     ),
 ) -> StatisticsResponse:
-    """Return aggregated dashboard statistics from SQLite."""
+    """Return aggregated dashboard statistics from the database."""
     stats = statistics_service.get_statistics(days=days)
     return StatisticsResponse(**stats)

@@ -13,9 +13,8 @@ data/raw/**/*.json
 data/raw/**/*.csv
 data/raw/**/*.txt
 
-# SQLite databases under data/db (daily ingest uses sentiments.db — tracked on main)
+# Local SQLite / DB files under data/db (Neon is canonical; no DB file in repo)
 data/db/*.db
-!data/db/sentiments.db
 
 # Legacy / removed directories
 data/predictions/

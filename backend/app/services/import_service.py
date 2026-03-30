@@ -1,4 +1,4 @@
-"""Import service for ingesting external records into SQLite."""
+"""Import service for ingesting external records into PostgreSQL (Neon)."""
 
 from __future__ import annotations
 

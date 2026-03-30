@@ -1,8 +1,7 @@
 """
 PostgreSQL (Neon) database module using SQLAlchemy.
 
-Reads DATABASE_URL from the environment and provides the engine,
-session factory, and ORM model for unified sentiment record storage.
+Requires DATABASE_URL (connection string). Tables are created on first engine use.
 """
 
 from __future__ import annotations
@@ -116,7 +115,7 @@ def get_engine():
     global _engine
     if _engine is None:
         _load_dotenv_if_needed()
-        url = os.environ.get("DATABASE_URL")
+        url = os.environ.get("DATABASE_URL", "").strip()
         if not url:
             raise RuntimeError(
                 "DATABASE_URL environment variable is not set. "

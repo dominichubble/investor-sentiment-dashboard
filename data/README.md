@@ -4,9 +4,9 @@ This directory contains sample cleaned and annotated datasets for the Investor S
 
 ## Current Storage Model (DB-First)
 
-The project now runs in **DB-first mode** for daily operations:
+The project runs in **DB-first mode** for daily operations:
 
-- Daily ingestion writes directly into `data/db/sentiments.db`.
+- The canonical store is **PostgreSQL (Neon)** via `DATABASE_URL` in `.env` (and the same secret in GitHub Actions for scheduled ingest).
 - Local `data/raw/`, `data/predictions/`, and `data/stock_sentiments/` are legacy paths and are not required for runtime.
 - Local file artifacts (for debugging or audit) are optional and disabled by default in ingestion scripts.
 

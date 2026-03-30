@@ -227,7 +227,7 @@ def run_ingestion(
         limit_per_subreddit: Maximum posts per subreddit
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
-        store_db: If True, persist records directly to SQLite
+        store_db: If True, persist records directly to the database
         write_files: If True, also export JSON files to local data directory
 
     Returns:
@@ -376,7 +376,7 @@ Examples:
         "--store-db",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Store ingested records in SQLite (default: True)",
+        help="Store ingested records in the database (default: True)",
     )
     parser.add_argument(
         "--write-files",

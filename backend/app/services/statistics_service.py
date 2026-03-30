@@ -1,4 +1,4 @@
-"""Statistics aggregation service backed by SQLite storage."""
+"""Statistics aggregation service backed by sentiment record storage."""
 
 from __future__ import annotations
 

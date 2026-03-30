@@ -436,7 +436,7 @@ def run_ingestion(
         min_engagement: Minimum engagement threshold
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
-        store_db: If True, persist records directly to SQLite
+        store_db: If True, persist records directly to the database
         write_files: If True, also export CSV files to local data directory
 
     Returns:
@@ -538,7 +538,7 @@ Examples:
         "--store-db",
         action=argparse.BooleanOptionalAction,
         default=True,
-        help="Store ingested records in SQLite (default: True)",
+        help="Store ingested records in the database (default: True)",
     )
     parser.add_argument(
         "--write-files",

@@ -28,6 +28,7 @@ Key capabilities:
 
 - **Python 3.11+** with pip
 - **Node.js 18+** with npm
+- A **Neon** (or other PostgreSQL) database and `DATABASE_URL` in repo-root `.env` (see `.env.example`)
 - A terminal (PowerShell, bash, etc.)
 
 ### 1. Backend
@@ -79,7 +80,7 @@ investor-sentiment-dashboard/
 │   │   ├── models/                  # FinBERT model wrapper, keyword baseline
 │   │   ├── pipelines/               # Reddit, Twitter, News ingestion
 │   │   ├── services/                # Import service, statistics service
-│   │   └── storage/                 # SQLite storage (SQLAlchemy ORM)
+│   │   └── storage/                 # PostgreSQL (Neon) via SQLAlchemy
 │   ├── api/routers/                 # Correlation router (legacy path)
 │   ├── scripts/                     # import_tweets.py, generate_lime_examples.py
 │   ├── data/evaluation/             # Benchmark results (JSON)
@@ -94,7 +95,7 @@ investor-sentiment-dashboard/
 │   │   └── types/                   # TypeScript interfaces
 │   └── package.json
 ├── data/
-│   ├── db/sentiments.db             # SQLite database (primary data store)
+│   ├── db/                          # Local DB dir (optional; Neon is primary store)
 │   └── processed/explanations/      # LIME example outputs (PNG + HTML)
 ├── notebooks/                       # Jupyter notebooks for exploration
 └── CONTEXT.MD                       # Detailed project context and progress log
@@ -139,7 +140,7 @@ python -m pytest tests/ -v
 | Layer     | Technology                                      |
 |-----------|-------------------------------------------------|
 | Frontend  | React 18, TypeScript, Vite, Recharts            |
-| Backend   | FastAPI, Uvicorn, SQLAlchemy, SQLite             |
+| Backend   | FastAPI, Uvicorn, SQLAlchemy, PostgreSQL (Neon)  |
 | ML Model  | FinBERT (ProsusAI/finbert via HuggingFace)       |
 | XAI       | LIME (lime-text), Matplotlib                     |
 | Data      | Reddit (PRAW), NewsAPI, yfinance, historical CSV |

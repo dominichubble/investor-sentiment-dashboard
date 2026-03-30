@@ -2,7 +2,7 @@
 Legacy Sentiment Prediction Storage Module
 
 Provides CSV/JSON import/export utilities for sentiment predictions.
-SQLite is the primary store for runtime data.
+PostgreSQL (Neon) is the primary store for runtime data.
 
 Usage:
     from app.storage import save_prediction, load_predictions
