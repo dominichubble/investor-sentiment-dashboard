@@ -99,6 +99,10 @@ class CorrelationResponse(BaseModel):
     period: Optional[str] = None
     sentiment_metric: Optional[str] = None
     price_metric: Optional[str] = None
+    trailing_days: Optional[int] = Field(
+        None,
+        description="Trailing window (days) for net_sentiment rolling mean used in correlation",
+    )
     pearson: Optional[CorrelationResult] = None
     spearman: Optional[CorrelationResult] = None
     error: Optional[str] = None
@@ -122,6 +126,7 @@ class LagAnalysisResponse(BaseModel):
     max_lag_days: int
     lags: List[LagResult]
     best_lag: Optional[LagResult] = None
+    trailing_days: Optional[int] = None
     error: Optional[str] = None
 
 
@@ -133,6 +138,10 @@ class TimeSeriesPoint(BaseModel):
     returns: Optional[float] = None
     avg_sentiment_score: float
     net_sentiment: float
+    trailing_net_sentiment: float = Field(
+        ...,
+        description="Causal rolling mean of net_sentiment over trailing_days",
+    )
     mention_count: int
     positive_ratio: float
     negative_ratio: float
@@ -144,6 +153,9 @@ class TimeSeriesResponse(BaseModel):
 
     ticker: str
     data_points: int
+    trailing_days: int = Field(
+        1, description="Window length used for trailing_net_sentiment"
+    )
     series: List[TimeSeriesPoint]
 
 
@@ -182,6 +194,7 @@ class GrangerCausalityResponse(BaseModel):
     ticker: str
     max_lag: Optional[int] = None
     data_points: Optional[int] = None
+    trailing_days: Optional[int] = None
     sentiment_to_price: Optional[List[GrangerLagResult]] = None
     price_to_sentiment: Optional[List[GrangerLagResult]] = None
     summary: Optional[GrangerSummary] = None
@@ -213,6 +226,7 @@ class RollingCorrelationResponse(BaseModel):
     data_points: int
     series: List[RollingCorrelationPoint]
     statistics: Optional[RollingCorrelationStats] = None
+    trailing_days: Optional[int] = None
     error: Optional[str] = None
 
 
@@ -271,6 +285,12 @@ async def get_correlation(
     end_date: Optional[date] = Query(
         None, description="Custom range end (inclusive), requires start_date"
     ),
+    trailing_days: int = Query(
+        1,
+        ge=1,
+        le=30,
+        description="Trailing window (days) for net_sentiment rolling mean; 1 = same-day only",
+    ),
 ) -> CorrelationResponse:
     """
     Calculate correlation between sentiment and stock price for a ticker.
@@ -280,7 +300,7 @@ async def get_correlation(
     """
     start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
     cache_key = (
-        f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}"
+        f"{ticker.upper()}:{period}:{sentiment_metric}:{price_metric}:td{trailing_days}"
         f"{_range_cache_suffix(start_date, end_date)}"
     )
     cached = _correlation_cache.get(cache_key)
@@ -295,6 +315,7 @@ async def get_correlation(
             price_metric=price_metric,
             start_date=start_dt,
             end_date=end_dt,
+            trailing_days=trailing_days,
         )
         response = CorrelationResponse(**result)
         _correlation_cache[cache_key] = response
@@ -313,6 +334,12 @@ async def get_correlation_timeseries(
     end_date: Optional[date] = Query(
         None, description="Custom range end (inclusive), requires start_date"
     ),
+    trailing_days: int = Query(
+        1,
+        ge=1,
+        le=30,
+        description="Trailing window (days) for trailing_net_sentiment",
+    ),
 ) -> TimeSeriesResponse:
     """
     Get merged sentiment + price time-series data for charting.
@@ -322,7 +349,8 @@ async def get_correlation_timeseries(
     """
     start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
     cache_key = (
-        f"ts:{ticker.upper()}:{period}{_range_cache_suffix(start_date, end_date)}"
+        f"ts:{ticker.upper()}:{period}:td{trailing_days}"
+        f"{_range_cache_suffix(start_date, end_date)}"
     )
     cached = _timeseries_cache.get(cache_key)
     if cached is not None:
@@ -334,6 +362,7 @@ async def get_correlation_timeseries(
             period=period,
             start_date=start_dt,
             end_date=end_dt,
+            trailing_days=trailing_days,
         )
         response = TimeSeriesResponse(**result)
         _timeseries_cache[cache_key] = response
@@ -352,6 +381,12 @@ async def get_lag_analysis(
     ),
     start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
     end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
+    trailing_days: int = Query(
+        1,
+        ge=1,
+        le=30,
+        description="Trailing window (days) for net_sentiment when using net_sentiment metric",
+    ),
 ) -> LagAnalysisResponse:
     """
     Perform lag correlation analysis.
@@ -367,6 +402,7 @@ async def get_lag_analysis(
             sentiment_metric=sentiment_metric,
             start_date=start_dt,
             end_date=end_dt,
+            trailing_days=trailing_days,
         )
         return LagAnalysisResponse(**result)
     except Exception as e:
@@ -383,6 +419,12 @@ async def get_granger_causality(
     ),
     start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
     end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
+    trailing_days: int = Query(
+        1,
+        ge=1,
+        le=30,
+        description="Trailing window (days) for net_sentiment when using net_sentiment metric",
+    ),
 ) -> GrangerCausalityResponse:
     """
     Test Granger causality between sentiment and price returns.
@@ -391,7 +433,7 @@ async def get_granger_causality(
     """
     start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
     cache_key = (
-        f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}"
+        f"granger:{ticker.upper()}:{max_lag}:{period}:{sentiment_metric}:td{trailing_days}"
         f"{_range_cache_suffix(start_date, end_date)}"
     )
     cached = _granger_cache.get(cache_key)
@@ -406,6 +448,7 @@ async def get_granger_causality(
             sentiment_metric=sentiment_metric,
             start_date=start_dt,
             end_date=end_dt,
+            trailing_days=trailing_days,
         )
         response = GrangerCausalityResponse(**result)
         _granger_cache[cache_key] = response
@@ -427,6 +470,12 @@ async def get_rolling_correlation(
     ),
     start_date: Optional[date] = Query(None, description="Custom range start (inclusive)"),
     end_date: Optional[date] = Query(None, description="Custom range end (inclusive)"),
+    trailing_days: int = Query(
+        1,
+        ge=1,
+        le=30,
+        description="Trailing window (days) for net_sentiment when using net_sentiment metric",
+    ),
 ) -> RollingCorrelationResponse:
     """
     Calculate rolling windowed correlation between sentiment and price.
@@ -435,7 +484,7 @@ async def get_rolling_correlation(
     """
     start_dt, end_dt = _optional_range_datetimes(start_date, end_date)
     cache_key = (
-        f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}"
+        f"rolling:{ticker.upper()}:{window}:{period}:{sentiment_metric}:{price_metric}:td{trailing_days}"
         f"{_range_cache_suffix(start_date, end_date)}"
     )
     cached = _rolling_cache.get(cache_key)
@@ -451,6 +500,7 @@ async def get_rolling_correlation(
             price_metric=price_metric,
             start_date=start_dt,
             end_date=end_dt,
+            trailing_days=trailing_days,
         )
         response = RollingCorrelationResponse(**result)
         _rolling_cache[cache_key] = response

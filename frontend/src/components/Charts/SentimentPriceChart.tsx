@@ -13,18 +13,27 @@ import {
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
 import { chartTheme } from './chartTheme';
+import { trailingRollingMean } from '../../utils/sentimentRolling';
 
 interface SentimentPriceChartProps {
   data: TimeSeriesPoint[];
   height?: number;
   showVolume?: boolean;
+  /** 1 = same-day net only; 3+ = trailing mean of net_sentiment over that many days (causal). */
+  rollingWindowDays?: number;
+  /** When equal to rolling window and points include trailing_net_sentiment, use API values (no client recompute). */
+  apiTrailingDays?: number;
 }
 
 const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
   data,
   height = 400,
   showVolume = true,
+  rollingWindowDays = 3,
+  apiTrailingDays,
 }) => {
+  const window = Math.max(1, Math.min(30, Math.floor(rollingWindowDays || 1)));
+
   const { chartData, maxMentions, tickEvery } = useMemo(() => {
     if (!data?.length) {
       return { chartData: [], maxMentions: 1, tickEvery: 1 };
@@ -32,13 +41,23 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
     const maxM = Math.max(1, ...data.map((p) => p.mention_count ?? 0));
     const n = data.length;
     const tickEvery = n > 45 ? Math.ceil(n / 12) : n > 20 ? 2 : 1;
-    const chartData = data.map((point) => ({
+
+    const useApi =
+      apiTrailingDays === window &&
+      data.every((p) => typeof p.trailing_net_sentiment === 'number');
+    const nets = data.map((p) => p.net_sentiment);
+    const rollingNet = useApi
+      ? data.map((p) => p.trailing_net_sentiment)
+      : trailingRollingMean(nets, window);
+
+    const chartData = data.map((point, i) => ({
       ...point,
       shortDate: point.date.slice(5),
       fullDate: point.date,
+      rolling_net_sentiment: rollingNet[i],
     }));
     return { chartData, maxMentions: maxM * 1.08, tickEvery };
-  }, [data]);
+  }, [data, window, apiTrailingDays]);
 
   if (!chartData.length) {
     return (
@@ -55,6 +74,8 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
       </div>
     );
   }
+
+  const showRawOverlay = window > 1;
 
   const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
     if (!active || !payload?.length) return null;
@@ -75,13 +96,26 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
         <p style={{ margin: 0, color: chartTheme.price }}>
           Close: <strong>${d?.close?.toFixed(2)}</strong>
         </p>
+        {showRawOverlay && (
+          <p
+            style={{
+              margin: 0,
+              color: d?.net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
+              opacity: 0.85,
+            }}
+          >
+            Same-day net: <strong>{d?.net_sentiment?.toFixed(3)}</strong>
+          </p>
+        )}
         <p
           style={{
             margin: 0,
-            color: d?.net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
+            color:
+              d?.rolling_net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
           }}
         >
-          Net sentiment: <strong>{d?.net_sentiment?.toFixed(3)}</strong>
+          {window > 1 ? `${window}-day trailing net` : 'Net sentiment'}:{' '}
+          <strong>{d?.rolling_net_sentiment?.toFixed(3)}</strong>
         </p>
         <p style={{ margin: 0, color: '#495057' }}>
           Mentions: <strong>{d?.mention_count}</strong>
@@ -100,6 +134,9 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
     );
   };
 
+  const sentimentLabel =
+    window > 1 ? `Trailing net (${window}d)` : 'Net sentiment';
+
   return (
     <ResponsiveContainer width="100%" height={height} minWidth={0}>
       <ComposedChart
@@ -115,7 +152,6 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           interval={tickEvery > 1 ? tickEvery - 1 : 'preserveStartEnd'}
           minTickGap={28}
         />
-        {/* Price — primary left scale */}
         <YAxis
           yAxisId="price"
           orientation="left"
@@ -132,7 +168,6 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
             style: { fontSize: 11, fill: chartTheme.price, fontWeight: 600 },
           }}
         />
-        {/* Mention volume — separate scale (was incorrectly sharing sentiment axis) */}
         {showVolume && (
           <YAxis
             yAxisId="volume"
@@ -141,7 +176,6 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
             domain={[0, maxMentions]}
           />
         )}
-        {/* Sentiment — fixed [-1, 1] on the right */}
         <YAxis
           yAxisId="sentiment"
           orientation="right"
@@ -150,12 +184,12 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           tickLine={false}
           axisLine={{ stroke: chartTheme.grid }}
           tickFormatter={(v) => v.toFixed(1)}
-          width={40}
+          width={44}
           label={{
-            value: 'Net sentiment',
+            value: sentimentLabel,
             angle: 90,
             position: 'insideRight',
-            style: { fontSize: 11, fill: chartTheme.sentimentStroke, fontWeight: 600 },
+            style: { fontSize: 10, fill: chartTheme.sentimentStroke, fontWeight: 600 },
           }}
         />
         <Tooltip content={<CustomTooltip />} />
@@ -186,15 +220,29 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }}
         />
 
+        {showRawOverlay && (
+          <Line
+            yAxisId="sentiment"
+            type="monotone"
+            dataKey="net_sentiment"
+            stroke={chartTheme.axis}
+            strokeWidth={1.25}
+            strokeDasharray="4 4"
+            strokeOpacity={0.65}
+            dot={false}
+            name="Same-day net"
+          />
+        )}
+
         <Area
           yAxisId="sentiment"
           type="monotone"
-          dataKey="net_sentiment"
+          dataKey="rolling_net_sentiment"
           stroke={chartTheme.sentimentStroke}
           fill={chartTheme.sentimentFill}
           fillOpacity={1}
-          strokeWidth={2}
-          name="Net sentiment"
+          strokeWidth={2.5}
+          name={window > 1 ? `${window}-day trailing net` : 'Net sentiment'}
           activeDot={{ r: 4 }}
         />
       </ComposedChart>

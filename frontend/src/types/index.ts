@@ -55,6 +55,8 @@ export interface CorrelationResponse {
   period?: string;
   sentiment_metric?: string;
   price_metric?: string;
+  /** Backend trailing window used for net_sentiment correlations (1 = same day). */
+  trailing_days?: number;
   pearson: CorrelationResult | null;
   spearman: CorrelationResult | null;
   error?: string;
@@ -74,6 +76,7 @@ export interface LagAnalysisResponse {
   max_lag_days: number;
   lags: LagResult[];
   best_lag: LagResult | null;
+  trailing_days?: number;
   error?: string;
 }
 
@@ -83,6 +86,8 @@ export interface TimeSeriesPoint {
   returns: number | null;
   avg_sentiment_score: number;
   net_sentiment: number;
+  /** Causal rolling mean of net_sentiment; window length in TimeSeriesResponse.trailing_days. */
+  trailing_net_sentiment: number;
   mention_count: number;
   positive_ratio: number;
   negative_ratio: number;
@@ -92,6 +97,7 @@ export interface TimeSeriesPoint {
 export interface TimeSeriesResponse {
   ticker: string;
   data_points: number;
+  trailing_days: number;
   series: TimeSeriesPoint[];
 }
 
@@ -152,6 +158,7 @@ export interface GrangerCausalityResponse {
   ticker: string;
   max_lag?: number;
   data_points?: number;
+  trailing_days?: number;
   sentiment_to_price?: GrangerLagResult[];
   price_to_sentiment?: GrangerLagResult[];
   summary?: GrangerSummary;
@@ -182,5 +189,6 @@ export interface RollingCorrelationResponse {
   data_points: number;
   series: RollingCorrelationPoint[];
   statistics?: RollingCorrelationStats;
+  trailing_days?: number;
   error?: string;
 }

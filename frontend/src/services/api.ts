@@ -238,6 +238,7 @@ export const apiService = {
       end_date?: string;
       sentiment_metric?: string;
       price_metric?: string;
+      trailing_days?: number;
     }
   ): Promise<CorrelationResponse> {
     const response = await api.get<CorrelationResponse>(
@@ -253,6 +254,7 @@ export const apiService = {
       period?: string;
       start_date?: string;
       end_date?: string;
+      trailing_days?: number;
     }
   ): Promise<TimeSeriesResponse> {
     const response = await api.get<TimeSeriesResponse>(
@@ -270,8 +272,7 @@ export const apiService = {
       start_date?: string;
       end_date?: string;
       sentiment_metric?: string;
-      start_date?: string;
-      end_date?: string;
+      trailing_days?: number;
     }
   ): Promise<LagAnalysisResponse> {
     const response = await api.get<LagAnalysisResponse>(
@@ -320,6 +321,7 @@ export const apiService = {
       sentiment_metric?: string;
       start_date?: string;
       end_date?: string;
+      trailing_days?: number;
     }
   ): Promise<GrangerCausalityResponse> {
     const response = await api.get<GrangerCausalityResponse>(
@@ -338,6 +340,7 @@ export const apiService = {
       end_date?: string;
       sentiment_metric?: string;
       price_metric?: string;
+      trailing_days?: number;
     }
   ): Promise<RollingCorrelationResponse> {
     const response = await api.get<RollingCorrelationResponse>(

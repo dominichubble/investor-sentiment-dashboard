@@ -2,13 +2,15 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import {
   SentimentPriceChart,
+  DailySentimentAggregateChart,
+  GlobalMarketSentimentChart,
   CorrelationScatter,
   LagChart,
   RollingCorrelationChart,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
-import { apiService } from '../../services/api';
+import { apiService, type DailyTrendPoint } from '../../services/api';
 import type {
   CorrelationResponse,
   LagAnalysisResponse,
@@ -62,12 +64,16 @@ const StockAnalysis: React.FC = () => {
   // UI states
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [marketDailyTrend, setMarketDailyTrend] = useState<DailyTrendPoint[]>([]);
+  /** Trailing days for net sentiment when comparing to price (causal moving average). */
+  const [sentimentMemoryDays, setSentimentMemoryDays] = useState(3);
 
   const analyzeStock = useCallback(
     async (
       stockTicker: string,
       analysisPeriod: string,
       customRange: CustomRangePayload,
+      trailingDaysOverride?: number,
     ) => {
     if (!stockTicker) return;
 
@@ -75,13 +81,15 @@ const StockAnalysis: React.FC = () => {
     setError(null);
     setTicker(stockTicker);
 
+    const trailing_days = trailingDaysOverride ?? sentimentMemoryDays;
     const rangeParams = customRange
       ? {
           period: analysisPeriod,
           start_date: customRange.start_date,
           end_date: customRange.end_date,
+          trailing_days,
         }
-      : { period: analysisPeriod };
+      : { period: analysisPeriod, trailing_days };
 
     try {
       const [corrData, tsData, lagData, infoData, grangerResult, rollingResult] = await Promise.allSettled([
@@ -121,7 +129,7 @@ const StockAnalysis: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [sentimentMemoryDays]);
 
   const syncUrl = (sym: string, p: string, custom: CustomRangePayload) => {
     if (custom) {
@@ -130,6 +138,21 @@ const StockAnalysis: React.FC = () => {
       setSearchParams({ ticker: sym, period: p });
     }
   };
+
+  useEffect(() => {
+    let cancelled = false;
+    apiService
+      .getStatistics({ days: 90 })
+      .then((s) => {
+        if (!cancelled && Array.isArray(s.daily_trend) && s.daily_trend.length > 0) {
+          setMarketDailyTrend(s.daily_trend);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Load ticker (and optional range) from URL on first mount
   useEffect(() => {
@@ -246,6 +269,20 @@ const StockAnalysis: React.FC = () => {
         subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window."
       />
 
+      {marketDailyTrend.length > 0 && (
+        <ErrorBoundary fallbackTitle="Failed to render market-wide sentiment chart">
+          <div className="sa-chart-section sa-market-wide">
+            <h3 className="sa-section-title">Market-wide daily sentiment</h3>
+            <p className="sa-section-desc">
+              All stock-mention records in the database, grouped by calendar day (last 90 days relative to
+              the newest record). Bars are total mentions per day; the line is net sentiment
+              (positive minus negative counts, scaled by volume).
+            </p>
+            <GlobalMarketSentimentChart data={marketDailyTrend} height={300} />
+          </div>
+        </ErrorBoundary>
+      )}
+
       {/* Header / Search */}
       <div className="sa-header">
         <h1 className="sa-title">Analyze a stock</h1>
@@ -337,6 +374,51 @@ const StockAnalysis: React.FC = () => {
             )}
           </div>
         )}
+
+        <div className="sa-memory-panel" role="region" aria-labelledby="sa-memory-title">
+          <div className="sa-memory-panel__intro">
+            <span className="sa-memory-panel__kicker">Sentiment smoothing</span>
+            <h2 className="sa-memory-panel__title" id="sa-memory-title">
+              Trailing net sentiment
+            </h2>
+            <p className="sa-memory-panel__lede">
+              Choose how many <strong>past</strong> calendar days are averaged into each day’s net sentiment (no
+              lookahead). This single control updates Pearson/Spearman, lag, Granger, rolling correlation, and the
+              charts below.
+            </p>
+          </div>
+          <div className="sa-memory-panel__control">
+            <span className="sa-memory-panel__control-label" id="sa-memory-segment-label">
+              Window length
+            </span>
+            <div
+              className="sa-memory-segmented"
+              role="group"
+              aria-labelledby="sa-memory-segment-label"
+            >
+              {([1, 3, 5, 7] as const).map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  className={`sa-memory-segmented__btn ${sentimentMemoryDays === d ? 'is-active' : ''}`}
+                  aria-pressed={sentimentMemoryDays === d}
+                  onClick={() => {
+                    setSentimentMemoryDays(d);
+                    if (!ticker) return;
+                    const custom: CustomRangePayload =
+                      dateRangeMode === 'custom' && customStart && customEnd
+                        ? { start_date: customStart, end_date: customEnd }
+                        : null;
+                    analyzeStock(ticker, period, custom, d);
+                  }}
+                >
+                  <span className="sa-memory-segmented__value">{d === 1 ? '1' : d}</span>
+                  <span className="sa-memory-segmented__unit">{d === 1 ? 'day' : 'days'}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Error */}
@@ -462,16 +544,40 @@ const StockAnalysis: React.FC = () => {
             </div>
           </div>
 
-          {/* Dual-Axis Time Series */}
+          {/* Daily aggregated sentiment (mentions pooled by calendar day) */}
+          {timeSeries && timeSeries.series.length > 0 && (
+            <ErrorBoundary fallbackTitle="Failed to render daily sentiment chart">
+              <div className="sa-chart-section">
+                <h3 className="sa-section-title">Daily sentiment aggregate</h3>
+                <p className="sa-section-desc">
+                  Each day, all mentions of {ticker} are rolled into one bucket. The stacked bands show
+                  the fraction of mentions classified positive, neutral, or negative; the line is net
+                  sentiment (positive share minus negative share), from −1 to +1.
+                </p>
+                <DailySentimentAggregateChart data={timeSeries.series} height={400} />
+              </div>
+            </ErrorBoundary>
+          )}
+
+          {/* Dual-Axis Time Series — trailing sentiment vs price */}
           {timeSeries && timeSeries.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render time series chart">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Sentiment vs price over time</h3>
+                <h3 className="sa-section-title">Sentiment vs price (with memory)</h3>
                 <p className="sa-section-desc">
-                  Close price (left scale) and net sentiment −1…1 (right). Bars use their own scale for
-                  daily mention volume so counts are not distorted by the sentiment axis.
+                  The <strong>filled</strong> series is a <strong>trailing average</strong> of daily net
+                  sentiment: each point uses that calendar day and the previous N−1 days in range (no
+                  lookahead). A run of positive days pulls the curve up before you compare it to{' '}
+                  <strong>close</strong> (left axis). With N &gt; 1, the <strong>dashed</strong> line is
+                  same-day net only. Bars are daily mention counts on their own scale. Change the trailing window
+                  under the date range controls to refit correlations.
                 </p>
-                <SentimentPriceChart data={timeSeries.series} height={440} />
+                <SentimentPriceChart
+                  data={timeSeries.series}
+                  height={440}
+                  rollingWindowDays={sentimentMemoryDays}
+                  apiTrailingDays={timeSeries.trailing_days}
+                />
               </div>
             </ErrorBoundary>
           )}
@@ -483,13 +589,16 @@ const StockAnalysis: React.FC = () => {
                 <div className="sa-chart-section sa-chart-half">
                   <h3 className="sa-section-title">Sentiment vs return (per day)</h3>
                   <p className="sa-section-desc">
-                    Each point is one trading day. Colour shows quadrant alignment; size reflects mention
-                    volume. The dashed line is an ordinary least squares fit through the cloud.
+                    Each point is one trading day; the horizontal axis matches the trailing net sentiment
+                    window above (same series as Pearson <em>r</em>). Colour shows quadrant alignment; size
+                    reflects mention volume. The dashed line is an ordinary least squares fit through the
+                    cloud.
                   </p>
                   <CorrelationScatter
                     data={timeSeries.series}
                     correlationCoefficient={correlation.pearson?.coefficient}
                     height={360}
+                    trailingWindowDays={sentimentMemoryDays}
                   />
                 </div>
               </ErrorBoundary>
@@ -500,9 +609,9 @@ const StockAnalysis: React.FC = () => {
                 <div className="sa-chart-section sa-chart-half">
                   <h3 className="sa-section-title">Lag analysis</h3>
                   <p className="sa-section-desc">
-                    Pearson <em>r</em> between sentiment and returns at each day offset. Green or red
-                    bars are significant at 5%; grey bars are not. The outlined bar is the strongest lag
-                    in the grid.
+                    Pearson <em>r</em> between trailing net sentiment and returns at each day offset. Green
+                    or red bars are significant at 5%; grey bars are not. The outlined bar is the strongest
+                    lag in the grid.
                   </p>
                   <LagChart
                     data={lagAnalysis.lags}
@@ -520,8 +629,9 @@ const StockAnalysis: React.FC = () => {
               <div className="sa-chart-section">
                 <h3 className="sa-section-title">Rolling correlation ({rollingData.window}-day window)</h3>
                 <p className="sa-section-desc">
-                  Time-varying Pearson correlation between sentiment and returns. Shaded area highlights
-                  positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2 band.
+                  Time-varying Pearson correlation between trailing net sentiment and returns. Shaded area
+                  highlights positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2
+                  band.
                 </p>
                 <div className="sa-rolling-chart">
                   <RollingCorrelationChart

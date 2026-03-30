@@ -28,6 +28,22 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+_TRAILING_MAX_DAYS = 30
+
+
+def _trailing_window_days(trailing_days: Optional[int]) -> int:
+    """Clamp trailing window for causal rolling mean of net_sentiment (1 = same-day only)."""
+    if trailing_days is None or trailing_days < 1:
+        return 1
+    return min(_TRAILING_MAX_DAYS, int(trailing_days))
+
+
+def _sentiment_column_for_correlation(sentiment_metric: str) -> str:
+    """Map API sentiment_metric to merged DataFrame column."""
+    if sentiment_metric == "net_sentiment":
+        return "trailing_net_sentiment"
+    return sentiment_metric
+
 
 class CorrelationAnalyzer:
     """Analyzes correlation between sentiment and stock price movements."""
@@ -102,13 +118,19 @@ class CorrelationAnalyzer:
         period: str = "90d",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> pd.DataFrame:
         """
         Merge sentiment data with price data on a daily basis.
 
+        Adds ``trailing_net_sentiment``: causal rolling mean of ``net_sentiment``
+        over ``trailing_days`` (min_periods=1). For ``net_sentiment`` correlations,
+        use this column via ``_sentiment_column_for_correlation``.
+
         Returns:
             DataFrame with columns: date, close, returns, avg_score,
-            mention_count, net_sentiment, positive_ratio, negative_ratio, neutral_ratio.
+            mention_count, net_sentiment, trailing_net_sentiment,
+            positive_ratio, negative_ratio, neutral_ratio.
         """
         sentiment_df = self._aggregate_daily_sentiment(ticker, start_date, end_date)
         price_df = PriceService.get_daily_returns(
@@ -123,8 +145,14 @@ class CorrelationAnalyzer:
         price_df["date"] = pd.to_datetime(price_df["date"]).dt.normalize()
 
         merged = pd.merge(sentiment_df, price_df, on="date", how="inner")
+        merged = merged.sort_values("date").reset_index(drop=True)
 
-        return merged.sort_values("date").reset_index(drop=True)
+        w = _trailing_window_days(trailing_days)
+        merged["trailing_net_sentiment"] = (
+            merged["net_sentiment"].rolling(window=w, min_periods=1).mean()
+        )
+
+        return merged
 
     def calculate_correlation(
         self,
@@ -134,6 +162,7 @@ class CorrelationAnalyzer:
         price_metric: str = "returns",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> Dict:
         """
         Calculate Pearson and Spearman correlations between sentiment and price.
@@ -145,15 +174,18 @@ class CorrelationAnalyzer:
             price_metric: Column to use for price (returns, close).
             start_date: Inclusive range start (optional, with end_date).
             end_date: Inclusive range end (optional, with start_date).
+            trailing_days: For ``net_sentiment``, rolling window length (causal, 1=same day).
 
         Returns:
             Dictionary with correlation results and statistical significance.
         """
+        w = _trailing_window_days(trailing_days)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
+            trailing_days=w,
         )
 
         if merged.empty or len(merged) < 5:
@@ -163,9 +195,11 @@ class CorrelationAnalyzer:
                 "error": "Insufficient data for correlation analysis (need at least 5 overlapping days)",
                 "pearson": None,
                 "spearman": None,
+                "trailing_days": w,
             }
 
-        sentiment_values = merged[sentiment_metric].values
+        sent_col = _sentiment_column_for_correlation(sentiment_metric)
+        sentiment_values = merged[sent_col].values
         price_values = merged[price_metric].values
 
         # Remove any NaN pairs
@@ -180,6 +214,7 @@ class CorrelationAnalyzer:
                 "error": "Insufficient valid data points after cleaning",
                 "pearson": None,
                 "spearman": None,
+                "trailing_days": w,
             }
 
         # Check for constant arrays (would cause warnings)
@@ -190,6 +225,7 @@ class CorrelationAnalyzer:
                 "error": "One or both variables are constant (no variance)",
                 "pearson": None,
                 "spearman": None,
+                "trailing_days": w,
             }
 
         # Pearson correlation (linear relationship)
@@ -223,6 +259,7 @@ class CorrelationAnalyzer:
             "data_points": int(len(sentiment_clean)),
             "period": period_label,
             "sentiment_metric": sentiment_metric,
+            "trailing_days": w,
             "price_metric": price_metric,
             "pearson": {
                 "coefficient": round(float(pearson_r), 4),
@@ -246,6 +283,7 @@ class CorrelationAnalyzer:
         sentiment_metric: str = "net_sentiment",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> Dict:
         """
         Analyze correlation at different lag periods.
@@ -256,11 +294,13 @@ class CorrelationAnalyzer:
         Returns:
             Dictionary with lag correlation results.
         """
+        w = _trailing_window_days(trailing_days)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
+            trailing_days=w,
         )
 
         if merged.empty or len(merged) < max_lag_days + 5:
@@ -268,9 +308,11 @@ class CorrelationAnalyzer:
                 "ticker": ticker,
                 "error": "Insufficient data for lag analysis",
                 "lags": [],
+                "trailing_days": w,
             }
 
-        sentiment_values = merged[sentiment_metric].values
+        sent_col = _sentiment_column_for_correlation(sentiment_metric)
+        sentiment_values = merged[sent_col].values
         price_returns = merged["returns"].values
 
         lag_results: List[Dict] = []
@@ -340,6 +382,7 @@ class CorrelationAnalyzer:
             "max_lag_days": max_lag_days,
             "lags": lag_results,
             "best_lag": best_lag,
+            "trailing_days": w,
         }
 
     def granger_causality(
@@ -350,6 +393,7 @@ class CorrelationAnalyzer:
         sentiment_metric: str = "net_sentiment",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> Dict:
         """
         Test Granger causality between sentiment and price returns.
@@ -376,11 +420,13 @@ class CorrelationAnalyzer:
                 "Install with: pip install statsmodels",
             }
 
+        w = _trailing_window_days(trailing_days)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
+            trailing_days=w,
         )
 
         if merged.empty or len(merged) < max_lag + 10:
@@ -388,9 +434,11 @@ class CorrelationAnalyzer:
                 "ticker": ticker,
                 "error": f"Insufficient data for Granger causality "
                 f"(need at least {max_lag + 10} data points, have {len(merged)})",
+                "trailing_days": w,
             }
 
-        sentiment_values = merged[sentiment_metric].values
+        sent_col = _sentiment_column_for_correlation(sentiment_metric)
+        sentiment_values = merged[sent_col].values
         price_returns = merged["returns"].values
 
         valid_mask = ~(np.isnan(sentiment_values) | np.isnan(price_returns))
@@ -401,12 +449,14 @@ class CorrelationAnalyzer:
             return {
                 "ticker": ticker,
                 "error": "Insufficient valid data after NaN removal",
+                "trailing_days": w,
             }
 
         results: Dict = {
             "ticker": ticker,
             "max_lag": max_lag,
             "data_points": int(len(sentiment_clean)),
+            "trailing_days": w,
             "sentiment_to_price": [],
             "price_to_sentiment": [],
             "summary": {},
@@ -524,6 +574,7 @@ class CorrelationAnalyzer:
         price_metric: str = "returns",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> Dict:
         """
         Calculate rolling windowed correlation between sentiment and price.
@@ -540,23 +591,28 @@ class CorrelationAnalyzer:
         Returns:
             Dictionary with time-series of rolling correlation values.
         """
+        w = _trailing_window_days(trailing_days)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
+            trailing_days=w,
         )
 
         if merged.empty or len(merged) < window + 2:
             return {
                 "ticker": ticker,
                 "window": window,
+                "data_points": 0,
                 "error": f"Insufficient data (need at least {window + 2} days, "
                 f"have {len(merged)})",
                 "series": [],
+                "trailing_days": w,
             }
 
-        sent_series = merged[sentiment_metric]
+        sent_col = _sentiment_column_for_correlation(sentiment_metric)
+        sent_series = merged[sent_col]
         price_series = merged[price_metric]
 
         rolling_corr = sent_series.rolling(window=window).corr(price_series)
@@ -601,6 +657,7 @@ class CorrelationAnalyzer:
             "data_points": len(series),
             "series": series,
             "statistics": stats_summary,
+            "trailing_days": w,
         }
 
     def get_correlation_overview(
@@ -659,17 +716,20 @@ class CorrelationAnalyzer:
         period: str = "90d",
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
     ) -> Dict:
         """
         Get formatted time-series data for API response.
 
         Returns dictionary suitable for JSON serialization and frontend charting.
         """
+        w = _trailing_window_days(trailing_days)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
+            trailing_days=w,
         )
 
         if merged.empty:
@@ -677,6 +737,7 @@ class CorrelationAnalyzer:
                 "ticker": ticker,
                 "data_points": 0,
                 "series": [],
+                "trailing_days": w,
             }
 
         series = []
@@ -692,6 +753,9 @@ class CorrelationAnalyzer:
                     ),
                     "avg_sentiment_score": round(float(row["avg_score"]), 4),
                     "net_sentiment": round(float(row["net_sentiment"]), 4),
+                    "trailing_net_sentiment": round(
+                        float(row["trailing_net_sentiment"]), 4
+                    ),
                     "mention_count": int(row["mention_count"]),
                     "positive_ratio": round(float(row["positive_ratio"]), 4),
                     "negative_ratio": round(float(row["negative_ratio"]), 4),
@@ -703,4 +767,5 @@ class CorrelationAnalyzer:
             "ticker": ticker,
             "data_points": len(series),
             "series": series,
+            "trailing_days": w,
         }

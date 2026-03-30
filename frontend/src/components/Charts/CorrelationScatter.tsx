@@ -20,6 +20,8 @@ interface CorrelationScatterProps {
   data: TimeSeriesPoint[];
   height?: number;
   correlationCoefficient?: number;
+  /** Trailing window for net sentiment (for axis label); x uses trailing_net_sentiment from API. */
+  trailingWindowDays?: number;
 }
 
 function linearRegression(xs: number[], ys: number[]): { a: number; b: number } {
@@ -49,12 +51,18 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
   data,
   height = 360,
   correlationCoefficient,
+  trailingWindowDays = 1,
 }) => {
+  const w = Math.max(1, Math.min(30, Math.floor(trailingWindowDays || 1)));
+
   const { scatterData, lineData, xDomain, yDomain, slope, intercept } = useMemo(() => {
     const raw = (data ?? [])
       .filter((p) => p.returns != null)
       .map((p) => ({
-        sentiment: p.net_sentiment,
+        sentiment:
+          typeof p.trailing_net_sentiment === 'number'
+            ? p.trailing_net_sentiment
+            : p.net_sentiment,
         returns: (p.returns ?? 0) * 100,
         date: p.date,
         mentions: Math.max(0, p.mention_count ?? 0),
@@ -124,7 +132,8 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
       >
         <p style={{ fontWeight: 600, margin: '0 0 6px', color: '#212529' }}>{d?.date}</p>
         <p style={{ margin: 0, color: '#495057' }}>
-          Net sentiment: <strong>{d?.sentiment?.toFixed(3)}</strong>
+          {w > 1 ? `${w}-day trailing net` : 'Net sentiment'}:{' '}
+          <strong>{d?.sentiment?.toFixed(3)}</strong>
         </p>
         <p style={{ margin: 0, color: '#495057' }}>
           Daily return: <strong>{d?.returns?.toFixed(2)}%</strong>
@@ -159,7 +168,11 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
             axisLine={{ stroke: chartTheme.grid }}
           >
             <Label
-              value="Net sentiment (that day)"
+              value={
+                w > 1
+                  ? `Trailing net sentiment (${w}-day mean)`
+                  : 'Net sentiment (that day)'
+              }
               position="bottom"
               offset={12}
               style={{ fontSize: 12, fill: '#495057', fontWeight: 500 }}
