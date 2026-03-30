@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
-  ScatterChart,
+  ComposedChart,
   Scatter,
+  Line,
   XAxis,
   YAxis,
+  ZAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
   ReferenceLine,
   Label,
+  Cell,
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
+import { chartTheme } from './chartTheme';
 
 interface CorrelationScatterProps {
   data: TimeSeriesPoint[];
@@ -18,104 +22,229 @@ interface CorrelationScatterProps {
   correlationCoefficient?: number;
 }
 
+function linearRegression(xs: number[], ys: number[]): { a: number; b: number } {
+  const n = xs.length;
+  if (n < 2) return { a: 0, b: 0 };
+  const mx = xs.reduce((s, x) => s + x, 0) / n;
+  const my = ys.reduce((s, y) => s + y, 0) / n;
+  let num = 0;
+  let den = 0;
+  for (let i = 0; i < n; i++) {
+    num += (xs[i] - mx) * (ys[i] - my);
+    den += (xs[i] - mx) ** 2;
+  }
+  const b = den < 1e-14 ? 0 : num / den;
+  const a = my - b * mx;
+  return { a, b };
+}
+
+function quadrantFill(sentiment: number, retPct: number): string {
+  if (sentiment >= 0 && retPct >= 0) return 'rgba(47, 158, 68, 0.82)';
+  if (sentiment < 0 && retPct < 0) return 'rgba(224, 49, 49, 0.82)';
+  if (sentiment >= 0 && retPct < 0) return 'rgba(245, 159, 0, 0.75)';
+  return 'rgba(66, 99, 235, 0.75)';
+}
+
 const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
   data,
-  height = 350,
+  height = 360,
   correlationCoefficient,
 }) => {
-  if (!data || data.length === 0) {
+  const { scatterData, lineData, xDomain, yDomain, slope, intercept } = useMemo(() => {
+    const raw = (data ?? [])
+      .filter((p) => p.returns != null)
+      .map((p) => ({
+        sentiment: p.net_sentiment,
+        returns: (p.returns ?? 0) * 100,
+        date: p.date,
+        mentions: Math.max(0, p.mention_count ?? 0),
+      }));
+    if (!raw.length) {
+      return {
+        scatterData: [],
+        lineData: [] as { sentiment: number; returns: number }[],
+        xDomain: [-1, 1] as [number, number],
+        yDomain: [-5, 5] as [number, number],
+        slope: 0,
+        intercept: 0,
+      };
+    }
+    const xs = raw.map((d) => d.sentiment);
+    const ys = raw.map((d) => d.returns);
+    const { a, b } = linearRegression(xs, ys);
+    const xPad = 0.08;
+    const xMin = Math.max(-1, Math.min(...xs) - xPad);
+    const xMax = Math.min(1, Math.max(...xs) + xPad);
+    const yAbs = Math.max(3, ...ys.map((y) => Math.abs(y))) * 1.12;
+    const yDom: [number, number] = [-yAbs, yAbs];
+    const lineData = [
+      { sentiment: xMin, returns: a + b * xMin },
+      { sentiment: xMax, returns: a + b * xMax },
+    ];
+    return {
+      scatterData: raw,
+      lineData,
+      xDomain: [xMin, xMax] as [number, number],
+      yDomain: yDom,
+      slope: b,
+      intercept: a,
+    };
+  }, [data]);
+
+  if (!scatterData.length) {
     return (
-      <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
-        No data available for scatter plot
+      <div
+        style={{
+          height,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#868e96',
+          fontSize: 14,
+        }}
+      >
+        No overlapping days with returns — widen the date range if possible.
       </div>
     );
   }
 
-  const scatterData = data
-    .filter(p => p.returns != null)
-    .map(p => ({
-      sentiment: p.net_sentiment,
-      returns: (p.returns ?? 0) * 100,
-      date: p.date,
-      mentions: p.mention_count,
-    }));
-
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (!active || !payload || payload.length === 0) return null;
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
+    if (!active || !payload?.length) return null;
     const d = payload[0]?.payload;
     return (
-      <div style={{
-        background: 'white',
-        border: '1px solid #e0e0e0',
-        borderRadius: 8,
-        padding: '10px 14px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        fontSize: 13,
-      }}>
-        <p style={{ fontWeight: 600, margin: 0, marginBottom: 4 }}>{d?.date}</p>
-        <p style={{ margin: 0 }}>Sentiment: <strong>{d?.sentiment?.toFixed(3)}</strong></p>
-        <p style={{ margin: 0 }}>Return: <strong>{d?.returns?.toFixed(2)}%</strong></p>
-        <p style={{ margin: 0, color: '#999' }}>Mentions: {d?.mentions}</p>
+      <div
+        style={{
+          background: chartTheme.tooltipBg,
+          border: `1px solid ${chartTheme.tooltipBorder}`,
+          borderRadius: 10,
+          padding: '10px 14px',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.1)',
+          fontSize: 13,
+        }}
+      >
+        <p style={{ fontWeight: 600, margin: '0 0 6px', color: '#212529' }}>{d?.date}</p>
+        <p style={{ margin: 0, color: '#495057' }}>
+          Net sentiment: <strong>{d?.sentiment?.toFixed(3)}</strong>
+        </p>
+        <p style={{ margin: 0, color: '#495057' }}>
+          Daily return: <strong>{d?.returns?.toFixed(2)}%</strong>
+        </p>
+        <p style={{ margin: '4px 0 0', color: '#868e96', fontSize: 12 }}>
+          Mentions: {d?.mentions}
+        </p>
       </div>
     );
   };
 
-  const getColor = (r?: number): string => {
-    if (r === undefined) return '#5c7cfa';
-    if (r > 0.3) return '#7aac86';
-    if (r < -0.3) return '#cb6e68';
-    return '#5c7cfa';
-  };
+  const rColor =
+    correlationCoefficient === undefined
+      ? chartTheme.price
+      : correlationCoefficient > 0.25
+        ? chartTheme.sentimentPos
+        : correlationCoefficient < -0.25
+          ? chartTheme.sentimentNeg
+          : chartTheme.axis;
 
   return (
-    <div>
+    <div className="correlation-scatter-wrap">
       <ResponsiveContainer width="100%" height={height} minWidth={0}>
-        <ScatterChart margin={{ top: 10, right: 30, bottom: 20, left: 10 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+        <ComposedChart data={scatterData} margin={{ top: 12, right: 24, bottom: 28, left: 8 }}>
+          <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
           <XAxis
             type="number"
             dataKey="sentiment"
-            name="Net Sentiment"
-            tick={{ fontSize: 11, fill: '#888' }}
-            domain={[-1, 1]}
+            domain={xDomain}
+            tick={{ fontSize: 11, fill: chartTheme.axis }}
+            tickLine={false}
+            axisLine={{ stroke: chartTheme.grid }}
           >
-            <Label value="Net Sentiment" position="bottom" offset={0} style={{ fontSize: 12, fill: '#666' }} />
+            <Label
+              value="Net sentiment (that day)"
+              position="bottom"
+              offset={12}
+              style={{ fontSize: 12, fill: '#495057', fontWeight: 500 }}
+            />
           </XAxis>
           <YAxis
             type="number"
             dataKey="returns"
-            name="Daily Return (%)"
-            tick={{ fontSize: 11, fill: '#888' }}
-            tickFormatter={(v) => `${v.toFixed(1)}%`}
+            domain={yDomain}
+            tick={{ fontSize: 11, fill: chartTheme.axis }}
+            tickLine={false}
+            axisLine={{ stroke: chartTheme.grid }}
+            tickFormatter={(v: number) => `${v.toFixed(0)}%`}
           >
-            <Label value="Daily Return (%)" angle={-90} position="insideLeft" style={{ fontSize: 12, fill: '#666' }} />
+            <Label
+              value="Daily return (%)"
+              angle={-90}
+              position="insideLeft"
+              style={{ fontSize: 12, fill: '#495057', fontWeight: 500 }}
+            />
           </YAxis>
-          <Tooltip content={<CustomTooltip />} />
+          <ZAxis type="number" dataKey="mentions" range={[48, 320]} name="Mentions" />
+          <Tooltip content={<CustomTooltip />} cursor={{ strokeDasharray: '4 4' }} />
+          <ReferenceLine x={0} stroke={chartTheme.grid} strokeDasharray="4 4" />
+          <ReferenceLine y={0} stroke={chartTheme.grid} strokeDasharray="4 4" />
 
-          <ReferenceLine x={0} stroke="#ddd" strokeDasharray="3 3" yAxisId={0} />
-          <ReferenceLine y={0} stroke="#ddd" strokeDasharray="3 3" />
+          <Scatter name="Days" isAnimationActive={false}>
+            {scatterData.map((entry, index) => (
+              <Cell key={`c-${index}`} fill={quadrantFill(entry.sentiment, entry.returns)} />
+            ))}
+          </Scatter>
 
-          <Scatter
-            data={scatterData}
-            fill={getColor(correlationCoefficient)}
-            fillOpacity={0.7}
-            r={5}
-          />
-        </ScatterChart>
+          {lineData.length === 2 && scatterData.length >= 2 && (
+            <Line
+              data={lineData}
+              dataKey="returns"
+              stroke="#495057"
+              strokeWidth={2}
+              strokeDasharray="7 5"
+              dot={false}
+              name="OLS fit"
+              isAnimationActive={false}
+              legendType="line"
+            />
+          )}
+        </ComposedChart>
       </ResponsiveContainer>
 
-      {correlationCoefficient !== undefined && (
-        <div style={{
-          textAlign: 'center',
-          marginTop: 8,
-          fontSize: 13,
-          color: '#666',
-        }}>
-          Pearson r = <strong style={{ color: getColor(correlationCoefficient) }}>
-            {correlationCoefficient.toFixed(4)}
-          </strong>
-        </div>
-      )}
+      <div className="correlation-scatter-legend">
+        <span className="correlation-scatter-legend__item">
+          <i className="correlation-scatter-legend__swatch" style={{ background: 'rgba(47, 158, 68, 0.82)' }} />
+          +Sentiment / +Return
+        </span>
+        <span className="correlation-scatter-legend__item">
+          <i className="correlation-scatter-legend__swatch" style={{ background: 'rgba(224, 49, 49, 0.82)' }} />
+          −Sentiment / −Return
+        </span>
+        <span className="correlation-scatter-legend__item">
+          <i className="correlation-scatter-legend__swatch" style={{ background: 'rgba(245, 159, 0, 0.75)' }} />
+          Mixed
+        </span>
+        <span className="correlation-scatter-legend__item correlation-scatter-legend__item--note">
+          Point size ∝ mentions
+        </span>
+      </div>
+
+      <div className="correlation-scatter-footer">
+        {correlationCoefficient !== undefined && (
+          <span>
+            Pearson <em>r</em> ={' '}
+            <strong style={{ color: rColor }}>{correlationCoefficient.toFixed(4)}</strong>
+          </span>
+        )}
+        {scatterData.length >= 2 && (
+          <span className="correlation-scatter-footer__fit">
+            OLS slope: <strong>{slope.toFixed(3)}</strong>% per 1.0 sentiment
+            {intercept !== 0 && (
+              <>
+                {' '}
+                · intercept <strong>{intercept.toFixed(2)}</strong>%
+              </>
+            )}
+          </span>
+        )}
+      </div>
     </div>
   );
 };

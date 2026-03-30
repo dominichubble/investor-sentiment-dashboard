@@ -1,30 +1,74 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  font-family: 'Roboto', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --color-bg: #e8ecf6;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f8fafc;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+
+  --color-text: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #64748b;
+  --color-text-subtle: #94a3b8;
+
+  --color-accent: #4f46e5;
+  --color-accent-hover: #4338ca;
+  --color-accent-soft: rgba(79, 70, 229, 0.12);
+
+  --color-positive: #059669;
+  --color-positive-soft: #d1fae5;
+  --color-negative: #dc2626;
+  --color-negative-soft: #fee2e2;
+
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-pill: 9999px;
+
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light;
-  color: rgba(0, 0, 0, 0.87);
-  background-color: #dfdfdf;
-
+  color: var(--color-text);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color-scheme: light;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  padding: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
   min-height: 100vh;
+  min-width: 320px;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(79, 70, 229, 0.11), transparent 55%),
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(59, 130, 246, 0.08), transparent 45%),
+    radial-gradient(ellipse 40% 35% at 0% 100%, rgba(99, 102, 241, 0.06), transparent 50%);
+  background-attachment: fixed;
 }
 
 #root {
   width: 100%;
-  margin: 0 auto;
+  min-height: 100vh;
+}
+
+code {
+  font-family: ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, monospace;
 }

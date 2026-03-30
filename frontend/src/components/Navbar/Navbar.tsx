@@ -27,14 +27,18 @@ const Navbar: React.FC<NavbarProps> = ({
   timeframeOptions,
   selectedTimeframe,
   onTimeframeChange,
-  className
+  className,
 }) => {
   return (
-    <nav className={`navbar ${className || ''}`}>
+    <nav className={`navbar ${className || ''}`} aria-label="Primary">
       <div className="navbar-top">
-        <div className="navbar-brand">
-          <h1 className="navbar-title">{title}</h1>
-          {subtitle && <p className="navbar-subtitle">{subtitle}</p>}
+        <div className="navbar-brand-row">
+          <div className="navbar-logo-mark" aria-hidden />
+          <div className="navbar-brand">
+            <p className="navbar-eyebrow">Investor sentiment dashboard</p>
+            <h1 className="navbar-title">{title}</h1>
+            {subtitle && <p className="navbar-subtitle">{subtitle}</p>}
+          </div>
         </div>
       </div>
 

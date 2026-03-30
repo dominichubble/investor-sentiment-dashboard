@@ -9,8 +9,10 @@ import {
   ResponsiveContainer,
   Cell,
   ReferenceLine,
+  LabelList,
 } from 'recharts';
 import type { LagResult } from '../../types';
+import { chartTheme } from './chartTheme';
 
 interface LagChartProps {
   data: LagResult[];
@@ -21,17 +23,26 @@ interface LagChartProps {
 const LagChart: React.FC<LagChartProps> = ({
   data,
   bestLag,
-  height = 300,
+  height = 320,
 }) => {
   if (!data || data.length === 0) {
     return (
-      <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
+      <div
+        style={{
+          height,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#868e96',
+          fontSize: 14,
+        }}
+      >
         No lag analysis data available
       </div>
     );
   }
 
-  const chartData = data.map(lag => ({
+  const chartData = data.map((lag) => ({
     lag: lag.lag_days,
     label: lag.lag_days === 0 ? 'Same day' : lag.lag_days > 0 ? `+${lag.lag_days}d` : `${lag.lag_days}d`,
     correlation: lag.pearson_r ?? 0,
@@ -41,62 +52,86 @@ const LagChart: React.FC<LagChartProps> = ({
     isBest: bestLag ? lag.lag_days === bestLag.lag_days : false,
   }));
 
-  const getBarColor = (entry: typeof chartData[0]) => {
-    if (entry.isBest) return '#5c7cfa';
-    if (!entry.significant) return '#d0d4db';
-    return entry.correlation > 0 ? '#7aac86' : '#cb6e68';
+  const getBarColor = (entry: (typeof chartData)[0]) => {
+    if (entry.isBest) return chartTheme.price;
+    if (!entry.significant) return '#dee2e6';
+    return entry.correlation > 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg;
   };
 
-  const CustomTooltip = ({ active, payload }: any) => {
-    if (!active || !payload || payload.length === 0) return null;
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
+    if (!active || !payload?.length) return null;
     const d = payload[0]?.payload;
     return (
-      <div style={{
-        background: 'white',
-        border: '1px solid #e0e0e0',
-        borderRadius: 8,
-        padding: '10px 14px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        fontSize: 13,
-      }}>
-        <p style={{ fontWeight: 600, margin: 0, marginBottom: 4 }}>{d?.description}</p>
-        <p style={{ margin: 0 }}>
-          Correlation: <strong>{d?.correlation?.toFixed(4)}</strong>
+      <div
+        style={{
+          background: chartTheme.tooltipBg,
+          border: `1px solid ${chartTheme.tooltipBorder}`,
+          borderRadius: 10,
+          padding: '10px 14px',
+          boxShadow: '0 6px 18px rgba(0,0,0,0.1)',
+          fontSize: 13,
+        }}
+      >
+        <p style={{ fontWeight: 600, margin: '0 0 6px', color: '#212529' }}>{d?.description}</p>
+        <p style={{ margin: 0, color: '#495057' }}>
+          Pearson <em>r</em>: <strong>{d?.correlation?.toFixed(4)}</strong>
         </p>
-        <p style={{ margin: 0, color: '#999' }}>
-          p-value: {d?.pValue?.toFixed(6)}
+        <p style={{ margin: 0, color: '#868e96', fontSize: 12 }}>
+          <em>p</em> = {d?.pValue != null ? Number(d.pValue).toExponential(2) : '—'}
         </p>
-        <p style={{ margin: 0, color: d?.significant ? '#7aac86' : '#cb6e68' }}>
-          {d?.significant ? 'Statistically significant' : 'Not significant'}
+        <p
+          style={{
+            margin: '6px 0 0',
+            color: d?.significant ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
+            fontWeight: 500,
+          }}
+        >
+          {d?.significant ? 'Significant (α = 0.05)' : 'Not significant'}
         </p>
       </div>
     );
   };
 
   return (
-    <div>
+    <div className="lag-chart-wrap">
       <ResponsiveContainer width="100%" height={height} minWidth={0}>
-        <BarChart data={chartData} margin={{ top: 10, right: 20, left: 0, bottom: 5 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+        <BarChart data={chartData} margin={{ top: 28, right: 12, left: 4, bottom: 8 }} barCategoryGap="18%">
+          <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
           <XAxis
             dataKey="label"
-            tick={{ fontSize: 11, fill: '#888' }}
+            tick={{ fontSize: 11, fill: chartTheme.axis }}
             tickLine={false}
+            axisLine={{ stroke: chartTheme.grid }}
           />
           <YAxis
             domain={[-1, 1]}
-            tick={{ fontSize: 11, fill: '#888' }}
+            tick={{ fontSize: 11, fill: chartTheme.axis }}
+            tickLine={false}
+            axisLine={{ stroke: chartTheme.grid }}
             tickFormatter={(v) => v.toFixed(1)}
+            width={36}
+            label={{
+              value: 'Correlation (r)',
+              angle: -90,
+              position: 'insideLeft',
+              style: { fontSize: 11, fill: chartTheme.axis },
+            }}
           />
-          <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine y={0} stroke="#ccc" />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(0,0,0,0.04)' }} />
+          <ReferenceLine y={0} stroke={chartTheme.axis} strokeDasharray="4 4" strokeOpacity={0.75} />
 
-          <Bar dataKey="correlation" radius={[4, 4, 0, 0]}>
+          <Bar dataKey="correlation" radius={[6, 6, 0, 0]} maxBarSize={48}>
+            <LabelList
+              dataKey="correlation"
+              position="top"
+              formatter={(v: number) => (Math.abs(v) < 0.01 ? '' : v.toFixed(2))}
+              style={{ fontSize: 10, fill: '#495057', fontWeight: 600 }}
+            />
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={getBarColor(entry)}
-                stroke={entry.isBest ? '#3b5bdb' : 'none'}
+                stroke={entry.isBest ? '#364fc7' : 'transparent'}
                 strokeWidth={entry.isBest ? 2 : 0}
               />
             ))}
@@ -105,19 +140,16 @@ const LagChart: React.FC<LagChartProps> = ({
       </ResponsiveContainer>
 
       {bestLag && bestLag.pearson_r !== null && (
-        <div style={{
-          textAlign: 'center',
-          marginTop: 8,
-          fontSize: 13,
-          color: '#666',
-        }}>
-          Strongest correlation at <strong style={{ color: '#5c7cfa' }}>
+        <div className="lag-chart-caption">
+          Strongest lag:{' '}
+          <strong style={{ color: chartTheme.price }}>
             {bestLag.lag_days === 0
               ? 'same day'
               : bestLag.lag_days > 0
-                ? `${bestLag.lag_days}-day lead`
-                : `${Math.abs(bestLag.lag_days)}-day lag`}
-          </strong> (r = {bestLag.pearson_r.toFixed(4)})
+                ? `sentiment leads by ${bestLag.lag_days}d`
+                : `price leads by ${Math.abs(bestLag.lag_days)}d`}
+          </strong>{' '}
+          (<em>r</em> = {bestLag.pearson_r.toFixed(4)})
         </div>
       )}
     </div>

@@ -4,4 +4,5 @@ export { default as MiniAreaChart } from './MiniAreaChart';
 export { default as SentimentPriceChart } from './SentimentPriceChart';
 export { default as CorrelationScatter } from './CorrelationScatter';
 export { default as LagChart } from './LagChart';
+export { default as RollingCorrelationChart } from './RollingCorrelationChart';
 export { default as CorrelationHeatmap } from './CorrelationHeatmap';

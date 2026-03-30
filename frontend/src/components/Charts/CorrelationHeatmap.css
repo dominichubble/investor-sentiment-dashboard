@@ -10,49 +10,54 @@
 .heatmap-empty {
   padding: 40px;
   text-align: center;
-  color: #999;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
+  color: var(--color-text-muted);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
 }
 
 .heatmap-tile {
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   padding: 16px 12px;
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--color-border);
   min-width: 120px;
+  background: var(--color-surface);
 }
 
 .heatmap-tile:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
 }
 
 .heatmap-ticker {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: 16px;
+  font-size: 1rem;
   margin-bottom: 4px;
+  color: var(--color-text);
 }
 
 .heatmap-value {
-  font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 4px;
 }
 
 .heatmap-mentions {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
-  opacity: 0.8;
+  opacity: 0.85;
+  color: var(--color-text-muted);
 }
 
 .heatmap-significance {
-  font-family: 'Roboto', sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
-  opacity: 0.7;
-  margin-top: 2px;
+  font-weight: 600;
+  margin-top: 6px;
+  letter-spacing: 0.04em;
+  opacity: 0.9;
 }

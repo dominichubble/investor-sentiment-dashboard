@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   ComposedChart,
   Line,
@@ -12,6 +12,7 @@ import {
   Area,
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
+import { chartTheme } from './chartTheme';
 
 interface SentimentPriceChartProps {
   data: TimeSeriesPoint[];
@@ -24,46 +25,75 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
   height = 400,
   showVolume = true,
 }) => {
-  if (!data || data.length === 0) {
+  const { chartData, maxMentions, tickEvery } = useMemo(() => {
+    if (!data?.length) {
+      return { chartData: [], maxMentions: 1, tickEvery: 1 };
+    }
+    const maxM = Math.max(1, ...data.map((p) => p.mention_count ?? 0));
+    const n = data.length;
+    const tickEvery = n > 45 ? Math.ceil(n / 12) : n > 20 ? 2 : 1;
+    const chartData = data.map((point) => ({
+      ...point,
+      shortDate: point.date.slice(5),
+      fullDate: point.date,
+    }));
+    return { chartData, maxMentions: maxM * 1.08, tickEvery };
+  }, [data]);
+
+  if (!chartData.length) {
     return (
-      <div style={{ height, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999' }}>
+      <div
+        style={{
+          height,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#868e96',
+        }}
+      >
         No time-series data available
       </div>
     );
   }
 
-  const chartData = data.map(point => ({
-    ...point,
-    date: point.date.slice(5), // MM-DD format
-    fullDate: point.date,
-  }));
-
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (!active || !payload || payload.length === 0) return null;
+  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: any[] }) => {
+    if (!active || !payload?.length) return null;
     const d = payload[0]?.payload;
     return (
-      <div style={{
-        background: 'white',
-        border: '1px solid #e0e0e0',
-        borderRadius: 8,
-        padding: '12px 16px',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-        fontSize: 13,
-        lineHeight: 1.6,
-      }}>
-        <p style={{ fontWeight: 600, margin: 0, marginBottom: 6 }}>{d?.fullDate}</p>
-        <p style={{ margin: 0, color: '#5c7cfa' }}>
-          Price: <strong>${d?.close?.toFixed(2)}</strong>
+      <div
+        style={{
+          background: chartTheme.tooltipBg,
+          border: `1px solid ${chartTheme.tooltipBorder}`,
+          borderRadius: 10,
+          padding: '12px 16px',
+          boxShadow: '0 6px 20px rgba(0,0,0,0.1)',
+          fontSize: 13,
+          lineHeight: 1.55,
+        }}
+      >
+        <p style={{ fontWeight: 600, margin: '0 0 8px', color: '#212529' }}>{d?.fullDate}</p>
+        <p style={{ margin: 0, color: chartTheme.price }}>
+          Close: <strong>${d?.close?.toFixed(2)}</strong>
         </p>
-        <p style={{ margin: 0, color: d?.net_sentiment >= 0 ? '#7aac86' : '#cb6e68' }}>
-          Sentiment: <strong>{d?.net_sentiment?.toFixed(3)}</strong>
+        <p
+          style={{
+            margin: 0,
+            color: d?.net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
+          }}
+        >
+          Net sentiment: <strong>{d?.net_sentiment?.toFixed(3)}</strong>
         </p>
-        <p style={{ margin: 0, color: '#8e94a0' }}>
+        <p style={{ margin: 0, color: '#495057' }}>
           Mentions: <strong>{d?.mention_count}</strong>
         </p>
         {d?.returns != null && (
-          <p style={{ margin: 0, color: d.returns >= 0 ? '#7aac86' : '#cb6e68' }}>
-            Return: <strong>{(d.returns * 100).toFixed(2)}%</strong>
+          <p
+            style={{
+              margin: '4px 0 0',
+              color: d.returns >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
+            }}
+          >
+            Daily return: <strong>{(d.returns * 100).toFixed(2)}%</strong>
           </p>
         )}
       </div>
@@ -72,40 +102,76 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
 
   return (
     <ResponsiveContainer width="100%" height={height} minWidth={0}>
-      <ComposedChart data={chartData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+      <ComposedChart
+        data={chartData}
+        margin={{ top: 16, right: 52, left: 4, bottom: 8 }}
+      >
+        <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
         <XAxis
-          dataKey="date"
-          tick={{ fontSize: 11, fill: '#888' }}
+          dataKey="shortDate"
+          tick={{ fontSize: 11, fill: chartTheme.axis }}
           tickLine={false}
-          interval="preserveStartEnd"
+          axisLine={{ stroke: chartTheme.grid }}
+          interval={tickEvery > 1 ? tickEvery - 1 : 'preserveStartEnd'}
+          minTickGap={28}
         />
+        {/* Price — primary left scale */}
         <YAxis
           yAxisId="price"
           orientation="left"
-          tick={{ fontSize: 11, fill: '#5c7cfa' }}
-          tickFormatter={(v) => `$${v.toFixed(0)}`}
-          label={{ value: 'Price ($)', angle: -90, position: 'insideLeft', fill: '#5c7cfa', fontSize: 12 }}
+          tick={{ fontSize: 11, fill: chartTheme.price }}
+          tickLine={false}
+          axisLine={{ stroke: chartTheme.grid }}
+          tickFormatter={(v) => `$${Number(v).toFixed(0)}`}
+          width={56}
+          domain={['auto', 'auto']}
+          label={{
+            value: 'Price',
+            angle: -90,
+            position: 'insideLeft',
+            style: { fontSize: 11, fill: chartTheme.price, fontWeight: 600 },
+          }}
         />
+        {/* Mention volume — separate scale (was incorrectly sharing sentiment axis) */}
+        {showVolume && (
+          <YAxis
+            yAxisId="volume"
+            orientation="left"
+            hide
+            domain={[0, maxMentions]}
+          />
+        )}
+        {/* Sentiment — fixed [-1, 1] on the right */}
         <YAxis
           yAxisId="sentiment"
           orientation="right"
           domain={[-1, 1]}
-          tick={{ fontSize: 11, fill: '#7aac86' }}
+          tick={{ fontSize: 11, fill: chartTheme.sentimentStroke }}
+          tickLine={false}
+          axisLine={{ stroke: chartTheme.grid }}
           tickFormatter={(v) => v.toFixed(1)}
-          label={{ value: 'Net Sentiment', angle: 90, position: 'insideRight', fill: '#7aac86', fontSize: 12 }}
+          width={40}
+          label={{
+            value: 'Net sentiment',
+            angle: 90,
+            position: 'insideRight',
+            style: { fontSize: 11, fill: chartTheme.sentimentStroke, fontWeight: 600 },
+          }}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Legend wrapperStyle={{ fontSize: 12 }} />
+        <Legend
+          wrapperStyle={{ fontSize: 12, paddingTop: 12 }}
+          formatter={(value) => <span style={{ color: '#495057' }}>{value}</span>}
+        />
 
         {showVolume && (
           <Bar
-            yAxisId="sentiment"
+            yAxisId="volume"
             dataKey="mention_count"
-            fill="#e8ecf4"
-            name="Mentions"
-            barSize={8}
-            radius={[2, 2, 0, 0]}
+            fill={chartTheme.volumeBar}
+            name="Daily mentions"
+            barSize={Math.min(14, Math.max(4, 480 / chartData.length))}
+            radius={[3, 3, 0, 0]}
           />
         )}
 
@@ -113,22 +179,22 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           yAxisId="price"
           type="monotone"
           dataKey="close"
-          stroke="#5c7cfa"
+          stroke={chartTheme.price}
           strokeWidth={2.5}
           dot={false}
-          name="Stock Price"
-          activeDot={{ r: 4 }}
+          name="Close"
+          activeDot={{ r: 5, stroke: '#fff', strokeWidth: 2 }}
         />
 
         <Area
           yAxisId="sentiment"
           type="monotone"
           dataKey="net_sentiment"
-          stroke="#7aac86"
-          fill="#7aac86"
-          fillOpacity={0.15}
+          stroke={chartTheme.sentimentStroke}
+          fill={chartTheme.sentimentFill}
+          fillOpacity={1}
           strokeWidth={2}
-          name="Net Sentiment"
+          name="Net sentiment"
           activeDot={{ r: 4 }}
         />
       </ComposedChart>

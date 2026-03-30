@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import * as RechartsPrimitive from 'recharts';
 import {
   SentimentPriceChart,
   CorrelationScatter,
   LagChart,
+  RollingCorrelationChart,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
@@ -225,10 +225,10 @@ const StockAnalysis: React.FC = () => {
   const todayISO = toISODate(new Date());
 
   const getCorrelationColor = (r: number | undefined): string => {
-    if (r === undefined) return '#8e94a0';
-    if (r > 0.3) return '#7aac86';
-    if (r < -0.3) return '#cb6e68';
-    return '#8e94a0';
+    if (r === undefined) return 'var(--color-text-muted)';
+    if (r > 0.3) return 'var(--color-positive)';
+    if (r < -0.3) return 'var(--color-negative)';
+    return 'var(--color-text-muted)';
   };
 
   const formatMarketCap = (cap: number | undefined): string => {
@@ -426,7 +426,7 @@ const StockAnalysis: React.FC = () => {
 
             <div className="sa-stat-card">
               <div className="sa-stat-label">Best Lag</div>
-              <div className="sa-stat-value" style={{ color: '#5c7cfa' }}>
+              <div className="sa-stat-value" style={{ color: 'var(--color-accent)' }}>
                 {lagAnalysis?.best_lag
                   ? lagAnalysis.best_lag.lag_days === 0
                     ? 'Same Day'
@@ -450,7 +450,7 @@ const StockAnalysis: React.FC = () => {
             <div className="sa-stat-card">
               <div className="sa-stat-label">Signal Strength</div>
               <div className="sa-stat-value" style={{
-                color: correlation.pearson?.significant ? '#7aac86' : '#cb6e68'
+                color: correlation.pearson?.significant ? 'var(--color-positive)' : 'var(--color-negative)'
               }}>
                 {correlation.pearson?.significant ? 'Significant' : 'Weak'}
               </div>
@@ -466,12 +466,12 @@ const StockAnalysis: React.FC = () => {
           {timeSeries && timeSeries.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render time series chart">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Sentiment vs Price Over Time</h3>
+                <h3 className="sa-section-title">Sentiment vs price over time</h3>
                 <p className="sa-section-desc">
-                  Dual-axis view comparing daily net sentiment (right axis) with stock price (left axis).
-                  Bars show daily mention volume.
+                  Close price (left scale) and net sentiment −1…1 (right). Bars use their own scale for
+                  daily mention volume so counts are not distorted by the sentiment axis.
                 </p>
-                <SentimentPriceChart data={timeSeries.series} height={420} />
+                <SentimentPriceChart data={timeSeries.series} height={440} />
               </div>
             </ErrorBoundary>
           )}
@@ -481,15 +481,15 @@ const StockAnalysis: React.FC = () => {
             {timeSeries && timeSeries.series.length > 0 && (
               <ErrorBoundary fallbackTitle="Failed to render scatter plot">
                 <div className="sa-chart-section sa-chart-half">
-                  <h3 className="sa-section-title">Correlation Scatter Plot</h3>
+                  <h3 className="sa-section-title">Sentiment vs return (per day)</h3>
                   <p className="sa-section-desc">
-                    Each point is a day: x = net sentiment, y = daily price return.
-                    Tighter clustering along a diagonal indicates stronger correlation.
+                    Each point is one trading day. Colour shows quadrant alignment; size reflects mention
+                    volume. The dashed line is an ordinary least squares fit through the cloud.
                   </p>
                   <CorrelationScatter
                     data={timeSeries.series}
                     correlationCoefficient={correlation.pearson?.coefficient}
-                    height={320}
+                    height={360}
                   />
                 </div>
               </ErrorBoundary>
@@ -498,15 +498,16 @@ const StockAnalysis: React.FC = () => {
             {lagAnalysis && lagAnalysis.lags.length > 0 && (
               <ErrorBoundary fallbackTitle="Failed to render lag chart">
                 <div className="sa-chart-section sa-chart-half">
-                  <h3 className="sa-section-title">Lag Analysis</h3>
+                  <h3 className="sa-section-title">Lag analysis</h3>
                   <p className="sa-section-desc">
-                    Tests if sentiment at day t predicts price at day t+lag.
-                    Colored bars are statistically significant (p &lt; 0.05).
+                    Pearson <em>r</em> between sentiment and returns at each day offset. Green or red
+                    bars are significant at 5%; grey bars are not. The outlined bar is the strongest lag
+                    in the grid.
                   </p>
                   <LagChart
                     data={lagAnalysis.lags}
                     bestLag={lagAnalysis.best_lag}
-                    height={320}
+                    height={340}
                   />
                 </div>
               </ErrorBoundary>
@@ -517,13 +518,17 @@ const StockAnalysis: React.FC = () => {
           {rollingData && rollingData.series && rollingData.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render rolling correlation">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Rolling Correlation ({rollingData.window}-day window)</h3>
+                <h3 className="sa-section-title">Rolling correlation ({rollingData.window}-day window)</h3>
                 <p className="sa-section-desc">
-                  Shows how the correlation between sentiment and price changes over time.
-                  Values above 0 indicate positive correlation; below 0 indicates negative.
+                  Time-varying Pearson correlation between sentiment and returns. Shaded area highlights
+                  positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2 band.
                 </p>
-                <div className="sa-rolling-chart" style={{ height: 320 }}>
-                  <RollingCorrelationChart data={rollingData.series} height={320} />
+                <div className="sa-rolling-chart">
+                  <RollingCorrelationChart
+                    data={rollingData.series}
+                    height={340}
+                    windowDays={rollingData.window}
+                  />
                 </div>
                 {rollingData.statistics && (
                   <div className="sa-rolling-stats">
@@ -594,47 +599,6 @@ const StockAnalysis: React.FC = () => {
     </div>
   );
 };
-
-function RollingCorrelationChart({ data, height = 300 }: {
-  data: { date: string; correlation: number }[];
-  height?: number;
-}) {
-  return (
-    <RechartsPrimitive.ResponsiveContainer width="100%" height={height} minWidth={0}>
-      <RechartsPrimitive.LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
-        <RechartsPrimitive.CartesianGrid strokeDasharray="3 3" stroke="#e8e8e8" />
-        <RechartsPrimitive.XAxis
-          dataKey="date"
-          tick={{ fontSize: 11, fill: '#888' }}
-          tickFormatter={(v: string) => v.slice(5)}
-        />
-        <RechartsPrimitive.YAxis
-          domain={[-1, 1]}
-          tick={{ fontSize: 11, fill: '#888' }}
-          tickFormatter={(v: number) => v.toFixed(1)}
-        />
-        <RechartsPrimitive.Tooltip
-          contentStyle={{
-            background: 'white',
-            border: '1px solid #e0e0e0',
-            borderRadius: '8px',
-            fontSize: '12px',
-            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-          }}
-          formatter={(value: number) => [value.toFixed(4), 'Correlation']}
-        />
-        <RechartsPrimitive.ReferenceLine y={0} stroke="#ccc" strokeDasharray="3 3" />
-        <RechartsPrimitive.Line
-          type="monotone"
-          dataKey="correlation"
-          stroke="#5c7cfa"
-          dot={false}
-          strokeWidth={2}
-        />
-      </RechartsPrimitive.LineChart>
-    </RechartsPrimitive.ResponsiveContainer>
-  );
-}
 
 function renderInterpretation(
   correlation: CorrelationResponse | null,
