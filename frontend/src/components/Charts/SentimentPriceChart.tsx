@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
 import { chartTheme } from './chartTheme';
+import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import { trailingRollingMean } from '../../utils/sentimentRolling';
 
 interface SentimentPriceChartProps {
@@ -94,7 +95,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
       >
         <p style={{ fontWeight: 600, margin: '0 0 8px', color: '#212529' }}>{d?.fullDate}</p>
         <p style={{ margin: 0, color: chartTheme.price }}>
-          Close: <strong>${d?.close?.toFixed(2)}</strong>
+          Close: <strong>${formatDecimalDisplay(d?.close, 2)}</strong>
         </p>
         {showRawOverlay && (
           <p
@@ -104,7 +105,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
               opacity: 0.85,
             }}
           >
-            Same-day net: <strong>{d?.net_sentiment?.toFixed(3)}</strong>
+            Same-day net: <strong>{formatDecimalDisplay(d?.net_sentiment, 3)}</strong>
           </p>
         )}
         <p
@@ -115,10 +116,10 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           }}
         >
           {window > 1 ? `${window}-day trailing net` : 'Net sentiment'}:{' '}
-          <strong>{d?.rolling_net_sentiment?.toFixed(3)}</strong>
+          <strong>{formatDecimalDisplay(d?.rolling_net_sentiment, 3)}</strong>
         </p>
         <p style={{ margin: 0, color: '#495057' }}>
-          Mentions: <strong>{d?.mention_count}</strong>
+          Mentions: <strong>{formatIntegerDisplay(d?.mention_count)}</strong>
         </p>
         {d?.returns != null && (
           <p
@@ -127,7 +128,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
               color: d.returns >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg,
             }}
           >
-            Daily return: <strong>{(d.returns * 100).toFixed(2)}%</strong>
+            Daily return: <strong>{formatDecimalDisplay(d.returns * 100, 2)}%</strong>
           </p>
         )}
       </div>
@@ -158,7 +159,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           tick={{ fontSize: 11, fill: chartTheme.price }}
           tickLine={false}
           axisLine={{ stroke: chartTheme.grid }}
-          tickFormatter={(v) => `$${Number(v).toFixed(0)}`}
+          tickFormatter={(v) => `$${formatIntegerDisplay(v)}`}
           width={56}
           domain={['auto', 'auto']}
           label={{
@@ -183,7 +184,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
           tick={{ fontSize: 11, fill: chartTheme.sentimentStroke }}
           tickLine={false}
           axisLine={{ stroke: chartTheme.grid }}
-          tickFormatter={(v) => v.toFixed(1)}
+          tickFormatter={(v) => formatDecimalDisplay(v, 1)}
           width={44}
           label={{
             value: sentimentLabel,

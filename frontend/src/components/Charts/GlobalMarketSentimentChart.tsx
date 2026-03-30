@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { DailyTrendPoint } from '../../services/api';
+import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 interface GlobalMarketSentimentChartProps {
@@ -60,11 +61,11 @@ const GlobalMarketSentimentChart: React.FC<GlobalMarketSentimentChartProps> = ({
         <p style={{ margin: 0, color: '#475569' }}>
           Net sentiment:{' '}
           <strong style={{ color: d.net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg }}>
-            {d.net_sentiment?.toFixed(3)}
+            {formatDecimalDisplay(d.net_sentiment, 3)}
           </strong>
         </p>
         <p style={{ margin: 0, color: '#64748b', fontSize: 12 }}>
-          Stock-level mentions: <strong>{d.count}</strong>
+          Stock-level mentions: <strong>{formatIntegerDisplay(d.count)}</strong>
         </p>
       </div>
     );
@@ -94,7 +95,7 @@ const GlobalMarketSentimentChart: React.FC<GlobalMarketSentimentChartProps> = ({
           tick={{ fontSize: 11, fill: '#4f46e5' }}
           tickLine={false}
           width={40}
-          tickFormatter={(v: number) => v.toFixed(1)}
+          tickFormatter={(v: number) => formatDecimalDisplay(v, 1)}
           label={{
             value: 'Net (−1…1)',
             angle: 90,

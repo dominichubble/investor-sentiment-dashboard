@@ -1,5 +1,6 @@
 import React from 'react';
 import type { CorrelationOverviewItem } from '../../types';
+import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import './CorrelationHeatmap.css';
 
 interface CorrelationHeatmapProps {
@@ -59,10 +60,11 @@ const CorrelationHeatmap: React.FC<CorrelationHeatmapProps> = ({
                 {item.ticker}
               </div>
               <div className="heatmap-value" style={{ color: textColor }}>
-                {item.pearson_r >= 0 ? '+' : ''}{item.pearson_r.toFixed(2)}
+                {item.pearson_r >= 0 ? '+' : ''}
+                {formatDecimalDisplay(item.pearson_r, 2)}
               </div>
               <div className="heatmap-mentions" style={{ color: textColor }}>
-                {item.mentions} mentions
+                {formatIntegerDisplay(item.mentions)} mentions
               </div>
               <div className="heatmap-significance" style={{ color: textColor }}>
                 {item.significant ? 'p < 0.05' : 'n.s.'}

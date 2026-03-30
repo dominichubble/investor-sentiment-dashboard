@@ -10,6 +10,7 @@ import {
   YAxis,
   ReferenceLine,
 } from 'recharts';
+import { formatDecimalDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 export interface RollingCorrelationPoint {
@@ -86,7 +87,7 @@ const RollingCorrelationChart: React.FC<RollingCorrelationChartProps> = ({
           tick={{ fontSize: 11, fill: chartTheme.axis }}
           tickLine={false}
           axisLine={{ stroke: chartTheme.grid }}
-          tickFormatter={(v: number) => v.toFixed(1)}
+          tickFormatter={(v: number) => formatDecimalDisplay(v, 1)}
           width={44}
           label={{
             value: `Rolling r (${windowDays}d)`,
@@ -107,7 +108,7 @@ const RollingCorrelationChart: React.FC<RollingCorrelationChartProps> = ({
             const row = payload?.[0]?.payload as RollingCorrelationPoint | undefined;
             return row?.date ?? '';
           }}
-          formatter={(value: number) => [value.toFixed(4), 'Correlation']}
+          formatter={(value: number) => [formatDecimalDisplay(value, 4), 'Correlation']}
         />
         <ReferenceLine y={0} stroke={chartTheme.axis} strokeDasharray="4 4" strokeOpacity={0.7} />
         <ReferenceLine

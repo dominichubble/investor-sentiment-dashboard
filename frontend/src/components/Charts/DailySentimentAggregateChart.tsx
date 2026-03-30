@@ -11,6 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
+import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 const NEUTRAL_BAND = '#94a3b8';
@@ -77,18 +78,18 @@ const DailySentimentAggregateChart: React.FC<DailySentimentAggregateChartProps> 
         <p style={{ margin: 0, color: '#475569' }}>
           Net sentiment:{' '}
           <strong style={{ color: d.net_sentiment >= 0 ? chartTheme.sentimentPos : chartTheme.sentimentNeg }}>
-            {d.net_sentiment?.toFixed(3)}
+            {formatDecimalDisplay(d.net_sentiment, 3)}
           </strong>
         </p>
         <p style={{ margin: 0, color: '#475569' }}>
-          Avg score: <strong>{d.avg_sentiment_score?.toFixed(3)}</strong>
+          Avg score: <strong>{formatDecimalDisplay(d.avg_sentiment_score, 3)}</strong>
         </p>
         <p style={{ margin: '6px 0 0', color: '#64748b', fontSize: 12 }}>
-          Mentions: <strong>{d.mention_count}</strong>
+          Mentions: <strong>{formatIntegerDisplay(d.mention_count)}</strong>
         </p>
         <p style={{ margin: '8px 0 0', fontSize: 11, color: '#94a3b8', borderTop: '1px solid #e2e8f0', paddingTop: 8 }}>
-          Mix: +{(d.positive_ratio * 100).toFixed(0)}% / ○{(d.neutral_ratio * 100).toFixed(0)}% / −
-          {(d.negative_ratio * 100).toFixed(0)}%
+          Mix: +{Math.round((d.positive_ratio ?? 0) * 100)}% / ○{Math.round((d.neutral_ratio ?? 0) * 100)}% / −
+          {Math.round((d.negative_ratio ?? 0) * 100)}%
         </p>
       </div>
     );
@@ -128,7 +129,7 @@ const DailySentimentAggregateChart: React.FC<DailySentimentAggregateChartProps> 
           tick={{ fontSize: 11, fill: '#4f46e5' }}
           tickLine={false}
           axisLine={{ stroke: chartTheme.grid }}
-          tickFormatter={(v: number) => v.toFixed(1)}
+          tickFormatter={(v: number) => formatDecimalDisplay(v, 1)}
           width={40}
           label={{
             value: 'Net sentiment',

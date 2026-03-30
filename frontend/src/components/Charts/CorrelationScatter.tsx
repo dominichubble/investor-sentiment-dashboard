@@ -14,6 +14,7 @@ import {
   Cell,
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
+import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 interface CorrelationScatterProps {
@@ -133,13 +134,13 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
         <p style={{ fontWeight: 600, margin: '0 0 6px', color: '#212529' }}>{d?.date}</p>
         <p style={{ margin: 0, color: '#495057' }}>
           {w > 1 ? `${w}-day trailing net` : 'Net sentiment'}:{' '}
-          <strong>{d?.sentiment?.toFixed(3)}</strong>
+          <strong>{formatDecimalDisplay(d?.sentiment, 3)}</strong>
         </p>
         <p style={{ margin: 0, color: '#495057' }}>
-          Daily return: <strong>{d?.returns?.toFixed(2)}%</strong>
+          Daily return: <strong>{formatDecimalDisplay(d?.returns, 2)}%</strong>
         </p>
         <p style={{ margin: '4px 0 0', color: '#868e96', fontSize: 12 }}>
-          Mentions: {d?.mentions}
+          Mentions: {formatIntegerDisplay(d?.mentions)}
         </p>
       </div>
     );
@@ -166,6 +167,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
             tick={{ fontSize: 11, fill: chartTheme.axis }}
             tickLine={false}
             axisLine={{ stroke: chartTheme.grid }}
+            tickFormatter={(v: number) => formatDecimalDisplay(v, 2)}
           >
             <Label
               value={
@@ -185,7 +187,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
             tick={{ fontSize: 11, fill: chartTheme.axis }}
             tickLine={false}
             axisLine={{ stroke: chartTheme.grid }}
-            tickFormatter={(v: number) => `${v.toFixed(0)}%`}
+            tickFormatter={(v: number) => `${Math.round(Number(v))}%`}
           >
             <Label
               value="Daily return (%)"
@@ -243,16 +245,16 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
         {correlationCoefficient !== undefined && (
           <span>
             Pearson <em>r</em> ={' '}
-            <strong style={{ color: rColor }}>{correlationCoefficient.toFixed(4)}</strong>
+            <strong style={{ color: rColor }}>{formatDecimalDisplay(correlationCoefficient, 4)}</strong>
           </span>
         )}
         {scatterData.length >= 2 && (
           <span className="correlation-scatter-footer__fit">
-            OLS slope: <strong>{slope.toFixed(3)}</strong>% per 1.0 sentiment
+            OLS slope: <strong>{formatDecimalDisplay(slope, 3)}</strong>% per 1.0 sentiment
             {intercept !== 0 && (
               <>
                 {' '}
-                · intercept <strong>{intercept.toFixed(2)}</strong>%
+                · intercept <strong>{formatDecimalDisplay(intercept, 2)}</strong>%
               </>
             )}
           </span>

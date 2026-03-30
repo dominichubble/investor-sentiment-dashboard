@@ -12,6 +12,7 @@ import {
   LabelList,
 } from 'recharts';
 import type { LagResult } from '../../types';
+import { formatDecimalDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 interface LagChartProps {
@@ -74,7 +75,7 @@ const LagChart: React.FC<LagChartProps> = ({
       >
         <p style={{ fontWeight: 600, margin: '0 0 6px', color: '#212529' }}>{d?.description}</p>
         <p style={{ margin: 0, color: '#495057' }}>
-          Pearson <em>r</em>: <strong>{d?.correlation?.toFixed(4)}</strong>
+          Pearson <em>r</em>: <strong>{formatDecimalDisplay(d?.correlation, 4)}</strong>
         </p>
         <p style={{ margin: 0, color: '#868e96', fontSize: 12 }}>
           <em>p</em> = {d?.pValue != null ? Number(d.pValue).toExponential(2) : '—'}
@@ -108,7 +109,7 @@ const LagChart: React.FC<LagChartProps> = ({
             tick={{ fontSize: 11, fill: chartTheme.axis }}
             tickLine={false}
             axisLine={{ stroke: chartTheme.grid }}
-            tickFormatter={(v) => v.toFixed(1)}
+            tickFormatter={(v) => formatDecimalDisplay(v, 1)}
             width={36}
             label={{
               value: 'Correlation (r)',
@@ -124,7 +125,10 @@ const LagChart: React.FC<LagChartProps> = ({
             <LabelList
               dataKey="correlation"
               position="top"
-              formatter={(v: number) => (Math.abs(v) < 0.01 ? '' : v.toFixed(2))}
+              formatter={(v: number | string) => {
+                const n = Number(v);
+                return Math.abs(n) < 0.01 ? '' : formatDecimalDisplay(n, 2);
+              }}
               style={{ fontSize: 10, fill: '#495057', fontWeight: 600 }}
             />
             {chartData.map((entry, index) => (
@@ -149,7 +153,7 @@ const LagChart: React.FC<LagChartProps> = ({
                 ? `sentiment leads by ${bestLag.lag_days}d`
                 : `price leads by ${Math.abs(bestLag.lag_days)}d`}
           </strong>{' '}
-          (<em>r</em> = {bestLag.pearson_r.toFixed(4)})
+          (<em>r</em> = {formatDecimalDisplay(bestLag.pearson_r, 4)})
         </div>
       )}
     </div>

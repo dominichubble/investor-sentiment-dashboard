@@ -37,6 +37,9 @@
   font-size: 1rem;
   margin-bottom: 4px;
   color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .heatmap-value {
@@ -44,6 +47,7 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 4px;
+  white-space: nowrap;
 }
 
 .heatmap-mentions {
@@ -51,6 +55,7 @@
   font-size: 11px;
   opacity: 0.85;
   color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .heatmap-significance {
@@ -60,4 +65,5 @@
   margin-top: 6px;
   letter-spacing: 0.04em;
   opacity: 0.9;
+  white-space: nowrap;
 }
