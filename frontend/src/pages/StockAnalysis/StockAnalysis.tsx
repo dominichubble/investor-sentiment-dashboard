@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { useSearchParams } from 'react-router-dom';
 import {
   SentimentPriceChart,
@@ -9,7 +10,7 @@ import {
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
-import { apiService } from '../../services/api';
+import { apiService, type TickerNarrativeResponse } from '../../services/api';
 import type {
   CorrelationResponse,
   LagAnalysisResponse,
@@ -65,6 +66,10 @@ const StockAnalysis: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   /** Trailing days for net sentiment when comparing to price (causal moving average). */
   const [sentimentMemoryDays, setSentimentMemoryDays] = useState(3);
+
+  const [tickerNarrative, setTickerNarrative] = useState<TickerNarrativeResponse | null>(null);
+  const [tickerNarrativeLoading, setTickerNarrativeLoading] = useState(false);
+  const [tickerNarrativeError, setTickerNarrativeError] = useState<string | null>(null);
 
   const analyzeStock = useCallback(
     async (
@@ -128,6 +133,44 @@ const StockAnalysis: React.FC = () => {
       setIsLoading(false);
     }
   }, [sentimentMemoryDays]);
+
+  useEffect(() => {
+    setTickerNarrative(null);
+    setTickerNarrativeError(null);
+  }, [ticker, period, dateRangeMode, customStart, customEnd]);
+
+  const fetchTickerNarrative = useCallback(
+    async (forceRefresh: boolean) => {
+      if (!ticker) return;
+      setTickerNarrativeLoading(true);
+      setTickerNarrativeError(null);
+      try {
+        const params =
+          dateRangeMode === 'custom' && customStart && customEnd
+            ? {
+                period,
+                start_date: customStart,
+                end_date: customEnd,
+                force_refresh: forceRefresh,
+              }
+            : { period, force_refresh: forceRefresh };
+        const data = await apiService.getTickerSentimentNarrative(ticker, params);
+        if (data.error) {
+          setTickerNarrative(null);
+          setTickerNarrativeError(data.error);
+          return;
+        }
+        setTickerNarrative(data);
+      } catch (e: unknown) {
+        const msg = e instanceof Error ? e.message : 'Failed to load narrative';
+        setTickerNarrative(null);
+        setTickerNarrativeError(msg);
+      } finally {
+        setTickerNarrativeLoading(false);
+      }
+    },
+    [ticker, period, dateRangeMode, customStart, customEnd],
+  );
 
   const syncUrl = (sym: string, p: string, custom: CustomRangePayload) => {
     if (custom) {
@@ -511,6 +554,61 @@ const StockAnalysis: React.FC = () => {
                   : 'No statistically significant relationship detected'}
               </div>
             </div>
+          </div>
+
+          <div className="sa-chart-section sa-ticker-narrative">
+            <h3 className="sa-section-title">AI sentiment narrative</h3>
+            <p className="sa-section-desc">
+              Summarises <strong>only ingested posts and news</strong> in the same date window as the
+              charts above (via Groq&apos;s free API). Cached per ticker and data snapshot; add{' '}
+              <code className="sa-inline-code">GROQ_API_KEY</code> to your backend <code className="sa-inline-code">.env</code>.
+            </p>
+            <div className="sa-ticker-narrative__actions">
+              <button
+                type="button"
+                className="sa-narrative-btn"
+                disabled={tickerNarrativeLoading}
+                onClick={() => fetchTickerNarrative(false)}
+              >
+                {tickerNarrativeLoading ? 'Working…' : 'Get AI summary (uses cache if data unchanged)'}
+              </button>
+              <button
+                type="button"
+                className="sa-narrative-btn sa-narrative-btn--secondary"
+                disabled={tickerNarrativeLoading}
+                onClick={() => fetchTickerNarrative(true)}
+              >
+                Regenerate (new API call)
+              </button>
+            </div>
+            {tickerNarrativeError && (
+              <p className="sa-ticker-narrative__error" role="alert">
+                {tickerNarrativeError}
+              </p>
+            )}
+            {tickerNarrative && !tickerNarrativeError && (
+              <div className="sa-ticker-narrative__meta">
+                {tickerNarrative.cached ? (
+                  <span className="sa-narrative-pill">Cached</span>
+                ) : (
+                  <span className="sa-narrative-pill">Fresh</span>
+                )}
+                {tickerNarrative.model && tickerNarrative.model !== 'none' && (
+                  <span className="sa-narrative-pill">{tickerNarrative.model}</span>
+                )}
+                <span className="sa-narrative-pill">{tickerNarrative.record_count} mentions in window</span>
+                {tickerNarrative.window_start && tickerNarrative.window_end && (
+                  <span className="sa-narrative-pill">
+                    {tickerNarrative.window_start.slice(0, 10)} → {tickerNarrative.window_end.slice(0, 10)}
+                  </span>
+                )}
+              </div>
+            )}
+            {tickerNarrative?.narrative && (
+              <div className="sa-ticker-narrative__body">
+                <ReactMarkdown>{tickerNarrative.narrative}</ReactMarkdown>
+              </div>
+            )}
           </div>
 
           {/* Daily aggregated sentiment (mentions pooled by calendar day) */}

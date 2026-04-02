@@ -30,6 +30,18 @@ export interface ExplanationToken {
   weight: number;
 }
 
+export interface TickerNarrativeResponse {
+  narrative: string;
+  cached: boolean;
+  model: string;
+  record_count: number;
+  window_start: string | null;
+  window_end: string | null;
+  period_key: string;
+  data_signature: string | null;
+  error: string | null;
+}
+
 export interface ExplainSentimentResponse {
   text: string;
   prediction: {
@@ -249,6 +261,33 @@ export const apiService = {
       '/sentiment/explain',
       { text, options },
       { timeout: 120_000, signal },   // 120 s budget for CPU-heavy LIME
+    );
+    return response.data;
+  },
+
+  /** Grounded AI summary of ticker sentiment (Groq); same date window as correlation. */
+  async getTickerSentimentNarrative(
+    ticker: string,
+    params: {
+      period?: string;
+      start_date?: string;
+      end_date?: string;
+      force_refresh?: boolean;
+    },
+    signal?: AbortSignal,
+  ): Promise<TickerNarrativeResponse> {
+    const response = await api.get<TickerNarrativeResponse>(
+      `/sentiment/ticker-narrative/${encodeURIComponent(ticker)}`,
+      {
+        params: {
+          period: params.period ?? '90d',
+          start_date: params.start_date,
+          end_date: params.end_date,
+          force_refresh: params.force_refresh ?? false,
+        },
+        timeout: 90_000,
+        signal,
+      },
     );
     return response.data;
   },

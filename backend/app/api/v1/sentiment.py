@@ -1,16 +1,17 @@
 """Sentiment endpoints for API v1."""
 
 import asyncio
-from datetime import datetime
+from datetime import date, datetime
 from time import perf_counter
-from typing import Any
+from typing import Any, Optional
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
 from app.explainability.lime_explainer import get_lime_explainer
 from app.models.sentiment_inference import analyze_batch as run_batch_sentiment
 from app.models.sentiment_inference import analyze_sentiment as run_sentiment
+from app.services.sentiment_narrative_service import generate_ticker_narrative
 
 router = APIRouter(prefix="/sentiment", tags=["sentiment"])
 
@@ -88,6 +89,20 @@ class ExplainResponse(BaseModel):
     prediction: SentimentResult
     tokens: list[ExplanationToken]
     metadata: dict[str, Any]
+
+
+class TickerNarrativeResponse(BaseModel):
+    """Grounded LLM summary of ticker sentiment over a date window (cached)."""
+
+    narrative: str = ""
+    cached: bool = False
+    model: str = ""
+    record_count: int = 0
+    window_start: Optional[str] = None
+    window_end: Optional[str] = None
+    period_key: str = ""
+    data_signature: Optional[str] = None
+    error: Optional[str] = None
 
 
 @router.get("/_ping")
@@ -277,4 +292,68 @@ async def explain_sentiment(request: ExplainRequest) -> ExplainResponse:
             "processing_time_ms": round((perf_counter() - started) * 1000, 2),
             "timestamp": _utc_now_iso(),
         },
+    )
+
+
+@router.get(
+    "/ticker-narrative/{ticker}",
+    response_model=TickerNarrativeResponse,
+    summary="AI narrative for ticker sentiment (grounded, cached)",
+)
+async def get_ticker_sentiment_narrative(
+    ticker: str,
+    period: str = Query(
+        "90d",
+        description="Same as correlation: 7d, 30d, 90d, 6mo, 1y — ignored if start_date+end_date set",
+    ),
+    start_date: Optional[date] = Query(
+        None,
+        description="Custom range start (inclusive); requires end_date",
+    ),
+    end_date: Optional[date] = Query(
+        None,
+        description="Custom range end (inclusive); requires start_date",
+    ),
+    force_refresh: bool = Query(
+        False,
+        description="Bypass cache and regenerate (still keyed on current data fingerprint)",
+    ),
+) -> TickerNarrativeResponse:
+    """
+    Summarise why sentiment looks the way it does for this ticker, using **only**
+    ingested rows in the resolved window (aligned with price-based range for presets).
+
+    Requires ``GROQ_API_KEY`` (free tier at https://console.groq.com/). Responses are
+    stored in ``sentiment_narrative_cache`` keyed by ticker, range, and data fingerprint.
+    """
+    if start_date is not None or end_date is not None:
+        if start_date is None or end_date is None:
+            raise HTTPException(
+                status_code=400,
+                detail="Both start_date and end_date are required for a custom range.",
+            )
+        if start_date > end_date:
+            raise HTTPException(
+                status_code=400,
+                detail="start_date must be on or before end_date.",
+            )
+
+    result = await asyncio.to_thread(
+        generate_ticker_narrative,
+        ticker,
+        period,
+        start_date,
+        end_date,
+        force_refresh,
+    )
+    return TickerNarrativeResponse(
+        narrative=result.get("narrative") or "",
+        cached=bool(result.get("cached")),
+        model=result.get("model") or "",
+        record_count=int(result.get("record_count") or 0),
+        window_start=result.get("window_start"),
+        window_end=result.get("window_end"),
+        period_key=result.get("period_key") or "",
+        data_signature=result.get("data_signature"),
+        error=result.get("error"),
     )

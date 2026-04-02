@@ -17,8 +17,10 @@ from sqlalchemy import (
     DateTime,
     Float,
     Index,
+    Integer,
     String,
     Text,
+    UniqueConstraint,
     create_engine,
 )
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
@@ -79,6 +81,32 @@ class SentimentRecordRow(Base):
             "source_meta_json": self.source_meta_json,
             "published_at": self.published_at.isoformat() + "Z" if self.published_at else None,
         }
+
+
+class SentimentNarrativeCacheRow(Base):
+    """Cached LLM narrative summaries for ticker sentiment (Groq / OpenAI-compatible)."""
+
+    __tablename__ = "sentiment_narrative_cache"
+
+    id = Column(String(36), primary_key=True)
+    ticker = Column(String(12), nullable=False, index=True)
+    period_key = Column(String(80), nullable=False)
+    data_signature = Column(String(64), nullable=False)
+    narrative_text = Column(Text, nullable=False)
+    model_id = Column(String(80), nullable=False)
+    record_count = Column(Integer, nullable=False)
+    window_start = Column(DateTime, nullable=True)
+    window_end = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint(
+            "ticker",
+            "period_key",
+            "data_signature",
+            name="uq_sentiment_narrative_cache_key",
+        ),
+    )
 
 
 _engine = None
