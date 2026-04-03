@@ -14,7 +14,7 @@ from typing import Dict, List, Optional, Tuple
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 
-from .database import SentimentRecordRow, get_engine, get_session
+from .database import SentimentRecordRow, get_session
 from .record_ids import make_record_id
 
 logger = logging.getLogger(__name__)
@@ -29,7 +29,9 @@ class SentimentStorage:
     _loaded = True
 
     def __init__(self) -> None:
-        get_engine()
+        # Defer get_engine() to first get_session() — avoids DB + create_all during
+        # app import (critical for PaaS port checks and Docker without DATABASE_URL).
+        pass
 
     def load(self) -> None:
         """No-op kept for backward compatibility."""

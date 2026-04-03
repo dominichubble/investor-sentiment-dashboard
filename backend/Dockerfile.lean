@@ -1,21 +1,20 @@
+# Smaller runtime for Render free tier: pip install requirements-lean.txt only.
+# Set env LEAN_API=1 on the service (see .env.example).
+# Build from repo with context = backend (same as main Dockerfile).
+
 FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements
-COPY requirements.txt .
-
-# Install Python dependencies
+COPY requirements-lean.txt requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh

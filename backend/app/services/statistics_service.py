@@ -64,7 +64,6 @@ class StatisticsService:
 
     def __init__(self) -> None:
         self.stock_db = StockDatabase()
-        self.stock_db.load()
 
     def get_statistics(
         self,
@@ -81,6 +80,8 @@ class StatisticsService:
             include_source_comparison: When True and ``data_source`` is unset,
                 include per-channel sentiment breakdown (``source_comparison``).
         """
+        # Load after import so startup never blocks on SEC download / disk I/O.
+        self.stock_db.load()
         session = get_session()
         try:
             ds_filter = _normalize_data_source_param(data_source)

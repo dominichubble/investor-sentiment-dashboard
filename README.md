@@ -50,6 +50,8 @@ python -m uvicorn app.main:app --reload --port 8000
 
 The API will be available at `http://localhost:8000`. Check health: `GET http://localhost:8000/health`.
 
+**Lean API (small cloud instances, no on-box ML):** `pip install -r backend/requirements-lean.txt`, set `LEAN_API=1`, then run Uvicorn as above. You keep statistics, correlation, stock-quality, and Groq-backed ticker narrative; `/sentiment/analyze`, `/batch`, and `/explain` return **503** (FinBERT/LIME need the full `requirements.txt`). Use `backend/Dockerfile.lean` on Render and set the same env var.
+
 ### 2. Frontend
 
 ```bash

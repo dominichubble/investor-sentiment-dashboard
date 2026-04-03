@@ -125,6 +125,8 @@ def run_lime_explain(
     Default num_samples reduced from 1000 to 500 for faster CPU response
     while retaining sufficient explanation accuracy.
     """
+    from app.explainability.lime_explainer import get_lime_explainer
+
     explainer = get_lime_explainer()
     return explainer.explain(
         text=text, num_features=num_features, num_samples=num_samples

@@ -60,3 +60,18 @@ def security_headers_enabled() -> bool:
         "yes",
         "on",
     )
+
+
+def lean_api_enabled() -> bool:
+    """
+    When true, mount only lightweight sentiment routes (narrative + ML stubs).
+
+    Use with requirements-lean.txt for small cloud instances: no torch/transformers,
+    no ingest clients, no on-box FinBERT/LIME.
+    """
+    return (os.getenv("LEAN_API") or "").strip().lower() in (
+        "1",
+        "true",
+        "yes",
+        "on",
+    )
