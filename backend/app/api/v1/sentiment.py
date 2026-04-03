@@ -8,10 +8,10 @@ from typing import Any, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from app.explainability.lime_explainer import get_lime_explainer
-from app.models.sentiment_inference import analyze_batch as run_batch_sentiment
-from app.models.sentiment_inference import analyze_sentiment as run_sentiment
 from app.services.sentiment_narrative_service import generate_ticker_narrative
+
+# FinBERT + LIME are imported lazily inside handlers so the API can bind a port on
+# small hosts (e.g. 512MB) before loading torch/transformers.
 
 router = APIRouter(prefix="/sentiment", tags=["sentiment"])
 
@@ -141,6 +141,8 @@ async def analyze_sentiment(request: AnalyzeRequest) -> AnalyzeResponse:
     include_scores = bool((request.options or {}).get("include_scores", False))
     started = perf_counter()
     try:
+        from app.models.sentiment_inference import analyze_sentiment as run_sentiment
+
         result = run_sentiment(text, return_all_scores=include_scores)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
@@ -187,6 +189,8 @@ async def batch_analyze_sentiment(request: BatchRequest) -> BatchResponse:
     include_scores = bool((request.options or {}).get("include_scores", False))
     started = perf_counter()
     try:
+        from app.models.sentiment_inference import analyze_batch as run_batch_sentiment
+
         batch_results = run_batch_sentiment(
             request.texts,
             return_all_scores=include_scores,

@@ -9,11 +9,11 @@ client = TestClient(app)
 
 def test_v1_analyze_happy_path(monkeypatch):
     """Analyze endpoint returns label/score payload."""
-    from app.api.v1 import sentiment
+    import app.models.sentiment_inference as inf
 
     monkeypatch.setattr(
-        sentiment,
-        "run_sentiment",
+        inf,
+        "analyze_sentiment",
         lambda text, return_all_scores=False: {"label": "positive", "score": 0.9},
     )
 
@@ -37,11 +37,11 @@ def test_v1_analyze_empty_text_returns_400():
 
 def test_v1_batch_happy_path(monkeypatch):
     """Batch endpoint should preserve input order."""
-    from app.api.v1 import sentiment
+    import app.models.sentiment_inference as inf
 
     monkeypatch.setattr(
-        sentiment,
-        "run_batch_sentiment",
+        inf,
+        "analyze_batch",
         lambda texts, **kwargs: [
             {"label": "positive", "score": 0.8},
             {"label": "negative", "score": 0.7},

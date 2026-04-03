@@ -18,8 +18,7 @@ load_dotenv_from_repo()
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    """Initialize core services when the app boots."""
-    get_engine()
+    """Do not connect to the DB here — keeps the process alive for /health if DB is slow or misconfigured."""
     yield
 
 
