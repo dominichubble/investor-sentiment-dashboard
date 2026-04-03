@@ -11,7 +11,15 @@ import type {
   RollingCorrelationResponse,
 } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
+/** Ensure base URL ends with /api/v1 (common Vercel misconfig omits it). */
+function resolveApiBaseUrl(): string {
+  const raw = (import.meta.env.VITE_API_URL || '').trim() || 'http://localhost:8000/api/v1';
+  const base = raw.replace(/\/+$/, '');
+  if (base.endsWith('/api/v1')) return base;
+  return `${base}/api/v1`;
+}
+
+const API_BASE_URL = resolveApiBaseUrl();
 
 const apiKey = (import.meta.env.VITE_API_KEY || '').trim();
 
