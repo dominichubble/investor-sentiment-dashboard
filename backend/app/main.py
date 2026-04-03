@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -48,6 +49,19 @@ if _hosts:
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=_hosts)
 
 app.include_router(api_router, prefix="/api/v1")
+
+
+@app.get("/api/v1")
+async def api_v1_index() -> dict[str, Any]:
+    """So GET /api/v1 is not a bare 404; real endpoints are nested paths."""
+    return {
+        "version": "v1",
+        "docs": "/docs",
+        "examples": {
+            "data_ping": "/api/v1/data/_ping",
+            "statistics": "/api/v1/data/statistics?days=90",
+        },
+    }
 
 
 @app.get("/")
