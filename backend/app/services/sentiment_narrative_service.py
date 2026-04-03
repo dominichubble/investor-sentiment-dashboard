@@ -11,14 +11,13 @@ import json
 import logging
 import os
 import uuid
-from datetime import date, datetime, time
-from typing import Any, Optional, Tuple
+from datetime import date, datetime
+from typing import Any, Optional
 
 import httpx
-import pandas as pd
 from sqlalchemy import func
 
-from app.analysis.price_service import PriceService
+from app.services.sentiment_window import resolve_sentiment_window
 from app.storage.database import (
     SentimentNarrativeCacheRow,
     SentimentRecordRow,
@@ -45,31 +44,6 @@ def _period_key(
     if start_date is not None and end_date is not None:
         return f"c:{start_date.isoformat()}:{end_date.isoformat()}"
     return f"p:{period.strip()}"
-
-
-def _window_datetimes(
-    ticker: str,
-    period: str,
-    start_date: Optional[date],
-    end_date: Optional[date],
-) -> Tuple[Optional[datetime], Optional[datetime]]:
-    """
-    Match correlation analysis: custom range uses inclusive calendar days;
-    preset uses yfinance price history min/max dates.
-    """
-    if start_date is not None and end_date is not None:
-        start_dt = datetime.combine(start_date, time.min)
-        end_dt = datetime.combine(end_date, time.max.replace(microsecond=0))
-        return start_dt, end_dt
-
-    df = PriceService.get_price_history(ticker.upper(), period=period)
-    if df is None or df.empty:
-        return None, None
-    d_min = pd.Timestamp(df["date"].min()).to_pydatetime()
-    d_max = pd.Timestamp(df["date"].max()).to_pydatetime()
-    start_dt = d_min.replace(hour=0, minute=0, second=0, microsecond=0)
-    end_dt = d_max.replace(hour=23, minute=59, second=59, microsecond=0)
-    return start_dt, end_dt
 
 
 def _data_signature(session, ticker: str, start_dt: datetime, end_dt: datetime) -> str:
@@ -368,7 +342,7 @@ def generate_ticker_narrative(
         return {"error": "ticker is required"}
 
     pkey = _period_key(period, start_date, end_date)
-    start_dt, end_dt = _window_datetimes(sym, period, start_date, end_date)
+    start_dt, end_dt = resolve_sentiment_window(sym, period, start_date, end_date)
     if start_dt is None or end_dt is None:
         return {
             "error": "Could not resolve a price history window for this ticker and period.",

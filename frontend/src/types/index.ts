@@ -137,6 +137,32 @@ export interface StockInfoResponse {
   currency?: string;
 }
 
+/** Per-ticker sentiment data quality (same window as correlation / AI narrative). */
+export interface DataQualityFlag {
+  id: string;
+  severity: string;
+  title: string;
+  detail: string;
+}
+
+export interface StockDataQualityResponse {
+  ticker: string;
+  window_start: string | null;
+  window_end: string | null;
+  calendar_days: number;
+  days_with_mentions: number;
+  calendar_coverage: number;
+  longest_gap_days: number;
+  total_mentions: number;
+  by_label: Record<string, number>;
+  label_shares: Record<string, number>;
+  by_channel: Record<string, number>;
+  confidence_score: number;
+  confidence_label: string;
+  flags: DataQualityFlag[];
+  error?: string | null;
+}
+
 // --- Granger Causality Types ---
 
 export interface GrangerLagResult {

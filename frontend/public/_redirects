@@ -1,0 +1,2 @@
+# Netlify (and similar): serve index.html for client routes so /legal and /analyze work on refresh.
+/*    /index.html   200

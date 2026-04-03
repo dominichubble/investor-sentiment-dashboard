@@ -1,0 +1,12 @@
+# Render Blueprint — https://render.com/docs/blueprint-spec
+# After connect: set DATABASE_URL, CORS_ALLOW_ORIGINS (and optional API_KEYS, GROQ_API_KEY) in the dashboard.
+
+services:
+  - type: web
+    name: investor-sentiment-api
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    # Render sets PORT; binding to 127.0.0.1 or a fixed 8000 will fail the port check.
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health

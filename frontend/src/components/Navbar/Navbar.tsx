@@ -66,6 +66,14 @@ const Navbar: React.FC<NavbarProps> = ({
             >
               Stock analysis
             </NavLink>
+            <NavLink
+              to="/legal"
+              className={({ isActive }) =>
+                `navbar-nav-item${isActive ? ' active' : ''}`
+              }
+            >
+              Legal
+            </NavLink>
           </div>
         </div>
       )}

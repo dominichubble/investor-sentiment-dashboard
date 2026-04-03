@@ -558,7 +558,7 @@ const MarketOverview: React.FC = () => {
   }, [sentimentSource]);
 
   return (
-    <div className="stock-analysis">
+    <div id="main-content" className="stock-analysis" tabIndex={-1}>
       <Navbar
         title="Market overview"
         subtitle="Aggregate sentiment across your ingested data: compare Reddit, news, and X, then inspect daily volume and net sentiment (not tied to a single ticker)."

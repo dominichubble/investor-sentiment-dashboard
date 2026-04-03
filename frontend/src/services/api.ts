@@ -6,17 +6,21 @@ import type {
   TimeSeriesResponse,
   PriceHistoryResponse,
   StockInfoResponse,
+  StockDataQualityResponse,
   GrangerCausalityResponse,
   RollingCorrelationResponse,
 } from '../types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
+const apiKey = (import.meta.env.VITE_API_KEY || '').trim();
+
 const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
+    ...(apiKey ? { Authorization: `Bearer ${apiKey}` } : {}),
   },
 });
 
@@ -377,6 +381,21 @@ export const apiService = {
     return response.data;
   },
 
+  async getStockDataQuality(
+    ticker: string,
+    params?: {
+      period?: string;
+      start_date?: string;
+      end_date?: string;
+    },
+  ): Promise<StockDataQualityResponse> {
+    const response = await api.get<StockDataQualityResponse>(
+      `/data/stock-quality/${encodeURIComponent(ticker)}`,
+      { params },
+    );
+    return response.data;
+  },
+
   async getGrangerCausality(
     ticker: string,
     params?: {
@@ -416,7 +435,8 @@ export const apiService = {
 
   // Health check
   async healthCheck(): Promise<any> {
-    const response = await axios.get(`${API_BASE_URL.replace('/api/v1', '')}/health`);
+    const base = API_BASE_URL.replace(/\/api\/v1\/?$/, '');
+    const response = await axios.get(`${base}/health`);
     return response.data;
   },
 };

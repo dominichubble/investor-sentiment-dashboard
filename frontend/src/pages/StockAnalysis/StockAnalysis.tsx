@@ -16,6 +16,7 @@ import type {
   LagAnalysisResponse,
   TimeSeriesResponse,
   StockInfoResponse,
+  StockDataQualityResponse,
   GrangerCausalityResponse,
   RollingCorrelationResponse,
 } from '../../types';
@@ -60,6 +61,7 @@ const StockAnalysis: React.FC = () => {
   const [grangerData, setGrangerData] = useState<GrangerCausalityResponse | null>(null);
   const [rollingData, setRollingData] = useState<RollingCorrelationResponse | null>(null);
   const [stockInfo, setStockInfo] = useState<StockInfoResponse | null>(null);
+  const [dataQuality, setDataQuality] = useState<StockDataQualityResponse | null>(null);
 
   // UI states
   const [isLoading, setIsLoading] = useState(false);
@@ -95,14 +97,16 @@ const StockAnalysis: React.FC = () => {
       : { period: analysisPeriod, trailing_days };
 
     try {
-      const [corrData, tsData, lagData, infoData, grangerResult, rollingResult] = await Promise.allSettled([
-        apiService.getCorrelation(stockTicker, rangeParams),
-        apiService.getCorrelationTimeseries(stockTicker, rangeParams),
-        apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, ...rangeParams }),
-        apiService.getStockInfo(stockTicker),
-        apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...rangeParams }),
-        apiService.getRollingCorrelation(stockTicker, { window: 14, ...rangeParams }),
-      ]);
+      const [corrData, tsData, lagData, infoData, grangerResult, rollingResult, qualityData] =
+        await Promise.allSettled([
+          apiService.getCorrelation(stockTicker, rangeParams),
+          apiService.getCorrelationTimeseries(stockTicker, rangeParams),
+          apiService.getLagAnalysis(stockTicker, { max_lag_days: 5, ...rangeParams }),
+          apiService.getStockInfo(stockTicker),
+          apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...rangeParams }),
+          apiService.getRollingCorrelation(stockTicker, { window: 14, ...rangeParams }),
+          apiService.getStockDataQuality(stockTicker, rangeParams),
+        ]);
 
       if (corrData.status === 'fulfilled') setCorrelation(corrData.value);
       else setCorrelation(null);
@@ -122,6 +126,9 @@ const StockAnalysis: React.FC = () => {
       if (rollingResult.status === 'fulfilled') setRollingData(rollingResult.value);
       else setRollingData(null);
 
+      if (qualityData.status === 'fulfilled') setDataQuality(qualityData.value);
+      else setDataQuality(null);
+
       const allFailed = [corrData, tsData, lagData].every(r => r.status === 'rejected');
       if (allFailed) {
         setError('Could not fetch data for this ticker. Please check the ticker symbol and ensure the backend is running.');
@@ -137,6 +144,7 @@ const StockAnalysis: React.FC = () => {
   useEffect(() => {
     setTickerNarrative(null);
     setTickerNarrativeError(null);
+    setDataQuality(null);
   }, [ticker, period, dateRangeMode, customStart, customEnd]);
 
   const fetchTickerNarrative = useCallback(
@@ -289,7 +297,7 @@ const StockAnalysis: React.FC = () => {
   };
 
   return (
-    <div className="stock-analysis">
+    <div id="main-content" className="stock-analysis" tabIndex={-1}>
       <Navbar
         title="Sentiment–price correlation"
         subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window. For market-wide sentiment by source, use Market overview."
@@ -475,6 +483,125 @@ const StockAnalysis: React.FC = () => {
               <span className="sa-tag">{correlation.data_points} data points</span>
             </div>
           </div>
+
+          {dataQuality && (
+            <div className="sa-chart-section sa-data-quality" aria-label="Sentiment data quality">
+              <h3 className="sa-section-title">Data quality &amp; confidence</h3>
+              <p className="sa-section-desc">
+                Derived from ingested mentions in the <strong>same date window</strong> as your charts and AI narrative.
+                Flags are rule-based heuristics (sample size, channel mix, calendar coverage)—not statistical tests.
+              </p>
+              {dataQuality.error ? (
+                <p className="sa-data-quality__error" role="alert">
+                  {dataQuality.error}
+                </p>
+              ) : (
+                <>
+                  <div className="sa-data-quality__top">
+                    <div className="sa-data-quality__score-block">
+                      <div className="sa-data-quality__score-label">Reliability (heuristic)</div>
+                      <div
+                        className={`sa-data-quality__badge sa-data-quality__badge--${dataQuality.confidence_label}`}
+                      >
+                        {(dataQuality.confidence_label || '—').replace(/^\w/, (c) => c.toUpperCase())}
+                      </div>
+                      <div className="sa-data-quality__meter-wrap" aria-hidden>
+                        <div
+                          className="sa-data-quality__meter-fill"
+                          style={{
+                            width: `${Math.min(100, Math.round(dataQuality.confidence_score * 100))}%`,
+                          }}
+                        />
+                      </div>
+                      <div className="sa-data-quality__score-num">
+                        Score {(dataQuality.confidence_score * 100).toFixed(0)}% — use with charts and fundamentals.
+                      </div>
+                    </div>
+                    <dl className="sa-data-quality__stats">
+                      <div>
+                        <dt>Mentions in window</dt>
+                        <dd>{dataQuality.total_mentions.toLocaleString()}</dd>
+                      </div>
+                      <div>
+                        <dt>Days with ≥1 mention</dt>
+                        <dd>
+                          {dataQuality.days_with_mentions} / {dataQuality.calendar_days}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt>Calendar coverage</dt>
+                        <dd>{(dataQuality.calendar_coverage * 100).toFixed(0)}%</dd>
+                      </div>
+                      <div>
+                        <dt>Longest gap (no mentions)</dt>
+                        <dd>{dataQuality.longest_gap_days} day(s)</dd>
+                      </div>
+                    </dl>
+                  </div>
+                  <div className="sa-data-quality__row">
+                    <div className="sa-data-quality__col">
+                      <h4 className="sa-data-quality__subhead">FinBERT label mix</h4>
+                      <ul className="sa-data-quality__mini">
+                        <li>
+                          Positive ~{(100 * (dataQuality.label_shares?.positive ?? 0)).toFixed(0)}% (
+                          {dataQuality.by_label?.positive ?? 0})
+                        </li>
+                        <li>
+                          Neutral ~{(100 * (dataQuality.label_shares?.neutral ?? 0)).toFixed(0)}% (
+                          {dataQuality.by_label?.neutral ?? 0})
+                        </li>
+                        <li>
+                          Negative ~{(100 * (dataQuality.label_shares?.negative ?? 0)).toFixed(0)}% (
+                          {dataQuality.by_label?.negative ?? 0})
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="sa-data-quality__col">
+                      <h4 className="sa-data-quality__subhead">Ingest channel share</h4>
+                      {dataQuality.total_mentions > 0 &&
+                      Object.keys(dataQuality.by_channel).length > 0 ? (
+                        <div className="sa-data-quality__channels">
+                          {Object.entries(dataQuality.by_channel)
+                            .sort((a, b) => b[1] - a[1])
+                            .map(([ch, n]) => {
+                              const pct = Math.round((n / dataQuality.total_mentions) * 100);
+                              const safe = ch.replace(/[^a-z]/g, '') || 'unknown';
+                              return (
+                                <div key={ch} className="sa-data-quality__channel-row">
+                                  <span className="sa-data-quality__ch-name">{ch}</span>
+                                  <div className="sa-data-quality__channel-bar-wrap">
+                                    <div
+                                      className={`sa-data-quality__channel-bar sa-data-quality__channel-bar--${safe}`}
+                                      style={{ width: `${pct}%` }}
+                                    />
+                                  </div>
+                                  <span className="sa-data-quality__ch-pct">{pct}%</span>
+                                </div>
+                              );
+                            })}
+                        </div>
+                      ) : (
+                        <p className="sa-data-quality__empty-ch">No channel breakdown (no rows).</p>
+                      )}
+                    </div>
+                  </div>
+                  {dataQuality.flags.length > 0 && (
+                    <ul className="sa-data-quality__flags">
+                      {dataQuality.flags.map((f) => (
+                        <li
+                          key={`${f.id}-${f.title}`}
+                          className={`sa-data-quality__flag sa-data-quality__flag--${f.severity}`}
+                        >
+                          <strong>{f.title}</strong>
+                          <span>{f.detail}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              )}
+            </div>
+          )}
 
           {/* Correlation Summary Cards */}
           <div className="sa-summary-grid">

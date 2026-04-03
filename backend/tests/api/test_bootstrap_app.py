@@ -31,3 +31,4 @@ def test_correlation_routes_are_mounted_in_openapi():
     paths = response.json().get("paths", {})
     assert "/api/v1/correlation/overview/all" in paths
     assert "/api/v1/sentiment/ticker-narrative/{ticker}" in paths
+    assert "/api/v1/data/stock-quality/{ticker}" in paths

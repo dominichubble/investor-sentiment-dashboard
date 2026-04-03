@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 import MarketOverview from './pages/MarketOverview/MarketOverview';
 import StockAnalysis from './pages/StockAnalysis';
+import Legal from './pages/Legal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
 
@@ -30,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<RootRoute />} />
             <Route path="/analyze" element={<StockAnalysis />} />
+            <Route path="/legal" element={<Legal />} />
             <Route path="/correlation" element={<Navigate to="/analyze" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -41,7 +43,7 @@ function App() {
 
 function NotFound() {
   return (
-    <div className="not-found">
+    <div id="main-content" className="not-found" tabIndex={-1}>
       <h1 className="not-found__code">404</h1>
       <h2 className="not-found__title">Page not found</h2>
       <p className="not-found__text">
@@ -53,6 +55,9 @@ function NotFound() {
         </Link>
         <Link to="/analyze" className="not-found__link">
           Stock analysis
+        </Link>
+        <Link to="/legal" className="not-found__link">
+          Legal &amp; disclaimer
         </Link>
       </div>
     </div>
