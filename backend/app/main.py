@@ -6,6 +6,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 
 from app.api.v1.router import api_router
@@ -47,6 +48,25 @@ if _hosts:
     app.add_middleware(TrustedHostMiddleware, allowed_hosts=_hosts)
 
 app.include_router(api_router, prefix="/api/v1")
+
+
+@app.get("/")
+async def root() -> dict[str, str]:
+    """Human-friendly root when someone opens the API host in a browser (avoids bare 404)."""
+    return {
+        "name": "Investor Sentiment Dashboard API",
+        "version": "1.0.0",
+        "docs": "/docs",
+        "health": "/health",
+        "health_ready": "/health/ready",
+        "api_v1": "/api/v1",
+    }
+
+
+@app.head("/")
+async def root_head() -> Response:
+    """Some load balancers probe with HEAD; return 200 with an empty body."""
+    return Response(status_code=200)
 
 
 @app.get("/health")
