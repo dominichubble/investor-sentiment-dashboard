@@ -1,0 +1,76 @@
+# Weekly: deeper Reddit pull (listings + search) → FinBERT → Neon.
+# Same secrets as Daily sentiment ingestion (REDDIT_*, DATABASE_URL).
+
+name: Weekly Reddit bulk ingest
+
+on:
+  schedule:
+    - cron: "0 5 * * 0"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sentiment-reddit-bulk-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PYTHONPATH: ${{ github.workspace }}/backend
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+jobs:
+  reddit-bulk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: backend/requirements.txt
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: huggingface-${{ runner.os }}-finbert-${{ hashFiles('backend/requirements.txt') }}
+          restore-keys: |
+            huggingface-${{ runner.os }}-finbert-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --no-cache-dir -r backend/requirements.txt
+
+      - name: Require Neon DATABASE_URL
+        run: |
+          if [ -z "${DATABASE_URL:-}" ]; then
+            echo "::error::Add the DATABASE_URL repository secret."
+            exit 1
+          fi
+
+      - name: Bulk Reddit ingest (subset of subs to finish within timeout)
+        env:
+          REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
+          REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
+          REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
+        run: |
+          python -m app.pipelines.reddit_bulk_ingest \
+            --subreddits wallstreetbets stocks investing StockMarket options finance \
+            --limit-per-feed 250 \
+            --search-limit 120 \
+            --search-time-filter month \
+            --top-filters day week month \
+            --sleep-seconds 1.0 \
+            --store-db --no-write-files
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Weekly Reddit bulk" >> "$GITHUB_STEP_SUMMARY"
+          echo "- UTC: $(date -u)" >> "$GITHUB_STEP_SUMMARY"

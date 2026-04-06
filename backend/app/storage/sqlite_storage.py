@@ -8,11 +8,13 @@ Stock rows are identified by having a non-null ticker column.
 from __future__ import annotations
 
 import logging
+import os
 from datetime import datetime, timedelta, timezone
 from typing import Dict, List, Optional, Tuple
 
-from sqlalchemy import func
+from sqlalchemy import func, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
+from sqlalchemy.exc import OperationalError
 
 from .database import SentimentRecordRow, get_session
 from .record_ids import make_record_id
@@ -20,6 +22,24 @@ from .record_ids import make_record_id
 logger = logging.getLogger(__name__)
 
 BATCH_SIZE = 500
+_MAX_AUTO_PRUNE_ROUNDS = 20
+
+
+def _storage_pressure_error(exc: BaseException) -> bool:
+    """True when the driver/DB reports disk or storage quota exhaustion."""
+    e: BaseException | None = exc
+    while e is not None:
+        if type(e).__name__ == "DiskFull":
+            return True
+        msg = str(e).lower()
+        if "diskfull" in msg.replace(" ", "") or "no space left" in msg:
+            return True
+        if "53100" in msg:
+            return True
+        if "storage limit" in msg or "disk quota" in msg:
+            return True
+        e = getattr(e, "__cause__", None) or getattr(e, "orig", None)  # type: ignore[assignment]
+    return False
 
 
 class SentimentStorage:
@@ -50,27 +70,106 @@ class SentimentStorage:
                 pass
         return datetime.utcnow()
 
-    def _insert_records(self, records: List[Dict]) -> int:
-        if not records:
+    def prune_oldest_published(
+        self,
+        *,
+        limit: int,
+        source: Optional[str] = None,
+        data_source: Optional[str] = None,
+    ) -> int:
+        """
+        Delete up to ``limit`` rows with the oldest ``published_at`` (ties broken by ``id``).
+
+        Optional ``source`` / ``data_source`` narrow the candidate set; omit both to prune globally.
+        """
+        if limit <= 0:
             return 0
+        parts = ["1=1"]
+        params: Dict[str, object] = {"lim": limit}
+        if source is not None:
+            parts.append("source = :source")
+            params["source"] = source
+        if data_source is not None:
+            parts.append("data_source = :data_source")
+            params["data_source"] = data_source
+        where_sql = " AND ".join(parts)
+        delete_sql = text(
+            f"""
+            DELETE FROM sentiment_records
+            WHERE id IN (
+                SELECT id FROM sentiment_records
+                WHERE {where_sql}
+                ORDER BY published_at ASC, id ASC
+                LIMIT :lim
+            )
+            """
+        )
         session = get_session()
         try:
-            total_inserted = 0
-            for i in range(0, len(records), BATCH_SIZE):
-                batch = records[i : i + BATCH_SIZE]
-                stmt = pg_insert(SentimentRecordRow).values(batch)
-                stmt = stmt.on_conflict_do_nothing(index_elements=["id"])
-                result = session.execute(stmt)
-                total_inserted += int(result.rowcount or 0)
-
+            result = session.execute(delete_sql, params)
             session.commit()
-            return total_inserted
-        except Exception as e:
+            deleted = int(result.rowcount or 0)
+            if deleted:
+                logger.info(
+                    "Pruned %s sentiment row(s) (oldest published_at; filters source=%r data_source=%r)",
+                    deleted,
+                    source,
+                    data_source,
+                )
+            return deleted
+        except Exception:
             session.rollback()
-            logger.error("Failed to save records: %s", e)
             raise
         finally:
             session.close()
+
+    def _insert_records(self, records: List[Dict]) -> int:
+        if not records:
+            return 0
+        auto_prune = os.environ.get("SENTIMENT_AUTO_PRUNE_ON_STORAGE_ERROR") == "1"
+        prune_batch = int(os.environ.get("SENTIMENT_AUTO_PRUNE_BATCH", "5000"))
+        prune_rounds = 0
+
+        while True:
+            session = get_session()
+            try:
+                total_inserted = 0
+                for i in range(0, len(records), BATCH_SIZE):
+                    batch = records[i : i + BATCH_SIZE]
+                    stmt = pg_insert(SentimentRecordRow).values(batch)
+                    stmt = stmt.on_conflict_do_nothing(index_elements=["id"])
+                    result = session.execute(stmt)
+                    total_inserted += int(result.rowcount or 0)
+
+                session.commit()
+                return total_inserted
+            except OperationalError as e:
+                session.rollback()
+                if (
+                    auto_prune
+                    and _storage_pressure_error(e)
+                    and prune_rounds < _MAX_AUTO_PRUNE_ROUNDS
+                ):
+                    prune_rounds += 1
+                    deleted = self.prune_oldest_published(limit=prune_batch)
+                    logger.warning(
+                        "Insert hit storage limit; pruned %s oldest row(s) (round %s/%s), retrying",
+                        deleted,
+                        prune_rounds,
+                        _MAX_AUTO_PRUNE_ROUNDS,
+                    )
+                    if deleted == 0:
+                        logger.error("Failed to save records: %s", e)
+                        raise
+                    continue
+                logger.error("Failed to save records: %s", e)
+                raise
+            except Exception as e:
+                session.rollback()
+                logger.error("Failed to save records: %s", e)
+                raise
+            finally:
+                session.close()
 
     def save_records_batch(self, records: List[Dict]) -> int:
         """Save multiple sentiment records."""
@@ -82,6 +181,10 @@ class SentimentStorage:
             else:
                 ts = self._normalize_timestamp(ts_val)
 
+            src = (record.get("source", "") or "")[:64]
+            dsrc = record.get("data_source")
+            if isinstance(dsrc, str):
+                dsrc = dsrc[:64]
             normalized.append(
                 {
                     "id": record["id"],
@@ -96,8 +199,8 @@ class SentimentStorage:
                     "sentiment_uncertainty": record.get("sentiment_uncertainty"),
                     "rationale": record.get("rationale"),
                     "aspects_json": record.get("aspects_json"),
-                    "source": record.get("source", "") or "",
-                    "data_source": record.get("data_source"),
+                    "source": src,
+                    "data_source": dsrc,
                     "source_id": record.get("source_id", "") or "",
                     "source_meta_json": record.get("source_meta_json"),
                     "published_at": ts,
@@ -250,6 +353,7 @@ class SentimentStorage:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         source: Optional[str] = None,
+        data_source: Optional[str] = None,
     ) -> List[Dict]:
         """Get sentiment records for a specific stock."""
         ticker = ticker.upper()
@@ -258,6 +362,7 @@ class SentimentStorage:
             start_date=start_date,
             end_date=end_date,
             source=source,
+            data_source=data_source,
             stocks_only=True,
         )
         return records

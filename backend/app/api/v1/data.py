@@ -239,6 +239,10 @@ async def get_stock_quality(
         None,
         description="Custom range end (inclusive); requires start_date",
     ),
+    data_source: str | None = Query(
+        None,
+        description="If set, only count mentions with this data_source (e.g. reddit, news, twitter)",
+    ),
 ) -> StockDataQualityResponse:
     """
     Mentions, label/channel mix, calendar coverage, and heuristic flags for the
@@ -261,6 +265,7 @@ async def get_stock_quality(
         period=period,
         start_date=start_date,
         end_date=end_date,
+        data_source=data_source,
     )
     err = raw.pop("error", None)
     flags = raw.pop("flags", [])

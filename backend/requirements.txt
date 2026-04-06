@@ -20,6 +20,8 @@ uvicorn[standard]>=0.24.0
 # Data processing (for future use)
 pandas>=2.1.0
 numpy>=1.26.0
+datasets>=2.14.0
+ijson>=3.2.0
 
 # Text preprocessing
 nltk>=3.8.0

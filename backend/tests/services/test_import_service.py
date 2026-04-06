@@ -63,6 +63,27 @@ def test_import_creates_stock_rows_per_ticker():
         assert r["data_source"] == "reddit"
 
 
+def test_import_merges_detected_and_hint_tickers():
+    """hint_tickers add symbols not spelled in text; detection still runs."""
+    storage = DummyStorage()
+    service = _make_service(storage)
+
+    service.import_from_records(
+        [
+            {
+                "text": "$AAPL outlook strong versus peers",
+                "source": "twitter",
+                "author_id": "1",
+                "timestamp": "2025-06-01T12:00:00Z",
+                "hint_tickers": ["MSFT"],
+            }
+        ]
+    )
+
+    tickers = {r["ticker"] for r in storage.saved_rows}
+    assert tickers == {"AAPL", "MSFT"}
+
+
 def test_import_hint_tickers_when_text_has_no_symbol():
     """Reddit-style search hits can carry hint_tickers so rows still persist."""
     storage = DummyStorage()
@@ -105,6 +126,30 @@ def test_import_no_ticker_skips_row():
     assert result["records_loaded"] == 1
     assert result["records_inserted"] == 0
     assert len(storage.saved_rows) == 0
+
+
+def test_import_document_fallback_without_ticker():
+    """Optional fallback stores document-level row when no ticker is found."""
+    storage = DummyStorage()
+    service = _make_service(storage)
+
+    result = service.import_from_records(
+        [
+            {
+                "text": "Markets look uncertain today.",
+                "source": "news",
+                "timestamp": "2025-01-01T00:00:00Z",
+            }
+        ],
+        document_fallback_without_ticker=True,
+    )
+
+    assert result["records_loaded"] == 1
+    assert result["records_inserted"] == 1
+    assert len(storage.saved_rows) == 1
+    assert storage.saved_rows[0]["ticker"] is None
+    assert storage.saved_rows[0]["mentioned_as"] == ""
+    assert storage.saved_rows[0]["id"].startswith("doc_")
 
 
 def test_import_multiple_tickers_produce_separate_rows():

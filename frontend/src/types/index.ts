@@ -55,6 +55,13 @@ export interface CorrelationResponse {
   period?: string;
   sentiment_metric?: string;
   price_metric?: string;
+  /** Column used for the price side (e.g. forward_1d_return, excess_returns). */
+  effective_price_metric?: string;
+  align_mode?: string;
+  market_adjustment?: string;
+  spy_beta?: number | null;
+  data_source?: string | null;
+  min_mentions_per_day?: number;
   /** Backend trailing window used for net_sentiment correlations (1 = same day). */
   trailing_days?: number;
   pearson: CorrelationResult | null;
@@ -84,6 +91,10 @@ export interface TimeSeriesPoint {
   date: string;
   close: number;
   returns: number | null;
+  spy_returns?: number | null;
+  excess_returns?: number | null;
+  forward_1d_return?: number | null;
+  forward_excess_return?: number | null;
   avg_sentiment_score: number;
   net_sentiment: number;
   /** Causal rolling mean of net_sentiment; window length in TimeSeriesResponse.trailing_days. */
@@ -98,6 +109,9 @@ export interface TimeSeriesResponse {
   ticker: string;
   data_points: number;
   trailing_days: number;
+  spy_beta?: number | null;
+  align_mode?: string;
+  market_adjustment?: string;
   series: TimeSeriesPoint[];
 }
 
@@ -108,8 +122,63 @@ export interface CorrelationOverviewItem {
   pearson_r: number;
   pearson_p: number;
   significant: boolean;
+  significant_bonferroni?: boolean;
   interpretation: string;
   spearman_r: number;
+}
+
+export interface CorrelationOverviewResponse {
+  n_tickers_tested: number;
+  alpha_individual: number;
+  alpha_bonferroni: number | null;
+  align_mode: string;
+  market_adjustment: string;
+  data_source: string | null;
+  items: CorrelationOverviewItem[];
+}
+
+export type ScatterYKey = 'returns' | 'forward_1d_return' | 'excess_returns' | 'forward_excess_return';
+
+export function scatterYKeyFromEffective(metric?: string | null): ScatterYKey {
+  if (
+    metric === 'forward_1d_return' ||
+    metric === 'forward_excess_return' ||
+    metric === 'excess_returns'
+  ) {
+    return metric;
+  }
+  return 'returns';
+}
+
+export interface OutOfSampleBlock {
+  label: string;
+  n: number;
+  pearson_r: number | null;
+  pearson_p: number | null;
+  significant: boolean;
+}
+
+export interface OutOfSampleResponse {
+  ticker: string;
+  error?: string | null;
+  train_ratio?: number;
+  split_date?: string;
+  effective_price_metric?: string;
+  sentiment_metric?: string;
+  align_mode?: string;
+  market_adjustment?: string;
+  spy_beta?: number | null;
+  train?: OutOfSampleBlock | null;
+  test?: OutOfSampleBlock | null;
+  trailing_days?: number;
+}
+
+/** Shared query params for correlation methodology (API v1). */
+export interface CorrelationMethodologyParams {
+  data_source?: string;
+  min_mentions_per_day?: number;
+  align_mode?: string;
+  market_adjustment?: string;
 }
 
 export interface PriceHistoryPoint {
@@ -216,5 +285,6 @@ export interface RollingCorrelationResponse {
   series: RollingCorrelationPoint[];
   statistics?: RollingCorrelationStats;
   trailing_days?: number;
+  effective_price_metric?: string;
   error?: string;
 }

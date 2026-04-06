@@ -22,6 +22,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     create_engine,
+    text,
 )
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
 
@@ -47,8 +48,8 @@ class SentimentRecordRow(Base):
     sentiment_uncertainty = Column(Float, nullable=True)
     rationale = Column(Text, nullable=True)
     aspects_json = Column(Text, nullable=True)
-    source = Column(String(20), default="")
-    data_source = Column(String(20), nullable=True, index=True)
+    source = Column(String(64), default="")
+    data_source = Column(String(64), nullable=True, index=True)
     source_id = Column(String(100), default="")
     source_meta_json = Column(Text, nullable=True)
     published_at = Column(DateTime, nullable=False, index=True)
@@ -138,6 +139,22 @@ def _load_dotenv_if_needed() -> None:
         here = here.parent
 
 
+def _widen_sentiment_source_columns(engine) -> None:
+    """Neon/Postgres: subreddit names can exceed 20 chars; widen legacy varchar(20)."""
+    if engine.dialect.name != "postgresql":
+        return
+    stmts = [
+        "ALTER TABLE sentiment_records ALTER COLUMN source TYPE VARCHAR(64)",
+        "ALTER TABLE sentiment_records ALTER COLUMN data_source TYPE VARCHAR(64)",
+    ]
+    with engine.begin() as conn:
+        for sql in stmts:
+            try:
+                conn.execute(text(sql))
+            except Exception:
+                pass
+
+
 def get_engine():
     """Get or create the SQLAlchemy engine (singleton)."""
     global _engine
@@ -151,6 +168,7 @@ def get_engine():
             )
         _engine = create_engine(url, pool_pre_ping=True, echo=False)
         Base.metadata.create_all(_engine)
+        _widen_sentiment_source_columns(_engine)
         logger.info("PostgreSQL database initialized via %s", url.split("@")[-1])
     return _engine
 

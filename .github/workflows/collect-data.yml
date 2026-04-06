@@ -64,19 +64,19 @@ jobs:
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
           REDDIT_USER_AGENT: ${{ secrets.REDDIT_USER_AGENT }}
-        run: python -m app.pipelines.ingest_reddit --time-filter day --limit 120 --store-db --no-write-files
+        run: python -m app.pipelines.ingest_reddit --time-filter week --limit 50 --store-db --no-write-files
         continue-on-error: true
 
       - name: News to sentiment to DB
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-        run: python -m app.pipelines.ingest_news --days-back 1 --max-articles 100 --store-db --no-write-files
+        run: python -m app.pipelines.ingest_news --days-back 2 --max-articles 150 --store-db --no-write-files
         continue-on-error: true
 
       - name: X/Twitter to sentiment to DB (snscrape; no official API key required)
         env:
           TWITTER_INGEST_BACKEND: snscrape
-        run: python -m app.pipelines.ingest_twitter --max-tweets 80 --store-db --no-write-files
+        run: python -m app.pipelines.ingest_twitter --max-tweets 120 --store-db --no-write-files
         continue-on-error: true
 
       - name: Summary

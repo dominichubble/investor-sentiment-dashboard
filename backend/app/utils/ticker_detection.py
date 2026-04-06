@@ -14,9 +14,11 @@ from typing import Dict, List, Optional, Set, Tuple
 
 logger = logging.getLogger(__name__)
 
-# Reddit/social text often uses $nvda / $GME — match case-insensitively, normalize to upper.
-_CASHTAG_RE = re.compile(r"\$([A-Za-z]{1,5})\b")
-_BARE_TICKER_RE = re.compile(r"(?<![A-Za-z])([A-Z]{2,5})(?![a-z])")
+# Reddit/social text often uses $nvda / $GME / $BRK.B — normalize dots to hyphens for DB lookup.
+_CASHTAG_RE = re.compile(r"\$([A-Za-z]{1,5}(?:\.[A-Za-z])?)\b")
+_BARE_TICKER_RE = re.compile(
+    r"(?<![A-Za-z0-9])([A-Z]{2,5}(?:\.[A-Z])?)(?![a-z])"
+)
 
 # Common uppercase words / abbreviations that coincide with real tickers.
 # These are almost never stock references in running text.
@@ -127,6 +129,16 @@ _WELL_KNOWN_NAMES: Dict[str, str] = {
 }
 
 
+def normalize_ticker_symbol(symbol: str) -> str:
+    """Uppercase, strip $, map common class-B dots to hyphen (BRK.B → BRK-B)."""
+    if not symbol:
+        return ""
+    s = symbol.strip().lstrip("$").upper()
+    if not s:
+        return ""
+    return s.replace(".", "-")
+
+
 class TickerDetector:
     """Fast ticker detection using stock_database.json — no spaCy needed."""
 
@@ -174,9 +186,8 @@ class TickerDetector:
 
     def is_valid_ticker(self, symbol: str) -> bool:
         """True if *symbol* is in the loaded stock universe (uppercase)."""
-        if not symbol:
-            return False
-        return symbol.strip().lstrip("$").upper() in self._valid_tickers
+        sym = normalize_ticker_symbol(symbol)
+        return bool(sym) and sym in self._valid_tickers
 
     def detect(self, text: str) -> List[Tuple[str, str]]:
         """Return ``[(ticker, mentioned_as), ...]`` found in *text*.
@@ -189,19 +200,20 @@ class TickerDetector:
 
         found: Dict[str, str] = {}
 
-        # 1. Cashtags  –  $AAPL, $aapl  (highest confidence)
+        # 1. Cashtags  –  $AAPL, $aapl, $BRK.B  (highest confidence)
         for m in _CASHTAG_RE.finditer(text):
-            sym = m.group(1).upper()
+            sym = normalize_ticker_symbol(m.group(1))
             if sym in self._valid_tickers:
                 found.setdefault(sym, f"${sym}")
 
-        # 2. Bare uppercase tickers  –  AAPL, TSLA
+        # 2. Bare uppercase tickers  –  AAPL, TSLA, BRK.B
         for m in _BARE_TICKER_RE.finditer(text):
-            sym = m.group(1)
+            raw = m.group(1)
+            sym = normalize_ticker_symbol(raw)
             if sym in _BARE_TICKER_BLACKLIST:
                 continue
             if sym in self._valid_tickers:
-                found.setdefault(sym, sym)
+                found.setdefault(sym, raw)
 
         # 3. Known company names  –  "Tesla", "Apple", "Nvidia", etc.
         text_lower = text.lower()

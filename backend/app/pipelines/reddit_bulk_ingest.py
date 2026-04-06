@@ -42,6 +42,11 @@ from app.pipelines.ingest_reddit import (
     initialize_reddit_client,
     normalize_post,
 )
+from app.pipelines.reddit_common import (
+    DEFAULT_KEYWORD_GROUPS,
+    hint_tickers_from_keyword_group,
+    keyword_groups_for_tickers,
+)
 from app.services.import_service import ImportService
 
 logging.basicConfig(
@@ -50,8 +55,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# Finance / markets ecosystem (add/remove as needed; some subs may 403).
-DEFAULT_BULK_SUBREDDITS: List[str] = [
+def _unique_subs(names: List[str]) -> List[str]:
+    out: List[str] = []
+    seen: Set[str] = set()
+    for raw in names:
+        s = raw.strip().lstrip("r/").lower()
+        if not s or s in seen:
+            continue
+        seen.add(s)
+        out.append(s)
+    return out
+
+
+# Finance / markets ecosystem (add/remove as needed; some subs may 403 or rate-limit).
+_DEFAULT_SUB_LIST: List[str] = [
     "wallstreetbets",
     "stocks",
     "investing",
@@ -80,63 +97,51 @@ DEFAULT_BULK_SUBREDDITS: List[str] = [
     "Bogleheads",
     "personalfinance",
     "CryptoMarkets",
+    "robinhood",
+    "ETFs",
+    "mutualfunds",
+    "AusFinance",
+    "UKPersonalFinance",
+    "eupersonalfinance",
+    "IndiaInvestments",
+    "SingaporeStocks",
+    "JapanStocks",
+    "HongKongStocks",
+    "EuropeStocks",
+    "weedstocks",
+    "Vitards",
+    "IPOMarkets",
+    "algotrading",
+    "quant",
+    "Forex",
+    "forex",
+    "optionsflow",
+    "LEAPS",
+    "CoveredCalls",
+    "REIT",
+    "CommercialRealEstate",
+    "SecurityAnalysis",
+    "Stock_Picks",
+    "InvestmentClub",
+    "10xPennyStocks",
+    "CanadianStockMarket",
+    "MexicoBursatil",
+    "BrazilianStocks",
+    "SouthAfricaStocks",
+    "CryptoCurrencyTrading",
+    "defi",
+    "solana",
+    "cardano",
+    "dogecoin",
+    "wallstreetbetsOG",
+    "Shortsqueeze",
+    "SqueezePlays",
+    "SPACs",
+    "EarningsWhispers",
+    "RobinHoodPennyStocks",
 ]
 
-# Smaller OR-queries = different search result sets than one giant OR.
-DEFAULT_KEYWORD_GROUPS: List[List[str]] = [
-    ["stock", "stocks", "market", "trading", "investor"],
-    ["earnings", "eps", "revenue", "guidance", "quarter"],
-    ["fed", "rates", "inflation", "recession", "tariff"],
-    ["nvda", "tsla", "aapl", "msft", "amzn", "meta", "googl", "amd"],
-    ["bull", "bear", "rally", "crash", "dip", "short", "long"],
-    ["crypto", "bitcoin", "btc", "eth", "etf"],
-    ["bankruptcy", "debt", "lawsuit", "sec", "merger"],
-]
-
-# Optional extra terms per ticker (symbol-only search misses many posts).
-_TICKER_SEARCH_ALIASES: Dict[str, List[str]] = {
-    "GOOGL": ["google", "alphabet"],
-    "GOOG": ["google", "alphabet"],
-    "META": ["facebook", "fb"],
-    "AMZN": ["amazon"],
-    "BRK.B": ["berkshire", "buffett"],
-    "BRK.A": ["berkshire", "buffett"],
-}
-
-
-def hint_tickers_from_keyword_group(group: List[str]) -> List[str]:
-    """Extract uppercase symbols from a search keyword group (for import hints)."""
-    ordered: List[str] = []
-    seen_syms: Set[str] = set()
-    for raw in group:
-        sym = raw.strip().lstrip("$").upper()
-        if not sym or len(sym) > 5:
-            continue
-        if not sym.replace(".", "").isalnum():
-            continue
-        if sym in seen_syms:
-            continue
-        seen_syms.add(sym)
-        ordered.append(sym)
-    return ordered
-
-
-def keyword_groups_for_tickers(tickers: List[str]) -> List[List[str]]:
-    """
-    One search batch per ticker: plain symbol + $SYMBOL + optional aliases.
-    Keeps OR-queries small so Reddit search returns more focused hits.
-    """
-    groups: List[List[str]] = []
-    for raw in tickers:
-        sym = raw.strip().lstrip("$").upper()
-        if not sym or not sym.replace(".", "").isalnum():
-            continue
-        terms = [sym, f"${sym}"]
-        for alias in _TICKER_SEARCH_ALIASES.get(sym, []):
-            if alias not in terms:
-                terms.append(alias)
-        groups.append(terms)
-    return groups
+DEFAULT_BULK_SUBREDDITS: List[str] = _unique_subs(_DEFAULT_SUB_LIST)
 
 
 def _sleep(seconds: float, reason: str) -> None:

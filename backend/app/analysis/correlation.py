@@ -45,6 +45,85 @@ def _sentiment_column_for_correlation(sentiment_metric: str) -> str:
     return sentiment_metric
 
 
+_VALID_ALIGN = frozenset({"same_day", "sentiment_leads_1d"})
+_VALID_MARKET = frozenset({"none", "spy_beta_residual"})
+
+
+def _norm_align(align_mode: str) -> str:
+    k = (align_mode or "same_day").strip().lower()
+    if k not in _VALID_ALIGN:
+        raise ValueError(
+            f"align_mode must be one of {sorted(_VALID_ALIGN)}, got {align_mode!r}"
+        )
+    return k
+
+
+def _norm_market(market_adjustment: str) -> str:
+    k = (market_adjustment or "none").strip().lower()
+    if k not in _VALID_MARKET:
+        raise ValueError(
+            f"market_adjustment must be one of {sorted(_VALID_MARKET)}, "
+            f"got {market_adjustment!r}"
+        )
+    return k
+
+
+def _ols_beta_y_on_x(y: np.ndarray, x: np.ndarray) -> float:
+    """Scalar beta in y ≈ beta * x (through origin); fallback 1.0 if degenerate."""
+    x = np.asarray(x, dtype=float)
+    y = np.asarray(y, dtype=float)
+    vx = np.var(x)
+    if vx < 1e-16 or len(x) < 2:
+        return 1.0
+    return float(np.cov(y, x, bias=True)[0, 1] / vx)
+
+
+def _default_price_column(align_mode: str, market_adjustment: str) -> str:
+    if align_mode == "sentiment_leads_1d":
+        return (
+            "forward_excess_return"
+            if market_adjustment == "spy_beta_residual"
+            else "forward_1d_return"
+        )
+    return "excess_returns" if market_adjustment == "spy_beta_residual" else "returns"
+
+
+def _resolve_price_metric(
+    price_metric: Optional[str],
+    align_mode: str,
+    market_adjustment: str,
+) -> str:
+    """Pick DataFrame column for price side of correlation."""
+    pm = (price_metric or "").strip().lower()
+    if pm in ("", "auto"):
+        return _default_price_column(align_mode, market_adjustment)
+    # Plain "returns" with next-day alignment means forward return, not same-day.
+    if pm == "returns" and align_mode == "sentiment_leads_1d":
+        return (
+            "forward_excess_return"
+            if market_adjustment == "spy_beta_residual"
+            else "forward_1d_return"
+        )
+    if pm == "excess_returns" and align_mode == "sentiment_leads_1d":
+        return (
+            "forward_excess_return"
+            if market_adjustment == "spy_beta_residual"
+            else "forward_1d_return"
+        )
+    allowed = {
+        "returns",
+        "close",
+        "forward_1d_return",
+        "excess_returns",
+        "forward_excess_return",
+    }
+    if pm not in allowed:
+        raise ValueError(
+            f"price_metric must be one of {sorted(allowed)} or auto, got {price_metric!r}"
+        )
+    return pm
+
+
 class CorrelationAnalyzer:
     """Analyzes correlation between sentiment and stock price movements."""
 
@@ -58,6 +137,7 @@ class CorrelationAnalyzer:
         ticker: str,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
+        data_source: Optional[str] = None,
     ) -> pd.DataFrame:
         """
         Aggregate sentiment records into daily averages.
@@ -67,7 +147,10 @@ class CorrelationAnalyzer:
             positive_ratio, negative_ratio, neutral_ratio, net_sentiment.
         """
         records = self.storage.get_stock_sentiment(
-            ticker=ticker, start_date=start_date, end_date=end_date
+            ticker=ticker,
+            start_date=start_date,
+            end_date=end_date,
+            data_source=data_source,
         )
 
         if not records:
@@ -119,6 +202,10 @@ class CorrelationAnalyzer:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> pd.DataFrame:
         """
         Merge sentiment data with price data on a daily basis.
@@ -127,12 +214,22 @@ class CorrelationAnalyzer:
         over ``trailing_days`` (min_periods=1). For ``net_sentiment`` correlations,
         use this column via ``_sentiment_column_for_correlation``.
 
+        When ``market_adjustment`` is ``spy_beta_residual``, fetches SPY and sets
+        ``excess_returns`` / ``forward_excess_return`` using a single OLS beta
+        (stock return on SPY return) over the merged window.
+
+        ``sentiment_leads_1d`` adds ``forward_1d_return`` (close-to-close return
+        realized on the **next** trading row) for causal alignment.
+
         Returns:
-            DataFrame with columns: date, close, returns, avg_score,
-            mention_count, net_sentiment, trailing_net_sentiment,
-            positive_ratio, negative_ratio, neutral_ratio.
+            DataFrame with price/sentiment columns; metadata in ``.attrs``.
         """
-        sentiment_df = self._aggregate_daily_sentiment(ticker, start_date, end_date)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
+
+        sentiment_df = self._aggregate_daily_sentiment(
+            ticker, start_date, end_date, data_source=data_source
+        )
         price_df = PriceService.get_daily_returns(
             ticker, start_date=start_date, end_date=end_date, period=period
         )
@@ -140,9 +237,15 @@ class CorrelationAnalyzer:
         if sentiment_df.empty or price_df.empty:
             return pd.DataFrame()
 
-        # Normalize dates
         sentiment_df["date"] = pd.to_datetime(sentiment_df["date"]).dt.normalize()
         price_df["date"] = pd.to_datetime(price_df["date"]).dt.normalize()
+
+        mnp = max(1, int(min_mentions_per_day))
+        if mnp > 1:
+            sentiment_df = sentiment_df[sentiment_df["mention_count"] >= mnp]
+
+        if sentiment_df.empty:
+            return pd.DataFrame()
 
         merged = pd.merge(sentiment_df, price_df, on="date", how="inner")
         merged = merged.sort_values("date").reset_index(drop=True)
@@ -152,6 +255,51 @@ class CorrelationAnalyzer:
             merged["net_sentiment"].rolling(window=w, min_periods=1).mean()
         )
 
+        spy_beta: Optional[float] = None
+        if mm == "spy_beta_residual":
+            spy_df = PriceService.get_daily_returns(
+                "SPY",
+                start_date=start_date,
+                end_date=end_date,
+                period=period,
+            )
+            if spy_df.empty:
+                merged["spy_returns"] = np.nan
+                merged["excess_returns"] = merged["returns"]
+            else:
+                spy_df["date"] = pd.to_datetime(spy_df["date"]).dt.normalize()
+                spy_df = spy_df.rename(columns={"returns": "spy_returns"})
+                merged = merged.merge(
+                    spy_df[["date", "spy_returns"]], on="date", how="inner"
+                )
+                valid = merged["returns"].notna() & merged["spy_returns"].notna()
+                if valid.sum() >= 2:
+                    spy_beta = _ols_beta_y_on_x(
+                        merged.loc[valid, "returns"].values,
+                        merged.loc[valid, "spy_returns"].values,
+                    )
+                else:
+                    spy_beta = 1.0
+                merged["excess_returns"] = merged["returns"] - spy_beta * merged[
+                    "spy_returns"
+                ]
+        else:
+            merged["spy_returns"] = np.nan
+            merged["excess_returns"] = merged["returns"]
+
+        merged["forward_1d_return"] = merged["returns"].shift(-1)
+        if mm == "spy_beta_residual" and spy_beta is not None:
+            fwd_spy = merged["spy_returns"].shift(-1)
+            merged["forward_excess_return"] = merged["forward_1d_return"] - spy_beta * fwd_spy
+        else:
+            merged["forward_excess_return"] = merged["forward_1d_return"]
+
+        merged.attrs["align_mode"] = am
+        merged.attrs["market_adjustment"] = mm
+        merged.attrs["spy_beta"] = spy_beta
+        merged.attrs["min_mentions_per_day"] = mnp
+        merged.attrs["data_source"] = data_source
+
         return merged
 
     def calculate_correlation(
@@ -159,33 +307,36 @@ class CorrelationAnalyzer:
         ticker: str,
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
-        price_metric: str = "returns",
+        price_metric: Optional[str] = None,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> Dict:
         """
         Calculate Pearson and Spearman correlations between sentiment and price.
 
-        Args:
-            ticker: Stock ticker symbol.
-            period: Price data period (used when start_date/end_date not both set).
-            sentiment_metric: Column to use for sentiment (net_sentiment, avg_score).
-            price_metric: Column to use for price (returns, close).
-            start_date: Inclusive range start (optional, with end_date).
-            end_date: Inclusive range end (optional, with start_date).
-            trailing_days: For ``net_sentiment``, rolling window length (causal, 1=same day).
-
-        Returns:
-            Dictionary with correlation results and statistical significance.
+        Use ``price_metric='auto'`` or omit (via API) to pick a column from
+        ``align_mode`` and ``market_adjustment`` (e.g. next-day return, SPY residual).
         """
         w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
+        eff_price = _resolve_price_metric(price_metric, am, mm)
+
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
             trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
         )
 
         if merged.empty or len(merged) < 5:
@@ -196,13 +347,20 @@ class CorrelationAnalyzer:
                 "pearson": None,
                 "spearman": None,
                 "trailing_days": w,
+                "align_mode": am,
+                "market_adjustment": mm,
+                "effective_price_metric": eff_price,
+                "spy_beta": (merged.attrs.get("spy_beta") if not merged.empty else None),
+                "data_source": data_source,
+                "min_mentions_per_day": max(1, int(min_mentions_per_day)),
             }
 
         sent_col = _sentiment_column_for_correlation(sentiment_metric)
-        sentiment_values = merged[sent_col].values
-        price_values = merged[price_metric].values
+        work = merged.dropna(subset=[sent_col, eff_price]).copy()
 
-        # Remove any NaN pairs
+        sentiment_values = work[sent_col].values
+        price_values = work[eff_price].values
+
         valid_mask = ~(np.isnan(sentiment_values) | np.isnan(price_values))
         sentiment_clean = sentiment_values[valid_mask]
         price_clean = price_values[valid_mask]
@@ -215,9 +373,14 @@ class CorrelationAnalyzer:
                 "pearson": None,
                 "spearman": None,
                 "trailing_days": w,
+                "align_mode": am,
+                "market_adjustment": mm,
+                "effective_price_metric": eff_price,
+                "spy_beta": merged.attrs.get("spy_beta"),
+                "data_source": data_source,
+                "min_mentions_per_day": max(1, int(min_mentions_per_day)),
             }
 
-        # Check for constant arrays (would cause warnings)
         if np.std(sentiment_clean) == 0 or np.std(price_clean) == 0:
             return {
                 "ticker": ticker,
@@ -226,15 +389,17 @@ class CorrelationAnalyzer:
                 "pearson": None,
                 "spearman": None,
                 "trailing_days": w,
+                "align_mode": am,
+                "market_adjustment": mm,
+                "effective_price_metric": eff_price,
+                "spy_beta": merged.attrs.get("spy_beta"),
+                "data_source": data_source,
+                "min_mentions_per_day": max(1, int(min_mentions_per_day)),
             }
 
-        # Pearson correlation (linear relationship)
         pearson_r, pearson_p = stats.pearsonr(sentiment_clean, price_clean)
-
-        # Spearman correlation (monotonic relationship)
         spearman_r, spearman_p = stats.spearmanr(sentiment_clean, price_clean)
 
-        # Interpret strength
         def interpret_correlation(r: float) -> str:
             abs_r = abs(r)
             if abs_r >= 0.7:
@@ -260,7 +425,13 @@ class CorrelationAnalyzer:
             "period": period_label,
             "sentiment_metric": sentiment_metric,
             "trailing_days": w,
-            "price_metric": price_metric,
+            "price_metric": (price_metric or "auto"),
+            "effective_price_metric": eff_price,
+            "align_mode": am,
+            "market_adjustment": mm,
+            "spy_beta": merged.attrs.get("spy_beta"),
+            "data_source": data_source,
+            "min_mentions_per_day": max(1, int(min_mentions_per_day)),
             "pearson": {
                 "coefficient": round(float(pearson_r), 4),
                 "p_value": round(float(pearson_p), 6),
@@ -284,6 +455,10 @@ class CorrelationAnalyzer:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> Dict:
         """
         Analyze correlation at different lag periods.
@@ -295,12 +470,18 @@ class CorrelationAnalyzer:
             Dictionary with lag correlation results.
         """
         w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
             trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
         )
 
         if merged.empty or len(merged) < max_lag_days + 5:
@@ -313,6 +494,7 @@ class CorrelationAnalyzer:
 
         sent_col = _sentiment_column_for_correlation(sentiment_metric)
         sentiment_values = merged[sent_col].values
+        # Same-day raw returns for lag sweep (interpretable lead/lag structure).
         price_returns = merged["returns"].values
 
         lag_results: List[Dict] = []
@@ -394,6 +576,10 @@ class CorrelationAnalyzer:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> Dict:
         """
         Test Granger causality between sentiment and price returns.
@@ -421,12 +607,18 @@ class CorrelationAnalyzer:
             }
 
         w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
             trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
         )
 
         if merged.empty or len(merged) < max_lag + 10:
@@ -571,10 +763,14 @@ class CorrelationAnalyzer:
         window: int = 14,
         period: str = "90d",
         sentiment_metric: str = "net_sentiment",
-        price_metric: str = "returns",
+        price_metric: Optional[str] = None,
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> Dict:
         """
         Calculate rolling windowed correlation between sentiment and price.
@@ -592,12 +788,19 @@ class CorrelationAnalyzer:
             Dictionary with time-series of rolling correlation values.
         """
         w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
+        eff_price = _resolve_price_metric(price_metric, am, mm)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
             trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
         )
 
         if merged.empty or len(merged) < window + 2:
@@ -612,8 +815,19 @@ class CorrelationAnalyzer:
             }
 
         sent_col = _sentiment_column_for_correlation(sentiment_metric)
-        sent_series = merged[sent_col]
-        price_series = merged[price_metric]
+        work = merged.dropna(subset=[sent_col, eff_price])
+        if len(work) < window + 2:
+            return {
+                "ticker": ticker,
+                "window": window,
+                "data_points": 0,
+                "error": f"Insufficient data after NaN drop on {eff_price}",
+                "series": [],
+                "trailing_days": w,
+            }
+
+        sent_series = work[sent_col]
+        price_series = work[eff_price]
 
         rolling_corr = sent_series.rolling(window=window).corr(price_series)
 
@@ -624,14 +838,14 @@ class CorrelationAnalyzer:
         )
 
         series = []
-        for i, (_, row) in enumerate(merged.iterrows()):
+        for i, (_, row) in enumerate(work.iterrows()):
             corr_val = rolling_corr.iloc[i]
             if pd.notna(corr_val):
                 series.append(
                     {
                         "date": row["date"].strftime("%Y-%m-%d"),
                         "correlation": round(float(corr_val), 4),
-                        "window_start": merged.iloc[max(0, i - window + 1)][
+                        "window_start": work.iloc[max(0, i - window + 1)][
                             "date"
                         ].strftime("%Y-%m-%d"),
                     }
@@ -658,42 +872,54 @@ class CorrelationAnalyzer:
             "series": series,
             "statistics": stats_summary,
             "trailing_days": w,
+            "effective_price_metric": eff_price,
         }
 
     def get_correlation_overview(
         self,
         min_mentions: int = 3,
         period: str = "90d",
-    ) -> List[Dict]:
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
+    ) -> Dict:
         """
         Calculate correlation for all tracked stocks with sufficient data.
 
-        Returns:
-            List of correlation summaries sorted by absolute correlation strength.
+        Returns a dict with ``items`` (sorted by |Pearson r|) and Bonferroni
+        metadata for multiple testing across tickers.
         """
         all_sentiments = self.storage.get_all_sentiments()
 
-        # Count mentions per ticker
         ticker_counts: Dict[str, int] = defaultdict(int)
         for record in all_sentiments:
-            ticker = record.get("ticker", "")
-            if ticker:
-                ticker_counts[ticker] += 1
+            sym = record.get("ticker", "")
+            if not sym:
+                continue
+            if data_source and record.get("data_source") != data_source:
+                continue
+            ticker_counts[sym] += 1
 
-        # Filter tickers with enough mentions
         qualified_tickers = [t for t, c in ticker_counts.items() if c >= min_mentions]
 
-        results = []
-        for ticker in qualified_tickers:
+        results: List[Dict] = []
+        for sym in qualified_tickers:
             try:
                 corr = self.calculate_correlation(
-                    ticker, period=period, sentiment_metric="net_sentiment"
+                    sym,
+                    period=period,
+                    sentiment_metric="net_sentiment",
+                    data_source=data_source,
+                    min_mentions_per_day=min_mentions_per_day,
+                    align_mode=align_mode,
+                    market_adjustment=market_adjustment,
                 )
                 if corr.get("pearson") is not None:
                     results.append(
                         {
-                            "ticker": ticker,
-                            "mentions": ticker_counts[ticker],
+                            "ticker": sym,
+                            "mentions": ticker_counts[sym],
                             "data_points": corr["data_points"],
                             "pearson_r": corr["pearson"]["coefficient"],
                             "pearson_p": corr["pearson"]["p_value"],
@@ -703,12 +929,125 @@ class CorrelationAnalyzer:
                         }
                     )
             except Exception as e:
-                logger.warning(f"Failed correlation for {ticker}: {e}")
+                logger.warning(f"Failed correlation for {sym}: {e}")
                 continue
 
-        # Sort by absolute correlation strength
         results.sort(key=lambda x: abs(x.get("pearson_r", 0)), reverse=True)
-        return results
+        n = len(results)
+        alpha_b = (0.05 / n) if n else None
+        for row in results:
+            row["significant_bonferroni"] = bool(
+                alpha_b is not None and row["pearson_p"] < alpha_b
+            )
+
+        return {
+            "n_tickers_tested": n,
+            "alpha_individual": 0.05,
+            "alpha_bonferroni": round(float(alpha_b), 8) if alpha_b is not None else None,
+            "align_mode": _norm_align(align_mode),
+            "market_adjustment": _norm_market(market_adjustment),
+            "data_source": data_source,
+            "items": results,
+        }
+
+    def out_of_sample_correlation(
+        self,
+        ticker: str,
+        period: str = "90d",
+        sentiment_metric: str = "net_sentiment",
+        price_metric: Optional[str] = None,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        trailing_days: int = 1,
+        train_ratio: float = 0.7,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
+    ) -> Dict:
+        """
+        Split the merged window into early (train) and late (holdout) segments
+        and report Pearson r / p on each using the same effective price column.
+        """
+        w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
+        eff_price = _resolve_price_metric(price_metric, am, mm)
+        tr = float(train_ratio)
+        if tr <= 0.05 or tr >= 0.95:
+            return {
+                "ticker": ticker,
+                "error": "train_ratio must be between 0.05 and 0.95 (exclusive).",
+            }
+
+        merged = self.get_merged_timeseries(
+            ticker,
+            period=period,
+            start_date=start_date,
+            end_date=end_date,
+            trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
+        )
+        if merged.empty:
+            return {"ticker": ticker, "error": "No merged data for out-of-sample split."}
+
+        sent_col = _sentiment_column_for_correlation(sentiment_metric)
+        work = merged.dropna(subset=[sent_col, eff_price]).reset_index(drop=True)
+        n = len(work)
+        split_i = int(n * tr)
+        if split_i < 5 or n - split_i < 5:
+            return {
+                "ticker": ticker,
+                "error": f"Need at least 5 points in train and test; have n={n}, split={split_i}.",
+                "data_points": n,
+            }
+
+        train = work.iloc[:split_i]
+        test = work.iloc[split_i:]
+
+        def _pearson_block(
+            label: str, a: pd.DataFrame
+        ) -> Dict[str, object]:
+            xs = a[sent_col].values
+            ys = a[eff_price].values
+            m = ~(np.isnan(xs) | np.isnan(ys))
+            xs, ys = xs[m], ys[m]
+            if len(xs) < 5 or np.std(xs) == 0 or np.std(ys) == 0:
+                return {
+                    "label": label,
+                    "n": int(len(xs)),
+                    "pearson_r": None,
+                    "pearson_p": None,
+                    "significant": False,
+                }
+            r, p = stats.pearsonr(xs, ys)
+            return {
+                "label": label,
+                "n": int(len(xs)),
+                "pearson_r": round(float(r), 4),
+                "pearson_p": round(float(p), 6),
+                "significant": bool(p < 0.05),
+            }
+
+        split_date = test.iloc[0]["date"]
+        split_s = split_date.strftime("%Y-%m-%d") if hasattr(split_date, "strftime") else str(split_date)
+
+        return {
+            "ticker": ticker,
+            "train_ratio": round(tr, 4),
+            "split_date": split_s,
+            "effective_price_metric": eff_price,
+            "sentiment_metric": sentiment_metric,
+            "align_mode": am,
+            "market_adjustment": mm,
+            "spy_beta": merged.attrs.get("spy_beta"),
+            "train": _pearson_block("train", train),
+            "test": _pearson_block("test", test),
+            "trailing_days": w,
+        }
 
     def get_timeseries_response(
         self,
@@ -717,6 +1056,10 @@ class CorrelationAnalyzer:
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
         trailing_days: int = 1,
+        data_source: Optional[str] = None,
+        min_mentions_per_day: int = 1,
+        align_mode: str = "same_day",
+        market_adjustment: str = "none",
     ) -> Dict:
         """
         Get formatted time-series data for API response.
@@ -724,12 +1067,18 @@ class CorrelationAnalyzer:
         Returns dictionary suitable for JSON serialization and frontend charting.
         """
         w = _trailing_window_days(trailing_days)
+        am = _norm_align(align_mode)
+        mm = _norm_market(market_adjustment)
         merged = self.get_merged_timeseries(
             ticker,
             period=period,
             start_date=start_date,
             end_date=end_date,
             trailing_days=w,
+            data_source=data_source,
+            min_mentions_per_day=min_mentions_per_day,
+            align_mode=am,
+            market_adjustment=mm,
         )
 
         if merged.empty:
@@ -738,7 +1087,15 @@ class CorrelationAnalyzer:
                 "data_points": 0,
                 "series": [],
                 "trailing_days": w,
+                "spy_beta": None,
+                "align_mode": am,
+                "market_adjustment": mm,
             }
+
+        def _fcell(v: object) -> Optional[float]:
+            if v is None or (isinstance(v, float) and np.isnan(v)):
+                return None
+            return round(float(v), 6)
 
         series = []
         for _, row in merged.iterrows():
@@ -746,11 +1103,11 @@ class CorrelationAnalyzer:
                 {
                     "date": row["date"].strftime("%Y-%m-%d"),
                     "close": round(float(row["close"]), 2),
-                    "returns": (
-                        round(float(row["returns"]), 6)
-                        if not np.isnan(row["returns"])
-                        else None
-                    ),
+                    "returns": _fcell(row["returns"]),
+                    "spy_returns": _fcell(row.get("spy_returns")),
+                    "excess_returns": _fcell(row.get("excess_returns")),
+                    "forward_1d_return": _fcell(row.get("forward_1d_return")),
+                    "forward_excess_return": _fcell(row.get("forward_excess_return")),
                     "avg_sentiment_score": round(float(row["avg_score"]), 4),
                     "net_sentiment": round(float(row["net_sentiment"]), 4),
                     "trailing_net_sentiment": round(
@@ -768,4 +1125,7 @@ class CorrelationAnalyzer:
             "data_points": len(series),
             "series": series,
             "trailing_days": w,
+            "spy_beta": merged.attrs.get("spy_beta"),
+            "align_mode": am,
+            "market_adjustment": mm,
         }

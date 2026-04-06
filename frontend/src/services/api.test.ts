@@ -101,7 +101,17 @@ describe('apiService', () => {
 
   describe('getCorrelationOverview', () => {
     it('calls the overview endpoint with params', async () => {
-      mockedAxios.get.mockResolvedValueOnce({ data: [] });
+      mockedAxios.get.mockResolvedValueOnce({
+        data: {
+          n_tickers_tested: 0,
+          alpha_individual: 0.05,
+          alpha_bonferroni: null,
+          align_mode: 'same_day',
+          market_adjustment: 'none',
+          data_source: null,
+          items: [],
+        },
+      });
       await apiService.getCorrelationOverview({ min_mentions: 5, period: '90d' });
       expect(mockedAxios.get).toHaveBeenCalledWith('/correlation/overview/all', {
         params: { min_mentions: 5, period: '90d' },

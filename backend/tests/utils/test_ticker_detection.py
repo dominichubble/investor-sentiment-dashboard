@@ -53,3 +53,17 @@ def test_deduplication():
     result = d.detect("AAPL AAPL $AAPL Apple")
     tickers = [t for t, _ in result]
     assert tickers.count("AAPL") == 1
+
+
+def test_cashtag_dot_normalizes_to_exchange_symbol():
+    """$BRK.B style cashtags map to BRK-B in stock_database.json."""
+    d = _detector()
+    result = dict(d.detect("Berkshire $BRK.B adds to position"))
+    assert "BRK-B" in result
+
+
+def test_normalize_ticker_symbol():
+    from app.utils.ticker_detection import normalize_ticker_symbol
+
+    assert normalize_ticker_symbol("$brk.b") == "BRK-B"
+    assert normalize_ticker_symbol("  AI  ") == "AI"

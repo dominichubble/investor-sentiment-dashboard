@@ -172,6 +172,7 @@ def get_stock_data_quality(
     period: str = "90d",
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
+    data_source: Optional[str] = None,
 ) -> dict[str, Any]:
     sym = ticker.strip().upper()
     if not sym:
@@ -186,49 +187,44 @@ def get_stock_data_quality(
 
     session = get_session()
     try:
-        base_filter = (
-            session.query(SentimentRecordRow)
-            .filter(
-                SentimentRecordRow.ticker == sym,
-                SentimentRecordRow.published_at >= start_dt,
-                SentimentRecordRow.published_at <= end_dt,
-            )
+        base_filter = session.query(SentimentRecordRow).filter(
+            SentimentRecordRow.ticker == sym,
+            SentimentRecordRow.published_at >= start_dt,
+            SentimentRecordRow.published_at <= end_dt,
         )
+        if data_source:
+            base_filter = base_filter.filter(SentimentRecordRow.data_source == data_source)
 
         total = base_filter.count()
 
-        label_rows = (
-            session.query(
-                SentimentRecordRow.sentiment_label,
-                func.count(SentimentRecordRow.id),
-            )
-            .filter(
-                SentimentRecordRow.ticker == sym,
-                SentimentRecordRow.published_at >= start_dt,
-                SentimentRecordRow.published_at <= end_dt,
-            )
-            .group_by(SentimentRecordRow.sentiment_label)
-            .all()
+        label_q = session.query(
+            SentimentRecordRow.sentiment_label,
+            func.count(SentimentRecordRow.id),
+        ).filter(
+            SentimentRecordRow.ticker == sym,
+            SentimentRecordRow.published_at >= start_dt,
+            SentimentRecordRow.published_at <= end_dt,
         )
+        if data_source:
+            label_q = label_q.filter(SentimentRecordRow.data_source == data_source)
+        label_rows = label_q.group_by(SentimentRecordRow.sentiment_label).all()
         by_label = {"positive": 0, "negative": 0, "neutral": 0}
         for lbl, c in label_rows:
             key = (lbl or "neutral").lower()
             if key in by_label:
                 by_label[key] = int(c)
 
-        src_rows = (
-            session.query(
-                SentimentRecordRow.data_source,
-                func.count(SentimentRecordRow.id),
-            )
-            .filter(
-                SentimentRecordRow.ticker == sym,
-                SentimentRecordRow.published_at >= start_dt,
-                SentimentRecordRow.published_at <= end_dt,
-            )
-            .group_by(SentimentRecordRow.data_source)
-            .all()
+        src_q = session.query(
+            SentimentRecordRow.data_source,
+            func.count(SentimentRecordRow.id),
+        ).filter(
+            SentimentRecordRow.ticker == sym,
+            SentimentRecordRow.published_at >= start_dt,
+            SentimentRecordRow.published_at <= end_dt,
         )
+        if data_source:
+            src_q = src_q.filter(SentimentRecordRow.data_source == data_source)
+        src_rows = src_q.group_by(SentimentRecordRow.data_source).all()
         by_channel: dict[str, int] = {"reddit": 0, "news": 0, "twitter": 0, "unknown": 0}
         for ds, c in src_rows:
             bucket = _norm_channel(ds)
@@ -237,16 +233,14 @@ def get_stock_data_quality(
             by_channel[bucket] += int(c)
 
         day_col = cast(SentimentRecordRow.published_at, Date)
-        daily = (
-            session.query(day_col, func.count(SentimentRecordRow.id))
-            .filter(
-                SentimentRecordRow.ticker == sym,
-                SentimentRecordRow.published_at >= start_dt,
-                SentimentRecordRow.published_at <= end_dt,
-            )
-            .group_by(day_col)
-            .all()
+        daily_q = session.query(day_col, func.count(SentimentRecordRow.id)).filter(
+            SentimentRecordRow.ticker == sym,
+            SentimentRecordRow.published_at >= start_dt,
+            SentimentRecordRow.published_at <= end_dt,
         )
+        if data_source:
+            daily_q = daily_q.filter(SentimentRecordRow.data_source == data_source)
+        daily = daily_q.group_by(day_col).all()
         mention_dates: set[date] = set()
         for d, _cnt in daily:
             if d is None:

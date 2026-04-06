@@ -1575,3 +1575,85 @@
     display: none;
   }
 }
+
+/* Methodology + out-of-sample */
+.sa-methodology-panel {
+  margin-top: 8px;
+}
+
+.sa-methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px 18px;
+  margin-top: 12px;
+}
+
+.sa-method-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+}
+
+.sa-method-label {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.sa-method-select,
+.sa-method-input {
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+}
+
+.sa-methodology-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin-top: 16px;
+}
+
+.sa-method-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.sa-oos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  margin-top: 12px;
+}
+
+.sa-oos-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 14px 16px;
+  background: var(--color-surface);
+}
+
+.sa-oos-card__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  margin-bottom: 6px;
+}
+
+.sa-oos-card__main {
+  font-size: 1rem;
+  color: var(--color-text);
+}
+
+.sa-oos-card__sub {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  margin-top: 6px;
+}

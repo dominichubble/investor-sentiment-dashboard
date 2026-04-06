@@ -68,6 +68,7 @@ const CorrelationHeatmap: React.FC<CorrelationHeatmapProps> = ({
               </div>
               <div className="heatmap-significance" style={{ color: textColor }}>
                 {item.significant ? 'p < 0.05' : 'n.s.'}
+                {item.significant_bonferroni ? ' · Bonf.' : ''}
               </div>
             </div>
           );

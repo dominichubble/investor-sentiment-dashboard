@@ -88,17 +88,28 @@ class ImportService:
         for directory in source_dirs:
             payloads.extend(self._load_payloads_from_dir(directory))
 
-        inserted = self._classify_and_store(payloads)
+        inserted = self._classify_and_store(payloads, document_fallback_without_ticker=False)
         return {"records_loaded": len(payloads), "records_inserted": inserted}
 
-    def import_from_records(self, records: list[dict[str, Any]]) -> dict[str, int]:
+    def import_from_records(
+        self,
+        records: list[dict[str, Any]],
+        *,
+        document_fallback_without_ticker: bool = False,
+    ) -> dict[str, int]:
         """
         Import records already fetched from external APIs.
 
         This path is used to keep ingestion and storage separated while avoiding
         mandatory local file persistence.
+
+        When ``document_fallback_without_ticker`` is True, rows with no detected
+        ticker (and no ``hint_tickers``) still produce one DB row with
+        ``ticker=None`` (document-level sentiment).
         """
-        inserted = self._classify_and_store(records)
+        inserted = self._classify_and_store(
+            records, document_fallback_without_ticker=document_fallback_without_ticker
+        )
         return {"records_loaded": len(records), "records_inserted": inserted}
 
     def _load_payloads_from_dir(self, directory: Path) -> list[dict[str, Any]]:
@@ -145,7 +156,12 @@ class ImportService:
             logger.warning("Skipping unreadable CSV file %s: %s", file_path, exc)
             return []
 
-    def _classify_and_store(self, records: list[dict[str, Any]]) -> int:
+    def _classify_and_store(
+        self,
+        records: list[dict[str, Any]],
+        *,
+        document_fallback_without_ticker: bool = False,
+    ) -> int:
         prepared_rows = [self._normalize_record(row) for row in records]
         prepared_rows = [row for row in prepared_rows if row is not None]
         if not prepared_rows:
@@ -190,11 +206,31 @@ class ImportService:
             rationale = build_rationale(label, score, scores, entropy)
             aspects = extract_aspect_snippets(text)
 
-            tickers = detector.detect(text)
+            detected = detector.detect(text)
+            hinted = self._tickers_from_hints(row.get("hint_tickers"), detector)
+            merged: dict[str, str] = {}
+            for t, m in detected:
+                merged[t] = m
+            for t, m in hinted:
+                merged.setdefault(t, m)
+            tickers = list(merged.items())
             if not tickers:
-                tickers = self._tickers_from_hints(row.get("hint_tickers"), detector)
-            if not tickers:
-                skipped += 1
+                if document_fallback_without_ticker:
+                    work_items.append(
+                        {
+                            "row": row,
+                            "label": label,
+                            "score": score,
+                            "scores": scores,
+                            "entropy": entropy,
+                            "rationale": rationale,
+                            "aspects": aspects,
+                            "tickers": [],
+                            "document_only": True,
+                        }
+                    )
+                else:
+                    skipped += 1
                 continue
 
             work_items.append(
@@ -207,6 +243,7 @@ class ImportService:
                     "rationale": rationale,
                     "aspects": aspects,
                     "tickers": tickers,
+                    "document_only": False,
                 }
             )
 
@@ -237,6 +274,30 @@ class ImportService:
                 else None
             )
 
+            if item.get("document_only"):
+                db_rows.append(
+                    {
+                        "id": make_record_id("doc", source, source_id, ""),
+                        "text": text,
+                        "ticker": None,
+                        "mentioned_as": "",
+                        "sentiment_label": item["label"],
+                        "sentiment_score": item["score"],
+                        "score_positive": item["scores"]["positive"],
+                        "score_negative": item["scores"]["negative"],
+                        "score_neutral": item["scores"]["neutral"],
+                        "sentiment_uncertainty": item["entropy"],
+                        "rationale": item["rationale"],
+                        "aspects_json": aspects_json,
+                        "source": source,
+                        "data_source": data_source,
+                        "source_id": source_id,
+                        "source_meta_json": source_meta_json,
+                        "published_at": published_at,
+                    }
+                )
+                continue
+
             for ticker, mentioned_as in item["tickers"]:
                 db_rows.append(
                     {
@@ -264,10 +325,14 @@ class ImportService:
 
         total = self.storage.save_records_batch(db_rows)
         if db_rows:
+            doc_n = sum(1 for r in db_rows if r.get("ticker") is None)
+            stock_n = len(db_rows) - doc_n
             logger.info(
-                "Ticker detection: %d stock rows from %d documents (%d skipped, no ticker found)",
+                "Persisted %d rows from %d documents (%d stock, %d document-level, %d skipped no ticker)",
                 len(db_rows),
                 len(prepared_rows),
+                stock_n,
+                doc_n,
                 skipped,
             )
         return total

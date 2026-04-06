@@ -11,14 +11,16 @@ import {
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
 import { apiService, type TickerNarrativeResponse } from '../../services/api';
-import type {
-  CorrelationResponse,
-  LagAnalysisResponse,
-  TimeSeriesResponse,
-  StockInfoResponse,
-  StockDataQualityResponse,
-  GrangerCausalityResponse,
-  RollingCorrelationResponse,
+import {
+  scatterYKeyFromEffective,
+  type CorrelationResponse,
+  type LagAnalysisResponse,
+  type TimeSeriesResponse,
+  type StockInfoResponse,
+  type StockDataQualityResponse,
+  type GrangerCausalityResponse,
+  type RollingCorrelationResponse,
+  type OutOfSampleResponse,
 } from '../../types';
 import './StockAnalysis.css';
 
@@ -69,6 +71,14 @@ const StockAnalysis: React.FC = () => {
   /** Trailing days for net sentiment when comparing to price (causal moving average). */
   const [sentimentMemoryDays, setSentimentMemoryDays] = useState(3);
 
+  /** Correlation methodology (matches backend query params). */
+  const [alignMode, setAlignMode] = useState<'same_day' | 'sentiment_leads_1d'>('same_day');
+  const [marketAdjustment, setMarketAdjustment] = useState<'none' | 'spy_beta_residual'>('none');
+  const [dataSourceFilter, setDataSourceFilter] = useState<string>('');
+  const [minMentionsPerDay, setMinMentionsPerDay] = useState(1);
+
+  const [outOfSample, setOutOfSample] = useState<OutOfSampleResponse | null>(null);
+
   const [tickerNarrative, setTickerNarrative] = useState<TickerNarrativeResponse | null>(null);
   const [tickerNarrativeLoading, setTickerNarrativeLoading] = useState(false);
   const [tickerNarrativeError, setTickerNarrativeError] = useState<string | null>(null);
@@ -87,17 +97,24 @@ const StockAnalysis: React.FC = () => {
     setTicker(stockTicker);
 
     const trailing_days = trailingDaysOverride ?? sentimentMemoryDays;
+    const methodology = {
+      align_mode: alignMode,
+      market_adjustment: marketAdjustment,
+      min_mentions_per_day: minMentionsPerDay,
+      ...(dataSourceFilter ? { data_source: dataSourceFilter } : {}),
+    };
     const rangeParams = customRange
       ? {
           period: analysisPeriod,
           start_date: customRange.start_date,
           end_date: customRange.end_date,
           trailing_days,
+          ...methodology,
         }
-      : { period: analysisPeriod, trailing_days };
+      : { period: analysisPeriod, trailing_days, ...methodology };
 
     try {
-      const [corrData, tsData, lagData, infoData, grangerResult, rollingResult, qualityData] =
+      const [corrData, tsData, lagData, infoData, grangerResult, rollingResult, qualityData, oosData] =
         await Promise.allSettled([
           apiService.getCorrelation(stockTicker, rangeParams),
           apiService.getCorrelationTimeseries(stockTicker, rangeParams),
@@ -105,7 +122,16 @@ const StockAnalysis: React.FC = () => {
           apiService.getStockInfo(stockTicker),
           apiService.getGrangerCausality(stockTicker, { max_lag: 5, ...rangeParams }),
           apiService.getRollingCorrelation(stockTicker, { window: 14, ...rangeParams }),
-          apiService.getStockDataQuality(stockTicker, rangeParams),
+          apiService.getStockDataQuality(stockTicker, {
+            period: rangeParams.period,
+            start_date: 'start_date' in rangeParams ? rangeParams.start_date : undefined,
+            end_date: 'end_date' in rangeParams ? rangeParams.end_date : undefined,
+            ...(dataSourceFilter ? { data_source: dataSourceFilter } : {}),
+          }),
+          apiService.getOutOfSampleCorrelation(stockTicker, {
+            train_ratio: 0.7,
+            ...rangeParams,
+          }),
         ]);
 
       if (corrData.status === 'fulfilled') setCorrelation(corrData.value);
@@ -129,6 +155,9 @@ const StockAnalysis: React.FC = () => {
       if (qualityData.status === 'fulfilled') setDataQuality(qualityData.value);
       else setDataQuality(null);
 
+      if (oosData.status === 'fulfilled') setOutOfSample(oosData.value);
+      else setOutOfSample(null);
+
       const allFailed = [corrData, tsData, lagData].every(r => r.status === 'rejected');
       if (allFailed) {
         setError('Could not fetch data for this ticker. Please check the ticker symbol and ensure the backend is running.');
@@ -139,13 +168,20 @@ const StockAnalysis: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [sentimentMemoryDays]);
+  }, [
+    sentimentMemoryDays,
+    alignMode,
+    marketAdjustment,
+    dataSourceFilter,
+    minMentionsPerDay,
+  ]);
 
   useEffect(() => {
     setTickerNarrative(null);
     setTickerNarrativeError(null);
     setDataQuality(null);
-  }, [ticker, period, dateRangeMode, customStart, customEnd]);
+    setOutOfSample(null);
+  }, [ticker, period, dateRangeMode, customStart, customEnd, alignMode, marketAdjustment, dataSourceFilter, minMentionsPerDay]);
 
   const fetchTickerNarrative = useCallback(
     async (forceRefresh: boolean) => {
@@ -439,6 +475,109 @@ const StockAnalysis: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <div className="sa-memory-panel sa-methodology-panel" role="region" aria-labelledby="sa-method-title">
+          <div className="sa-memory-panel__intro">
+            <span className="sa-memory-panel__kicker">Stronger evidence (optional)</span>
+            <h2 className="sa-memory-panel__title" id="sa-method-title">
+              Price side &amp; sentiment filter
+            </h2>
+            <p className="sa-memory-panel__lede">
+              Correlate trailing net sentiment with either the <strong>same trading day</strong> return or the{' '}
+              <strong>next</strong> close-to-close return (causal timing). Optional{' '}
+              <strong>SPY beta residual</strong> removes broad market co-movement. Filter by channel or require a
+              minimum number of mentions per day to reduce noise. Click <strong>Apply methodology</strong> after
+              changing these controls.
+            </p>
+          </div>
+          <div className="sa-methodology-grid">
+            <label className="sa-method-field">
+              <span className="sa-method-label">Return alignment</span>
+              <select
+                className="sa-method-select"
+                value={alignMode}
+                onChange={(e) => setAlignMode(e.target.value as typeof alignMode)}
+              >
+                <option value="same_day">Same trading day (concurrent)</option>
+                <option value="sentiment_leads_1d">Sentiment → next-day return</option>
+              </select>
+            </label>
+            <label className="sa-method-field">
+              <span className="sa-method-label">Market adjustment</span>
+              <select
+                className="sa-method-select"
+                value={marketAdjustment}
+                onChange={(e) => setMarketAdjustment(e.target.value as typeof marketAdjustment)}
+              >
+                <option value="none">Raw stock return</option>
+                <option value="spy_beta_residual">SPY beta residual</option>
+              </select>
+            </label>
+            <label className="sa-method-field">
+              <span className="sa-method-label">Sentiment channel</span>
+              <select
+                className="sa-method-select"
+                value={dataSourceFilter}
+                onChange={(e) => setDataSourceFilter(e.target.value)}
+              >
+                <option value="">All channels</option>
+                <option value="reddit">reddit</option>
+                <option value="news">news</option>
+                <option value="twitter">twitter</option>
+              </select>
+            </label>
+            <label className="sa-method-field">
+              <span className="sa-method-label">Min mentions / day</span>
+              <input
+                type="number"
+                className="sa-method-input"
+                min={1}
+                max={500}
+                value={minMentionsPerDay}
+                onChange={(e) => setMinMentionsPerDay(Math.max(1, Math.min(500, Number(e.target.value) || 1)))}
+              />
+            </label>
+          </div>
+          <div className="sa-methodology-actions">
+            <button
+              type="button"
+              className="sa-apply-range-btn"
+              disabled={!ticker || isLoading}
+              onClick={() => {
+                if (!ticker) return;
+                const custom: CustomRangePayload =
+                  dateRangeMode === 'custom' && customStart && customEnd
+                    ? { start_date: customStart, end_date: customEnd }
+                    : null;
+                analyzeStock(ticker, period, custom);
+              }}
+            >
+              Apply methodology
+            </button>
+            <div className="sa-method-presets">
+              <button
+                type="button"
+                className="sa-period-btn"
+                onClick={() => {
+                  setAlignMode('same_day');
+                  setMarketAdjustment('none');
+                }}
+              >
+                Preset: classic
+              </button>
+              <button
+                type="button"
+                className="sa-period-btn"
+                onClick={() => {
+                  setAlignMode('sentiment_leads_1d');
+                  setMarketAdjustment('spy_beta_residual');
+                }}
+              >
+                Preset: causal + market
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Error */}
@@ -481,6 +620,14 @@ const StockAnalysis: React.FC = () => {
                 <span className="sa-tag">{formatMarketCap(stockInfo.market_cap)}</span>
               )}
               <span className="sa-tag">{correlation.data_points} data points</span>
+              {correlation.effective_price_metric && (
+                <span className="sa-tag" title="Column used on the price axis for Pearson/Spearman">
+                  Price: {correlation.effective_price_metric}
+                </span>
+              )}
+              {correlation.spy_beta != null && correlation.market_adjustment === 'spy_beta_residual' && (
+                <span className="sa-tag">β vs SPY ≈ {Number(correlation.spy_beta).toFixed(3)}</span>
+              )}
             </div>
           </div>
 
@@ -784,15 +931,18 @@ const StockAnalysis: React.FC = () => {
                   <h3 className="sa-section-title">Sentiment vs return (per day)</h3>
                   <p className="sa-section-desc">
                     Each point is one trading day; the horizontal axis matches the trailing net sentiment
-                    window above (same series as Pearson <em>r</em>). Colour shows quadrant alignment; size
-                    reflects mention volume. The dashed line is an ordinary least squares fit through the
-                    cloud.
+                    window above (same series as Pearson <em>r</em>). The vertical axis uses the same return
+                    series as the headline correlation (
+                    <strong>{correlation.effective_price_metric ?? 'returns'}</strong>
+                    ). Colour shows quadrant alignment; size reflects mention volume. The dashed line is an OLS
+                    fit through the cloud.
                   </p>
                   <CorrelationScatter
                     data={timeSeries.series}
                     correlationCoefficient={correlation.pearson?.coefficient}
                     height={360}
                     trailingWindowDays={sentimentMemoryDays}
+                    yReturnKey={scatterYKeyFromEffective(correlation.effective_price_metric)}
                   />
                 </div>
               </ErrorBoundary>
@@ -823,9 +973,9 @@ const StockAnalysis: React.FC = () => {
               <div className="sa-chart-section">
                 <h3 className="sa-section-title">Rolling correlation ({rollingData.window}-day window)</h3>
                 <p className="sa-section-desc">
-                  Time-varying Pearson correlation between trailing net sentiment and returns. Shaded area
-                  highlights positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2
-                  band.
+                  Time-varying Pearson correlation between trailing net sentiment and{' '}
+                  <strong>{rollingData.effective_price_metric ?? 'returns'}</strong>. Shaded area highlights
+                  positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2 band.
                 </p>
                 <div className="sa-rolling-chart">
                   <RollingCorrelationChart
@@ -889,6 +1039,36 @@ const StockAnalysis: React.FC = () => {
                 </div>
               </div>
             </ErrorBoundary>
+          )}
+
+          {outOfSample && !outOfSample.error && outOfSample.train && outOfSample.test && (
+            <div className="sa-chart-section sa-oos-section">
+              <h3 className="sa-section-title">Out-of-sample split (time holdout)</h3>
+              <p className="sa-section-desc">
+                The merged series is ordered by date; the first <strong>{Math.round((outOfSample.train_ratio ?? 0.7) * 100)}%</strong>{' '}
+                of days are <strong>train</strong> and the remainder are <strong>test</strong> (split after{' '}
+                <strong>{outOfSample.split_date}</strong>). Pearson <em>r</em> on the holdout set indicates
+                whether the relationship persists in the more recent slice (not a trading backtest).
+              </p>
+              <div className="sa-oos-grid">
+                <div className="sa-oos-card">
+                  <div className="sa-oos-card__label">Train</div>
+                  <div className="sa-oos-card__main">
+                    <em>r</em> = {outOfSample.train.pearson_r?.toFixed(4) ?? '—'},{' '}
+                    <em>p</em> = {outOfSample.train.pearson_p?.toFixed(4) ?? '—'}
+                  </div>
+                  <div className="sa-oos-card__sub">{outOfSample.train.n} days</div>
+                </div>
+                <div className="sa-oos-card">
+                  <div className="sa-oos-card__label">Test (holdout)</div>
+                  <div className="sa-oos-card__main">
+                    <em>r</em> = {outOfSample.test.pearson_r?.toFixed(4) ?? '—'},{' '}
+                    <em>p</em> = {outOfSample.test.pearson_p?.toFixed(4) ?? '—'}
+                  </div>
+                  <div className="sa-oos-card__sub">{outOfSample.test.n} days</div>
+                </div>
+              </div>
+            </div>
           )}
 
           {/* Interpretation */}

@@ -13,7 +13,7 @@ import {
   Label,
   Cell,
 } from 'recharts';
-import type { TimeSeriesPoint } from '../../types';
+import type { ScatterYKey, TimeSeriesPoint } from '../../types';
 import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
@@ -23,6 +23,8 @@ interface CorrelationScatterProps {
   correlationCoefficient?: number;
   /** Trailing window for net sentiment (for axis label); x uses trailing_net_sentiment from API. */
   trailingWindowDays?: number;
+  /** Which return column to plot vs sentiment (matches correlation effective_price_metric). */
+  yReturnKey?: ScatterYKey;
 }
 
 function linearRegression(xs: number[], ys: number[]): { a: number; b: number } {
@@ -53,18 +55,22 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
   height = 360,
   correlationCoefficient,
   trailingWindowDays = 1,
+  yReturnKey = 'returns',
 }) => {
   const w = Math.max(1, Math.min(30, Math.floor(trailingWindowDays || 1)));
 
   const { scatterData, lineData, xDomain, yDomain, slope, intercept } = useMemo(() => {
     const raw = (data ?? [])
-      .filter((p) => p.returns != null)
+      .filter((p) => {
+        const v = p[yReturnKey];
+        return v != null && typeof v === 'number' && !Number.isNaN(v);
+      })
       .map((p) => ({
         sentiment:
           typeof p.trailing_net_sentiment === 'number'
             ? p.trailing_net_sentiment
             : p.net_sentiment,
-        returns: (p.returns ?? 0) * 100,
+        returns: ((p[yReturnKey] as number) ?? 0) * 100,
         date: p.date,
         mentions: Math.max(0, p.mention_count ?? 0),
       }));
@@ -98,7 +104,16 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
       slope: b,
       intercept: a,
     };
-  }, [data]);
+  }, [data, yReturnKey]);
+
+  const yAxisShort =
+    yReturnKey === 'forward_1d_return'
+      ? 'Next-day return (%)'
+      : yReturnKey === 'forward_excess_return'
+        ? 'Next-day SPY-residual (%)'
+        : yReturnKey === 'excess_returns'
+          ? 'SPY-residual return (%)'
+          : 'Same-day return (%)';
 
   if (!scatterData.length) {
     return (
@@ -112,7 +127,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
           fontSize: 14,
         }}
       >
-        No overlapping days with returns — widen the date range if possible.
+        No overlapping days for this return series — widen the date range if possible.
       </div>
     );
   }
@@ -137,7 +152,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
           <strong>{formatDecimalDisplay(d?.sentiment, 3)}</strong>
         </p>
         <p style={{ margin: 0, color: '#495057' }}>
-          Daily return: <strong>{formatDecimalDisplay(d?.returns, 2)}%</strong>
+          {yAxisShort.replace(' (%)', '')}: <strong>{formatDecimalDisplay(d?.returns, 2)}%</strong>
         </p>
         <p style={{ margin: '4px 0 0', color: '#868e96', fontSize: 12 }}>
           Mentions: {formatIntegerDisplay(d?.mentions)}
@@ -190,7 +205,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
             tickFormatter={(v: number) => `${Math.round(Number(v))}%`}
           >
             <Label
-              value="Daily return (%)"
+              value={yAxisShort}
               angle={-90}
               position="insideLeft"
               style={{ fontSize: 12, fill: '#495057', fontWeight: 500 }}

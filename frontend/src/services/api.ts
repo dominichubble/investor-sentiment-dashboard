@@ -1,7 +1,8 @@
 import axios from 'axios';
 import type {
   CorrelationResponse,
-  CorrelationOverviewItem,
+  CorrelationOverviewResponse,
+  CorrelationMethodologyParams,
   LagAnalysisResponse,
   TimeSeriesResponse,
   PriceHistoryResponse,
@@ -9,6 +10,7 @@ import type {
   StockDataQualityResponse,
   GrangerCausalityResponse,
   RollingCorrelationResponse,
+  OutOfSampleResponse,
 } from '../types';
 
 /** Ensure base URL ends with /api/v1 (common Vercel misconfig omits it). */
@@ -313,9 +315,9 @@ export const apiService = {
       start_date?: string;
       end_date?: string;
       sentiment_metric?: string;
-      price_metric?: string;
+      price_metric?: string | null;
       trailing_days?: number;
-    }
+    } & CorrelationMethodologyParams
   ): Promise<CorrelationResponse> {
     const response = await api.get<CorrelationResponse>(
       `/correlation/${ticker}`,
@@ -331,7 +333,7 @@ export const apiService = {
       start_date?: string;
       end_date?: string;
       trailing_days?: number;
-    }
+    } & CorrelationMethodologyParams
   ): Promise<TimeSeriesResponse> {
     const response = await api.get<TimeSeriesResponse>(
       `/correlation/${ticker}/timeseries`,
@@ -349,7 +351,7 @@ export const apiService = {
       end_date?: string;
       sentiment_metric?: string;
       trailing_days?: number;
-    }
+    } & CorrelationMethodologyParams
   ): Promise<LagAnalysisResponse> {
     const response = await api.get<LagAnalysisResponse>(
       `/correlation/${ticker}/lag-analysis`,
@@ -362,9 +364,9 @@ export const apiService = {
     params?: {
       min_mentions?: number;
       period?: string;
-    }
-  ): Promise<CorrelationOverviewItem[]> {
-    const response = await api.get<CorrelationOverviewItem[]>(
+    } & CorrelationMethodologyParams
+  ): Promise<CorrelationOverviewResponse> {
+    const response = await api.get<CorrelationOverviewResponse>(
       '/correlation/overview/all',
       { params }
     );
@@ -395,6 +397,7 @@ export const apiService = {
       period?: string;
       start_date?: string;
       end_date?: string;
+      data_source?: string;
     },
   ): Promise<StockDataQualityResponse> {
     const response = await api.get<StockDataQualityResponse>(
@@ -413,7 +416,7 @@ export const apiService = {
       start_date?: string;
       end_date?: string;
       trailing_days?: number;
-    }
+    } & CorrelationMethodologyParams
   ): Promise<GrangerCausalityResponse> {
     const response = await api.get<GrangerCausalityResponse>(
       `/correlation/${ticker}/granger`,
@@ -430,13 +433,32 @@ export const apiService = {
       start_date?: string;
       end_date?: string;
       sentiment_metric?: string;
-      price_metric?: string;
+      price_metric?: string | null;
       trailing_days?: number;
-    }
+    } & CorrelationMethodologyParams
   ): Promise<RollingCorrelationResponse> {
     const response = await api.get<RollingCorrelationResponse>(
       `/correlation/${ticker}/rolling`,
       { params }
+    );
+    return response.data;
+  },
+
+  async getOutOfSampleCorrelation(
+    ticker: string,
+    params?: {
+      period?: string;
+      sentiment_metric?: string;
+      price_metric?: string | null;
+      train_ratio?: number;
+      start_date?: string;
+      end_date?: string;
+      trailing_days?: number;
+    } & CorrelationMethodologyParams,
+  ): Promise<OutOfSampleResponse> {
+    const response = await api.get<OutOfSampleResponse>(
+      `/correlation/${ticker}/out-of-sample`,
+      { params },
     );
     return response.data;
   },

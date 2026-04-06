@@ -30,6 +30,7 @@ except ImportError:
 import praw
 from praw.exceptions import PRAWException
 
+from app.pipelines.reddit_common import DEFAULT_KEYWORD_GROUPS, hint_tickers_from_keyword_group
 from app.services.import_service import ImportService
 
 # Configure logging
@@ -50,7 +51,14 @@ _URL_RE = re.compile(
 
 
 # Default configuration
-DEFAULT_SUBREDDITS = ["wallstreetbets", "stocks", "investing", "finance"]
+DEFAULT_SUBREDDITS = [
+    "wallstreetbets",
+    "stocks",
+    "investing",
+    "finance",
+    "StockMarket",
+    "options",
+]
 DEFAULT_KEYWORDS = [
     "stock",
     "stocks",
@@ -129,44 +137,66 @@ def build_query(keywords: List[str]) -> str:
 
 
 def fetch_posts_for_subreddit(
-    reddit: praw.Reddit, name: str, limit: int, time_filter: str, keywords: List[str]
+    reddit: praw.Reddit,
+    name: str,
+    limit_per_search: int,
+    time_filter: str,
+    keyword_groups: List[List[str]],
+    search_sorts: List[str],
 ) -> List[Dict[str, Any]]:
     """
-    Fetch posts from a single subreddit matching the keyword query.
+    Fetch posts from a subreddit via multiple keyword batches and search sorts.
+
+    Smaller OR-queries and multiple sorts surface different posts than one giant query.
+    ``hint_tickers`` (from symbol-like keywords in each batch) helps ImportService
+    retain posts that match a ticker search but do not spell the symbol in the text.
 
     Args:
         reddit: Authenticated PRAW Reddit instance
         name: Subreddit name (without r/)
-        limit: Maximum number of posts to fetch
-        time_filter: Time filter ('hour', 'day', 'week', 'month', 'year', 'all')
-        keywords: List of keywords to search for
-
-    Returns:
-        List of normalized post dictionaries
-
-    Raises:
-        PRAWException: If there's an error accessing the subreddit
+        limit_per_search: Max results per (keyword batch × sort) search
+        time_filter: Reddit search time_filter
+        keyword_groups: List of keyword lists; each list is one OR-query
+        search_sorts: PRAW search sort values (e.g. new, relevance)
     """
     logger.info(f"Fetching r/{name}...")
+    sr = reddit.subreddit(name)
+    rows_by_id: Dict[str, Dict[str, Any]] = {}
 
-    try:
-        sr = reddit.subreddit(name)
-        q = build_query(keywords)
-        seen = set()
-        rows: List[Dict[str, Any]] = []
+    def absorb(submission, hints: List[str]) -> None:
+        post = normalize_post(submission)
+        pid = post["id"]
+        if pid not in rows_by_id:
+            if hints:
+                post["hint_tickers"] = hints
+            rows_by_id[pid] = post
+        elif hints and not rows_by_id[pid].get("hint_tickers"):
+            rows_by_id[pid]["hint_tickers"] = hints
 
-        for s in sr.search(q, sort="new", time_filter=time_filter, limit=limit):
-            if s.id in seen:
-                continue
-            seen.add(s.id)
-            rows.append(normalize_post(s))
+    errors_local: List[str] = []
+    for group in keyword_groups:
+        if not group:
+            continue
+        q = build_query(group)
+        if not q.strip():
+            continue
+        hints = hint_tickers_from_keyword_group(group)
+        for sort in search_sorts:
+            try:
+                for s in sr.search(
+                    q, sort=sort, time_filter=time_filter, limit=limit_per_search
+                ):
+                    absorb(s, hints)
+            except PRAWException as e:
+                msg = f"r/{name} search sort={sort!r} ({q[:60]}...): {e}"
+                logger.warning(msg)
+                errors_local.append(msg)
 
-        logger.info(f"  Found {len(rows)} posts from r/{name}")
-        return rows
-
-    except PRAWException as e:
-        logger.error(f"Error fetching from r/{name}: {e}")
-        raise
+    rows = list(rows_by_id.values())
+    if errors_local:
+        logger.warning("r/%s finished with %d search warnings", name, len(errors_local))
+    logger.info("  Found %d unique posts from r/%s", len(rows), name)
+    return rows
 
 
 def initialize_reddit_client() -> praw.Reddit:
@@ -216,15 +246,20 @@ def run_ingestion(
     run_id: Optional[str] = None,
     store_db: bool = True,
     write_files: bool = False,
+    *,
+    keyword_mode: str = "groups",
+    search_sorts: Optional[List[str]] = None,
 ) -> str:
     """
     Run the complete Reddit data ingestion pipeline.
 
     Args:
         subreddits: List of subreddit names to fetch from
-        keywords: List of keywords to search for
+        keywords: Used when keyword_mode is ``flat`` (single OR-query)
         time_filter: Time filter for posts
-        limit_per_subreddit: Maximum posts per subreddit
+        limit_per_subreddit: Max posts per (keyword batch × sort) search pass
+        keyword_mode: ``groups`` (default thematic batches + hints) or ``flat`` (single OR of keywords)
+        search_sorts: Reddit search sorts to run per batch (default: new, relevance)
         output_dir: Output directory path
         run_id: Optional run identifier (defaults to current date)
         store_db: If True, persist records directly to the database
@@ -237,8 +272,20 @@ def run_ingestion(
         Exception: If ingestion fails
     """
     logger.info("Starting Reddit data ingestion pipeline")
+    sorts = list(search_sorts or ["new", "relevance"])
+    if keyword_mode == "groups":
+        keyword_groups: List[List[str]] = [list(g) for g in DEFAULT_KEYWORD_GROUPS]
+        logger.info(
+            "Keyword mode: groups (%d batches), sorts=%s",
+            len(keyword_groups),
+            sorts,
+        )
+    else:
+        keyword_groups = [list(keywords)]
+        logger.info("Keyword mode: flat (%d terms), sorts=%s", len(keywords), sorts)
+
     logger.info(f"Subreddits: {', '.join(subreddits)}")
-    logger.info(f"Time filter: {time_filter}, Limit: {limit_per_subreddit}")
+    logger.info(f"Time filter: {time_filter}, limit per search pass: {limit_per_subreddit}")
 
     # Initialize Reddit client
     reddit = initialize_reddit_client()
@@ -256,7 +303,12 @@ def run_ingestion(
     for sub in subreddits:
         try:
             rows = fetch_posts_for_subreddit(
-                reddit, sub, limit_per_subreddit, time_filter, keywords
+                reddit,
+                sub,
+                limit_per_subreddit,
+                time_filter,
+                keyword_groups,
+                sorts,
             )
             all_rows.extend(rows)
         except Exception as e:
@@ -301,7 +353,10 @@ def run_ingestion(
         "run_id": run_id,
         "timestamp": datetime.utcnow().isoformat(),
         "subreddits": subreddits,
-        "keywords": keywords,
+        "keywords": keywords if keyword_mode == "flat" else None,
+        "keyword_mode": keyword_mode,
+        "search_sorts": sorts,
+        "keyword_groups_count": len(keyword_groups),
         "time_filter": time_filter,
         "limit_per_subreddit": limit_per_subreddit,
         "total_posts": len(deduped),
@@ -350,7 +405,22 @@ Examples:
         "--keywords",
         nargs="+",
         default=DEFAULT_KEYWORDS,
-        help="Keywords to search for (default: stock, stocks, market, etc.)",
+        help="Keywords for --keyword-mode flat (ignored for groups)",
+    )
+
+    parser.add_argument(
+        "--keyword-mode",
+        choices=["groups", "flat"],
+        default="groups",
+        help="groups: thematic keyword batches + ticker hints (default). flat: single OR over --keywords",
+    )
+
+    parser.add_argument(
+        "--search-sorts",
+        nargs="+",
+        default=["new", "relevance"],
+        choices=["new", "relevance", "hot", "top", "comments"],
+        help="Reddit search sort per keyword batch (default: new relevance)",
     )
 
     parser.add_argument(
@@ -416,6 +486,8 @@ def main():
             run_id=args.run_id,
             store_db=args.store_db,
             write_files=args.write_files,
+            keyword_mode=args.keyword_mode,
+            search_sorts=args.search_sorts,
         )
 
         if output_file:
