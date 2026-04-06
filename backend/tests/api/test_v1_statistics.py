@@ -69,6 +69,17 @@ class DummyStatisticsService:
                     "neutral_percentage": 25.0,
                 },
             },
+            "source_disagreement_trend": [
+                {
+                    "date": "2026-02-01",
+                    "total_mentions": 9,
+                    "n_sources_active": 3,
+                    "disagreement_range": 0.25,
+                    "disagreement_std": 0.1,
+                    "net_by_source": {"reddit": 0.1, "news": -0.15, "twitter": 0.05},
+                    "counts_by_source": {"reddit": 3, "news": 3, "twitter": 3},
+                }
+            ],
         }
 
 
@@ -88,3 +99,5 @@ def test_v1_statistics_shape(monkeypatch):
     assert "top_stocks" in payload
     assert "recent_activity" in payload
     assert "date_range" in payload
+    assert "source_disagreement_trend" in payload
+    assert len(payload["source_disagreement_trend"]) == 1

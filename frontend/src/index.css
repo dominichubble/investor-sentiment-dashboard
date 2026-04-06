@@ -33,6 +33,34 @@
   --radius-lg: 16px;
   --radius-pill: 9999px;
 
+  /* Spacing scale (4px base) — use for vertical rhythm across pages */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-7: 1.75rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+
+  /* Page shell — one horizontal inset for navbar, footer, and main columns */
+  --page-padding-x: clamp(1rem, 4vw, 1.75rem);
+  --page-padding-top: var(--space-8);
+  --page-padding-bottom: var(--space-12);
+  --section-stack-gap: var(--space-6);
+
+  /* Primary content width (navbar, charts, KPI rows align to this) */
+  --layout-max-width: 1200px;
+  --content-form-max-width: 40rem;
+  --content-date-row-max-width: 45rem;
+  --panel-readable-max-width: 60rem;
+
+  /* Card / surface padding (symmetric defaults) */
+  --surface-padding-y: var(--space-6);
+  --surface-padding-x: var(--space-6);
+
   font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;

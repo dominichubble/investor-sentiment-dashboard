@@ -2,9 +2,9 @@
   background: transparent;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--section-stack-gap);
   align-items: center;
-  padding: 32px 24px 48px;
+  padding: var(--page-padding-top) var(--page-padding-x) var(--page-padding-bottom);
   min-height: 100vh;
   width: 100%;
   box-sizing: border-box;
@@ -13,9 +13,9 @@
 /* Header */
 .sa-header {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   text-align: center;
-  padding: 8px 0 4px;
+  padding: var(--space-2) 0 var(--space-1);
 }
 
 .sa-title {
@@ -23,7 +23,7 @@
   font-size: clamp(1.5rem, 4vw, 1.85rem);
   font-weight: 700;
   color: var(--color-text);
-  margin: 0 0 10px;
+  margin: 0 0 var(--space-3);
   letter-spacing: -0.03em;
 }
 
@@ -31,7 +31,7 @@
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   color: var(--color-text-muted);
-  margin: 0 0 24px;
+  margin: 0 0 var(--space-6);
   line-height: 1.55;
   max-width: none;
   width: 100%;
@@ -42,9 +42,9 @@
 /* Search */
 .sa-search-form {
   display: flex;
-  gap: 12px;
-  max-width: 640px;
-  margin: 0 auto 16px;
+  gap: var(--space-3);
+  max-width: var(--content-form-max-width);
+  margin: 0 auto var(--space-4);
 }
 
 .sa-search-input {
@@ -107,11 +107,11 @@
 .sa-range-mode {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--space-5);
   justify-content: center;
   align-items: center;
-  margin: 20px auto 12px;
-  max-width: 640px;
+  margin: var(--space-5) auto var(--space-3);
+  max-width: var(--content-form-max-width);
 }
 
 .sa-range-mode-option {
@@ -137,8 +137,20 @@
   gap: 16px;
   justify-content: center;
   align-items: flex-end;
-  margin: 0 auto 8px;
-  max-width: 720px;
+  margin: 0 auto var(--space-2);
+  max-width: var(--content-date-row-max-width);
+}
+
+.sa-custom-dates__hint {
+  flex: 1 1 100%;
+  margin: 4px 0 0;
+  padding: 0 8px;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  text-align: center;
+  max-width: 36rem;
+  margin-inline: auto;
 }
 
 .sa-date-field {
@@ -175,7 +187,8 @@
   box-shadow: 0 0 0 3px var(--color-accent-soft);
 }
 
-.sa-apply-range-btn {
+.sa-apply-range-btn,
+.sa-apply-method-btn {
   padding: 10px 22px;
   background: var(--color-accent);
   color: white;
@@ -190,11 +203,13 @@
   box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
-.sa-apply-range-btn:hover:not(:disabled) {
+.sa-apply-range-btn:hover:not(:disabled),
+.sa-apply-method-btn:hover:not(:disabled) {
   background: var(--color-accent-hover);
 }
 
-.sa-apply-range-btn:disabled {
+.sa-apply-range-btn:disabled,
+.sa-apply-method-btn:disabled {
   opacity: 0.55;
   cursor: not-allowed;
 }
@@ -202,9 +217,9 @@
 /* Trailing sentiment window — panel + segmented control */
 .sa-memory-panel {
   width: 100%;
-  max-width: 640px;
-  margin: 22px auto 6px;
-  padding: 22px 24px 24px;
+  max-width: var(--content-form-max-width);
+  margin: var(--space-5) auto var(--space-2);
+  padding: var(--space-5) var(--space-6) var(--space-6);
   text-align: left;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -213,7 +228,7 @@
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 22px;
+  gap: var(--space-5);
   position: relative;
   overflow: hidden;
 }
@@ -231,10 +246,10 @@
 }
 
 .sa-memory-panel__intro {
-  padding-left: 12px;
+  padding-left: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-2);
 }
 
 .sa-memory-panel__kicker {
@@ -271,10 +286,10 @@
 }
 
 .sa-memory-panel__control {
-  padding-left: 12px;
+  padding-left: var(--space-3);
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-3);
   align-items: stretch;
 }
 
@@ -358,21 +373,22 @@
   opacity: 0.85;
 }
 
+/* Row layout only for the trailing-sentiment panel — not methodology (has grid + actions below intro). */
 @media (min-width: 560px) {
-  .sa-memory-panel {
+  .sa-memory-panel:not(.sa-methodology-panel) {
     flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 28px;
-    padding: 24px 28px 26px;
+    gap: var(--space-7);
+    padding: var(--space-6) var(--space-7) var(--space-6);
   }
 
-  .sa-memory-panel__intro {
+  .sa-memory-panel:not(.sa-methodology-panel) .sa-memory-panel__intro {
     flex: 1;
     min-width: 0;
   }
 
-  .sa-memory-panel__control {
+  .sa-memory-panel:not(.sa-methodology-panel) .sa-memory-panel__control {
     flex: 0 0 auto;
     width: min(100%, 240px);
     align-items: stretch;
@@ -388,7 +404,7 @@
 /* Period Selector */
 .sa-period-selector {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   justify-content: center;
   flex-wrap: wrap;
 }
@@ -477,13 +493,15 @@
 /* Info Bar */
 .sa-info-bar {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   background: var(--color-surface);
   border-radius: var(--radius-md);
-  padding: 22px 26px;
+  padding: var(--space-5) var(--space-6);
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  gap: var(--space-3) var(--space-5);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
 }
@@ -491,8 +509,10 @@
 .sa-info-left {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: var(--space-3);
   flex-wrap: wrap;
+  min-width: 0;
+  flex: 1 1 200px;
 }
 
 .sa-ticker-title {
@@ -511,9 +531,12 @@
 
 .sa-info-right {
   display: flex;
-  gap: 8px;
+  gap: var(--space-2);
   flex-wrap: wrap;
   justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 240px;
 }
 
 .sa-tag {
@@ -526,21 +549,24 @@
   font-weight: 600;
   color: var(--color-text-secondary);
   letter-spacing: 0.02em;
+  max-width: 100%;
+  word-break: break-word;
+  line-height: 1.35;
 }
 
 /* Summary Grid */
 .sa-summary-grid {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .sa-stat-card {
   background: var(--color-surface);
   border-radius: var(--radius-md);
-  padding: 22px 18px;
+  padding: var(--space-5) var(--space-4);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   text-align: center;
@@ -559,14 +585,14 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
 }
 
 .sa-stat-value {
   font-family: var(--font-sans);
   font-size: 1.625rem;
   font-weight: 700;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-2);
   letter-spacing: -0.02em;
 }
 
@@ -574,7 +600,7 @@
   font-family: var(--font-sans);
   font-size: 0.75rem;
   color: var(--color-text-muted);
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   line-height: 1.45;
 }
 
@@ -601,20 +627,20 @@
 /* Chart Sections */
 .sa-results {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--section-stack-gap);
 }
 
 .sa-chart-section {
   background: var(--color-surface);
   border-radius: var(--radius-md);
-  padding: 26px 28px;
+  padding: var(--surface-padding-y) var(--surface-padding-x);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   box-sizing: border-box;
 }
 
@@ -628,9 +654,9 @@
 .sa-charts-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
+  gap: var(--section-stack-gap);
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
 }
 
 .sa-chart-half {
@@ -642,7 +668,7 @@
   font-size: 1.0625rem;
   font-weight: 700;
   color: var(--color-text);
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-2);
   letter-spacing: -0.02em;
 }
 
@@ -650,7 +676,7 @@
   font-family: var(--font-sans);
   font-size: 0.8125rem;
   color: var(--color-text-muted);
-  margin: 0 0 18px;
+  margin: 0 0 var(--space-4);
   line-height: 1.55;
   max-width: none;
 }
@@ -663,11 +689,11 @@
 .sa-interpretation {
   background: var(--color-surface);
   border-radius: var(--radius-md);
-  padding: 26px 28px;
+  padding: var(--surface-padding-y) var(--surface-padding-x);
   box-shadow: var(--shadow-sm);
   border: 1px solid var(--color-border);
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   box-sizing: border-box;
 }
 
@@ -676,7 +702,7 @@
   font-size: 0.9375rem;
   color: var(--color-text-secondary);
   line-height: 1.7;
-  margin: 0 0 14px;
+  margin: 0 0 var(--space-3);
 }
 
 .sa-interpretation-content p:last-child {
@@ -684,9 +710,9 @@
 }
 
 .sa-results-partial {
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   width: 100%;
-  padding: 24px;
+  padding: var(--space-6);
   box-sizing: border-box;
 }
 
@@ -704,8 +730,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
-  padding: 48px 24px;
+  gap: var(--space-3);
+  padding: var(--space-12) var(--space-6);
 }
 
 .sa-spinner {
@@ -734,8 +760,8 @@
   background: var(--color-negative-soft);
   border: 1px solid rgba(220, 38, 38, 0.25);
   border-radius: var(--radius-md);
-  padding: 16px 24px;
-  max-width: 1240px;
+  padding: var(--space-4) var(--space-6);
+  max-width: var(--layout-max-width);
   width: 100%;
   box-sizing: border-box;
   box-shadow: var(--shadow-xs);
@@ -909,7 +935,7 @@
 /* Sentiment source filter (Reddit / News / X) */
 .sa-source-panel {
   width: 100%;
-  max-width: 1240px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
 }
 
@@ -925,9 +951,9 @@
 .sa-source-filter {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-2);
   justify-content: center;
-  margin: 20px 0 24px;
+  margin: var(--space-5) 0 var(--space-6);
 }
 
 .sa-source-filter__btn {
@@ -958,13 +984,13 @@
 .sa-source-filter-summary {
   display: flex;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: var(--space-2);
   justify-content: center;
   align-items: center;
   font-family: var(--font-sans);
   font-size: 0.875rem;
   color: var(--color-text-muted);
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   padding-bottom: 2px;
@@ -984,13 +1010,13 @@
   font-size: 1.05rem;
   font-weight: 650;
   color: var(--color-text);
-  margin: 28px 0 8px;
+  margin: var(--space-7) 0 var(--space-2);
   text-align: center;
 }
 
 .sa-section-desc--tight {
   margin-top: 0;
-  margin-bottom: 16px;
+  margin-bottom: var(--space-4);
 }
 
 .sa-source-compare {
@@ -1577,15 +1603,29 @@
 }
 
 /* Methodology + out-of-sample */
-.sa-methodology-panel {
-  margin-top: 8px;
+.sa-memory-panel.sa-methodology-panel {
+  max-width: min(var(--panel-readable-max-width), 100%);
+  margin-top: var(--space-2);
+  flex-direction: column;
+  align-items: stretch;
+  overflow: visible;
+}
+
+.sa-memory-panel.sa-methodology-panel .sa-memory-panel__intro {
+  flex: none;
+  width: 100%;
+  max-width: none;
 }
 
 .sa-methodology-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px 18px;
-  margin-top: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-3) var(--space-4);
+  margin-top: 0;
+  padding-left: var(--space-3);
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .sa-method-field {
@@ -1594,6 +1634,7 @@
   gap: 6px;
   font-size: 0.8125rem;
   color: var(--color-text-muted);
+  min-width: 0;
 }
 
 .sa-method-label {
@@ -1609,20 +1650,59 @@
   background: var(--color-surface);
   color: var(--color-text);
   font-size: 0.875rem;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .sa-methodology-actions {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 12px 16px;
-  margin-top: 16px;
+  gap: var(--space-3) var(--space-4);
+  margin-top: var(--space-4);
+  padding-left: var(--space-3);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .sa-method-presets {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.sa-method-presets .sa-period-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-width: min(100%, 160px);
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .sa-methodology-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sa-methodology-actions .sa-apply-method-btn {
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .sa-method-presets {
+    flex-direction: column;
+  }
+
+  .sa-method-presets .sa-period-btn {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 .sa-oos-grid {

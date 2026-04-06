@@ -22,6 +22,14 @@ Key capabilities:
 
 ---
 
+## For examiners (dissertation / viva)
+
+- **Methodology in the artefact:** With the frontend running, open **`/methodology`** for a concise map from thesis claims (pipeline, evaluation, limitations) to dashboard screens and repository paths.
+- **Reproducibility:** Use `.env.example`, the Quick Start below, `backend` tests via `pytest`, and the benchmark / LIME regeneration commands under **Evaluation Artifacts**.
+- **Scope:** Correlation and Granger-style outputs are **exploratory statistics**, not trading advice or proof of causation; limitations are stated on **Methodology** and **Legal** in the SPA.
+
+---
+
 ## Quick Start
 
 ### Prerequisites

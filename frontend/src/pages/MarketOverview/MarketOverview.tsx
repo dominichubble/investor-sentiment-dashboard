@@ -12,7 +12,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { GlobalMarketSentimentChart } from '../../components/Charts';
+import { GlobalMarketSentimentChart, SourceDisagreementChart } from '../../components/Charts';
 import { chartTheme } from '../../components/Charts/chartTheme';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
@@ -644,6 +644,32 @@ const MarketOverview: React.FC = () => {
           {sentimentSource === 'all' && marketStats.source_comparison && (
             <SourceVolumePanel comp={marketStats.source_comparison} dateSpanText={dateSpanText} />
           )}
+          {sentimentSource === 'all' &&
+            marketStats.source_disagreement_trend &&
+            marketStats.source_disagreement_trend.length > 0 && (
+              <ErrorBoundary fallbackTitle="Failed to render cross-source disagreement chart">
+                <div className="sa-chart-section sa-market-wide sa-source-panel mo-full-width">
+                  <h4 className="sa-subsection-title">Cross-source disagreement over time</h4>
+                  <p className="sa-section-desc sa-section-desc--tight">
+                    Each day we compute <strong>net sentiment</strong> per channel (positive minus negative, divided
+                    by volume) for Reddit, news, and X separately. A channel is included only if it has at least{' '}
+                    <strong>three</strong> labelled rows that day. The <strong>purple line</strong> is the spread:
+                    maximum net minus minimum net across qualifying channels — high values mean platforms disagree on
+                    mood. The dashed line is the standard deviation of those channel nets. Grey bars are total
+                    mentions that day across all three channels. Same statistics window as above (
+                    <strong>{dateSpanText}</strong>).
+                  </p>
+                  <SourceDisagreementChart
+                    data={marketStats.source_disagreement_trend}
+                    height={320}
+                  />
+                  <ChartFootnote>
+                    This view is only available for <strong>All sources</strong>. It is descriptive, not a trading
+                    signal; thin days or missing channels reduce or blank the spread metrics.
+                  </ChartFootnote>
+                </div>
+              </ErrorBoundary>
+            )}
           <TopStocksPanel
             stocks={marketStats.top_stocks}
             filterLabel={filterLabel}

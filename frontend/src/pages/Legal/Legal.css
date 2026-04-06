@@ -1,7 +1,7 @@
 .legal-page__article {
   max-width: 42rem;
   margin: 0 auto;
-  padding: 8px 24px 48px;
+  padding: var(--space-2) 0 var(--page-padding-bottom);
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--color-text-secondary);

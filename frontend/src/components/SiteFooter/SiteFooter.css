@@ -1,17 +1,17 @@
 .site-footer {
   margin-top: auto;
-  padding: 28px 24px 36px;
+  padding: var(--space-7) var(--page-padding-x) var(--space-10);
   border-top: 1px solid var(--color-border);
   background: var(--color-surface-muted);
 }
 
 .site-footer__inner {
-  max-width: 1200px;
+  max-width: var(--layout-max-width);
   margin: 0 auto;
 }
 
 .site-footer__disclaimer {
-  margin: 0 0 16px;
+  margin: 0 0 var(--space-4);
   font-size: 0.8125rem;
   line-height: 1.55;
   color: var(--color-text-muted);

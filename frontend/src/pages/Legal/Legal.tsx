@@ -53,8 +53,12 @@ export default function Legal() {
         </p>
 
         <p className="legal-page__back">
+          <Link to="/methodology" className="legal-page__back-link">
+            Methodology &amp; evaluation framing
+          </Link>
+          {' · '}
           <Link to="/" className="legal-page__back-link">
-            ← Back to market overview
+            ← Market overview
           </Link>
         </p>
       </article>

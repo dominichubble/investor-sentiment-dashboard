@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+from collections import defaultdict
 from datetime import datetime, timedelta
-from typing import Any
+from typing import Any, Callable
 
 from sqlalchemy import func, case
 from sqlalchemy.orm import Query
 
+from app.analysis.source_disagreement import (
+    MIN_ROWS_PER_CHANNEL_PER_DAY,
+    STANDARD_CHANNELS,
+    disagreement_metrics,
+)
 from app.entities.stock_database import StockDatabase
 from app.storage.database import SentimentRecordRow, get_session
 
@@ -32,6 +38,83 @@ def _normalize_data_source_param(raw: str | None) -> str | None:
     if s in ("news", "article", "articles"):
         return "news"
     return None
+
+
+def _build_source_disagreement_trend(
+    session,
+    apply_window: Callable[[Query], Query],
+) -> list[dict[str, Any]]:
+    """
+    Per calendar day: net sentiment by channel (reddit / news / twitter), then
+    cross-source disagreement (range and std of nets) when ≥2 channels meet
+    the minimum row threshold.
+    """
+    day_col = func.date(SentimentRecordRow.published_at).label("day")
+    rows = (
+        apply_window(
+            session.query(
+                day_col,
+                SentimentRecordRow.data_source,
+                func.count(SentimentRecordRow.id).label("cnt"),
+                func.sum(
+                    case(
+                        (SentimentRecordRow.sentiment_label == "positive", 1),
+                        else_=0,
+                    )
+                ).label("pos"),
+                func.sum(
+                    case(
+                        (SentimentRecordRow.sentiment_label == "negative", 1),
+                        else_=0,
+                    )
+                ).label("neg"),
+            )
+        )
+        .filter(SentimentRecordRow.data_source.in_(list(STANDARD_CHANNELS)))
+        .group_by(day_col, SentimentRecordRow.data_source)
+        .order_by(day_col)
+        .all()
+    )
+
+    by_day: dict[str, dict[str, tuple[int, int, int]]] = defaultdict(dict)
+    for day, ds, cnt, pos, neg in rows:
+        key = (ds or "").strip().lower()
+        if key not in STANDARD_CHANNELS:
+            continue
+        c = int(cnt or 0)
+        p = int(pos or 0)
+        n = int(neg or 0)
+        by_day[str(day)][key] = (c, p, n)
+
+    out: list[dict[str, Any]] = []
+    for day in sorted(by_day.keys()):
+        chans = by_day[day]
+        nets: dict[str, float] = {}
+        counts: dict[str, int] = {}
+        total_mentions = 0
+        for ch in STANDARD_CHANNELS:
+            if ch not in chans:
+                continue
+            c, p, n = chans[ch]
+            total_mentions += c
+            if c < MIN_ROWS_PER_CHANNEL_PER_DAY:
+                continue
+            nets[ch] = round((p - n) / max(c, 1), 4)
+            counts[ch] = c
+
+        d_range, d_std = disagreement_metrics(nets)
+        out.append(
+            {
+                "date": day,
+                "total_mentions": total_mentions,
+                "n_sources_active": len(nets),
+                "disagreement_range": d_range,
+                "disagreement_std": d_std,
+                "net_by_source": nets,
+                "counts_by_source": counts,
+            }
+        )
+    return out
 
 
 def _sentiment_breakdown_from_counts(
@@ -308,6 +391,11 @@ class StatisticsService:
             }
             if source_comparison is not None:
                 out["source_comparison"] = source_comparison
+                out["source_disagreement_trend"] = _build_source_disagreement_trend(
+                    session, _apply_window
+                )
+            else:
+                out["source_disagreement_trend"] = []
             return out
         finally:
             session.close()

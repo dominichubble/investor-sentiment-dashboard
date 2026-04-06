@@ -9,6 +9,7 @@ import {
 import MarketOverview from './pages/MarketOverview/MarketOverview';
 import StockAnalysis from './pages/StockAnalysis';
 import Legal from './pages/Legal';
+import Methodology from './pages/Methodology';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/" element={<RootRoute />} />
             <Route path="/analyze" element={<StockAnalysis />} />
             <Route path="/legal" element={<Legal />} />
+            <Route path="/methodology" element={<Methodology />} />
             <Route path="/correlation" element={<Navigate to="/analyze" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -58,6 +60,9 @@ function NotFound() {
         </Link>
         <Link to="/legal" className="not-found__link">
           Legal &amp; disclaimer
+        </Link>
+        <Link to="/methodology" className="not-found__link">
+          Methodology
         </Link>
       </div>
     </div>

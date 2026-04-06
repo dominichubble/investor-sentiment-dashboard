@@ -75,6 +75,18 @@ class DailyTrendPoint(BaseModel):
     net_sentiment: float
 
 
+class SourceDisagreementDay(BaseModel):
+    """Per-day spread of net sentiment between Reddit, news, and X."""
+
+    date: str
+    total_mentions: int = 0
+    n_sources_active: int = 0
+    disagreement_range: float | None = None
+    disagreement_std: float | None = None
+    net_by_source: dict[str, float] = Field(default_factory=dict)
+    counts_by_source: dict[str, int] = Field(default_factory=dict)
+
+
 class SourceSentimentBlock(BaseModel):
     total: int = 0
     positive: int = 0
@@ -102,6 +114,10 @@ class StatisticsResponse(BaseModel):
     date_range: dict[str, str | None]
     daily_trend: list[DailyTrendPoint] = Field(default_factory=list)
     source_comparison: SourceComparisonResponse | None = None
+    source_disagreement_trend: list[SourceDisagreementDay] = Field(
+        default_factory=list,
+        description="Daily cross-source disagreement when viewing all channels",
+    )
 
 
 class DataQualityFlag(BaseModel):

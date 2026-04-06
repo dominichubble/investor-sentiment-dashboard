@@ -4,11 +4,11 @@
 
 .heatmap-grid {
   display: grid;
-  gap: 10px;
+  gap: var(--space-3);
 }
 
 .heatmap-empty {
-  padding: 40px;
+  padding: var(--space-10);
   text-align: center;
   color: var(--color-text-muted);
   font-family: var(--font-sans);
@@ -17,7 +17,7 @@
 
 .heatmap-tile {
   border-radius: var(--radius-sm);
-  padding: 16px 12px;
+  padding: var(--space-4) var(--space-3);
   text-align: center;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;

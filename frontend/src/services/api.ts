@@ -118,6 +118,17 @@ export interface SourceComparison {
   twitter: SourceSentimentBlock;
 }
 
+/** Daily cross-source disagreement (market-wide, all channels view) */
+export interface SourceDisagreementDay {
+  date: string;
+  total_mentions: number;
+  n_sources_active: number;
+  disagreement_range: number | null;
+  disagreement_std: number | null;
+  net_by_source: Record<string, number>;
+  counts_by_source: Record<string, number>;
+}
+
 export type SentimentSourceFilter = 'all' | 'reddit' | 'news' | 'twitter';
 
 export interface StatisticsResponse {
@@ -137,6 +148,8 @@ export interface StatisticsResponse {
   daily_trend: DailyTrendPoint[];
   /** Present when no data_source filter is applied */
   source_comparison?: SourceComparison | null;
+  /** Daily spread of net sentiment between Reddit, news, and X (all-sources view) */
+  source_disagreement_trend?: SourceDisagreementDay[];
 }
 
 export interface TrendingStock {

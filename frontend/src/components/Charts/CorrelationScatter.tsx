@@ -230,7 +230,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
               strokeWidth={2}
               strokeDasharray="7 5"
               dot={false}
-              name="OLS fit"
+              name="Best-fit line"
               isAnimationActive={false}
               legendType="line"
             />
@@ -265,7 +265,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
         )}
         {scatterData.length >= 2 && (
           <span className="correlation-scatter-footer__fit">
-            OLS slope: <strong>{formatDecimalDisplay(slope, 3)}</strong>% per 1.0 sentiment
+            Slope of best-fit line: <strong>{formatDecimalDisplay(slope, 3)}</strong>% per 1.0 sentiment
             {intercept !== 0 && (
               <>
                 {' '}

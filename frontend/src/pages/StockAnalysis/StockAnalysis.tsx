@@ -24,13 +24,15 @@ import {
 } from '../../types';
 import './StockAnalysis.css';
 
-const PERIOD_OPTIONS = [
-  { label: '30 Days', value: '30d' },
-  { label: '90 Days', value: '90d' },
-  { label: '6 Months', value: '6mo' },
-  { label: '1 Year', value: '1y' },
-  { label: 'Custom', value: 'custom' },
-];
+/** Preset lookbacks only — custom calendars use the “Choose my own dates” option (no duplicate “Custom” button). */
+const PRESET_PERIOD_OPTIONS = [
+  { label: '30 days', value: '30d' },
+  { label: '90 days', value: '90d' },
+  { label: '6 months', value: '6mo' },
+  { label: '1 year', value: '1y' },
+] as const;
+
+const PRESET_PERIOD_VALUES = new Set(PRESET_PERIOD_OPTIONS.map((o) => o.value));
 
 function toISODate(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -44,6 +46,22 @@ function defaultCustomRange(): { start: string; end: string } {
 }
 
 type CustomRangePayload = { start_date: string; end_date: string } | null;
+
+/** Short labels for info-bar tags (full metric name still in API / chart copy). */
+function labelForPriceMetric(metric: string | undefined): string {
+  switch (metric) {
+    case 'forward_1d_return':
+      return 'Next-day return';
+    case 'forward_excess_return':
+      return 'Next-day (ex-SPY)';
+    case 'excess_returns':
+      return 'Ex-SPY return';
+    case 'returns':
+      return 'Same-day return';
+    default:
+      return metric || 'returns';
+  }
+}
 
 const StockAnalysis: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -235,8 +253,8 @@ const StockAnalysis: React.FC = () => {
     const urlPeriod = searchParams.get('period')?.trim();
 
     const effectivePeriod =
-      urlPeriod && PERIOD_OPTIONS.some((o) => o.value === urlPeriod) ? urlPeriod : '90d';
-    if (urlPeriod && PERIOD_OPTIONS.some((o) => o.value === urlPeriod)) {
+      urlPeriod && PRESET_PERIOD_VALUES.has(urlPeriod) ? urlPeriod : '90d';
+    if (urlPeriod && PRESET_PERIOD_VALUES.has(urlPeriod)) {
       setPeriod(urlPeriod);
     }
 
@@ -299,22 +317,6 @@ const StockAnalysis: React.FC = () => {
     }
   };
 
-  const handleCustomRangeApply = () => {
-    const msg = validateCustomRange();
-    if (msg) {
-      setError(msg);
-      return;
-    }
-    setError(null);
-    if (!ticker) return;
-    const custom: CustomRangePayload = {
-      start_date: customStart,
-      end_date: customEnd,
-    };
-    syncUrl(ticker, period, custom);
-    analyzeStock(ticker, period, custom);
-  };
-
   const todayISO = toISODate(new Date());
 
   const getCorrelationColor = (r: number | undefined): string => {
@@ -335,27 +337,28 @@ const StockAnalysis: React.FC = () => {
   return (
     <div id="main-content" className="stock-analysis" tabIndex={-1}>
       <Navbar
-        title="Sentiment–price correlation"
-        subtitle="Choose a preset lookback or a custom calendar range. All charts and statistics use the same window. For market-wide sentiment by source, use Market overview."
+        title="Sentiment and share price"
+        subtitle="Pick how far back to look, or set your own start and end dates. Everything on the page uses the same window. For market-wide mood by source, open Market overview."
       />
 
       {/* Header / Search */}
       <div className="sa-header">
-        <h1 className="sa-title">Analyze a stock</h1>
+        <h1 className="sa-title">Analyse a stock</h1>
         <p className="sa-subtitle">
-          Enter a ticker, pick how far back to look, then run the analysis. Custom ranges use inclusive start and end dates.
+          Type a ticker, choose a time window below, then press <strong>Analyse</strong>. If you pick your own dates,
+          both days count as part of the range.
         </p>
 
         <form className="sa-search-form" onSubmit={handleSearch}>
           <input
             type="text"
             className="sa-search-input"
-            placeholder="Enter stock ticker (e.g. AAPL, TSLA, MSFT)"
+            placeholder="Ticker symbol (e.g. AAPL, TSLA, MSFT)"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
           />
           <button type="submit" className="sa-search-btn" disabled={isLoading || !searchInput.trim()}>
-            {isLoading ? 'Analyzing...' : 'Analyze'}
+            {isLoading ? 'Analysing…' : 'Analyse'}
           </button>
         </form>
 
@@ -367,7 +370,7 @@ const StockAnalysis: React.FC = () => {
               checked={dateRangeMode === 'preset'}
               onChange={() => setDateRangeMode('preset')}
             />
-            <span>Preset period</span>
+            <span>Fixed lookback</span>
           </label>
           <label className="sa-range-mode-option">
             <input
@@ -376,13 +379,13 @@ const StockAnalysis: React.FC = () => {
               checked={dateRangeMode === 'custom'}
               onChange={() => setDateRangeMode('custom')}
             />
-            <span>Custom date range</span>
+            <span>Choose my own dates</span>
           </label>
         </div>
 
         {dateRangeMode === 'preset' && (
           <div className="sa-period-selector">
-            {PERIOD_OPTIONS.map(opt => (
+            {PRESET_PERIOD_OPTIONS.map((opt) => (
               <button
                 key={opt.value}
                 type="button"
@@ -398,7 +401,7 @@ const StockAnalysis: React.FC = () => {
         {dateRangeMode === 'custom' && (
           <div className="sa-custom-dates">
             <label className="sa-date-field">
-              <span className="sa-date-label">From</span>
+              <span className="sa-date-label">Start</span>
               <input
                 type="date"
                 className="sa-date-input"
@@ -408,7 +411,7 @@ const StockAnalysis: React.FC = () => {
               />
             </label>
             <label className="sa-date-field">
-              <span className="sa-date-label">To</span>
+              <span className="sa-date-label">End</span>
               <input
                 type="date"
                 className="sa-date-input"
@@ -418,29 +421,23 @@ const StockAnalysis: React.FC = () => {
                 onChange={(e) => setCustomEnd(e.target.value)}
               />
             </label>
-            {ticker && (
-              <button
-                type="button"
-                className="sa-apply-range-btn"
-                disabled={isLoading}
-                onClick={handleCustomRangeApply}
-              >
-                Apply range
-              </button>
-            )}
+            <p className="sa-custom-dates__hint" id="sa-custom-dates-hint">
+              After you change dates, press <strong>Analyse</strong> again to refresh charts and stats (one place — no
+              separate “apply dates” button).
+            </p>
           </div>
         )}
 
         <div className="sa-memory-panel" role="region" aria-labelledby="sa-memory-title">
           <div className="sa-memory-panel__intro">
-            <span className="sa-memory-panel__kicker">Sentiment smoothing</span>
+            <span className="sa-memory-panel__kicker">Smoother mood line</span>
             <h2 className="sa-memory-panel__title" id="sa-memory-title">
-              Trailing net sentiment
+              Rolling net sentiment
             </h2>
             <p className="sa-memory-panel__lede">
-              Choose how many <strong>past</strong> calendar days are averaged into each day’s net sentiment (no
-              lookahead). This single control updates Pearson/Spearman, lag, Granger, rolling correlation, and the
-              charts below.
+              Each day’s score can blend in the previous few calendar days so one noisy spike does not dominate (we
+              never use future days). Changing this updates all the numbers and charts below — correlation strength,
+              timing checks, and the rolling chart — in one go.
             </p>
           </div>
           <div className="sa-memory-panel__control">
@@ -478,39 +475,39 @@ const StockAnalysis: React.FC = () => {
 
         <div className="sa-memory-panel sa-methodology-panel" role="region" aria-labelledby="sa-method-title">
           <div className="sa-memory-panel__intro">
-            <span className="sa-memory-panel__kicker">Stronger evidence (optional)</span>
+            <span className="sa-memory-panel__kicker">Optional refinements</span>
             <h2 className="sa-memory-panel__title" id="sa-method-title">
-              Price side &amp; sentiment filter
+              Which price move to compare, and how to filter posts
             </h2>
             <p className="sa-memory-panel__lede">
-              Correlate trailing net sentiment with either the <strong>same trading day</strong> return or the{' '}
-              <strong>next</strong> close-to-close return (causal timing). Optional{' '}
-              <strong>SPY beta residual</strong> removes broad market co-movement. Filter by channel or require a
-              minimum number of mentions per day to reduce noise. Click <strong>Apply methodology</strong> after
-              changing these controls.
+              Compare mood to the <strong>same day’s</strong> price change, or to <strong>the next day’s</strong> change
+              (a simple “did chat lead the next session?” idea). You can also strip out the broad US market wiggle
+              (S&amp;P 500 ETF, SPY) so you mostly see what is specific to this stock. Narrow by channel or require a
+              few mentions per day to drop very thin days. Press <strong>Update analysis</strong> when you change
+              these — they are not applied until you do.
             </p>
           </div>
           <div className="sa-methodology-grid">
             <label className="sa-method-field">
-              <span className="sa-method-label">Return alignment</span>
+              <span className="sa-method-label">Timing vs price</span>
               <select
                 className="sa-method-select"
                 value={alignMode}
                 onChange={(e) => setAlignMode(e.target.value as typeof alignMode)}
               >
-                <option value="same_day">Same trading day (concurrent)</option>
-                <option value="sentiment_leads_1d">Sentiment → next-day return</option>
+                <option value="same_day">Same trading day</option>
+                <option value="sentiment_leads_1d">Mood today → next trading day’s move</option>
               </select>
             </label>
             <label className="sa-method-field">
-              <span className="sa-method-label">Market adjustment</span>
+              <span className="sa-method-label">Market backdrop</span>
               <select
                 className="sa-method-select"
                 value={marketAdjustment}
                 onChange={(e) => setMarketAdjustment(e.target.value as typeof marketAdjustment)}
               >
-                <option value="none">Raw stock return</option>
-                <option value="spy_beta_residual">SPY beta residual</option>
+                <option value="none">Stock only (no market strip-out)</option>
+                <option value="spy_beta_residual">Remove typical SPY co-movement</option>
               </select>
             </label>
             <label className="sa-method-field">
@@ -527,7 +524,7 @@ const StockAnalysis: React.FC = () => {
               </select>
             </label>
             <label className="sa-method-field">
-              <span className="sa-method-label">Min mentions / day</span>
+              <span className="sa-method-label">Minimum mentions per day</span>
               <input
                 type="number"
                 className="sa-method-input"
@@ -541,7 +538,7 @@ const StockAnalysis: React.FC = () => {
           <div className="sa-methodology-actions">
             <button
               type="button"
-              className="sa-apply-range-btn"
+              className="sa-apply-method-btn"
               disabled={!ticker || isLoading}
               onClick={() => {
                 if (!ticker) return;
@@ -552,7 +549,7 @@ const StockAnalysis: React.FC = () => {
                 analyzeStock(ticker, period, custom);
               }}
             >
-              Apply methodology
+              Update analysis
             </button>
             <div className="sa-method-presets">
               <button
@@ -563,7 +560,7 @@ const StockAnalysis: React.FC = () => {
                   setMarketAdjustment('none');
                 }}
               >
-                Preset: classic
+                Quick reset: simple
               </button>
               <button
                 type="button"
@@ -573,7 +570,7 @@ const StockAnalysis: React.FC = () => {
                   setMarketAdjustment('spy_beta_residual');
                 }}
               >
-                Preset: causal + market
+                Quick reset: next-day + market
               </button>
             </div>
           </div>
@@ -591,7 +588,7 @@ const StockAnalysis: React.FC = () => {
       {isLoading && (
         <div className="sa-loading">
           <div className="sa-spinner" />
-          <p>Fetching price data and calculating correlations for {ticker}...</p>
+          <p>Loading prices and lining up sentiment for {ticker}…</p>
         </div>
       )}
 
@@ -619,24 +616,32 @@ const StockAnalysis: React.FC = () => {
               {stockInfo?.market_cap && (
                 <span className="sa-tag">{formatMarketCap(stockInfo.market_cap)}</span>
               )}
-              <span className="sa-tag">{correlation.data_points} data points</span>
+              <span className="sa-tag">{correlation.data_points} overlapping days</span>
               {correlation.effective_price_metric && (
-                <span className="sa-tag" title="Column used on the price axis for Pearson/Spearman">
-                  Price: {correlation.effective_price_metric}
+                <span
+                  className="sa-tag"
+                  title={`Technical id: ${correlation.effective_price_metric}`}
+                >
+                  Price view: {labelForPriceMetric(correlation.effective_price_metric)}
                 </span>
               )}
               {correlation.spy_beta != null && correlation.market_adjustment === 'spy_beta_residual' && (
-                <span className="sa-tag">β vs SPY ≈ {Number(correlation.spy_beta).toFixed(3)}</span>
+                <span
+                  className="sa-tag"
+                  title="How much this stock typically moves with SPY in this window; used to peel out broad market wiggle."
+                >
+                  Versus SPY (typical co-movement) ~ {Number(correlation.spy_beta).toFixed(3)}
+                </span>
               )}
             </div>
           </div>
 
           {dataQuality && (
             <div className="sa-chart-section sa-data-quality" aria-label="Sentiment data quality">
-              <h3 className="sa-section-title">Data quality &amp; confidence</h3>
+              <h3 className="sa-section-title">How trustworthy is the text feed?</h3>
               <p className="sa-section-desc">
-                Derived from ingested mentions in the <strong>same date window</strong> as your charts and AI narrative.
-                Flags are rule-based heuristics (sample size, channel mix, calendar coverage)—not statistical tests.
+                Built from the same mentions as your charts and AI summary, over the <strong>same dates</strong>. Flags
+                are simple rules (how much text, which channels, gaps in the calendar) — not formal statistical tests.
               </p>
               {dataQuality.error ? (
                 <p className="sa-data-quality__error" role="alert">
@@ -646,7 +651,7 @@ const StockAnalysis: React.FC = () => {
                 <>
                   <div className="sa-data-quality__top">
                     <div className="sa-data-quality__score-block">
-                      <div className="sa-data-quality__score-label">Reliability (heuristic)</div>
+                      <div className="sa-data-quality__score-label">Reliability (rule-of-thumb)</div>
                       <div
                         className={`sa-data-quality__badge sa-data-quality__badge--${dataQuality.confidence_label}`}
                       >
@@ -661,7 +666,8 @@ const StockAnalysis: React.FC = () => {
                         />
                       </div>
                       <div className="sa-data-quality__score-num">
-                        Score {(dataQuality.confidence_score * 100).toFixed(0)}% — use with charts and fundamentals.
+                        Score {(dataQuality.confidence_score * 100).toFixed(0)}% — use alongside charts and fundamentals,
+                        not on its own.
                       </div>
                     </div>
                     <dl className="sa-data-quality__stats">
@@ -687,7 +693,7 @@ const StockAnalysis: React.FC = () => {
                   </div>
                   <div className="sa-data-quality__row">
                     <div className="sa-data-quality__col">
-                      <h4 className="sa-data-quality__subhead">FinBERT label mix</h4>
+                      <h4 className="sa-data-quality__subhead">Model label mix (FinBERT)</h4>
                       <ul className="sa-data-quality__mini">
                         <li>
                           Positive ~{(100 * (dataQuality.label_shares?.positive ?? 0)).toFixed(0)}% (
@@ -704,7 +710,7 @@ const StockAnalysis: React.FC = () => {
                       </ul>
                     </div>
                     <div className="sa-data-quality__col">
-                      <h4 className="sa-data-quality__subhead">Ingest channel share</h4>
+                      <h4 className="sa-data-quality__subhead">Share by source channel</h4>
                       {dataQuality.total_mentions > 0 &&
                       Object.keys(dataQuality.by_channel).length > 0 ? (
                         <div className="sa-data-quality__channels">
@@ -753,7 +759,12 @@ const StockAnalysis: React.FC = () => {
           {/* Correlation Summary Cards */}
           <div className="sa-summary-grid">
             <div className="sa-stat-card">
-              <div className="sa-stat-label">Pearson Correlation</div>
+              <div
+                className="sa-stat-label"
+                title="Pearson r: how tightly sentiment and returns line up on a straight trend, from −1 (move opposite) to +1 (move together)."
+              >
+                Line fit (Pearson <em>r</em>)
+              </div>
               <div
                 className="sa-stat-value"
                 style={{ color: getCorrelationColor(correlation.pearson?.coefficient) }}
@@ -763,17 +774,27 @@ const StockAnalysis: React.FC = () => {
                   : 'N/A'}
               </div>
               <div className="sa-stat-detail">
-                {correlation.pearson?.interpretation || 'Insufficient data'}
+                {correlation.pearson?.interpretation || 'Not enough overlapping days'}
               </div>
               {correlation.pearson && (
-                <div className={`sa-stat-badge ${correlation.pearson.significant ? 'significant' : 'not-significant'}`}>
-                  {correlation.pearson.significant ? `p = ${correlation.pearson.p_value.toFixed(4)}` : 'Not significant'}
+                <div
+                  className={`sa-stat-badge ${correlation.pearson.significant ? 'significant' : 'not-significant'}`}
+                  title="p-value: rough chance you would see a line this strong if nothing were really going on. Small p → less likely to be a fluke (common cut-off 5%)."
+                >
+                  {correlation.pearson.significant
+                    ? `p = ${correlation.pearson.p_value.toFixed(4)}`
+                    : 'No strong evidence'}
                 </div>
               )}
             </div>
 
             <div className="sa-stat-card">
-              <div className="sa-stat-label">Spearman Correlation</div>
+              <div
+                className="sa-stat-label"
+                title="Spearman: same story as Pearson, but uses ranked order — a few wild outlier days pull less weight."
+              >
+                Rank-based link (Spearman)
+              </div>
               <div
                 className="sa-stat-value"
                 style={{ color: getCorrelationColor(correlation.spearman?.coefficient) }}
@@ -783,30 +804,40 @@ const StockAnalysis: React.FC = () => {
                   : 'N/A'}
               </div>
               <div className="sa-stat-detail">
-                {correlation.spearman?.interpretation || 'Insufficient data'}
+                {correlation.spearman?.interpretation || 'Not enough overlapping days'}
               </div>
               {correlation.spearman && (
-                <div className={`sa-stat-badge ${correlation.spearman.significant ? 'significant' : 'not-significant'}`}>
-                  {correlation.spearman.significant ? `p = ${correlation.spearman.p_value.toFixed(4)}` : 'Not significant'}
+                <div
+                  className={`sa-stat-badge ${correlation.spearman.significant ? 'significant' : 'not-significant'}`}
+                  title="p-value for the rank-based link; small p suggests the pattern is unlikely to be pure chance."
+                >
+                  {correlation.spearman.significant
+                    ? `p = ${correlation.spearman.p_value.toFixed(4)}`
+                    : 'No strong evidence'}
                 </div>
               )}
             </div>
 
             <div className="sa-stat-card">
-              <div className="sa-stat-label">Best Lag</div>
+              <div
+                className="sa-stat-label"
+                title="Shifts sentiment forward or backward by whole trading days to see when the clearest link appears."
+              >
+                Strongest timing offset
+              </div>
               <div className="sa-stat-value" style={{ color: 'var(--color-accent)' }}>
                 {lagAnalysis?.best_lag
                   ? lagAnalysis.best_lag.lag_days === 0
-                    ? 'Same Day'
+                    ? 'Same day'
                     : lagAnalysis.best_lag.lag_days > 0
-                      ? `+${lagAnalysis.best_lag.lag_days} Days`
-                      : `${lagAnalysis.best_lag.lag_days} Days`
+                      ? `Mood leads by ${lagAnalysis.best_lag.lag_days}d`
+                      : `Mood lags by ${Math.abs(lagAnalysis.best_lag.lag_days)}d`
                   : 'N/A'}
               </div>
               <div className="sa-stat-detail">
                 {lagAnalysis?.best_lag
-                  ? `r = ${lagAnalysis.best_lag.pearson_r?.toFixed(4)}`
-                  : 'No lag data'}
+                  ? `At that offset, r ≈ ${lagAnalysis.best_lag.pearson_r?.toFixed(4)}`
+                  : 'No timing grid for this window'}
               </div>
               {lagAnalysis?.best_lag?.significant && (
                 <div className="sa-stat-badge significant">
@@ -816,26 +847,32 @@ const StockAnalysis: React.FC = () => {
             </div>
 
             <div className="sa-stat-card">
-              <div className="sa-stat-label">Signal Strength</div>
+              <div
+                className="sa-stat-label"
+                title="Plain read on whether the Pearson line is strong enough to take seriously in a textbook stats sense."
+              >
+                Plain-English readout
+              </div>
               <div className="sa-stat-value" style={{
                 color: correlation.pearson?.significant ? 'var(--color-positive)' : 'var(--color-negative)'
               }}>
-                {correlation.pearson?.significant ? 'Significant' : 'Weak'}
+                {correlation.pearson?.significant ? 'Looks real' : 'Inconclusive'}
               </div>
               <div className="sa-stat-detail">
                 {correlation.pearson?.significant
-                  ? 'Statistical evidence of correlation'
-                  : 'No statistically significant relationship detected'}
+                  ? 'The straight-line pattern is unlikely to be pure chance (usual 5% bar).'
+                  : 'We cannot rule out chance for the straight-line pattern in this slice.'}
               </div>
             </div>
           </div>
 
           <div className="sa-chart-section sa-ticker-narrative">
-            <h3 className="sa-section-title">AI sentiment narrative</h3>
+            <h3 className="sa-section-title">AI plain-language summary</h3>
             <p className="sa-section-desc">
-              Summarises <strong>only ingested posts and news</strong> in the same date window as the
-              charts above (via Groq&apos;s free API). Cached per ticker and data snapshot; add{' '}
-              <code className="sa-inline-code">GROQ_API_KEY</code> to your backend <code className="sa-inline-code">.env</code>.
+              Reads <strong>only the posts and articles we already stored</strong> for the same dates as your charts
+              (Groq API). Results are cached per ticker until the underlying data changes; add{' '}
+              <code className="sa-inline-code">GROQ_API_KEY</code> to the backend <code className="sa-inline-code">.env</code>{' '}
+              to enable it.
             </p>
             <div className="sa-ticker-narrative__actions">
               <button
@@ -844,7 +881,7 @@ const StockAnalysis: React.FC = () => {
                 disabled={tickerNarrativeLoading}
                 onClick={() => fetchTickerNarrative(false)}
               >
-                {tickerNarrativeLoading ? 'Working…' : 'Get AI summary (uses cache if data unchanged)'}
+                {tickerNarrativeLoading ? 'Working…' : 'Fetch summary (reuse cache if nothing changed)'}
               </button>
               <button
                 type="button"
@@ -852,7 +889,7 @@ const StockAnalysis: React.FC = () => {
                 disabled={tickerNarrativeLoading}
                 onClick={() => fetchTickerNarrative(true)}
               >
-                Regenerate (new API call)
+                Regenerate (fresh API call)
               </button>
             </div>
             {tickerNarrativeError && (
@@ -889,11 +926,11 @@ const StockAnalysis: React.FC = () => {
           {timeSeries && timeSeries.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render daily sentiment chart">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Daily sentiment aggregate</h3>
+                <h3 className="sa-section-title">Mood by calendar day</h3>
                 <p className="sa-section-desc">
-                  Each day, all mentions of {ticker} are rolled into one bucket. The stacked bands show
-                  the fraction of mentions classified positive, neutral, or negative; the line is net
-                  sentiment (positive share minus negative share), from −1 to +1.
+                  Each day, every mention of {ticker} is pooled. The coloured bands show the split between upbeat,
+                  neutral, and downbeat labels; the line is net mood (upbeat share minus downbeat share), on a −1 to
+                  +1 scale.
                 </p>
                 <DailySentimentAggregateChart data={timeSeries.series} height={400} />
               </div>
@@ -904,14 +941,13 @@ const StockAnalysis: React.FC = () => {
           {timeSeries && timeSeries.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render time series chart">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Sentiment vs price (with memory)</h3>
+                <h3 className="sa-section-title">Smoothed mood vs closing price</h3>
                 <p className="sa-section-desc">
-                  The <strong>filled</strong> series is a <strong>trailing average</strong> of daily net
-                  sentiment: each point uses that calendar day and the previous N−1 days in range (no
-                  lookahead). A run of positive days pulls the curve up before you compare it to{' '}
-                  <strong>close</strong> (left axis). With N &gt; 1, the <strong>dashed</strong> line is
-                  same-day net only. Bars are daily mention counts on their own scale. Change the trailing window
-                  under the date range controls to refit correlations.
+                  The <strong>solid</strong> trace is a <strong>rolling average</strong> of daily net mood: each point
+                  blends that day with earlier days in range (never future ones). A stretch of upbeat chat lifts the
+                  line before you compare it to the <strong>closing</strong> price on the left axis. If you pick more
+                  than one day of smoothing, the <strong>dashed</strong> line shows same-day net only. Bars are how
+                  many mentions arrived each day. Tweak the smoothing control above to refit everything.
                 </p>
                 <SentimentPriceChart
                   data={timeSeries.series}
@@ -928,14 +964,14 @@ const StockAnalysis: React.FC = () => {
             {timeSeries && timeSeries.series.length > 0 && (
               <ErrorBoundary fallbackTitle="Failed to render scatter plot">
                 <div className="sa-chart-section sa-chart-half">
-                  <h3 className="sa-section-title">Sentiment vs return (per day)</h3>
+                  <h3 className="sa-section-title">One dot per trading day</h3>
                   <p className="sa-section-desc">
-                    Each point is one trading day; the horizontal axis matches the trailing net sentiment
-                    window above (same series as Pearson <em>r</em>). The vertical axis uses the same return
-                    series as the headline correlation (
+                    Across: smoothed net mood (same window as the headline line fit). Up: that day’s return using the
+                    same price definition as the summary (
                     <strong>{correlation.effective_price_metric ?? 'returns'}</strong>
-                    ). Colour shows quadrant alignment; size reflects mention volume. The dashed line is an OLS
-                    fit through the cloud.
+                    ). Dot colour shows whether mood and return pointed the same way; size scales with how much was
+                    posted. The dashed line is a simple best straight-line fit through the cloud (ordinary least
+                    squares).
                   </p>
                   <CorrelationScatter
                     data={timeSeries.series}
@@ -951,11 +987,11 @@ const StockAnalysis: React.FC = () => {
             {lagAnalysis && lagAnalysis.lags.length > 0 && (
               <ErrorBoundary fallbackTitle="Failed to render lag chart">
                 <div className="sa-chart-section sa-chart-half">
-                  <h3 className="sa-section-title">Lag analysis</h3>
+                  <h3 className="sa-section-title">Timing grid</h3>
                   <p className="sa-section-desc">
-                    Pearson <em>r</em> between trailing net sentiment and returns at each day offset. Green
-                    or red bars are significant at 5%; grey bars are not. The outlined bar is the strongest
-                    lag in the grid.
+                    For each whole-day shift, we measure how tightly mood and returns line up (Pearson <em>r</em>).
+                    Green or red bars pass a usual 5% “could this be chance?” check; grey bars do not. The outlined
+                    bar is the strongest offset in this window.
                   </p>
                   <LagChart
                     data={lagAnalysis.lags}
@@ -971,11 +1007,12 @@ const StockAnalysis: React.FC = () => {
           {rollingData && rollingData.series && rollingData.series.length > 0 && (
             <ErrorBoundary fallbackTitle="Failed to render rolling correlation">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Rolling correlation ({rollingData.window}-day window)</h3>
+                <h3 className="sa-section-title">How the link drifts over time ({rollingData.window}-day window)</h3>
                 <p className="sa-section-desc">
-                  Time-varying Pearson correlation between trailing net sentiment and{' '}
-                  <strong>{rollingData.effective_price_metric ?? 'returns'}</strong>. Shaded area highlights
-                  positive (green) vs negative (red) stretches; dotted lines mark a weak ±0.2 band.
+                  Each point is the straight-line link strength (Pearson) between smoothed mood and{' '}
+                  <strong>{rollingData.effective_price_metric ?? 'returns'}</strong> using only the surrounding{' '}
+                  {rollingData.window} sessions. Green stretches tilt positive; red stretches tilt negative; faint
+                  lines mark a weak ±0.2 band so you can eyeball “mostly noise” zones.
                 </p>
                 <div className="sa-rolling-chart">
                   <RollingCorrelationChart
@@ -986,11 +1023,11 @@ const StockAnalysis: React.FC = () => {
                 </div>
                 {rollingData.statistics && (
                   <div className="sa-rolling-stats">
-                    <span>Mean: {rollingData.statistics.mean_correlation.toFixed(4)}</span>
-                    <span>Min: {rollingData.statistics.min_correlation.toFixed(4)}</span>
-                    <span>Max: {rollingData.statistics.max_correlation.toFixed(4)}</span>
-                    <span>Positive periods: {rollingData.statistics.periods_positive}</span>
-                    <span>Negative periods: {rollingData.statistics.periods_negative}</span>
+                    <span>Average: {rollingData.statistics.mean_correlation.toFixed(4)}</span>
+                    <span>Lowest: {rollingData.statistics.min_correlation.toFixed(4)}</span>
+                    <span>Highest: {rollingData.statistics.max_correlation.toFixed(4)}</span>
+                    <span>Intervals &gt; 0: {rollingData.statistics.periods_positive}</span>
+                    <span>Intervals &lt; 0: {rollingData.statistics.periods_negative}</span>
                   </div>
                 )}
               </div>
@@ -1001,16 +1038,17 @@ const StockAnalysis: React.FC = () => {
           {grangerData && grangerData.summary && !grangerData.error && (
             <ErrorBoundary fallbackTitle="Failed to render Granger analysis">
               <div className="sa-chart-section">
-                <h3 className="sa-section-title">Granger Causality Test</h3>
+                <h3 className="sa-section-title">Does past mood help forecast price?</h3>
                 <p className="sa-section-desc">
-                  Tests whether past sentiment helps predict future price movements (and vice versa).
-                  This directly addresses whether sentiment is a leading indicator.
+                  Granger-style check (stats jargon): asks whether yesterday’s mood series carries extra information
+                  for tomorrow’s price move, and the reverse. Handy for “leading indicator?” questions — not a trading
+                  signal on its own.
                 </p>
                 <div className="sa-granger-results">
                   <div className="sa-granger-card">
-                    <div className="sa-granger-direction">Sentiment → Price</div>
+                    <div className="sa-granger-direction">Mood → price</div>
                     <div className={`sa-granger-verdict ${grangerData.summary.sentiment_predicts_price ? 'yes' : 'no'}`}>
-                      {grangerData.summary.sentiment_predicts_price ? 'Significant' : 'Not Significant'}
+                      {grangerData.summary.sentiment_predicts_price ? 'Adds information' : 'No extra edge'}
                     </div>
                     {grangerData.summary.best_sentiment_to_price_lag && (
                       <div className="sa-granger-detail">
@@ -1021,9 +1059,9 @@ const StockAnalysis: React.FC = () => {
                     )}
                   </div>
                   <div className="sa-granger-card">
-                    <div className="sa-granger-direction">Price → Sentiment</div>
+                    <div className="sa-granger-direction">Price → mood</div>
                     <div className={`sa-granger-verdict ${grangerData.summary.price_predicts_sentiment ? 'yes' : 'no'}`}>
-                      {grangerData.summary.price_predicts_sentiment ? 'Significant' : 'Not Significant'}
+                      {grangerData.summary.price_predicts_sentiment ? 'Adds information' : 'No extra edge'}
                     </div>
                     {grangerData.summary.best_price_to_sentiment_lag && (
                       <div className="sa-granger-detail">
@@ -1043,16 +1081,17 @@ const StockAnalysis: React.FC = () => {
 
           {outOfSample && !outOfSample.error && outOfSample.train && outOfSample.test && (
             <div className="sa-chart-section sa-oos-section">
-              <h3 className="sa-section-title">Out-of-sample split (time holdout)</h3>
+              <h3 className="sa-section-title">Sanity check: older vs newer days</h3>
               <p className="sa-section-desc">
-                The merged series is ordered by date; the first <strong>{Math.round((outOfSample.train_ratio ?? 0.7) * 100)}%</strong>{' '}
-                of days are <strong>train</strong> and the remainder are <strong>test</strong> (split after{' '}
-                <strong>{outOfSample.split_date}</strong>). Pearson <em>r</em> on the holdout set indicates
-                whether the relationship persists in the more recent slice (not a trading backtest).
+                Days are sorted in time; the first <strong>{Math.round((outOfSample.train_ratio ?? 0.7) * 100)}%</strong>{' '}
+                form the <strong>older</strong> bucket and the rest are <strong>held back</strong> (split after{' '}
+                <strong>{outOfSample.split_date}</strong>). Comparing Pearson <em>r</em> on the held-back slice shows
+                whether the straight-line link still shows up more recently — it is <strong>not</strong> a trading
+                backtest.
               </p>
               <div className="sa-oos-grid">
                 <div className="sa-oos-card">
-                  <div className="sa-oos-card__label">Train</div>
+                  <div className="sa-oos-card__label">Older slice</div>
                   <div className="sa-oos-card__main">
                     <em>r</em> = {outOfSample.train.pearson_r?.toFixed(4) ?? '—'},{' '}
                     <em>p</em> = {outOfSample.train.pearson_p?.toFixed(4) ?? '—'}
@@ -1060,7 +1099,7 @@ const StockAnalysis: React.FC = () => {
                   <div className="sa-oos-card__sub">{outOfSample.train.n} days</div>
                 </div>
                 <div className="sa-oos-card">
-                  <div className="sa-oos-card__label">Test (holdout)</div>
+                  <div className="sa-oos-card__label">Held-back slice</div>
                   <div className="sa-oos-card__main">
                     <em>r</em> = {outOfSample.test.pearson_r?.toFixed(4) ?? '—'},{' '}
                     <em>p</em> = {outOfSample.test.pearson_p?.toFixed(4) ?? '—'}
@@ -1073,7 +1112,7 @@ const StockAnalysis: React.FC = () => {
 
           {/* Interpretation */}
           <div className="sa-interpretation">
-            <h3 className="sa-section-title">Analysis Interpretation</h3>
+            <h3 className="sa-section-title">Plain-English wrap-up</h3>
             <div className="sa-interpretation-content">
               {renderInterpretation(correlation, lagAnalysis, ticker)}
             </div>
@@ -1089,7 +1128,7 @@ function renderInterpretation(
   lagAnalysis: LagAnalysisResponse | null,
   ticker: string,
 ): React.ReactNode {
-  if (!correlation) return <p>No analysis data available.</p>;
+  if (!correlation) return <p>No results loaded yet — run an analysis above.</p>;
 
   const pearson = correlation.pearson;
   const bestLag = lagAnalysis?.best_lag;
@@ -1102,25 +1141,25 @@ function renderInterpretation(
 
     if (pearson.significant) {
       paragraphs.push(
-        `The analysis found a statistically significant ${dir} correlation (r = ${pearson.coefficient.toFixed(4)}, p = ${pearson.p_value.toFixed(4)}) between investor sentiment and ${ticker}'s price movements over the analyzed period.`
+        `Over this window, chat and news mood moved in a ${dir} straight-line pattern with ${ticker}’s price (r = ${pearson.coefficient.toFixed(4)}; p = ${pearson.p_value.toFixed(4)} — smaller p usually means “less likely to be a fluke”).`
       );
 
       if (strength >= 0.5) {
         paragraphs.push(
-          `This is a relatively strong relationship, suggesting that sentiment derived from social media and news sources has meaningful predictive value for ${ticker}'s price direction.`
+          `That link is fairly tight for a messy real-world feed, so mood may deserve a seat at the table — still alongside fundamentals, liquidity, and everything else that drives the share.`
         );
       } else if (strength >= 0.3) {
         paragraphs.push(
-          `This is a moderate relationship. While sentiment shows some predictive value, other factors clearly also influence ${ticker}'s price movements significantly.`
+          `The link is middling: the feed carries some signal, but plenty of other forces still dominate how ${ticker} trades day to day.`
         );
       } else {
         paragraphs.push(
-          `However, the correlation is relatively weak, meaning sentiment alone is not a strong predictor of ${ticker}'s price movements. It may be useful as one signal among many.`
+          `Even though the pattern clears the usual “chance” bar, the line is still shallow — treat the feed as one soft input among many, not a crystal ball.`
         );
       }
     } else {
       paragraphs.push(
-        `No statistically significant correlation was found between investor sentiment and ${ticker}'s price movements (r = ${pearson.coefficient.toFixed(4)}, p = ${pearson.p_value.toFixed(4)}). This suggests that for this stock and time period, sentiment data alone does not reliably predict price direction.`
+        `We did not find a straight-line relationship strong enough to dismiss luck (r = ${pearson.coefficient.toFixed(4)}, p = ${pearson.p_value.toFixed(4)}). For this ticker and slice of history, mood in the scraped text alone is not a dependable guide to direction.`
       );
     }
   }
@@ -1128,22 +1167,22 @@ function renderInterpretation(
   if (bestLag && bestLag.pearson_r !== null && bestLag.significant) {
     if (bestLag.lag_days > 0) {
       paragraphs.push(
-        `The lag analysis suggests sentiment may lead price movements by ${bestLag.lag_days} day(s), with the strongest lagged correlation of r = ${bestLag.pearson_r.toFixed(4)}. This could indicate predictive value of sentiment data for short-term price forecasting.`
+        `Shifting mood forward by ${bestLag.lag_days} trading day(s) lines up best with returns (r ≈ ${bestLag.pearson_r.toFixed(4)}), which hints that posts might lead the next session — worth a cautious read, not a trade rule.`
       );
     } else if (bestLag.lag_days < 0) {
       paragraphs.push(
-        `Interestingly, the lag analysis shows the strongest correlation when price leads sentiment by ${Math.abs(bestLag.lag_days)} day(s) (r = ${bestLag.pearson_r.toFixed(4)}). This suggests price movements may drive subsequent sentiment changes rather than the reverse.`
+        `The cleanest fit appears when price leads mood by ${Math.abs(bestLag.lag_days)} day(s) (r ≈ ${bestLag.pearson_r.toFixed(4)}), which suggests traders talk after the tape moves, not the other way around.`
       );
     } else {
       paragraphs.push(
-        `The strongest correlation occurs on the same day, suggesting sentiment and price react to the same events simultaneously rather than one leading the other.`
+        `The same-day pairing is strongest, which often means sentiment and price are reacting together to fresh news rather than one clearly dragging the other.`
       );
     }
   }
 
   if (correlation.data_points < 20) {
     paragraphs.push(
-      `Note: This analysis is based on only ${correlation.data_points} overlapping data points. Results may become more reliable with additional data collection over time.`
+      `Heads-up: only ${correlation.data_points} overlapping days fed this view — widen the window or wait for more chatter before leaning on it heavily.`
     );
   }
 
