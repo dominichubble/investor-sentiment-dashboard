@@ -28,7 +28,7 @@ function App() {
   return (
     <ErrorBoundary fallbackTitle="Application Error">
       <Router>
-        <div className="App">
+        <div className="App app-layout">
           <Routes>
             <Route path="/" element={<RootRoute />} />
             <Route path="/analyze" element={<StockAnalysis />} />

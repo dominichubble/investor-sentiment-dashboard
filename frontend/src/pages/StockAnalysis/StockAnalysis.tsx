@@ -341,153 +341,177 @@ const StockAnalysis: React.FC = () => {
         subtitle="Pick how far back to look, or set your own start and end dates. Everything on the page uses the same window. For market-wide mood by source, open Market overview."
       />
 
-      {/* Header / Search */}
+      {/* Controls: hero search + time window + analysis options */}
       <div className="sa-header">
-        <h1 className="sa-title">Analyse a stock</h1>
-        <p className="sa-subtitle">
-          Type a ticker, choose a time window below, then press <strong>Analyse</strong>. If you pick your own dates,
-          both days count as part of the range.
-        </p>
+        <section className="sa-hero" aria-labelledby="sa-page-title">
+          <h1 className="sa-title" id="sa-page-title">
+            Analyse a stock
+          </h1>
+          <p className="sa-subtitle">
+            Type a ticker, choose a time window below, then press <strong>Analyse</strong>. If you pick your own dates,
+            both days count as part of the range.
+          </p>
 
-        <form className="sa-search-form" onSubmit={handleSearch}>
-          <input
-            type="text"
-            className="sa-search-input"
-            placeholder="Ticker symbol (e.g. AAPL, TSLA, MSFT)"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
-          />
-          <button type="submit" className="sa-search-btn" disabled={isLoading || !searchInput.trim()}>
-            {isLoading ? 'Analysing…' : 'Analyse'}
-          </button>
-        </form>
-
-        <div className="sa-range-mode" role="radiogroup" aria-label="Time window type">
-          <label className="sa-range-mode-option">
+          <form className="sa-search-form" onSubmit={handleSearch}>
             <input
-              type="radio"
-              name="rangeMode"
-              checked={dateRangeMode === 'preset'}
-              onChange={() => setDateRangeMode('preset')}
+              type="text"
+              className="sa-search-input"
+              placeholder="Ticker symbol (e.g. AAPL, TSLA, MSFT)"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value.toUpperCase())}
+              aria-label="Ticker symbol"
             />
-            <span>Fixed lookback</span>
-          </label>
-          <label className="sa-range-mode-option">
-            <input
-              type="radio"
-              name="rangeMode"
-              checked={dateRangeMode === 'custom'}
-              onChange={() => setDateRangeMode('custom')}
-            />
-            <span>Choose my own dates</span>
-          </label>
-        </div>
+            <button type="submit" className="sa-search-btn" disabled={isLoading || !searchInput.trim()}>
+              {isLoading ? 'Analysing…' : 'Analyse'}
+            </button>
+          </form>
+        </section>
 
-        {dateRangeMode === 'preset' && (
-          <div className="sa-period-selector">
-            {PRESET_PERIOD_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                type="button"
-                className={`sa-period-btn ${period === opt.value ? 'active' : ''}`}
-                onClick={() => handlePeriodChange(opt.value)}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        )}
-
-        {dateRangeMode === 'custom' && (
-          <div className="sa-custom-dates">
-            <label className="sa-date-field">
-              <span className="sa-date-label">Start</span>
-              <input
-                type="date"
-                className="sa-date-input"
-                value={customStart}
-                max={customEnd || todayISO}
-                onChange={(e) => setCustomStart(e.target.value)}
-              />
-            </label>
-            <label className="sa-date-field">
-              <span className="sa-date-label">End</span>
-              <input
-                type="date"
-                className="sa-date-input"
-                value={customEnd}
-                min={customStart}
-                max={todayISO}
-                onChange={(e) => setCustomEnd(e.target.value)}
-              />
-            </label>
-            <p className="sa-custom-dates__hint" id="sa-custom-dates-hint">
-              After you change dates, press <strong>Analyse</strong> again to refresh charts and stats (one place — no
-              separate “apply dates” button).
-            </p>
-          </div>
-        )}
-
-        <div className="sa-memory-panel" role="region" aria-labelledby="sa-memory-title">
-          <div className="sa-memory-panel__intro">
-            <span className="sa-memory-panel__kicker">Smoother mood line</span>
-            <h2 className="sa-memory-panel__title" id="sa-memory-title">
-              Rolling net sentiment
+        <section className="sa-time-window" aria-labelledby="sa-time-window-heading">
+          <div className="sa-time-window__head">
+            <h2 className="sa-time-window__title" id="sa-time-window-heading">
+              Time window
             </h2>
-            <p className="sa-memory-panel__lede">
-              Each day’s score can blend in the previous few calendar days so one noisy spike does not dominate (we
-              never use future days). Changing this updates all the numbers and charts below — correlation strength,
-              timing checks, and the rolling chart — in one go.
+            <p className="sa-time-window__hint">
+              Use a preset span or exact calendar dates — charts and stats below all use this same window.
             </p>
           </div>
-          <div className="sa-memory-panel__control">
-            <span className="sa-memory-panel__control-label" id="sa-memory-segment-label">
-              Window length
-            </span>
-            <div
-              className="sa-memory-segmented"
-              role="group"
-              aria-labelledby="sa-memory-segment-label"
-            >
-              {([1, 3, 5, 7] as const).map((d) => (
+
+          <div className="sa-range-mode" role="radiogroup" aria-label="Time window type">
+            <label className="sa-range-mode-option">
+              <input
+                type="radio"
+                name="rangeMode"
+                checked={dateRangeMode === 'preset'}
+                onChange={() => setDateRangeMode('preset')}
+              />
+              <span>Fixed lookback</span>
+            </label>
+            <label className="sa-range-mode-option">
+              <input
+                type="radio"
+                name="rangeMode"
+                checked={dateRangeMode === 'custom'}
+                onChange={() => setDateRangeMode('custom')}
+              />
+              <span>Choose my own dates</span>
+            </label>
+          </div>
+
+          {dateRangeMode === 'preset' && (
+            <div className="sa-period-selector" role="group" aria-label="Lookback length">
+              {PRESET_PERIOD_OPTIONS.map((opt) => (
                 <button
-                  key={d}
+                  key={opt.value}
                   type="button"
-                  className={`sa-memory-segmented__btn ${sentimentMemoryDays === d ? 'is-active' : ''}`}
-                  aria-pressed={sentimentMemoryDays === d}
-                  onClick={() => {
-                    setSentimentMemoryDays(d);
-                    if (!ticker) return;
-                    const custom: CustomRangePayload =
-                      dateRangeMode === 'custom' && customStart && customEnd
-                        ? { start_date: customStart, end_date: customEnd }
-                        : null;
-                    analyzeStock(ticker, period, custom, d);
-                  }}
+                  className={`sa-period-btn ${period === opt.value ? 'active' : ''}`}
+                  onClick={() => handlePeriodChange(opt.value)}
                 >
-                  <span className="sa-memory-segmented__value">{d === 1 ? '1' : d}</span>
-                  <span className="sa-memory-segmented__unit">{d === 1 ? 'day' : 'days'}</span>
+                  {opt.label}
                 </button>
               ))}
             </div>
-          </div>
-        </div>
+          )}
 
-        <div className="sa-memory-panel sa-methodology-panel" role="region" aria-labelledby="sa-method-title">
-          <div className="sa-memory-panel__intro">
-            <span className="sa-memory-panel__kicker">Optional refinements</span>
-            <h2 className="sa-memory-panel__title" id="sa-method-title">
-              Which price move to compare, and how to filter posts
+          {dateRangeMode === 'custom' && (
+            <div className="sa-custom-dates">
+              <label className="sa-date-field">
+                <span className="sa-date-label">Start</span>
+                <input
+                  type="date"
+                  className="sa-date-input"
+                  value={customStart}
+                  max={customEnd || todayISO}
+                  onChange={(e) => setCustomStart(e.target.value)}
+                />
+              </label>
+              <label className="sa-date-field">
+                <span className="sa-date-label">End</span>
+                <input
+                  type="date"
+                  className="sa-date-input"
+                  value={customEnd}
+                  min={customStart}
+                  max={todayISO}
+                  onChange={(e) => setCustomEnd(e.target.value)}
+                />
+              </label>
+              <p className="sa-custom-dates__hint" id="sa-custom-dates-hint">
+                After you change dates, press <strong>Analyse</strong> again to refresh charts and stats (one place — no
+                separate “apply dates” button).
+              </p>
+            </div>
+          )}
+        </section>
+
+        <section className="sa-analysis-settings" aria-labelledby="sa-settings-title">
+          <header className="sa-analysis-settings__intro">
+            <p className="sa-analysis-settings__kicker">After you run Analyse</p>
+            <h2 className="sa-analysis-settings__title" id="sa-settings-title">
+              Fine-tune mood and how it meets price
             </h2>
-            <p className="sa-memory-panel__lede">
-              Compare mood to the <strong>same day’s</strong> price change, or to <strong>the next day’s</strong> change
-              (a simple “did chat lead the next session?” idea). You can also strip out the broad US market wiggle
-              (S&amp;P 500 ETF, SPY) so you mostly see what is specific to this stock. Narrow by channel or require a
-              few mentions per day to drop very thin days. Press <strong>Update analysis</strong> when you change
-              these — they are not applied until you do.
+            <p className="sa-analysis-settings__lede">
+              <strong>Smoothing</strong> blends nearby calendar days into each day’s mood score and refreshes charts and
+              stats immediately. <strong>Compare and filter</strong> changes timing vs price, market backdrop, channel,
+              and how many mentions count — use <strong>Update analysis</strong> to apply those.
             </p>
+          </header>
+
+          <div className="sa-settings-smooth" role="region" aria-labelledby="sa-memory-title">
+            <div className="sa-settings-smooth__copy">
+              <h3 className="sa-settings-block-title" id="sa-memory-title">
+                Rolling mood window
+              </h3>
+              <p className="sa-settings-block-desc">
+                More days = a calmer line; one day = raw daily scores. Future dates are never used.
+              </p>
+            </div>
+            <div className="sa-settings-smooth__control">
+              <span className="sa-settings-control-label" id="sa-memory-segment-label">
+                Window length
+              </span>
+              <div
+                className="sa-memory-segmented"
+                role="group"
+                aria-labelledby="sa-memory-segment-label"
+              >
+                {([1, 3, 5, 7] as const).map((d) => (
+                  <button
+                    key={d}
+                    type="button"
+                    className={`sa-memory-segmented__btn ${sentimentMemoryDays === d ? 'is-active' : ''}`}
+                    aria-pressed={sentimentMemoryDays === d}
+                    onClick={() => {
+                      setSentimentMemoryDays(d);
+                      if (!ticker) return;
+                      const custom: CustomRangePayload =
+                        dateRangeMode === 'custom' && customStart && customEnd
+                          ? { start_date: customStart, end_date: customEnd }
+                          : null;
+                      analyzeStock(ticker, period, custom, d);
+                    }}
+                  >
+                    <span className="sa-memory-segmented__value">{d === 1 ? '1' : d}</span>
+                    <span className="sa-memory-segmented__unit">{d === 1 ? 'day' : 'days'}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          <div className="sa-methodology-grid">
+
+          <hr className="sa-analysis-settings__rule" aria-hidden="true" />
+
+          <div className="sa-settings-refine" role="region" aria-labelledby="sa-method-title">
+            <div className="sa-settings-refine__head">
+              <h3 className="sa-settings-block-title" id="sa-method-title">
+                Compare to price and filter posts
+              </h3>
+              <p className="sa-settings-block-desc">
+                Same day vs next trading day, optional SPY strip-out, which channel to use, and a minimum mentions
+                threshold for thin days.
+              </p>
+            </div>
+            <div className="sa-methodology-grid">
             <label className="sa-method-field">
               <span className="sa-method-label">Timing vs price</span>
               <select
@@ -574,7 +598,8 @@ const StockAnalysis: React.FC = () => {
               </button>
             </div>
           </div>
-        </div>
+          </div>
+        </section>
       </div>
 
       {/* Error */}
@@ -601,6 +626,10 @@ const StockAnalysis: React.FC = () => {
       {/* Results */}
       {!isLoading && ticker && correlation && (
         <div className="sa-results">
+          <header className="sa-results__header">
+            <p className="sa-results__kicker">Results</p>
+            <h2 className="sa-results__title visually-hidden">Analysis output for {ticker}</h2>
+          </header>
           {/* Stock Info Bar */}
           <div className="sa-info-bar">
             <div className="sa-info-left">

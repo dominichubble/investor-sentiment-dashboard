@@ -3,34 +3,46 @@
 :root {
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  --color-bg: #e8ecf6;
+  --color-bg: #e8edf3;
+  --color-bg-mesh: #e2e8f0;
   --color-surface: #ffffff;
-  --color-surface-muted: #f8fafc;
+  --color-surface-muted: #f4f6f9;
+  --color-surface-elevated: #ffffff;
   --color-border: #e2e8f0;
   --color-border-strong: #cbd5e1;
+  --color-border-subtle: rgba(148, 163, 184, 0.35);
 
-  --color-text: #0f172a;
+  --color-text: #0c1222;
   --color-text-secondary: #475569;
   --color-text-muted: #64748b;
   --color-text-subtle: #94a3b8;
 
   --color-accent: #4f46e5;
   --color-accent-hover: #4338ca;
-  --color-accent-soft: rgba(79, 70, 229, 0.12);
+  --color-accent-soft: rgba(79, 70, 229, 0.14);
+  --color-accent-muted: #6366f1;
 
   --color-positive: #059669;
   --color-positive-soft: #d1fae5;
   --color-negative: #dc2626;
   --color-negative-soft: #fee2e2;
 
-  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
-  --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 16px 48px rgba(15, 23, 42, 0.1);
+  --color-header-bg: rgba(255, 255, 255, 0.82);
+  --color-header-border: rgba(148, 163, 184, 0.22);
+  --color-nav-pill-bg: rgba(241, 245, 249, 0.95);
+  --color-nav-pill-border: rgba(148, 163, 184, 0.3);
+
+  --shadow-xs: 0 1px 2px rgba(15, 23, 42, 0.045);
+  --shadow-sm: 0 2px 10px rgba(15, 23, 42, 0.055);
+  --shadow-md: 0 10px 28px rgba(15, 23, 42, 0.075);
+  --shadow-lg: 0 20px 50px rgba(15, 23, 42, 0.09);
+  --shadow-header: 0 1px 0 rgba(255, 255, 255, 0.75) inset, 0 12px 40px rgba(15, 23, 42, 0.05);
+  --shadow-card: 0 4px 22px rgba(15, 23, 42, 0.055);
 
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-pill: 9999px;
 
   /* Spacing scale (4px base) — use for vertical rhythm across pages */
@@ -46,7 +58,8 @@
   --space-12: 3rem;
 
   /* Page shell — one horizontal inset for navbar, footer, and main columns */
-  --page-padding-x: clamp(1rem, 4vw, 1.75rem);
+  --page-padding-x: clamp(0.75rem, 4vw, 1.75rem);
+  --tap-target-min: 2.75rem;
   --page-padding-top: var(--space-8);
   --page-padding-bottom: var(--space-12);
   --section-stack-gap: var(--space-6);
@@ -81,20 +94,24 @@
 body {
   margin: 0;
   min-height: 100vh;
+  min-height: 100dvh;
   min-width: 320px;
   font-family: var(--font-sans);
   color: var(--color-text);
   background-color: var(--color-bg);
   background-image:
-    radial-gradient(ellipse 100% 70% at 50% -15%, rgba(79, 70, 229, 0.11), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(59, 130, 246, 0.08), transparent 45%),
-    radial-gradient(ellipse 40% 35% at 0% 100%, rgba(99, 102, 241, 0.06), transparent 50%);
+    radial-gradient(ellipse 120% 80% at 50% -20%, rgba(79, 70, 229, 0.09), transparent 58%),
+    radial-gradient(ellipse 55% 45% at 100% 5%, rgba(59, 130, 246, 0.06), transparent 48%),
+    radial-gradient(ellipse 50% 40% at 0% 95%, rgba(139, 92, 246, 0.05), transparent 52%),
+    linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-mesh) 100%);
   background-attachment: fixed;
 }
 
 #root {
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
+  overflow-x: clip;
 }
 
 code {

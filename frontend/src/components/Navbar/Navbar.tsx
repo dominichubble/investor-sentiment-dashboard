@@ -35,75 +35,81 @@ const Navbar: React.FC<NavbarProps> = ({
 }) => {
   return (
     <nav className={`navbar ${className || ''}`} aria-label="Primary">
-      <div className="navbar-top">
-        <div className="navbar-brand-row">
-          <div className="navbar-logo-mark" aria-hidden />
-          <div className="navbar-brand">
-            <p className="navbar-eyebrow">Investor sentiment dashboard</p>
-            <h1 className="navbar-title">{title}</h1>
+      <div className="navbar-inner">
+        <div className="navbar-primary">
+          <NavLink to="/" className="navbar-brand-link" end>
+            <span className="navbar-logo-mark" aria-hidden />
+            <span className="navbar-wordmark">
+              <span className="navbar-wordmark__name">Sentiment Lab</span>
+              <span className="navbar-wordmark__tag">Dissertation prototype</span>
+            </span>
+          </NavLink>
+
+          {siteNav && (
+            <div className="navbar-nav" role="navigation" aria-label="Site sections">
+              <NavLink
+                to="/"
+                end
+                className={({ isActive }) =>
+                  `navbar-nav-item${isActive ? ' is-active' : ''}`
+                }
+              >
+                Overview
+              </NavLink>
+              <NavLink
+                to="/analyze"
+                className={({ isActive }) =>
+                  `navbar-nav-item${isActive ? ' is-active' : ''}`
+                }
+              >
+                Stock analysis
+              </NavLink>
+              <NavLink
+                to="/methodology"
+                className={({ isActive }) =>
+                  `navbar-nav-item${isActive ? ' is-active' : ''}`
+                }
+              >
+                Methodology
+              </NavLink>
+              <NavLink
+                to="/legal"
+                className={({ isActive }) =>
+                  `navbar-nav-item${isActive ? ' is-active' : ''}`
+                }
+              >
+                Legal
+              </NavLink>
+            </div>
+          )}
+        </div>
+
+        {(title || subtitle) && (
+          <div className="navbar-context">
+            {title && <h1 className="navbar-title">{title}</h1>}
             {subtitle && <p className="navbar-subtitle">{subtitle}</p>}
           </div>
-        </div>
-      </div>
+        )}
 
-      {siteNav && (
-        <div className="navbar-site-nav">
-          <div className="navbar-nav" role="navigation" aria-label="Site sections">
-            <NavLink
-              to="/"
-              end
-              className={({ isActive }) =>
-                `navbar-nav-item${isActive ? ' active' : ''}`
-              }
-            >
-              Market overview
-            </NavLink>
-            <NavLink
-              to="/analyze"
-              className={({ isActive }) =>
-                `navbar-nav-item${isActive ? ' active' : ''}`
-              }
-            >
-              Stock analysis
-            </NavLink>
-            <NavLink
-              to="/methodology"
-              className={({ isActive }) =>
-                `navbar-nav-item${isActive ? ' active' : ''}`
-              }
-            >
-              Methodology
-            </NavLink>
-            <NavLink
-              to="/legal"
-              className={({ isActive }) =>
-                `navbar-nav-item${isActive ? ' active' : ''}`
-              }
-            >
-              Legal
-            </NavLink>
+        {assetOptions && selectedAsset && onAssetChange && timeframeOptions && selectedTimeframe && onTimeframeChange && (
+          <div className="navbar-filters">
+            <DropdownButton
+              label="Asset Selector"
+              options={assetOptions}
+              selectedOption={selectedAsset}
+              onSelect={onAssetChange}
+              disabled={assetDisabled}
+              disabledMessage={assetDisabledMessage}
+            />
+            <DropdownButton
+              label="Timeframe"
+              options={timeframeOptions}
+              selectedOption={selectedTimeframe}
+              onSelect={onTimeframeChange}
+            />
           </div>
-        </div>
-      )}
-
-      {assetOptions && selectedAsset && onAssetChange && timeframeOptions && selectedTimeframe && onTimeframeChange && (
-        <div className="navbar-filters">
-          <DropdownButton
-            label="Asset Selector"
-            options={assetOptions}
-            selectedOption={selectedAsset}
-            onSelect={onAssetChange}
-            disabled={assetDisabled}
-            disabledMessage={assetDisabledMessage}
-          />
-          <DropdownButton
-            label="Timeframe"
-            options={timeframeOptions}
-            selectedOption={selectedTimeframe}
-            onSelect={onTimeframeChange}
-          />
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
 };
