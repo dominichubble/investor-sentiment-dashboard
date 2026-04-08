@@ -22,6 +22,7 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
     create_engine,
+    inspect,
     text,
 )
 from sqlalchemy.orm import Session, declarative_base, sessionmaker
@@ -48,6 +49,9 @@ class SentimentRecordRow(Base):
     sentiment_uncertainty = Column(Float, nullable=True)
     rationale = Column(Text, nullable=True)
     aspects_json = Column(Text, nullable=True)
+    emotion_label = Column(String(32), nullable=True, index=True)
+    emotion_scores_json = Column(Text, nullable=True)
+    emotion_rationale = Column(Text, nullable=True)
     source = Column(String(64), default="")
     data_source = Column(String(64), nullable=True, index=True)
     source_id = Column(String(100), default="")
@@ -76,6 +80,9 @@ class SentimentRecordRow(Base):
             "sentiment_uncertainty": self.sentiment_uncertainty,
             "rationale": self.rationale,
             "aspects_json": self.aspects_json,
+            "emotion_label": self.emotion_label,
+            "emotion_scores_json": self.emotion_scores_json,
+            "emotion_rationale": self.emotion_rationale,
             "source": self.source,
             "data_source": self.data_source,
             "source_id": self.source_id,
@@ -113,6 +120,36 @@ class SentimentNarrativeCacheRow(Base):
 _engine = None
 _SessionLocal = None
 _dotenv_attempted = False
+
+
+def _ensure_sentiment_record_columns(engine) -> None:
+    """Add optional columns to existing databases without a formal migration tool."""
+    insp = inspect(engine)
+    try:
+        columns = {col["name"] for col in insp.get_columns("sentiment_records")}
+    except Exception:
+        return
+
+    wanted = {
+        "emotion_label": "ALTER TABLE sentiment_records ADD COLUMN emotion_label VARCHAR(32)",
+        "emotion_scores_json": "ALTER TABLE sentiment_records ADD COLUMN emotion_scores_json TEXT",
+        "emotion_rationale": "ALTER TABLE sentiment_records ADD COLUMN emotion_rationale TEXT",
+    }
+
+    with engine.begin() as conn:
+        for name, ddl in wanted.items():
+            if name in columns:
+                continue
+            conn.execute(text(ddl))
+        if "emotion_label" not in columns:
+            try:
+                conn.execute(
+                    text(
+                        "CREATE INDEX ix_sentiment_records_emotion_label ON sentiment_records (emotion_label)"
+                    )
+                )
+            except Exception:
+                logger.debug("Emotion label index already exists or could not be created")
 
 
 def _load_dotenv_if_needed() -> None:
@@ -169,6 +206,7 @@ def get_engine():
         _engine = create_engine(url, pool_pre_ping=True, echo=False)
         Base.metadata.create_all(_engine)
         _widen_sentiment_source_columns(_engine)
+        _ensure_sentiment_record_columns(_engine)
         logger.info("PostgreSQL database initialized via %s", url.split("@")[-1])
     return _engine
 

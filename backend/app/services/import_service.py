@@ -16,6 +16,7 @@ from app.analysis.financial_sentiment_enrichment import (
     extract_aspect_snippets,
     normalized_label_entropy,
 )
+from app.analysis.finance_emotion import infer_finance_emotion, serialize_emotion_scores
 from app.storage.record_ids import make_record_id
 from app.storage.sqlite_storage import SentimentStorage
 from app.utils.ticker_detection import TickerDetector
@@ -273,6 +274,15 @@ class ImportService:
                 if item["aspects"]
                 else None
             )
+            aspect_payload = json.loads(aspects_json) if aspects_json else []
+            emotion = infer_finance_emotion(
+                text=text,
+                sentiment_label=item["label"],
+                sentiment_score=item["score"],
+                scores=item["scores"],
+                uncertainty=item["entropy"],
+                aspects=aspect_payload,
+            )
 
             if item.get("document_only"):
                 db_rows.append(
@@ -315,6 +325,9 @@ class ImportService:
                         "sentiment_uncertainty": item["entropy"],
                         "rationale": item["rationale"],
                         "aspects_json": aspects_json,
+                        "emotion_label": emotion["label"],
+                        "emotion_scores_json": serialize_emotion_scores(emotion.get("scores")),
+                        "emotion_rationale": emotion.get("rationale"),
                         "source": source,
                         "data_source": data_source,
                         "source_id": source_id,

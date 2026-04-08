@@ -7,6 +7,7 @@ import {
   CorrelationScatter,
   LagChart,
   RollingCorrelationChart,
+  EmotionTimelineChart,
 } from '../../components/Charts';
 import { ErrorBoundary } from '../../components/ErrorBoundary';
 import Navbar from '../../components/Navbar';
@@ -21,6 +22,7 @@ import {
   type GrangerCausalityResponse,
   type RollingCorrelationResponse,
   type OutOfSampleResponse,
+  StockSentimentAggregatedResponse,
 } from '../../types';
 import './StockAnalysis.css';
 
@@ -33,6 +35,15 @@ const PRESET_PERIOD_OPTIONS = [
 ] as const;
 
 const PRESET_PERIOD_VALUES = new Set(PRESET_PERIOD_OPTIONS.map((o) => o.value));
+
+const EMOTION_COPY: Record<string, string> = {
+  fear: 'Negative signals dominate and the text reads risk-off or defensive.',
+  optimism: 'The tone leans constructive, with positive expectations or upside language.',
+  uncertainty: 'The text is cautious or unresolved, with limited conviction either way.',
+  confidence: 'The language suggests stronger conviction in fundamentals or execution.',
+  skepticism: 'The stance is doubtful, valuation-aware, or unconvinced by the bullish case.',
+  mixed: 'Multiple finance emotions compete, so the dominant read is intentionally cautious.',
+};
 
 function toISODate(d: Date): string {
   return d.toISOString().slice(0, 10);
@@ -82,6 +93,7 @@ const StockAnalysis: React.FC = () => {
   const [rollingData, setRollingData] = useState<RollingCorrelationResponse | null>(null);
   const [stockInfo, setStockInfo] = useState<StockInfoResponse | null>(null);
   const [dataQuality, setDataQuality] = useState<StockDataQualityResponse | null>(null);
+  const [stockSentimentSummary, setStockSentimentSummary] = useState<StockSentimentAggregatedResponse | null>(null);
 
   // UI states
   const [isLoading, setIsLoading] = useState(false);
@@ -132,7 +144,17 @@ const StockAnalysis: React.FC = () => {
       : { period: analysisPeriod, trailing_days, ...methodology };
 
     try {
-      const [corrData, tsData, lagData, infoData, grangerResult, rollingResult, qualityData, oosData] =
+      const [
+        corrData,
+        tsData,
+        lagData,
+        infoData,
+        grangerResult,
+        rollingResult,
+        qualityData,
+        oosData,
+        emotionSummary,
+      ] =
         await Promise.allSettled([
           apiService.getCorrelation(stockTicker, rangeParams),
           apiService.getCorrelationTimeseries(stockTicker, rangeParams),
@@ -149,6 +171,11 @@ const StockAnalysis: React.FC = () => {
           apiService.getOutOfSampleCorrelation(stockTicker, {
             train_ratio: 0.7,
             ...rangeParams,
+          }),
+          apiService.getStockSentimentAggregated(stockTicker, {
+            period: rangeParams.period,
+            start_date: 'start_date' in rangeParams ? rangeParams.start_date : undefined,
+            end_date: 'end_date' in rangeParams ? rangeParams.end_date : undefined,
           }),
         ]);
 
@@ -176,6 +203,9 @@ const StockAnalysis: React.FC = () => {
       if (oosData.status === 'fulfilled') setOutOfSample(oosData.value);
       else setOutOfSample(null);
 
+      if (emotionSummary.status === 'fulfilled') setStockSentimentSummary(emotionSummary.value);
+      else setStockSentimentSummary(null);
+
       const allFailed = [corrData, tsData, lagData].every(r => r.status === 'rejected');
       if (allFailed) {
         setError('Could not fetch data for this ticker. Please check the ticker symbol and ensure the backend is running.');
@@ -199,6 +229,7 @@ const StockAnalysis: React.FC = () => {
     setTickerNarrativeError(null);
     setDataQuality(null);
     setOutOfSample(null);
+    setStockSentimentSummary(null);
   }, [ticker, period, dateRangeMode, customStart, customEnd, alignMode, marketAdjustment, dataSourceFilter, minMentionsPerDay]);
 
   const fetchTickerNarrative = useCallback(
@@ -333,6 +364,9 @@ const StockAnalysis: React.FC = () => {
     if (cap >= 1e6) return `$${(cap / 1e6).toFixed(1)}M`;
     return `$${cap.toLocaleString()}`;
   };
+
+  const topEmotion = stockSentimentSummary?.emotion_analysis?.top_emotion ?? 'mixed';
+  const topEmotionPct = stockSentimentSummary?.emotion_analysis?.dominant_percentages?.[topEmotion] ?? 0;
 
   return (
     <div id="main-content" className="stock-analysis" tabIndex={-1}>
@@ -781,6 +815,72 @@ const StockAnalysis: React.FC = () => {
                     </ul>
                   )}
                 </>
+              )}
+            </div>
+          )}
+
+          {stockSentimentSummary?.emotion_analysis && (
+            <div className="sa-chart-section" aria-label="Finance emotion summary">
+              <h3 className="sa-section-title">Finance emotion layer</h3>
+              <p className="sa-section-desc">
+                A hybrid finance-emotion classifier built from FinBERT sentiment, uncertainty, aspect evidence,
+                and market-language lexicon scoring. The page shows one dominant emotion per mention in the same
+                window as the rest of this analysis.
+              </p>
+              <div className="sa-summary-grid">
+                <div className="sa-stat-card">
+                  <div className="sa-stat-label">Dominant emotion</div>
+                  <div className="sa-stat-value" style={{ color: 'var(--color-accent)' }}>
+                    {topEmotion.replace(/^\w/, (c) => c.toUpperCase())}
+                  </div>
+                  <div className="sa-stat-detail">{EMOTION_COPY[topEmotion] ?? EMOTION_COPY.mixed}</div>
+                  <div className="sa-stat-badge significant">
+                    {topEmotionPct.toFixed(1)}% of mentions
+                  </div>
+                </div>
+                <div className="sa-stat-card">
+                  <div className="sa-stat-label">Fear</div>
+                  <div className="sa-stat-value" style={{ color: 'var(--color-negative)' }}>
+                    {stockSentimentSummary.emotion_analysis.dominant_distribution.fear ?? 0}
+                  </div>
+                  <div className="sa-stat-detail">
+                    {stockSentimentSummary.emotion_analysis.dominant_percentages.fear?.toFixed(1) ?? '0.0'}% of mentions
+                  </div>
+                </div>
+                <div className="sa-stat-card">
+                  <div className="sa-stat-label">Optimism</div>
+                  <div className="sa-stat-value" style={{ color: 'var(--color-positive)' }}>
+                    {stockSentimentSummary.emotion_analysis.dominant_distribution.optimism ?? 0}
+                  </div>
+                  <div className="sa-stat-detail">
+                    {stockSentimentSummary.emotion_analysis.dominant_percentages.optimism?.toFixed(1) ?? '0.0'}% of mentions
+                  </div>
+                </div>
+                <div className="sa-stat-card">
+                  <div className="sa-stat-label">Mixed / uncertain</div>
+                  <div className="sa-stat-value" style={{ color: 'var(--color-text-muted)' }}>
+                    {(stockSentimentSummary.emotion_analysis.dominant_distribution.mixed ?? 0) +
+                      (stockSentimentSummary.emotion_analysis.dominant_distribution.uncertainty ?? 0)}
+                  </div>
+                  <div className="sa-stat-detail">
+                    Combined unresolved or ambiguous emotion reads in this window
+                  </div>
+                </div>
+              </div>
+
+              {stockSentimentSummary.emotion_analysis.timeline.length > 0 && (
+                <div className="sa-chart-section" style={{ marginTop: 24, marginBottom: 0 }}>
+                  <h4 className="sa-subsection-title">Emotion timeline</h4>
+                  <p className="sa-section-desc sa-section-desc--tight">
+                    Stacked bars show the count of dominant emotions per day, while the line tracks total
+                    mentions. This is useful for spotting shifts from optimism to skepticism, or spikes in fear
+                    around volatile periods.
+                  </p>
+                  <EmotionTimelineChart
+                    data={stockSentimentSummary.emotion_analysis.timeline}
+                    height={340}
+                  />
+                </div>
               )}
             </div>
           )}

@@ -9,3 +9,4 @@ export { default as CorrelationScatter } from './CorrelationScatter';
 export { default as LagChart } from './LagChart';
 export { default as RollingCorrelationChart } from './RollingCorrelationChart';
 export { default as CorrelationHeatmap } from './CorrelationHeatmap';
+export { default as EmotionTimelineChart } from './EmotionTimelineChart';

@@ -232,6 +232,34 @@ export interface StockDataQualityResponse {
   error?: string | null;
 }
 
+export interface EmotionTimelinePoint {
+  date: string;
+  total_mentions: number;
+  dominant_emotion: string;
+  counts: Record<string, number>;
+}
+
+export interface EmotionAnalysisResponse {
+  dominant_distribution: Record<string, number>;
+  dominant_percentages: Record<string, number>;
+  top_emotion: string;
+  top_emotion_count: number;
+  timeline: EmotionTimelinePoint[];
+}
+
+export interface StockSentimentAggregatedResponse {
+  ticker: string;
+  total_mentions: number;
+  average_score: number;
+  sentiment_distribution: {
+    positive: number;
+    negative: number;
+    neutral: number;
+  };
+  emotion_analysis?: EmotionAnalysisResponse | null;
+  records?: any[];
+}
+
 // --- Granger Causality Types ---
 
 export interface GrangerLagResult {

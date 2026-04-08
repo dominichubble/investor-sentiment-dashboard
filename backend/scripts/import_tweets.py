@@ -37,6 +37,7 @@ if str(_backend_dir) not in sys.path:
     sys.path.insert(0, str(_backend_dir))
 
 from app.storage.database import get_engine
+from app.analysis.finance_emotion import infer_finance_emotion, serialize_emotion_scores
 from app.storage.record_ids import make_record_id
 from app.storage.sqlite_storage import SentimentStorage
 
@@ -115,6 +116,11 @@ def _build_db_rows(
         src_id = row["source_id"]
         text = row["text"]
         ticker = row["ticker"]
+        emotion = infer_finance_emotion(
+            text=text,
+            sentiment_label=sentiment["label"],
+            sentiment_score=float(sentiment["score"]),
+        )
 
         doc_id = make_record_id("doc", src, src_id, ts, text[:120])
 
@@ -126,7 +132,11 @@ def _build_db_rows(
                 "mentioned_as": f"${ticker}" if ticker else "",
                 "sentiment_label": sentiment["label"],
                 "sentiment_score": float(sentiment["score"]),
+                "emotion_label": emotion["label"],
+                "emotion_scores_json": serialize_emotion_scores(emotion.get("scores")),
+                "emotion_rationale": emotion.get("rationale"),
                 "source": src,
+                "data_source": "twitter",
                 "source_id": src_id,
                 "published_at": ts,
             }

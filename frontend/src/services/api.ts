@@ -11,6 +11,7 @@ import type {
   GrangerCausalityResponse,
   RollingCorrelationResponse,
   OutOfSampleResponse,
+  StockSentimentAggregatedResponse,
 } from '../types';
 
 /** Ensure base URL ends with /api/v1 (common Vercel misconfig omits it). */
@@ -181,18 +182,6 @@ export interface PredictionsResponse {
   has_more: boolean;
 }
 
-export interface StockSentimentResponse {
-  ticker: string;
-  total_mentions: number;
-  average_score: number;
-  sentiment_distribution: {
-    positive: number;
-    negative: number;
-    neutral: number;
-  };
-  records?: any[];
-}
-
 // API Service
 export const apiService = {
   // Data endpoints
@@ -238,13 +227,14 @@ export const apiService = {
   async getStockSentimentAggregated(
     ticker: string,
     params?: {
+      period?: string;
       start_date?: string;
       end_date?: string;
       source?: string;
       include_records?: boolean;
     }
-  ): Promise<StockSentimentResponse> {
-    const response = await api.get<StockSentimentResponse>(
+  ): Promise<StockSentimentAggregatedResponse> {
+    const response = await api.get<StockSentimentAggregatedResponse>(
       `/stocks/${ticker}/sentiment`,
       { params }
     );

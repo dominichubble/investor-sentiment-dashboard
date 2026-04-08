@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter
 
-from api.routers import correlation
+from api.routers import correlation, stocks
 from app.settings import lean_api_enabled
 
 from . import data
@@ -20,3 +20,4 @@ else:
     api_router.include_router(sentiment.router)
 
 api_router.include_router(correlation.router)
+api_router.include_router(stocks.router)

@@ -1,5 +1,7 @@
 """Tests for import service record normalization and persistence wiring."""
 
+import json
+
 from app.services.import_service import ImportService
 
 
@@ -61,6 +63,9 @@ def test_import_creates_stock_rows_per_ticker():
         assert r["rationale"]
         assert r["sentiment_uncertainty"] is not None
         assert r["data_source"] == "reddit"
+        assert r["emotion_label"]
+        assert json.loads(r["emotion_scores_json"])
+        assert r["emotion_rationale"]
 
 
 def test_import_merges_detected_and_hint_tickers():

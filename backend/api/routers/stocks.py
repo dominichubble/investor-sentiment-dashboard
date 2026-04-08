@@ -10,6 +10,7 @@ from typing import List, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
+from app.services.sentiment_window import resolve_sentiment_window
 from app.stocks import analyze_stock_sentiment
 from app.storage import StockSentimentStorage
 
@@ -78,6 +79,7 @@ class StockSentimentResponse(BaseModel):
     total_mentions: int
     average_score: float
     sentiment_distribution: dict
+    emotion_analysis: Optional[dict] = None
     records: Optional[List[dict]] = None
 
 
@@ -163,6 +165,10 @@ async def analyze_stock_sentiment_endpoint(
 @router.get("/{ticker}/sentiment", response_model=StockSentimentResponse)
 async def get_stock_sentiment(
     ticker: str,
+    period: Optional[str] = Query(
+        None,
+        description="Preset window (7d, 30d, 90d, 6mo, 1y) when custom dates are not provided",
+    ),
     start_date: Optional[date] = Query(
         None, description="Filter by start date (YYYY-MM-DD)"
     ),
@@ -191,21 +197,29 @@ async def get_stock_sentiment(
     ```
     """
     try:
-        # Convert dates to datetime
-        start_dt = (
-            datetime.combine(start_date, datetime.min.time())
-            if start_date
-            else None
-        )
-        end_dt = (
-            datetime.combine(end_date, datetime.max.time())
-            if end_date
-            else None
-        )
+        if start_date is not None or end_date is not None:
+            if start_date is None or end_date is None:
+                raise HTTPException(
+                    status_code=400,
+                    detail="Both start_date and end_date are required for a custom range.",
+                )
+            start_dt = datetime.combine(start_date, datetime.min.time())
+            end_dt = datetime.combine(end_date, datetime.max.time())
+        elif period:
+            start_dt, end_dt = resolve_sentiment_window(ticker.upper(), period)
+        else:
+            start_dt = None
+            end_dt = None
 
         # Get aggregated sentiment
         aggregated = storage.aggregate_sentiment(
             ticker=ticker.upper(), start_date=start_dt, end_date=end_dt
+        )
+        emotion_analysis = storage.aggregate_emotions(
+            ticker=ticker.upper(),
+            start_date=start_dt,
+            end_date=end_dt,
+            source=source,
         )
 
         # Get individual records if requested
@@ -218,7 +232,11 @@ async def get_stock_sentiment(
                 source=source,
             )
 
-        return StockSentimentResponse(**aggregated, records=records)
+        return StockSentimentResponse(
+            **aggregated,
+            emotion_analysis=emotion_analysis,
+            records=records,
+        )
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

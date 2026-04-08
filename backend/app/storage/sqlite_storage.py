@@ -16,6 +16,8 @@ from sqlalchemy import func, text
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.exc import OperationalError
 
+from app.analysis.finance_emotion import infer_finance_emotion, serialize_emotion_scores
+
 from .database import SentimentRecordRow, get_session
 from .record_ids import make_record_id
 
@@ -199,6 +201,9 @@ class SentimentStorage:
                     "sentiment_uncertainty": record.get("sentiment_uncertainty"),
                     "rationale": record.get("rationale"),
                     "aspects_json": record.get("aspects_json"),
+                    "emotion_label": record.get("emotion_label"),
+                    "emotion_scores_json": record.get("emotion_scores_json"),
+                    "emotion_rationale": record.get("emotion_rationale"),
                     "source": src,
                     "data_source": dsrc,
                     "source_id": record.get("source_id", "") or "",
@@ -231,6 +236,12 @@ class SentimentStorage:
         doc_id = result.get("document_id") or make_record_id(
             "doc", source or "", source_id, now_iso, text[:200]
         )
+        overall_emotion = infer_finance_emotion(
+            text=text,
+            sentiment_label=overall.get("label", "neutral"),
+            sentiment_score=float(overall.get("score", 0.5)),
+            scores=overall.get("scores"),
+        )
 
         document_record = {
             "id": doc_id,
@@ -238,6 +249,9 @@ class SentimentStorage:
             "ticker": None,
             "sentiment_label": overall.get("label", "neutral"),
             "sentiment_score": overall.get("score", 0.5),
+            "emotion_label": overall_emotion["label"],
+            "emotion_scores_json": serialize_emotion_scores(overall_emotion.get("scores")),
+            "emotion_rationale": overall_emotion.get("rationale"),
             "source": source or "",
             "data_source": result.get("data_source"),
             "source_id": source_id,
@@ -247,6 +261,13 @@ class SentimentStorage:
 
         stock_records = []
         for stock in result.get("stocks", []):
+            stock_sentiment = stock.get("sentiment", {}) or {}
+            emotion = infer_finance_emotion(
+                text=stock.get("context") or text,
+                sentiment_label=stock_sentiment.get("label", "neutral"),
+                sentiment_score=float(stock_sentiment.get("score", 0.5)),
+                scores=stock_sentiment.get("scores"),
+            )
             stock_records.append(
                 {
                     "id": make_record_id(
@@ -263,6 +284,9 @@ class SentimentStorage:
                         "label", "neutral"
                     ),
                     "sentiment_score": stock.get("sentiment", {}).get("score", 0.5),
+                    "emotion_label": emotion["label"],
+                    "emotion_scores_json": serialize_emotion_scores(emotion.get("scores")),
+                    "emotion_rationale": emotion.get("rationale"),
                     "source": source or "",
                     "data_source": result.get("data_source"),
                     "source_id": source_id,
@@ -459,6 +483,100 @@ class SentimentStorage:
                 "total_mentions": total,
                 "average_score": round(float(avg_score or 0.0), 4),
                 "sentiment_distribution": distribution,
+            }
+        finally:
+            session.close()
+
+    def aggregate_emotions(
+        self,
+        ticker: str,
+        start_date: Optional[datetime] = None,
+        end_date: Optional[datetime] = None,
+        source: Optional[str] = None,
+    ) -> Dict:
+        """Aggregate dominant finance emotions for a ticker."""
+        session = get_session()
+        try:
+            query = session.query(SentimentRecordRow).filter(
+                SentimentRecordRow.ticker == ticker,
+            )
+            if start_date:
+                query = query.filter(SentimentRecordRow.published_at >= start_date)
+            if end_date:
+                query = query.filter(SentimentRecordRow.published_at <= end_date)
+            if source:
+                query = query.filter(SentimentRecordRow.source == source)
+
+            total = query.count()
+            labels = ("fear", "optimism", "uncertainty", "confidence", "skepticism", "mixed")
+            if total == 0:
+                return {
+                    "dominant_distribution": {label: 0 for label in labels},
+                    "dominant_percentages": {label: 0.0 for label in labels},
+                    "top_emotion": "mixed",
+                    "top_emotion_count": 0,
+                    "timeline": [],
+                }
+
+            dist_rows = (
+                query.with_entities(
+                    SentimentRecordRow.emotion_label,
+                    func.count(SentimentRecordRow.id),
+                )
+                .group_by(SentimentRecordRow.emotion_label)
+                .all()
+            )
+            distribution = {label: 0 for label in labels}
+            for label, count in dist_rows:
+                key = str(label or "mixed").lower()
+                if key in distribution:
+                    distribution[key] = int(count)
+
+            percentages = {
+                label: round((count / total) * 100, 2) if total else 0.0
+                for label, count in distribution.items()
+            }
+            top_emotion = max(distribution.items(), key=lambda item: item[1])[0]
+
+            day_col = func.date(SentimentRecordRow.published_at)
+            timeline_rows = (
+                query.with_entities(
+                    day_col.label("day"),
+                    SentimentRecordRow.emotion_label,
+                    func.count(SentimentRecordRow.id).label("count"),
+                )
+                .group_by(day_col, SentimentRecordRow.emotion_label)
+                .order_by(day_col)
+                .all()
+            )
+
+            by_day: Dict[str, Dict[str, int]] = {}
+            for day, label, count in timeline_rows:
+                day_key = str(day)
+                bucket = by_day.setdefault(day_key, {name: 0 for name in labels})
+                key = str(label or "mixed").lower()
+                if key in bucket:
+                    bucket[key] = int(count)
+
+            timeline = []
+            for day_key, counts in by_day.items():
+                total_day = sum(counts.values())
+                dominant = max(counts.items(), key=lambda item: item[1])[0] if total_day else "mixed"
+                timeline.append(
+                    {
+                        "date": day_key,
+                        "total_mentions": total_day,
+                        "dominant_emotion": dominant,
+                        "counts": counts,
+                    }
+                )
+
+            return {
+                "dominant_distribution": distribution,
+                "dominant_percentages": percentages,
+                "top_emotion": top_emotion,
+                "top_emotion_count": distribution[top_emotion],
+                "timeline": timeline,
             }
         finally:
             session.close()

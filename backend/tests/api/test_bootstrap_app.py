@@ -32,3 +32,4 @@ def test_correlation_routes_are_mounted_in_openapi():
     assert "/api/v1/correlation/overview/all" in paths
     assert "/api/v1/sentiment/ticker-narrative/{ticker}" in paths
     assert "/api/v1/data/stock-quality/{ticker}" in paths
+    assert "/api/v1/stocks/{ticker}/sentiment" in paths

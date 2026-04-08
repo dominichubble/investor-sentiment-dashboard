@@ -28,6 +28,17 @@ def build_prediction_metadata(record: Dict[str, Any]) -> Dict[str, Any]:
         }
     if record.get("sentiment_uncertainty") is not None:
         metadata["uncertainty"] = float(record["sentiment_uncertainty"])
+    if record.get("emotion_label"):
+        metadata["emotion"] = {
+            "label": record["emotion_label"],
+            "rationale": record.get("emotion_rationale"),
+        }
+        es = record.get("emotion_scores_json")
+        if es:
+            try:
+                metadata["emotion"]["scores"] = json.loads(es)
+            except (TypeError, json.JSONDecodeError):
+                metadata["emotion"]["scores"] = None
     rationale = record.get("rationale")
     if rationale:
         metadata["rationale"] = rationale
