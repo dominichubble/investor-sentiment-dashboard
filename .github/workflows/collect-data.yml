@@ -99,7 +99,7 @@ jobs:
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -n "${DATABASE_URL:-}" ]; then
-            ROWS="$(python -c "from sqlalchemy import text; from app.storage.database import get_engine; c=get_engine().connect(); print(c.execute(text(\"SELECT COUNT(*) FROM sentiment_records\")).scalar()); c.close()")"
+            ROWS="$(python -c 'import os; from sqlalchemy import create_engine, text; engine = create_engine(os.environ["DATABASE_URL"], pool_pre_ping=True); conn = engine.connect(); print(conn.execute(text("SELECT COUNT(*) FROM sentiment_records")).scalar()); conn.close()')"
             echo "### sentiment_records" >> "$GITHUB_STEP_SUMMARY"
             echo "- rows: ${ROWS}" >> "$GITHUB_STEP_SUMMARY"
           else
