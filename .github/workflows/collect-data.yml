@@ -60,6 +60,7 @@ jobs:
           fi
 
       - name: Reddit to sentiment to DB
+        id: ingest_reddit
         env:
           REDDIT_CLIENT_ID: ${{ secrets.REDDIT_CLIENT_ID }}
           REDDIT_CLIENT_SECRET: ${{ secrets.REDDIT_CLIENT_SECRET }}
@@ -68,12 +69,14 @@ jobs:
         continue-on-error: true
 
       - name: News to sentiment to DB
+        id: ingest_news
         env:
           NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
         run: python -m app.pipelines.ingest_news --days-back 2 --max-articles 150 --store-db --no-write-files
         continue-on-error: true
 
       - name: X/Twitter to sentiment to DB (snscrape; no official API key required)
+        id: ingest_twitter
         env:
           TWITTER_INGEST_BACKEND: snscrape
         run: python -m app.pipelines.ingest_twitter --max-tweets 120 --store-db --no-write-files
@@ -89,11 +92,38 @@ jobs:
             echo "- Branch: ${GITHUB_REF_NAME}"
             echo "- Target: Neon PostgreSQL"
             echo ""
+            echo "### Step outcomes"
+            echo "- Reddit: ${{ steps.ingest_reddit.outcome }}"
+            echo "- News: ${{ steps.ingest_news.outcome }}"
+            echo "- X/Twitter: ${{ steps.ingest_twitter.outcome }}"
+            echo ""
           } >> "$GITHUB_STEP_SUMMARY"
           if [ -n "${DATABASE_URL:-}" ]; then
             ROWS="$(python -c "from sqlalchemy import text; from app.storage.database import get_engine; c=get_engine().connect(); print(c.execute(text(\"SELECT COUNT(*) FROM sentiment_records\")).scalar()); c.close()")"
             echo "### sentiment_records" >> "$GITHUB_STEP_SUMMARY"
             echo "- rows: ${ROWS}" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "_DATABASE_URL not set — row count skipped_" >> "$GITHUB_STEP_SUMMARY"
+            echo "_DATABASE_URL not set - row count skipped_" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Fail if any ingest step failed
+        if: always()
+        run: |
+          FAILED=0
+          for pair in \
+            "Reddit:${{ steps.ingest_reddit.outcome }}" \
+            "News:${{ steps.ingest_news.outcome }}" \
+            "X/Twitter:${{ steps.ingest_twitter.outcome }}"
+          do
+            NAME="${pair%%:*}"
+            STATUS="${pair#*:}"
+            if [ "$STATUS" != "success" ]; then
+              echo "::error::${NAME} ingest step finished with outcome: ${STATUS}"
+              FAILED=1
+            fi
+          done
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo "One or more ingest steps failed. See step logs above for details."
+            exit 1
           fi
