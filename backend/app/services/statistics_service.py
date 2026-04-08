@@ -169,10 +169,17 @@ class StatisticsService:
         try:
             ds_filter = _normalize_data_source_param(data_source)
 
-            # Determine the anchor (latest record) for relative calculations.
-            latest_ts = (
-                session.query(func.max(SentimentRecordRow.published_at)).scalar()
-            )
+            def _apply_scope(query: Query) -> Query:
+                query = query.filter(SentimentRecordRow.ticker.isnot(None))
+                if ds_filter:
+                    query = query.filter(SentimentRecordRow.data_source == ds_filter)
+                return query
+
+            # Determine the anchor (latest stock-level record) for relative calculations.
+            # When a source filter is active, anchor relative windows to that source only.
+            latest_ts = _apply_scope(
+                session.query(func.max(SentimentRecordRow.published_at))
+            ).scalar()
             anchor = latest_ts if latest_ts else datetime.utcnow()
 
             # Base query filter: optionally restrict to the last N days.
@@ -183,10 +190,7 @@ class StatisticsService:
                 return query
 
             def _apply_channel(query: Query) -> Query:
-                query = _apply_window(query)
-                if ds_filter:
-                    query = query.filter(SentimentRecordRow.data_source == ds_filter)
-                return query
+                return _apply_window(_apply_scope(query))
 
             total_predictions = (
                 _apply_channel(session.query(func.count(SentimentRecordRow.id))).scalar()
@@ -348,6 +352,7 @@ class StatisticsService:
                             SentimentRecordRow.sentiment_label,
                             func.count(SentimentRecordRow.id),
                         )
+                        .filter(SentimentRecordRow.ticker.isnot(None))
                     )
                     .group_by(
                         SentimentRecordRow.data_source,
