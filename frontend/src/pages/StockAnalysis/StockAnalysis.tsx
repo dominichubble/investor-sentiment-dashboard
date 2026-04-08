@@ -367,6 +367,39 @@ const StockAnalysis: React.FC = () => {
 
   const topEmotion = stockSentimentSummary?.emotion_analysis?.top_emotion ?? 'mixed';
   const topEmotionPct = stockSentimentSummary?.emotion_analysis?.dominant_percentages?.[topEmotion] ?? 0;
+  const hasPearson = Boolean(correlation?.pearson);
+  const correlationFallback = correlation?.error ?? 'Not enough overlapping days';
+  const hasAnyResults = Boolean(
+    correlation ||
+      (timeSeries && timeSeries.series.length > 0) ||
+      (lagAnalysis && lagAnalysis.lags.length > 0) ||
+      (rollingData && rollingData.series.length > 0) ||
+      (grangerData && grangerData.summary && !grangerData.error) ||
+      (outOfSample && !outOfSample.error) ||
+      dataQuality ||
+      stockSentimentSummary
+  );
+  const overlappingDays =
+    correlation?.data_points ??
+    timeSeries?.data_points ??
+    rollingData?.data_points ??
+    outOfSample?.train?.n ??
+    0;
+  const effectivePriceMetric =
+    correlation?.effective_price_metric ??
+    rollingData?.effective_price_metric ??
+    outOfSample?.effective_price_metric ??
+    'returns';
+  const spyBeta =
+    correlation?.spy_beta ??
+    timeSeries?.spy_beta ??
+    outOfSample?.spy_beta ??
+    null;
+  const effectiveMarketAdjustment =
+    correlation?.market_adjustment ??
+    timeSeries?.market_adjustment ??
+    outOfSample?.market_adjustment ??
+    null;
 
   return (
     <div id="main-content" className="stock-analysis" tabIndex={-1}>
@@ -651,14 +684,14 @@ const StockAnalysis: React.FC = () => {
         </div>
       )}
 
-      {!isLoading && ticker && !correlation && error && (
+      {!isLoading && ticker && !hasAnyResults && error && (
         <div className="sa-results sa-results-partial">
           <p className="sa-partial-message">{error}</p>
         </div>
       )}
 
       {/* Results */}
-      {!isLoading && ticker && correlation && (
+      {!isLoading && ticker && hasAnyResults && (
         <div className="sa-results">
           <header className="sa-results__header">
             <p className="sa-results__kicker">Results</p>
@@ -679,21 +712,23 @@ const StockAnalysis: React.FC = () => {
               {stockInfo?.market_cap && (
                 <span className="sa-tag">{formatMarketCap(stockInfo.market_cap)}</span>
               )}
-              <span className="sa-tag">{correlation.data_points} overlapping days</span>
-              {correlation.effective_price_metric && (
+              {overlappingDays > 0 && (
+                <span className="sa-tag">{overlappingDays} overlapping days</span>
+              )}
+              {effectivePriceMetric && (
                 <span
                   className="sa-tag"
-                  title={`Technical id: ${correlation.effective_price_metric}`}
+                  title={`Technical id: ${effectivePriceMetric}`}
                 >
-                  Price view: {labelForPriceMetric(correlation.effective_price_metric)}
+                  Price view: {labelForPriceMetric(effectivePriceMetric)}
                 </span>
               )}
-              {correlation.spy_beta != null && correlation.market_adjustment === 'spy_beta_residual' && (
+              {spyBeta != null && effectiveMarketAdjustment === 'spy_beta_residual' && (
                 <span
                   className="sa-tag"
                   title="How much this stock typically moves with SPY in this window; used to peel out broad market wiggle."
                 >
-                  Versus SPY (typical co-movement) ~ {Number(correlation.spy_beta).toFixed(3)}
+                  Versus SPY (typical co-movement) ~ {Number(spyBeta).toFixed(3)}
                 </span>
               )}
             </div>
@@ -886,6 +921,7 @@ const StockAnalysis: React.FC = () => {
           )}
 
           {/* Correlation Summary Cards */}
+          {correlation ? (
           <div className="sa-summary-grid">
             <div className="sa-stat-card">
               <div
@@ -903,7 +939,7 @@ const StockAnalysis: React.FC = () => {
                   : 'N/A'}
               </div>
               <div className="sa-stat-detail">
-                {correlation.pearson?.interpretation || 'Not enough overlapping days'}
+                {correlation.pearson?.interpretation || correlationFallback}
               </div>
               {correlation.pearson && (
                 <div
@@ -933,7 +969,7 @@ const StockAnalysis: React.FC = () => {
                   : 'N/A'}
               </div>
               <div className="sa-stat-detail">
-                {correlation.spearman?.interpretation || 'Not enough overlapping days'}
+                {correlation.spearman?.interpretation || correlationFallback}
               </div>
               {correlation.spearman && (
                 <div
@@ -983,17 +1019,32 @@ const StockAnalysis: React.FC = () => {
                 Plain-English readout
               </div>
               <div className="sa-stat-value" style={{
-                color: correlation.pearson?.significant ? 'var(--color-positive)' : 'var(--color-negative)'
+                color: !hasPearson
+                  ? 'var(--color-text-muted)'
+                  : correlation.pearson?.significant
+                    ? 'var(--color-positive)'
+                    : 'var(--color-negative)'
               }}>
-                {correlation.pearson?.significant ? 'Looks real' : 'Inconclusive'}
+                {!hasPearson ? 'Needs more data' : correlation.pearson?.significant ? 'Looks real' : 'Inconclusive'}
               </div>
               <div className="sa-stat-detail">
-                {correlation.pearson?.significant
+                {!hasPearson
+                  ? correlationFallback
+                  : correlation.pearson?.significant
                   ? 'The straight-line pattern is unlikely to be pure chance (usual 5% bar).'
                   : 'We cannot rule out chance for the straight-line pattern in this slice.'}
               </div>
             </div>
           </div>
+          ) : (
+            <div className="sa-chart-section">
+              <h3 className="sa-section-title">Correlation summary</h3>
+              <p className="sa-section-desc">
+                Correlation metrics are unavailable for this request, but any charts below still reflect the data that could be loaded.
+              </p>
+              {error && <p className="sa-data-quality__error" role="alert">{error}</p>}
+            </div>
+          )}
 
           <div className="sa-chart-section sa-ticker-narrative">
             <h3 className="sa-section-title">AI plain-language summary</h3>
@@ -1097,17 +1148,17 @@ const StockAnalysis: React.FC = () => {
                   <p className="sa-section-desc">
                     Across: smoothed net mood (same window as the headline line fit). Up: that day’s return using the
                     same price definition as the summary (
-                    <strong>{correlation.effective_price_metric ?? 'returns'}</strong>
+                    <strong>{effectivePriceMetric}</strong>
                     ). Dot colour shows whether mood and return pointed the same way; size scales with how much was
                     posted. The dashed line is a simple best straight-line fit through the cloud (ordinary least
                     squares).
                   </p>
                   <CorrelationScatter
                     data={timeSeries.series}
-                    correlationCoefficient={correlation.pearson?.coefficient}
+                    correlationCoefficient={correlation?.pearson?.coefficient}
                     height={360}
                     trailingWindowDays={sentimentMemoryDays}
-                    yReturnKey={scatterYKeyFromEffective(correlation.effective_price_metric)}
+                    yReturnKey={scatterYKeyFromEffective(effectivePriceMetric)}
                   />
                 </div>
               </ErrorBoundary>
@@ -1258,6 +1309,15 @@ function renderInterpretation(
   ticker: string,
 ): React.ReactNode {
   if (!correlation) return <p>No results loaded yet — run an analysis above.</p>;
+
+  if (!correlation.pearson || !correlation.spearman) {
+    return (
+      <p>
+        {correlation.error ||
+          `There is not enough overlapping sentiment and price data to estimate a stable correlation for ${ticker} in this window yet.`}
+      </p>
+    );
+  }
 
   const pearson = correlation.pearson;
   const bestLag = lagAnalysis?.best_lag;
