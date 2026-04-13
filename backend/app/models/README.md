@@ -101,7 +101,8 @@ pytest backend/tests/models/test_finbert_model.py -v
 
 ```
 transformers>=4.35.0
-torch>=2.1.0
+torch>=2.6.0
+safetensors>=0.4.3
 ```
 
 Install with:

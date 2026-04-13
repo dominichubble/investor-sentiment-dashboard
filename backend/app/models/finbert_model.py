@@ -81,9 +81,12 @@ class FinBERTModel:
             )
             logger.info("✓ Tokenizer loaded successfully")
 
-            # Load model
+            # Load model weights via safetensors when available (avoids legacy torch.load on
+            # pickle checkpoints; aligns with PyTorch >= 2.6 guidance for CVE-2025-32434).
             self.model = AutoModelForSequenceClassification.from_pretrained(
-                self.MODEL_NAME, cache_dir=self.cache_dir
+                self.MODEL_NAME,
+                cache_dir=self.cache_dir,
+                use_safetensors=True,
             )
 
             # Move model to device

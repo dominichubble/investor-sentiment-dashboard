@@ -11,6 +11,7 @@ import {
   Line,
 } from 'recharts';
 import type { EmotionTimelinePoint } from '../../types';
+import { formatIntegerDisplay } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 const EMOTION_COLORS: Record<string, string> = {
@@ -45,12 +46,14 @@ const EmotionTimelineChart: React.FC<Props> = ({ data, height = 320 }) => {
           yAxisId="left"
           tick={{ fontSize: 11, fill: chartTheme.axis }}
           allowDecimals={false}
+          tickFormatter={(v: number) => formatIntegerDisplay(v)}
         />
         <YAxis
           yAxisId="right"
           orientation="right"
           tick={{ fontSize: 11, fill: chartTheme.axis }}
           allowDecimals={false}
+          tickFormatter={(v: number) => formatIntegerDisplay(v)}
         />
         <Tooltip
           contentStyle={{

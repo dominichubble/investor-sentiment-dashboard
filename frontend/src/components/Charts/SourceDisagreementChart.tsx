@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { SourceDisagreementDay } from '../../services/api';
-import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
+import { formatDecimalDisplay, formatIntegerDisplay, paddedNiceCountAxisMax } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 interface SourceDisagreementChartProps {
@@ -38,7 +38,7 @@ const SourceDisagreementChart: React.FC<SourceDisagreementChartProps> = ({
     const maxR = ranges.length ? Math.max(...ranges) : 0;
     return {
       chartData: rows,
-      maxCount: maxC * 1.08,
+      maxCount: paddedNiceCountAxisMax(maxC, 1.08),
       maxSpread: Math.max(0.35, maxR * 1.15, 0.01),
     };
   }, [data]);
@@ -112,7 +112,7 @@ const SourceDisagreementChart: React.FC<SourceDisagreementChartProps> = ({
           interval={tickEvery > 0 ? tickEvery : 'preserveStartEnd'}
           minTickGap={24}
         />
-        <YAxis yAxisId="vol" hide domain={[0, maxCount]} />
+        <YAxis yAxisId="vol" hide domain={[0, maxCount]} allowDecimals={false} />
         <YAxis
           yAxisId="spread"
           orientation="right"

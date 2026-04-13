@@ -26,6 +26,12 @@ export default function SiteFooter() {
           <Link to="/analyze" className="site-footer__link">
             Stock analysis
           </Link>
+          <span className="site-footer__sep" aria-hidden>
+            ·
+          </span>
+          <Link to="/lime" className="site-footer__link">
+            LIME explainability
+          </Link>
         </nav>
       </div>
     </footer>

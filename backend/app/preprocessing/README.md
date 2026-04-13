@@ -398,7 +398,7 @@ clear_tokenizer_cache()
 ## Dependencies
 
 - `transformers>=4.0.0` - Hugging Face Transformers for tokenizer
-- `torch>=1.9.0` - PyTorch for tensor operations
+- `torch>=2.6.0` - PyTorch for tensor operations (CVE-2025-32434 / `torch.load` policy)
 - `nltk>=3.6` - Natural Language Toolkit for text processing
 
 Install all dependencies:

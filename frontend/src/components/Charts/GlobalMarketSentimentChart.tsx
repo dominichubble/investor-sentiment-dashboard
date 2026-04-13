@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import type { DailyTrendPoint } from '../../services/api';
-import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
+import { formatDecimalDisplay, formatIntegerDisplay, paddedNiceCountAxisMax } from '../../utils/formatDisplay';
 import { chartTheme } from './chartTheme';
 
 interface GlobalMarketSentimentChartProps {
@@ -30,7 +30,7 @@ const GlobalMarketSentimentChart: React.FC<GlobalMarketSentimentChartProps> = ({
       fullDate: p.date,
     }));
     const maxC = Math.max(1, ...rows.map((r) => r.count || 0));
-    return { chartData: rows, maxCount: maxC * 1.08 };
+    return { chartData: rows, maxCount: paddedNiceCountAxisMax(maxC, 1.08) };
   }, [data]);
 
   const tickEvery = useMemo(() => {
@@ -87,6 +87,7 @@ const GlobalMarketSentimentChart: React.FC<GlobalMarketSentimentChartProps> = ({
           yAxisId="count"
           hide
           domain={[0, maxCount]}
+          allowDecimals={false}
         />
         <YAxis
           yAxisId="net"

@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import type { TimeSeriesPoint } from '../../types';
 import { chartTheme } from './chartTheme';
-import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
+import { formatDecimalDisplay, formatIntegerDisplay, paddedNiceCountAxisMax } from '../../utils/formatDisplay';
 import { trailingRollingMean } from '../../utils/sentimentRolling';
 
 interface SentimentPriceChartProps {
@@ -57,7 +57,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
       fullDate: point.date,
       rolling_net_sentiment: rollingNet[i],
     }));
-    return { chartData, maxMentions: maxM * 1.08, tickEvery };
+    return { chartData, maxMentions: paddedNiceCountAxisMax(maxM, 1.08), tickEvery };
   }, [data, window, apiTrailingDays]);
 
   if (!chartData.length) {
@@ -175,6 +175,7 @@ const SentimentPriceChart: React.FC<SentimentPriceChartProps> = ({
             orientation="left"
             hide
             domain={[0, maxMentions]}
+            allowDecimals={false}
           />
         )}
         <YAxis

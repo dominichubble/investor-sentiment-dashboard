@@ -10,6 +10,7 @@ import MarketOverview from './pages/MarketOverview/MarketOverview';
 import StockAnalysis from './pages/StockAnalysis';
 import Legal from './pages/Legal';
 import Methodology from './pages/Methodology';
+import LimeExplain from './pages/LimeExplain';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import './App.css';
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="/analyze" element={<StockAnalysis />} />
             <Route path="/legal" element={<Legal />} />
             <Route path="/methodology" element={<Methodology />} />
+            <Route path="/lime" element={<LimeExplain />} />
             <Route path="/correlation" element={<Navigate to="/analyze" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
@@ -63,6 +65,9 @@ function NotFound() {
         </Link>
         <Link to="/methodology" className="not-found__link">
           Methodology
+        </Link>
+        <Link to="/lime" className="not-found__link">
+          LIME explainability
         </Link>
       </div>
     </div>

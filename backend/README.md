@@ -62,6 +62,8 @@ source .venv/bin/activate
 pip install -r backend/requirements.txt
 ```
 
+**PyTorch and weight loading:** `requirements.txt` requires `torch>=2.6.0` (see [CVE-2025-32434](https://nvd.nist.gov/vuln/detail/CVE-2025-32434) for the `torch.load` hardening rationale). FinBERT is loaded with `use_safetensors=True` so Hugging Face prefers `model.safetensors` instead of legacy pickle checkpoints. For GPU, install a CUDA build of PyTorch that satisfies `>=2.6` from [pytorch.org](https://pytorch.org/get-started/locally/).
+
 ### 3. Environment Configuration
 
 Create a `.env` file in the project root:

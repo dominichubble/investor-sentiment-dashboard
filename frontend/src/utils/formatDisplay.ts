@@ -8,6 +8,19 @@ export function formatIntegerDisplay(value: unknown): string {
   return Math.round(n).toLocaleString();
 }
 
+/**
+ * Upper bound for count / mention axes: pad, ceil, then snap up to a clean step (…, 100, 200, 500, 1k, 2k, …)
+ * so domains stay round and Recharts is less likely to pick awkward float ticks.
+ */
+export function paddedNiceCountAxisMax(baseMax: number, pad = 1.1): number {
+  const raw = Math.max(1, baseMax) * pad;
+  const ceilRaw = Math.ceil(raw);
+  const log = Math.log10(ceilRaw);
+  if (!Number.isFinite(log) || log < 0) return ceilRaw;
+  const magnitude = 10 ** Math.floor(log);
+  return Math.ceil(ceilRaw / magnitude) * magnitude;
+}
+
 /** Rounds then formats with at most `decimals` fractional digits (stable for axis ticks). */
 export function formatDecimalDisplay(value: unknown, decimals: number): string {
   const n = Number(value);

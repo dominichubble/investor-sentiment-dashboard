@@ -24,7 +24,7 @@ import {
   type StatisticsResponse,
   type StockInfo,
 } from '../../services/api';
-import { formatDecimalDisplay, formatIntegerDisplay } from '../../utils/formatDisplay';
+import { formatDecimalDisplay, formatIntegerDisplay, paddedNiceCountAxisMax } from '../../utils/formatDisplay';
 import '../StockAnalysis/StockAnalysis.css';
 import './MarketOverview.css';
 
@@ -290,8 +290,10 @@ function RecentActivityBars({
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
           <XAxis
             type="number"
-            domain={[0, maxN * 1.08]}
+            domain={[0, paddedNiceCountAxisMax(maxN, 1.08)]}
+            allowDecimals={false}
             tick={{ fontSize: 11, fill: chartTheme.axis }}
+            tickFormatter={(v: number) => formatIntegerDisplay(v)}
             label={{
               value: 'Record count',
               position: 'insideBottom',
@@ -374,8 +376,10 @@ function SourceVolumePanel({
             label={{ value: 'Ingest channel', position: 'insideBottom', offset: -22, style: AXIS_LABEL_STYLE }}
           />
           <YAxis
-            domain={[0, maxV * 1.1]}
+            domain={[0, paddedNiceCountAxisMax(maxV, 1.1)]}
+            allowDecimals={false}
             tick={{ fontSize: 11, fill: chartTheme.axis }}
+            tickFormatter={(v: number) => formatIntegerDisplay(v)}
             label={{
               value: 'Stock-level rows',
               angle: -90,
@@ -435,7 +439,8 @@ function TopStocksPanel({
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
           <XAxis
             type="number"
-            domain={[0, maxC * 1.08]}
+            domain={[0, paddedNiceCountAxisMax(maxC, 1.08)]}
+            allowDecimals={false}
             tick={{ fontSize: 11, fill: chartTheme.axis }}
             tickFormatter={(v: number) => formatIntegerDisplay(v)}
             label={{

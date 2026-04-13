@@ -1,5 +1,22 @@
 .env
 
+# --- Virtual environments (never commit) ---
+.venv/
+venv/
+env/
+ENV/
+.virtualenv/
+pyvenv.cfg
+
+# --- Coursework & university context (briefs, rubrics, submissions; keep local only) ---
+*.pdf
+*.docx
+*.docm
+*.pptx
+*.xlsx
+*rubric*.png
+~$*
+
 # Python
 __pycache__/
 *.py[cod]
@@ -41,6 +58,7 @@ logs/
 # Frontend / Node.js
 node_modules/
 frontend/node_modules/
+frontend/.vite/
 dist/
 build/
 *.log

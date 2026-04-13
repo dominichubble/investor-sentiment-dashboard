@@ -73,6 +73,14 @@ const Navbar: React.FC<NavbarProps> = ({
                 Methodology
               </NavLink>
               <NavLink
+                to="/lime"
+                className={({ isActive }) =>
+                  `navbar-nav-item${isActive ? ' is-active' : ''}`
+                }
+              >
+                LIME
+              </NavLink>
+              <NavLink
                 to="/legal"
                 className={({ isActive }) =>
                   `navbar-nav-item${isActive ? ' is-active' : ''}`

@@ -90,7 +90,10 @@ export default function Methodology() {
               </tr>
               <tr>
                 <td>Explainability (LIME)</td>
-                <td>Supporting evidence for interpretability chapter</td>
+                <td>
+                  <Link to="/lime">LIME explainability</Link> — live FinBERT token explanations via{' '}
+                  <code className="legal-page__code">POST /sentiment/explain</code>
+                </td>
                 <td>
                   <code className="legal-page__code">data/processed/explanations/</code>,{' '}
                   <code className="legal-page__code">backend/scripts/generate_lime_examples.py</code>

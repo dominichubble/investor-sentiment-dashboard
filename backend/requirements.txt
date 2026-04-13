@@ -27,8 +27,10 @@ ijson>=3.2.0
 nltk>=3.8.0
 
 # Machine Learning / FinBERT
+# PyTorch >= 2.6: torch.load hardening (CVE-2025-32434). Prefer safetensors weights in code.
 transformers>=4.35.0
-torch>=2.1.0
+torch>=2.6.0
+safetensors>=0.4.3
 
 # Statistical analysis
 scipy>=1.11.0
