@@ -70,7 +70,7 @@ Vaswani et al.\ achieve this with a fixed encoding that uses sinusoidal function
 position $t$ and embedding dimension index $i$:
 \begin{align}
   PE_{(t,\,2i)}   &= \sin\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right) \\[4pt]
-  PE_{(t,\,2i+1)} &= \cos\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right)
+  PE_{(t,\,2i+1)} &= \cos\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right),
 \end{align}
 where $d_{\text{model}} = 768$ in BERT-base.
 The sinusoidal choice means that each position gets a unique, smoothly varying signature
@@ -108,7 +108,7 @@ the transformer runs $h$ parallel \emph{attention heads}, each projecting into a
 lower-dimensional subspace:
 \begin{equation}
   \text{MultiHead}(\mathbf{Q},\mathbf{K},\mathbf{V})
-  = \text{Concat}(\text{head}_1,\ldots,\text{head}_h)\,\mathbf{W}^O
+  = \text{Concat}(\text{head}_1,\ldots,\text{head}_h)\,\mathbf{W}^O,
   \label{eq:mha}
 \end{equation}
 where each $\text{head}_i = \text{Attention}(\mathbf{Q}\mathbf{W}_i^Q,\,
@@ -256,7 +256,7 @@ fidelity to $f$ locally against simplicity:
 \begin{equation}
   \xi(x^*)
   = \arg\min_{g \;\in\; \mathcal{G}}
-    \;\mathcal{L}(f,\,g,\,\pi_{x^*}) + \Omega(g)
+    \;\mathcal{L}(f,\,g,\,\pi_{x^*}) + \Omega(g),
   \label{eq:lime_obj}
 \end{equation}
 where $\mathcal{L}(f, g, \pi_{x^*})$ is the weighted prediction error between $f$ and $g$
@@ -300,7 +300,7 @@ $i$ across all possible orderings in which features can be added to a coalition:
   \phi_i
   = \sum_{S \;\subseteq\; F \setminus \{i\}}
     \frac{|S|!\;(|F| - |S| - 1)!}{|F|!}
-    \;\bigl[f(S \cup \{i\}) - f(S)\bigr]
+    \;\bigl[f(S \cup \{i\}) - f(S)\bigr],
   \label{eq:shapley}
 \end{equation}
 where $F$ is the full set of features, $S$ is a coalition not containing $i$,

@@ -285,27 +285,54 @@ The \textbf{Market Overview} page (\texttt{MarketOverview.tsx}) renders a global
 
 The \textbf{Stock Analysis} page (\texttt{StockAnalysis.tsx}) provides per-ticker analytics: a sentiment time-series with price overlay sourced from the correlation timeseries route (\path{/api/v1/correlation/<ticker>/timeseries}, with \texttt{<ticker>} replaced by the selected symbol at runtime), a finance-emotion breakdown, LIME explanation heatmap (tokens coloured by weight), and a data quality indicator panel.  A dedicated narrative card calls \path{/api/v1/sentiment/narrative} to retrieve a Groq-generated LLM summary of recent ticker sentiment, grounded in database records.
 
-\subsection{Dashboard screenshots}
+\subsection{Dashboard Screenshots}
 \label{sec:frontend_screenshots}
 
-Figures~\ref{fig:screen_market_overview}--\ref{fig:screen_lime} show three principal views of the running dashboard.  Key screens are also reproduced in Appendix~\ref{app:screenshots}.
+Figures~\ref{fig:screen_market_overview_a}--\ref{fig:screen_lime} show three principal views of the running dashboard.
 
 \begin{figure}[p]
   \centering
-  \IfFileExists{figures/screen_market_overview.png}{%
-    \includeDashboardShot{screen_market_overview.png}}{%
-    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2.5em}Market Overview (\texttt{screen\_market\_overview.png} not found)\vspace{2.5em}}}}
-  \caption{Market Overview: global sentiment distribution, daily trend, and per-source filter controls.}
-  \label{fig:screen_market_overview}
+  \IfFileExists{figures/screen_market_overview_1.png}{%
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{screen_market_overview_1.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2em}\texttt{screen\_market\_overview\_1.png} not found\vspace{2em}}}}
+  \caption{Market Overview page (1 of 2): header, source filters, and global sentiment distribution.}
+  \label{fig:screen_market_overview_a}
 \end{figure}
 
 \begin{figure}[p]
   \centering
-  \IfFileExists{figures/screen_stock_analysis.png}{%
-    \includeDashboardShot{screen_stock_analysis.png}}{%
-    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2.5em}Stock Analysis (\texttt{screen\_stock\_analysis.png} not found)\vspace{2.5em}}}}
-  \caption{Stock Analysis: per-ticker sentiment time-series, price overlay, emotion breakdown, and LIME heatmap.}
-  \label{fig:screen_stock_analysis}
+  \IfFileExists{figures/screen_market_overview_2.png}{%
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{screen_market_overview_2.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2em}\texttt{screen\_market\_overview\_2.png} not found\vspace{2em}}}}
+  \caption{Market Overview page (2 of 2): daily sentiment trend and top trending tickers.}
+  \label{fig:screen_market_overview_b}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_stock_analysis_1.png}{%
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{screen_stock_analysis_1.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2em}\texttt{screen\_stock\_analysis\_1.png} not found\vspace{2em}}}}
+  \caption{Stock Analysis page (1 of 3): ticker selector, sentiment time-series, and price overlay.}
+  \label{fig:screen_stock_analysis_a}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_stock_analysis_2.png}{%
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{screen_stock_analysis_2.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2em}\texttt{screen\_stock\_analysis\_2.png} not found\vspace{2em}}}}
+  \caption{Stock Analysis page (2 of 3): finance-emotion breakdown and per-source sentiment comparison.}
+  \label{fig:screen_stock_analysis_b}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_stock_analysis_3.png}{%
+    \includegraphics[width=\linewidth,height=0.82\textheight,keepaspectratio]{screen_stock_analysis_3.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2em}\texttt{screen\_stock\_analysis\_3.png} not found\vspace{2em}}}}
+  \caption{Stock Analysis page (3 of 3): LIME token heatmap and data quality indicators.}
+  \label{fig:screen_stock_analysis_c}
 \end{figure}
 
 \begin{figure}[p]
