@@ -38,7 +38,7 @@ const EmotionTimelineChart: React.FC<Props> = ({ data, height = 320 }) => {
   }));
 
   return (
-    <ResponsiveContainer width="100%" height={height}>
+    <ResponsiveContainer width="100%" height={height} debounce={120}>
       <ComposedChart data={chartData} margin={{ top: 8, right: 24, left: 8, bottom: 12 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
         <XAxis dataKey="date" tick={{ fontSize: 11, fill: chartTheme.axis }} />

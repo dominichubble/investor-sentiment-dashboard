@@ -96,7 +96,7 @@ const DailySentimentAggregateChart: React.FC<DailySentimentAggregateChartProps> 
   };
 
   return (
-    <ResponsiveContainer width="100%" height={height} minWidth={0}>
+    <ResponsiveContainer width="100%" height={height} minWidth={0} debounce={120}>
       <ComposedChart data={chartData} margin={{ top: 16, right: 52, left: 4, bottom: 8 }}>
         <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
         <XAxis

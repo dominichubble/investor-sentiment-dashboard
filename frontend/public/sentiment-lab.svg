@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" role="img" aria-label="Sentiment Lab">
+  <defs>
+    <linearGradient id="slg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="52%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="40" height="40" rx="10" fill="url(#slg)"/>
+  <path d="M 6 27 Q 14 10 34 16" fill="none" stroke="rgba(255,255,255,0.28)" stroke-width="2" stroke-linecap="round"/>
+  <path d="M 6 28 Q 15 12 34 19" fill="none" stroke="rgba(255,255,255,0.95)" stroke-width="2.25" stroke-linecap="round"/>
+  <rect x="7.5" y="23" width="4.5" height="10" rx="1.25" fill="rgba(255,255,255,0.88)"/>
+  <rect x="14.25" y="17" width="4.5" height="16" rx="1.25" fill="rgba(255,255,255,0.95)"/>
+  <rect x="21" y="13" width="4.5" height="20" rx="1.25" fill="rgba(255,255,255,0.9)"/>
+  <rect x="27.75" y="9" width="4.5" height="24" rx="1.25" fill="rgba(255,255,255,0.82)"/>
+</svg>

@@ -856,6 +856,9 @@
   margin: 0 0 var(--space-2);
   letter-spacing: -0.02em;
   line-height: 1.3;
+  padding-left: var(--space-3);
+  border-left: 3px solid transparent;
+  border-image: linear-gradient(180deg, var(--color-accent) 0%, var(--brand-violet) 100%) 1;
 }
 
 .sa-section-desc {

@@ -14,6 +14,43 @@
   margin: 0 auto;
 }
 
+.site-footer__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.site-footer__mark {
+  filter: drop-shadow(0 2px 6px rgba(79, 70, 229, 0.25));
+}
+
+.site-footer__brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.site-footer__brand-name {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  line-height: 1.2;
+}
+
+.site-footer__brand-tag {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
 .site-footer__disclaimer {
   margin: 0 0 var(--space-4);
   font-size: 0.8125rem;

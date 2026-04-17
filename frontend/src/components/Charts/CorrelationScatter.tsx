@@ -172,7 +172,7 @@ const CorrelationScatter: React.FC<CorrelationScatterProps> = ({
 
   return (
     <div className="correlation-scatter-wrap">
-      <ResponsiveContainer width="100%" height={height} minWidth={0}>
+      <ResponsiveContainer width="100%" height={height} minWidth={0} debounce={120}>
         <ComposedChart data={scatterData} margin={{ top: 12, right: 24, bottom: 28, left: 8 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} />
           <XAxis

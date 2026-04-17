@@ -216,7 +216,7 @@ function SentimentPiePanel({
       <p className="mo-chart-panel__desc">
         Share of positive, neutral, and negative labels for the current source filter (same 90-day window).
       </p>
-      <ResponsiveContainer width="100%" height={220} minWidth={0}>
+      <ResponsiveContainer width="100%" height={220} minWidth={0} debounce={120}>
         <PieChart>
           <Pie
             data={data}
@@ -285,7 +285,7 @@ function RecentActivityBars({
       <p className="mo-chart-panel__desc">
         Record counts relative to the latest timestamp in the dataset (not calendar “today” if data is historical).
       </p>
-      <ResponsiveContainer width="100%" height={240} minWidth={0}>
+      <ResponsiveContainer width="100%" height={240} minWidth={0} debounce={120}>
         <BarChart data={data} layout="vertical" margin={{ left: 8, right: 16, bottom: 28, top: 4 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
           <XAxis
@@ -365,7 +365,7 @@ function SourceVolumePanel({
       <p className="mo-chart-panel__desc">
         Total stock-level records per ingest platform (all sources view, same 90-day window).
       </p>
-      <ResponsiveContainer width="100%" height={220} minWidth={0}>
+      <ResponsiveContainer width="100%" height={220} minWidth={0} debounce={120}>
         <BarChart data={data} margin={{ top: 8, right: 16, left: 8, bottom: 36 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
           <XAxis
@@ -434,7 +434,12 @@ function TopStocksPanel({
         Ranked by how many stock-level ingested rows mention each ticker (same statistics API as the KPIs).
         Colours hint sentiment tilt: greener = higher positive share, redder = higher negative share.
       </p>
-      <ResponsiveContainer width="100%" height={Math.max(260, rows.length * 36)} minWidth={0}>
+      <ResponsiveContainer
+        width="100%"
+        height={Math.max(260, rows.length * 36)}
+        minWidth={0}
+        debounce={120}
+      >
         <BarChart data={rows} layout="vertical" margin={{ left: 4, right: 24, bottom: 28, top: 4 }}>
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} horizontal={false} />
           <XAxis

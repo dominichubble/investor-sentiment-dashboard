@@ -95,7 +95,7 @@ const LagChart: React.FC<LagChartProps> = ({
 
   return (
     <div className="lag-chart-wrap">
-      <ResponsiveContainer width="100%" height={height} minWidth={0}>
+      <ResponsiveContainer width="100%" height={height} minWidth={0} debounce={120}>
         <BarChart data={chartData} margin={{ top: 28, right: 12, left: 4, bottom: 8 }} barCategoryGap="18%">
           <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
           <XAxis

@@ -1,5 +1,6 @@
-import React from 'react';
+import type { FC } from 'react';
 import { NavLink } from 'react-router-dom';
+import { BrandMark } from '../Brand';
 import DropdownButton, { DropdownOption } from '../DropdownButton';
 import './Navbar.css';
 
@@ -19,8 +20,8 @@ interface NavbarProps {
   className?: string;
 }
 
-const Navbar: React.FC<NavbarProps> = ({
-  title = 'Investor Sentiment — Correlation Analysis',
+const Navbar: FC<NavbarProps> = ({
+  title = 'Sentiment Lab',
   subtitle,
   siteNav = true,
   assetOptions,
@@ -38,10 +39,12 @@ const Navbar: React.FC<NavbarProps> = ({
       <div className="navbar-inner">
         <div className="navbar-primary">
           <NavLink to="/" className="navbar-brand-link" end>
-            <span className="navbar-logo-mark" aria-hidden />
+            <span className="navbar-logo-mark" aria-hidden>
+              <BrandMark />
+            </span>
             <span className="navbar-wordmark">
               <span className="navbar-wordmark__name">Sentiment Lab</span>
-              <span className="navbar-wordmark__tag">Dissertation prototype</span>
+              <span className="navbar-wordmark__tag">Investor sentiment analytics</span>
             </span>
           </NavLink>
 
