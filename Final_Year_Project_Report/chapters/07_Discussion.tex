@@ -81,11 +81,11 @@ The correlation engine's per-source filtering is therefore not a convenience fea
 
 The multi-backend X/Twitter architecture was a forced adaptation rather than a planned design decision, but it turned out to be the right call.  The documented instability of the unofficial API and the significant pricing changes introduced in 2023--2024 mean that any system relying solely on official access faces a real reproducibility risk.  The fallback hierarchy (official API $\to$ snscrape $\to$ historical CSV) ensures the ingestion layer continues to function under varying access conditions, and the CSV backend enables fully reproducible evaluations from a fixed historical corpus, a property that single-backend designs cannot guarantee.
 
-\section{Reflections on the build process}
+\section{Reflections on the Build Process}
 
 Two points in the build process proved particularly instructive. The first was an extended debugging session on the NewsAPI deduplication logic: database row counts appeared substantially higher than expected, and systematic inspection of content hashes revealed that syndicated wire copy was repeating under different publisher names. Identifying and handling that duplication was time-consuming but necessary for the integrity of the downstream charts. The second was the first successful LIME run on a sentence selected because it was intuitively positive: the token weights aligned with the words that a domain reader would identify as sentiment-bearing (``surged'', ``guidance''). That result provided early confidence in the explainability integration as a meaningful analytical tool rather than a post-hoc visual artefact.
 
-\section{Prototype polish and commercial context}
+\section{Prototype Polish and Commercial Context}
 
 The screenshots in Section~\ref{sec:frontend_screenshots} illustrate that the system extends beyond a backend data pipeline: the React SPA provides multi-source views, per-ticker drill-down, explainability, and correlation within a single interface. This is relevant for demonstrating the practical utility of the work to potential investors or product teams, though it is distinct from claiming the build constitutes a commercial offering. A real rollout would need hardened authentication, billing, observability, contractual data licences, model governance sign-off, and jurisdiction-specific compliance (for example clear boundaries around investment advice in the UK). I kept the Legal and Methodology routes in the SPA precisely so those gaps are visible rather than hidden.
 

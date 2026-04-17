@@ -1,12 +1,12 @@
 \chapter{Appendices}
 \label{appendix:supplementary}
 
-\section{Project workplan and Gantt chart}
+\section{Project Workplan and Gantt Chart}
 \label{app:gantt}
 
 I maintained two views of the project plan throughout the year: a Gantt-style phase chart (strategic) and a Jira board decomposed into individual tasks (tactical). The Gantt chart was produced at project inception in September 2025, submitted with the approved Project Brief in October 2025, and updated at the January 2026 deliverable milestone to reflect actual progress.
 
-\subsection*{High-level phase timeline (September 2025--April 2026)}
+\subsection*{High-Level Phase Timeline (September 2025--April 2026)}
 
 \begin{table}[!ht]
 \centering
@@ -29,7 +29,7 @@ Apr          & Final submission      & Code freeze, proofread, appendix and PDF 
 \label{tab:appendix_workplan}
 \end{table}
 
-\subsection*{Gantt chart}
+\subsection*{Gantt Chart}
 
 Figure~\ref{fig:gantt} shows the exported Gantt chart.
 
@@ -46,7 +46,7 @@ Figure~\ref{fig:gantt} shows the exported Gantt chart.
     \label{fig:gantt}
 \end{figure}
 
-\section{Ethics awareness and data governance}
+\section{Ethics Awareness and Data Governance}
 \label{app:ethics}
 
 The project involved two distinct research activities, each with its own ethical classification.
@@ -64,7 +64,7 @@ The Ethics Awareness Form (EAF) was completed with my supervisor in September 20
   \item Storage: database credentials kept exclusively in environment variables; lean deployment mode prevents accidental ML stack loading on public-facing instances.
 \end{itemize}
 
-\section{Representative dataset sample}
+\section{Representative Dataset Sample}
 \label{app:dataset_sample}
 
 Table~\ref{tab:dataset_sample} shows five representative rows from the ingested corpus. Text is truncated to fit the table; actual records contain full post or article text.
@@ -87,7 +87,7 @@ NewsAPI          & Mixed session as investors wait for CPI print tomorrow.    & 
 \end{tabular}
 \end{table}
 
-\section{Extended evaluation results}
+\section{Extended Evaluation Results}
 \label{app:extended_results}
 
 Table~\ref{tab:full_results_appendix} presents the full per-class results underlying the summary in Chapter~\ref{chap:evaluation} (Tables~\ref{tab:benchmark_summary} and~\ref{tab:per_class}). The bar chart and confusion-matrix heatmap in that chapter are Figures~\ref{fig:metrics_barchart} and~\ref{fig:cm_heatmap}.
@@ -117,12 +117,12 @@ Keyword baseline & Positive  & 0.809 & 0.786 & 0.797 \\
 \paragraph{Single-annotator note.}
 Ground-truth labels were assigned by the author, cross-referenced against the Financial PhraseBank taxonomy \citep{malo2014financialphrasebank} for consistency. The absence of multi-annotator inter-rater reliability scores is acknowledged as a limitation; a crowdsourced re-annotation of a subset is identified as a priority for future work.
 
-\section{Illustrative API response schemas}
+\section{Illustrative API Response Schemas}
 \label{app:api_samples}
 
 The following JSON fragments illustrate the response shapes returned by two key endpoints. Field names reflect the codebase conventions; exact keys may vary slightly by route version.
 
-\subsection*{Sentiment prediction}
+\subsection*{Sentiment Prediction}
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single]
 {
@@ -133,7 +133,7 @@ The following JSON fragments illustrate the response shapes returned by two key 
 }
 \end{lstlisting}
 
-\subsection*{LIME explanation}
+\subsection*{LIME Explanation}
 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single]
 {
@@ -144,7 +144,7 @@ The following JSON fragments illustrate the response shapes returned by two key 
 }
 \end{lstlisting}
 
-\section{Environment variables and deployment switches}
+\section{Environment Variables and Deployment Switches}
 \label{app:env_table}
 
 Table~\ref{tab:env_vars} lists the principal environment variables controlling ingestion backend selection and deployment mode.
@@ -168,7 +168,7 @@ Table~\ref{tab:env_vars} lists the principal environment variables controlling i
 \end{tabular}
 \end{table}
 
-\section{Expert interview summaries}
+\section{Expert Interview Summaries}
 \label{app:interviews}
 
 During the requirements phase of the project, three structured interviews were conducted with three separate finance and technology practitioners to validate the project's motivation and inform feature priorities. Two sessions took place on 13 October 2025 and a third on 21 October 2025; the interviews were conducted online, lasted approximately 60--70 minutes each, and were focused around three themes: (i) how investor sentiment is currently monitored in practice; (ii) what data sources are considered most reliable; and (iii) what analytical capabilities would make a sentiment dashboard genuinely useful to a practitioner. Table~\ref{tab:interview_sessions} lists the sessions.
@@ -205,27 +205,3 @@ The three sessions produced substantially overlapping insights, which are consol
 
 \paragraph{Interview notes and recording status.}
 Notes were taken during the first session on 13 October 2025 with AI transcription assistance (Notion AI) and are available on request. Recordings for the second 13 October 2025 session and the 21 October 2025 session did not export successfully, so those sessions are represented here only through contemporaneous hand-written notes; the themes above were consistent across all three sessions, which is why they are reported in consolidated form. No personally identifiable information was retained in any case. The interviews are cited here as context for the requirements process rather than as formal qualitative data.
-
-\section{Dashboard screenshots}
-\label{app:screenshots}
-
-\clearpage
-Figures~\ref{fig:screen_market_overview_app}--\ref{fig:screen_stock_analysis_app} reproduce two principal dashboard screens from the running build (see also Section~\ref{sec:frontend_screenshots}).
-
-\begin{figure}[H]
-  \centering
-  \IfFileExists{figures/screen_market_overview.png}{%
-    \includeDashboardShot[\linewidth]{screen_market_overview.png}}{%
-    \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}Market Overview screenshot (\texttt{figures/screen\_market\_overview.png} not found).\vspace{1.5em}}}}
-  \caption{Market Overview page: global sentiment distribution, daily trend, and per-source filter controls.}
-  \label{fig:screen_market_overview_app}
-\end{figure}
-
-\begin{figure}[H]
-  \centering
-  \IfFileExists{figures/screen_stock_analysis.png}{%
-    \includeDashboardShot[\linewidth]{screen_stock_analysis.png}}{%
-    \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}Stock Analysis screenshot (\texttt{figures/screen\_stock\_analysis.png} not found).\vspace{1.5em}}}}
-  \caption{Stock Analysis page: per-ticker sentiment time-series, price overlay, LIME heatmap, and data quality indicators.}
-  \label{fig:screen_stock_analysis_app}
-\end{figure}
