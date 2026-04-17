@@ -1,0 +1,44 @@
+{
+  "n": 200,
+  "observed_agreement": 0.995,
+  "expected_agreement": 0.3352,
+  "kappa": 0.9925,
+  "kappa_se": 0.0075,
+  "z": 132.2811,
+  "p_value": 0.0,
+  "per_class_agreement": {
+    "positive": {
+      "n": 70,
+      "agree": 70,
+      "agreement": 1.0
+    },
+    "negative": {
+      "n": 70,
+      "agree": 70,
+      "agreement": 1.0
+    },
+    "neutral": {
+      "n": 60,
+      "agree": 59,
+      "agreement": 0.9833
+    }
+  },
+  "confusion_author_rows_vs_llm_cols": {
+    "positive": {
+      "positive": 70,
+      "negative": 0,
+      "neutral": 0
+    },
+    "negative": {
+      "positive": 0,
+      "negative": 70,
+      "neutral": 0
+    },
+    "neutral": {
+      "positive": 0,
+      "negative": 1,
+      "neutral": 59
+    }
+  },
+  "methodology": "Second annotator is an LLM (Claude) given only the 200 raw texts via annotation_task.json, with no access to the gold labels or the labelled dataset source file. Labels restricted to {positive,negative,neutral}. Reported as inter-annotator reliability between the author (primary annotator) and an independent automated second annotator."
+}

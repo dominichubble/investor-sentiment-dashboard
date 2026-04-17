@@ -1,0 +1,12 @@
+{
+  "n_discordant": 71,
+  "b_only_A_correct": 22,
+  "c_only_B_correct": 49,
+  "p_value_exact": 0.0018204049356112858,
+  "chi2_cc": 9.52112676056338,
+  "p_value_chi2": 0.0020311983018945767,
+  "both_correct": 115,
+  "both_wrong": 14,
+  "keyword_accuracy": 0.685,
+  "finbert_accuracy": 0.82
+}
