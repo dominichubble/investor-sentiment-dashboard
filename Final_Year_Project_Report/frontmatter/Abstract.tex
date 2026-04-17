@@ -1,0 +1,61 @@
+\chapter*{Abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This dissertation describes the design, implementation, and evaluation of an
+\textit{Investor Sentiment Dashboard}: an end-to-end analytics system that applies
+Natural Language Processing (NLP) and Explainable Artificial Intelligence (XAI)
+to the multi-source analysis of public investor sentiment and its relationship to
+financial asset price movements.
+
+Three novel contributions are presented, each supported by empirical or
+demonstrable results.
+First, a \textit{finance-specific emotion taxonomy} layers six domain emotions
+(fear, optimism, uncertainty, confidence, scepticism, and mixed) over FinBERT's
+softmax probabilities using normalised Shannon entropy, domain lexicon matching,
+and financial aspect priors.
+No prior system in the reviewed literature combines these signals within a single,
+architecture-agnostic scoring function; the module is deployed in production and
+annotates the full 150{,}000-record corpus.
+Second, a lightweight \textit{Aspect-Based Sentiment Analysis (ABSA)} module
+extracts and tags evidence sentences across six financial aspect categories without
+requiring fine-tuned sequence models, providing traceable justification for each
+headline sentiment label.
+Third, \textit{production-grade XAI integration}: LIME \citep{ribeiro2016lime} is
+wired through the full application stack as a REST endpoint and rendered as a
+token-level heatmap within the React SPA, making this one of the first reported
+financial sentiment systems to surface token-level explanations directly in a
+deployed user interface rather than an offline notebook.
+The LIME integration also yielded a concrete diagnostic finding: contextually neutral
+risk vocabulary (e.g.\ ``cautious'', ``inflation'') is systematically pushed toward
+the negative class, directly identifying the mechanism behind FinBERT's neutral
+recall deficit and pointing to a targeted fine-tuning strategy.
+
+To underpin these contributions, \textbf{FinBERT} \citep{araci2019finbert} is
+deployed as the core classifier on text aggregated from three distinct channels:
+Reddit (via PRAW), X/Twitter (via a resilient multi-backend layer), and financial
+news (via NewsAPI).
+On a purpose-built, 200-sample evaluation benchmark reflecting the real
+distribution of multi-source financial text, FinBERT achieves \textbf{82.0\%}
+accuracy and \textbf{80.3\%} macro F1-score, \textbf{outperforming a
+keyword-based baseline by 13.5 and 12.4 percentage points respectively}.
+The most striking individual gain is on the negative class, where FinBERT recall
+improves from 47.1\% to 94.3\%, a 47.2 percentage-point improvement that
+illustrates the inherent limitation of lexicon-based methods on implicit financial
+phrasing.
+
+In addition to the three primary contributions, a \textit{sentiment--price
+correlation engine} provides Pearson and Spearman correlation, configurable lag
+analysis, Granger causality testing \citep{granger1969}, rolling correlation, and
+market-adjusted metrics within a single interactive interface; a combination of
+statistical methods not previously described together in an integrated,
+ticker-agnostic dashboard.
+
+Overall, the project demonstrates that multi-source, domain-adaptive sentiment
+analysis can be deployed transparently and at scale within a single academic
+system, and that the finance-emotion taxonomy, ABSA enrichment layer, and
+production XAI integration in particular offer a publishable contribution at the
+intersection of NLP, behavioural finance, and explainable AI.
+A live industry demonstration of the delivered system to senior finance and AI
+practitioners has been arranged for the summer 2026 period, with a view to
+obtaining structured practitioner feedback and exploring potential real-world
+adoption pathways beyond the scope of this dissertation.

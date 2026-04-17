@@ -1,0 +1,182 @@
+\chapter{Introduction}
+\label{chap:introduction}
+
+\section{Background}
+
+Investor sentiment plays a well-documented role in shaping financial markets.
+Beyond traditional indicators (earnings reports, macroeconomic data, and analyst
+forecasts), collective mood and perception can drive price volatility, amplify
+trading volume, and create temporary mispricings that persist until information is
+fully absorbed \citep{tetlock2007giving}. With the proliferation of digital
+communication, social media and online communities have become primary channels
+through which retail investors express and exchange market opinions. Reddit,
+X (formerly Twitter), and financial news outlets together host millions of daily
+discussions that reflect how diverse investor communities interpret and respond to
+market developments.
+
+The emergence of Natural Language Processing (NLP) has made it possible to
+quantify these qualitative opinions at scale. In particular, domain-adaptive
+transformer models such as FinBERT \citep{araci2019finbert} have demonstrated
+state-of-the-art performance on financial sentiment benchmarks, capturing nuances
+such as ``guidance raised'', ``missed expectations'', and ``strong headwinds'' that
+earlier lexicon or bag-of-words approaches simply miss. These advances open a
+realistic path toward decision-support tools that fuse public opinion signals
+with quantitative market data.
+
+What I noticed, however, is that most published work evaluates sentiment models
+in isolation on benchmark datasets, without combining data ingestion, entity
+resolution, explainability, and price correlation into a reproducible, user-facing
+product. That gap is what this project is designed to address.
+
+\section{Problem Definition}
+
+Despite considerable progress in financial NLP, existing approaches have several
+compounding limitations. The key issue is that many systems draw from a single
+data source (Twitter or news feeds), producing sentiment signals that reflect
+only one segment of the investor population \citep{tetlock2007giving,
+bollen2011twitter}. Retail sentiment on Reddit, for example, can diverge
+substantially from institutional-oriented news sentiment during the same market
+event, as demonstrated by Long et al.\ \citep{long2023reddit} during the
+GameStop rally, and ignoring either channel distorts the overall picture.
+
+A second limitation is opacity. Widely used classifiers output a three-class
+label (positive, neutral, negative) with a single confidence score, a
+representation that discards the behavioural richness of investor discourse.
+An investor expressing ``cautious optimism'' differs meaningfully from one
+expressing ``confident bullishness'', yet both receive the same
+\textit{positive} label. Without knowing \textit{why} a model reached its
+classification, users cannot validate outputs, detect biases, or calibrate
+trust, a requirement made explicit by \citeauthor{doshivelez2017interpretable}
+(\citeyear{doshivelez2017interpretable}) and reinforced in the context of
+financial AI by \citeauthor{yeo2023xai} (\citeyear{yeo2023xai}), who observe
+that most XAI work in finance remains confined to offline research tools rather
+than deployed user interfaces.
+
+A third gap is the integration of sentiment with price behaviour. While the
+literature documents correlations between sentiment and returns
+\citep{bollen2011twitter, schumaker2009textmining}, these analyses are
+reported in standalone research scripts. No prior work describes an
+interactive, ticker-agnostic tool that combines Pearson, Spearman, lag
+analysis, Granger causality \citep{granger1969}, rolling correlation, and
+market-adjusted metrics within a single user-configurable interface.
+
+To address these gaps, I developed an \textit{Investor Sentiment Dashboard} that
+(i) aggregates sentiment across multiple heterogeneous sources, (ii) introduces a
+novel finance-specific emotion taxonomy enriching FinBERT outputs with six
+behavioural dimensions, (iii) provides an ABSA module for traceable justification,
+(iv) surfaces LIME explanations within an interactive React dashboard, and (v)
+integrates a sentiment--price correlation engine with Granger causality testing.
+
+\paragraph{Scope note.}
+This is a research artefact rather than a regulated financial product. The React interface was designed with production-quality engineering in mind (clear navigation, responsive charts, and explicit Methodology and Legal pages), so that the system could credibly serve as an investor analytics prototype or the basis for a future pilot study. Where this report refers to \emph{investor-facing} or \emph{production-style} qualities, it means product-minded design that could support user trials or a journal demonstration, not a claim of FCA authorisation, suitability advice, or commercial SLAs.
+
+\section{Aims and Objectives}
+\label{sec:aims_objectives}
+
+My overarching aim was to design, implement, and evaluate a transparent,
+reproducible, end-to-end system for analysing and visualising investor sentiment
+across heterogeneous online sources.
+
+The specific objectives were to:
+
+\begin{enumerate}
+    \item Aggregate sentiment data from Reddit, X (Twitter), and financial news
+    using a resilient multi-backend ingestion architecture with rate-limit
+    management and automated scheduling.
+    \item Apply FinBERT to classify collected text and formally evaluate it against
+    a keyword-based baseline on a purpose-built 200-sample benchmark.
+    \item Develop a \textit{novel finance-emotion taxonomy} layering six
+    domain-specific emotions (fear, optimism, uncertainty, confidence, scepticism,
+    and mixed) over FinBERT outputs using Shannon entropy, domain lexicons, and
+    financial aspect priors.
+    \item Implement a lightweight \textit{Aspect-Based Sentiment Analysis} module
+    that identifies and tags evidence sentences across six financial aspect
+    categories.
+    \item Integrate LIME as a REST endpoint and embed it within the React SPA,
+    making model explanations directly accessible to end users.
+    \item Build a stock entity resolution pipeline combining spaCy Named Entity
+    Recognition with fuzzy string matching to link free-text mentions to canonical
+    ticker symbols.
+    \item Implement a \textit{sentiment--price correlation engine} supporting
+    Pearson correlation, Spearman correlation, configurable lag analysis, Granger
+    causality testing, and rolling correlation.
+    \item Develop a React SPA built with Vite and Recharts, and deploy the backend
+    in both full (ML) and lean (DB-only) modes.
+\end{enumerate}
+
+\section{Novel Contributions}
+\label{sec:novel_contributions}
+
+No existing system in the reviewed literature integrates multi-source ingestion,
+a finance-specific emotion taxonomy, lightweight ABSA, production-grade XAI,
+and an interactive correlation engine within a single reproducible tool.
+This project makes three primary novel contributions:
+
+\begin{enumerate}
+
+    \item \textbf{Finance-specific emotion taxonomy.}
+    Prior work on financial sentiment is largely limited to three-class
+    (positive/neutral/negative) classifiers \citep{araci2019finbert,
+    malo2014financialphrasebank}. Bollen et al.\ \citep{bollen2011twitter}
+    proposed multi-dimensional mood indices for general social media, but no
+    equivalent has been defined for the vocabulary and behavioural patterns
+    specific to investor discourse.
+    I designed and implemented a six-class taxonomy (fear, optimism, uncertainty,
+    confidence, scepticism, mixed) that is computed from FinBERT's softmax
+    probabilities, normalised Shannon entropy, domain lexicons, and financial
+    aspect priors in a single inference pass. The combination of these four signals
+    within one architecture-agnostic scoring function has not been previously
+    reported, and the module is deployed in production, annotating the entire
+    150{,}000-record corpus.
+
+    \item \textbf{Lightweight ABSA for financial enrichment.}
+    Full ABSA systems require fine-tuned sequence-labelling models and
+    purpose-built annotated datasets \citep{pontiki2014semeval}, making them
+    impractical for high-throughput, continuously ingesting pipelines.
+    I implemented a keyword-triggered, sentence-level aspect extraction module
+    covering six financial aspect categories (revenue, growth, risk, valuation,
+    product/AI, and macro/policy) that operates without any labelled training data
+    and attaches evidence sentences to each stored record, providing traceable
+    justification for the headline sentiment label.
+
+    \item \textbf{Production-grade XAI integration.}
+    \citeauthor{yeo2023xai} (\citeyear{yeo2023xai}) find that most XAI
+    applications in finance remain confined to offline notebooks; the same
+    observation applies to every financial sentiment system in the reviewed
+    literature. I embedded LIME \citep{ribeiro2016lime} as a live FastAPI REST
+    endpoint, resolved the async/CPU-blocking challenge via
+    \texttt{run\_in\_executor}, and rendered token-level heatmaps directly within
+    the React frontend, making model explanations accessible to end users without
+    any code interaction. LIME diagnostics also produced a concrete finding:
+    contextually neutral risk vocabulary systematically triggers negative
+    misclassification, providing an actionable target for future fine-tuning.
+
+\end{enumerate}
+
+\section{Report Structure}
+
+The remainder of this report is organised as follows:
+
+\begin{itemize}
+    \item \textbf{Chapter 2 -- Literature Review:} reviews prior research on
+    financial sentiment analysis, NLP models, explainable AI, and
+    sentiment--price relationships, identifying the gaps that motivated this
+    project.
+    \item \textbf{Chapter 3 -- Technical Background:} derives the mathematical
+    foundations of the methods used: the transformer self-attention mechanism,
+    BERT and FinBERT pre-training, the LIME and SHAP explainability frameworks,
+    and the Granger causality F-test.
+    \item \textbf{Chapter 4 -- System Design and Methodology:} details the
+    five-tier architecture, development methodology, ethical considerations, and
+    key design decisions.
+    \item \textbf{Chapter 5 -- Implementation:} describes the technical
+    realisation of each system component, with code listings illustrating
+    key choices.
+    \item \textbf{Chapter 6 -- Evaluation:} presents quantitative benchmark
+    results, LIME qualitative analysis, and system performance measurements.
+    \item \textbf{Chapter 7 -- Discussion:} contextualises findings against the
+    literature, reflects on novel contributions, and explores implications.
+    \item \textbf{Chapter 8 -- Conclusion:} summarises key outcomes, reflects on
+    personal and professional development, and proposes directions for future
+    research and publication.
+\end{itemize}

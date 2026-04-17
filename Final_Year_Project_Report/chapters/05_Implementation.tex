@@ -1,0 +1,338 @@
+\chapter{Implementation}
+\label{chap:implementation}
+
+\section{Development Environment}
+\label{sec:dev_env}
+
+The system is developed in \textbf{Python~3.11}, selected for its mature NLP ecosystem, improved typing support (PEP~654 exception groups, PEP~673 \texttt{Self} type), and compatibility with the latest versions of \texttt{Transformers} and \texttt{PyTorch}.  Environment isolation is managed via a virtual environment with dependencies declared in \texttt{backend/requirements.txt}.  Two dependency profiles are maintained: the full profile for local and GPU-equipped deployments (includes PyTorch, Transformers, LIME, SHAP, and spaCy), and a lean profile (\texttt{requirements-lean.txt}) for resource-constrained cloud instances.
+
+Code quality is enforced via Black (line length 88, target version \texttt{py311}), isort, and a Pytest test suite covering unit and integration tests.  Version control is maintained through Git with a modular directory structure separating ingestion pipelines (\texttt{backend/app/pipelines/}), NLP models (\texttt{backend/app/models/}), enrichment and analysis (\texttt{backend/app/analysis/}), entity resolution (\texttt{backend/app/entities/}), explainability (\texttt{backend/app/explainability/}), storage (\texttt{backend/app/storage/}), and API routing (\texttt{backend/app/api/v1/}).
+
+\section{Data Ingestion Pipelines}
+\label{sec:data_ingestion}
+
+\subsection{Reddit Ingestion}
+
+The Reddit pipeline (\texttt{ingest\_reddit.py}) uses the Python Reddit API Wrapper (PRAW) with OAuth2 client-credentials authentication.  Finance-oriented subreddits (e.g., r/stocks, r/investing, r/ETFs, r/cryptocurrency) are queried using the \texttt{new}, \texttt{hot}, and \texttt{top} sort modes to capture both recent posts and high-engagement content.  A separate bulk ingestion pipeline (\texttt{reddit\_bulk\_ingest.py}) supports deeper historical retrieval using keyword-filtered search, configurable via a \texttt{--max-posts} argument.  Post metadata (title, body, timestamp, subreddit, score) is extracted and normalised before being passed to the preprocessing stage.
+
+\subsection{X/Twitter Ingestion}
+
+The Twitter pipeline (\texttt{ingest\_twitter.py}) implements a multi-backend architecture controlled by the \texttt{TWITTER\_INGEST\_BACKEND} environment variable, providing three modes:
+
+\begin{itemize}
+    \item \textbf{\texttt{snscrape} (default):} Accesses publicly available tweets using the same pathway as the web interface.  No official API key is required, making this the most accessible backend.  A configurable cashtag and keyword filter targets finance-relevant content (e.g., \texttt{\$AAPL}, ``earnings'', ``fed rate'').
+    \item \textbf{\texttt{api}:} Activates the official X API v2 client (Tweepy) when a \texttt{TWITTER\_BEARER\_TOKEN} is available.  This backend enforces the platform's rate limits, returning 429 responses that trigger an exponential backoff strategy.
+    \item \textbf{\texttt{csv}:} Reads from a local CSV file (default: the \texttt{stock\_tweets.csv} historical dataset spanning September 2021 to September 2022) using a standardised schema.  This backend is used for reproducible evaluation, as it provides a fixed corpus of known composition.
+    \item \textbf{\texttt{auto}:} Selects \texttt{api} if a bearer token is present in the environment, otherwise falls back to \texttt{snscrape}.
+\end{itemize}
+
+All backends produce records in an identical normalised schema (text, timestamp, source, ticker), so downstream processing is indifferent to which backend was active.  Figure~\ref{fig:twitter_backend} illustrates the backend selection logic.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  dec/.style  ={draw, diamond, fill=yellow!20, aspect=2.6,
+                minimum width=4.2cm, inner sep=3pt, align=center},
+  back/.style ={draw, rounded corners=4pt, fill=#1,
+                minimum width=3.4cm, minimum height=0.90cm,
+                align=center, inner sep=6pt},
+  io/.style   ={draw, rounded corners=4pt, fill=teal!18,
+                minimum width=6.0cm, minimum height=0.80cm,
+                align=center, inner sep=6pt},
+  note/.style ={font=\scriptsize\itshape, text=gray!75, align=center},
+  arr/.style  ={->, >=Stealth, thick}]
+
+%% Top: env var selector
+\node[io]  (env)     at ( 0,   0.0) {\texttt{TWITTER\_INGEST\_BACKEND} env var};
+\node[dec] (mode)    at ( 0,  -1.9) {Backend mode?};
+
+%% Three backend nodes
+\node[back=blue!14]   (api)  at (-4.6, -3.9) {Official X API v2\\[-3pt]\scriptsize Tweepy + bearer token};
+\node[back=orange!14] (sns)  at ( 0.0, -3.9) {snscrape\\[-3pt]\scriptsize No API key needed};
+\node[back=green!14]  (csv)  at ( 4.6, -3.9) {CSV dataset\\[-3pt]\scriptsize Historical corpus};
+
+%% Notes below backends (well below, no overlap with anything)
+\node[note, below=0.25cm of api] {Best coverage\\and data quality};
+\node[note, below=0.25cm of sns] {Default; most\\accessible};
+\node[note, below=0.25cm of csv] {Reproducible\\evaluation};
+
+%% Rate-limit handling (well below the notes)
+\node[dec] (ratelim)  at (-4.6, -6.6) {429 rate\\limit?};
+\node[back=orange!14] (fallback) at (-4.6, -8.4) {Fallback to\\snscrape};
+
+%% Output + merge hub (all backends converge here before persistence)
+\node[io]  (out)      at ( 0,  -10.6) {Normalised records: (text, timestamp, source, ticker)};
+\coordinate (merge) at (0,-9.05);
+
+%% Arrows: env → mode → backends
+\draw[arr] (env)  -- (mode);
+\draw[arr] (mode.west) -- node[above, font=\scriptsize]{\texttt{api}}  ++(-4.6,0) -- (api);
+\draw[arr] (mode.south)-- node[right, font=\scriptsize]{\texttt{snscrape} / \texttt{auto}} (sns);
+\draw[arr] (mode.east) -- node[above, font=\scriptsize]{\texttt{csv}}  ++(4.6,0)  -- (csv);
+
+%% API → rate limit check
+\draw[arr] (api.south) -- ++(0,-1.35) -- (ratelim.north);
+
+%% Rate limit branches → merge hub
+\draw[arr] (ratelim.south) -- node[right, font=\scriptsize]{yes} (fallback.north);
+\draw[arr] (ratelim.east)  -- node[above, font=\scriptsize]{no} ++(1.4,0) |- (merge);
+\draw[arr] (fallback.south) -- ++(0,-0.55) -| (merge);
+\draw[arr] (sns.south)  -- ++(0,-0.85) -| (merge);
+\draw[arr] (csv.south)  -- ++(0,-0.85) -| (merge);
+
+%% Hub → shared output schema
+\draw[arr] (merge) -- (out.north);
+\end{tikzpicture}
+\caption{X/Twitter multi-backend ingestion architecture.  The active backend is selected via an environment variable at startup.  When the official API returns a 429 rate-limit response, the pipeline automatically falls back to \texttt{snscrape}.  All three backends emit the same normalised record schema, keeping the downstream pipeline indifferent to which backend is active.}
+\label{fig:twitter_backend}
+\end{figure}
+
+The multi-backend design was not part of the original plan; it emerged directly from a practical problem. The official X API v2 rate limits are genuinely restrictive on a free account: in early testing I found I could not collect enough data to build a meaningful corpus within the quota. Rather than paying for elevated access, I built the fallback hierarchy so the system could keep ingesting regardless of API availability. If I were starting again, I would have anticipated this problem and designed the multi-backend architecture from day one, instead of retrofitting it mid-project.
+
+\subsection{News Ingestion}
+
+Financial news is collected via the NewsAPI \texttt{/everything} endpoint (\texttt{ingest\_news.py}), targeting major outlets including Reuters and Bloomberg under business and finance category filters. A configurable keyword query (e.g., ``stock market OR earnings OR Fed rate'') is combined with source-level filtering. The NewsAPI client is authenticated via \texttt{NEWS\_API\_KEY}, and pagination is handled automatically. One problem I had not anticipated was the volume of syndicated duplicate content: the same Reuters or AP wire article would appear under dozens of different publisher names, meaning a naive ingest would count it as many separate data points. I addressed this with content-hash deduplication and URL-based deduplication at ingestion time. Artefacts introduced by NewsAPI's response format (e.g., ``[+\textit{N} chars]'' truncation indicators) are also stripped during cleaning.
+
+\subsection{Supplementary Ingestion Pipelines}
+
+Two additional ingest pipelines are maintained for bulk historical data collection:
+\begin{itemize}
+    \item \path{ingest_huggingface_financial_tweets.py}: streams the HuggingFace dataset \path{StephanAkkerman/financial-tweets-stocks} and recomputes sentiment using FinBERT.
+    \item \path{ingest_felixdrinkall_yahoo_news.py}: ingests a 2017--2023 Yahoo Finance news archive, providing a multi-year historical baseline for correlation analysis.
+\end{itemize}
+
+\subsection{Automated Scheduling}
+
+Continuous data collection is orchestrated through two GitHub Actions workflows.  The daily workflow (\texttt{collect-data.yml}) runs Reddit, NewsAPI, and X/Twitter ingestion in sequence, passes results through the FinBERT inference stack, and writes labelled records to the Neon PostgreSQL database.  A separate weekly workflow (\texttt{collect-reddit-bulk.yml}) performs a deeper Reddit pull across a broader ticker list.  Both workflows cache HuggingFace model weights using a hash of \texttt{requirements.txt} as the cache key, avoiding redundant downloads across runs.
+
+\section{Preprocessing Pipeline}
+\label{sec:preprocessing}
+
+The preprocessing module (\texttt{app/pipelines/preprocess\_data.py}) implements four named configuration profiles, selected at runtime via a \texttt{--config} argument.  The \texttt{finbert} profile, used exclusively for sentiment inference, is designed to preserve the contextual integrity required by the transformer architecture:
+
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=Python, caption={FinBERT preprocessing configuration in \texttt{preprocess\_data.py}.}, label={lst:finbert_config}]
+CONFIGS = {
+    "finbert": {
+        "lowercase": False,           # Preserve case (tickers, proper nouns)
+        "remove_urls": True,
+        "remove_stopwords": False,    # Full context required for attention
+        "lemmatize": False,           # Subword tokenisation handles variants
+        "preserve_financial": True,
+        "preserve_financial_punctuation": True,  # Retain %, $, decimals
+        "handle_negations": True,     # "not profitable" -> "not_profitable"
+    }
+}
+\end{lstlisting}
+\end{minipage}
+
+All processed records are stored with both the original and cleaned text, along with a \path{text_cleaned} field and source-specific metadata.  Source-text field mapping (\path{SOURCE_TEXT_FIELDS}) ensures that the correct JSON key is extracted for each platform (e.g., Reddit's \path{title} plus \path{selftext}, Twitter's \path{text}, NewsAPI's \path{clean_title} plus \path{clean_description}).
+
+\section{Sentiment Inference Engine}
+\label{sec:inference_engine}
+
+The FinBERT model is encapsulated in the \texttt{FinBERTModel} class within \path{app/models/finbert_model.py}, loaded from the \path{ProsusAI/finbert} checkpoint via HuggingFace Transformers.  A singleton accessor \texttt{get\_model()} ensures the model is loaded once per process, avoiding repeated initialisation overhead.  Inference is performed with a configurable batch size (default 32) and a maximum sequence length of 512 tokens.
+
+The \texttt{analyze\_batch()} function in \texttt{app/models/sentiment\_inference.py} provides the production batch interface and returns a tuple of results and a \texttt{FailedItemsTracker} instance:
+
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=Python, caption={Production batch inference signature in \texttt{sentiment\_inference.py}.}, label={lst:batch_inference}]
+def analyze_batch(
+    texts: List[str],
+    batch_size: int = 32,
+    return_all_scores: bool = False,
+    skip_errors: bool = True,
+    track_failures: bool = True,
+) -> tuple[List[Optional[Dict]], Optional[FailedItemsTracker]]:
+    """
+    Analyse sentiment for multiple texts.
+
+    Returns a (results, tracker) tuple.  Each result is a dict:
+        {"label": "positive"|"negative"|"neutral",
+         "score": float,
+         "scores": {"positive": ..., "negative": ..., "neutral": ...}}
+    Failed items are logged in the tracker rather than raising.
+    """
+\end{lstlisting}
+\end{minipage}
+
+Empty texts are filtered before the model call and tracked in the \texttt{FailedItemsTracker}, preserving original index alignment in the returned list.
+
+The FinBERT tokeniser module (\texttt{app/preprocessing/finbert\_tokenizer.py}) provides standalone tokenisation with padding, truncation, and attention mask generation, decoupled from the model class so unit tests can call tokenisation alone.
+
+\section{Novel: Finance-Emotion Taxonomy}
+\label{sec:emotion_impl}
+
+The finance-emotion module (\path{app/analysis/finance_emotion.py}) implements the taxonomy described in Section~\ref{sec:emotion_design}.  Six emotion categories are defined with curated domain lexicons:
+
+\begin{itemize}
+    \item \textbf{fear}: ``selloff'', ``panic'', ``crash'', ``plunge'', ``bankruptcy'', ``tariff'', ``bearish'', etc.
+    \item \textbf{optimism}: ``beat'', ``surge'', ``rally'', ``bullish'', ``momentum'', ``breakout'', etc.
+    \item \textbf{uncertainty}: ``uncertain'', ``volatility'', ``mixed'', ``guidance cut'', ``headwind'', etc.
+    \item \textbf{confidence}: ``conviction'', ``resilient'', ``outperform'', ``strong balance sheet'', ``moat'', etc.
+    \item \textbf{scepticism}: ``overvalued'', ``hype'', ``bubble'', ``priced for perfection'', etc.
+    \item \textbf{mixed}: assigned when no single emotion achieves sufficient confidence.
+\end{itemize}
+
+The inference function \texttt{infer\_finance\_emotion()} accepts the FinBERT softmax vector, normalised Shannon entropy, and extracted aspect snippets as inputs.  It initialises base scores, applies probability-weighted increments, adds lexicon hit scores, and adds aspect-specific priors before normalising to a probability simplex.  A dominant emotion is selected only if its score exceeds a minimum threshold and is sufficiently differentiated from the second-ranked emotion; otherwise, \textit{mixed} is returned.  The output dictionary includes the dominant label, its score, the full distribution, and a human-readable rationale string for display in the dashboard.
+
+\section{Novel: Aspect-Based Sentiment Analysis (ABSA-Lite)}
+\label{sec:absa_impl}
+
+The financial sentiment enrichment module (\path{app/analysis/financial_sentiment_enrichment.py}) implements the lightweight ABSA described in Section~\ref{sec:absa_design}.  The \texttt{extract\_aspect\_snippets()} function segments documents into sentences using a regex-based splitter and matches each sentence against the six aspect keyword buckets.  Up to eight evidence snippets are returned per document (maximum two per aspect) with their aspect tag and optional FinBERT per-snippet label.
+
+A \texttt{normalized\_label\_entropy()} function computes $H_{\text{norm}} = -\sum_i p_i \log p_i / \log 3$ over the FinBERT softmax distribution, producing a score in $[0, 1]$ where 0 indicates a decisive one-class prediction and 1 indicates maximum distributional uncertainty.  This entropy value feeds directly into the emotion inference pipeline and is exposed in the API response as an uncertainty indicator.
+
+\section{Stock Entity Resolution}
+\label{sec:entity_impl}
+
+The entity resolution subsystem spans three files: \path{app/entities/stock_database.py} (ticker and company name lookup), \path{app/entities/company_extractor.py} (spaCy NER), and \path{app/entities/entity_resolver.py} (fuzzy matching and resolution).
+
+The \texttt{EntityResolver.resolve()} method implements a three-stage priority cascade: (1)~exact cashtag match (\texttt{\$AAPL} → \texttt{AAPL}); (2)~exact company name match; (3)~fuzzy partial-ratio match using FuzzyWuzzy with a similarity threshold of 0.85.  A blacklist of 12 common false-positive entities (``Fed'', ``SEC'', ``FBI'', ``White House'', etc.) prevents systematic misclassification of regulatory and government body mentions.
+
+\section{XAI: LIME Integration}
+\label{sec:xai_impl}
+
+\subsection{LIME Explainer}
+
+The \texttt{LIMEExplainer} class is implemented in \path{app/explainability/lime_explainer.py}.  It wraps a \texttt{LimeTextExplainer} singleton with a probability adapter that maps any free-text input to FinBERT's three-class probability distribution.  The adapter normalises inputs, tokenises using FinBERT's WordPiece tokeniser, runs inference, and returns a matrix of shape $N \times 3$.  This black-box interface decouples the explainer from FinBERT's internals, permitting future model substitution without modifying the explanation logic.
+
+\noindent
+\begin{minipage}{\linewidth}
+\begin{lstlisting}[language=Python, caption={LIME \texttt{/explain} handler (excerpt from \texttt{sentiment.py}).}, label={lst:lime_endpoint}]
+@router.post("/explain", response_model=ExplainResponse)
+async def explain(body: ExplainRequest):
+    """Generate token-level LIME explanation for a single text."""
+    loop = asyncio.get_event_loop()
+    # Run CPU-heavy LIME in a background thread to avoid blocking the event loop
+    explanation = await loop.run_in_executor(
+        None, run_lime_explain, body.text, body.options
+    )
+    tokens = [
+        ExplanationToken(token=t, weight=w)
+        for t, w in explanation["top_features"]
+    ]
+    return ExplainResponse(
+        text=body.text,
+        prediction=SentimentResult(**explanation["prediction"]),
+        tokens=tokens,
+        metadata={"method": "LIME", "processing_time_ms": explanation["time_ms"]},
+    )
+\end{lstlisting}
+\end{minipage}
+
+The \texttt{run\_in\_executor} pattern is architecturally important: LIME perturbation sampling is a CPU-bound computation that can take several seconds per explanation.  Running it in a background thread via the event loop's thread pool executor prevents the FastAPI server from blocking other concurrent requests during explanation generation.  The frontend allocates a 120-second timeout budget to this endpoint to accommodate inference on complex, long-form posts.
+
+\subsection{SHAP Explainer}
+
+The \texttt{SHAPExplainer} class (\path{app/explainability/shap_explainer.py}) provides token-level Shapley value attribution using the \texttt{shap.Explainer} with the FinBERT tokeniser as the masker.  SHAP values are computed per token per class, and the \texttt{get\_summary\_data()} method aggregates token importance across a corpus, excluding special tokens (\texttt{[CLS]}, \texttt{[SEP]}, \texttt{[PAD]}).  SHAP is available via the API's \path{/api/v1/explainability/shap} route (served from the \path{backend/api/} router) and through the Jupyter notebook \path{notebooks/06-shap-explainability.ipynb}, but is not rendered in the production frontend due to latency constraints.  Ten pre-generated LIME explanation artefacts (PNG bar charts and HTML files) are stored in \texttt{data/processed/explanations/lime\_examples/} and are referenced in the evaluation chapter.
+
+\section{REST API}
+\label{sec:api_impl}
+
+\subsection{Application Structure}
+
+The canonical FastAPI application is defined in \path{backend/app/main.py}.  It registers three middleware layers (in innermost-to-outermost order): \texttt{SecurityHeadersMiddleware} (sets HTTP security headers), \texttt{APIKeyMiddleware} (enforces the \texttt{API\_KEY} environment variable on protected routes in production), and \texttt{CORSMiddleware} (permitting cross-origin requests from the React dev server).  A \texttt{TrustedHostMiddleware} is conditionally registered when the \texttt{ALLOWED\_HOSTS} environment variable is set.
+
+The versioned API router is assembled in \path{app/api/v1/router.py} and includes the following sub-routers:
+
+\begin{table}[ht]
+  \centering
+  \footnotesize
+  \setlength{\tabcolsep}{3pt}
+  \caption{Primary REST API endpoints exposed by \texttt{backend/app/main.py}.}
+  \label{tab:api-routes}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.40\linewidth}@{}}
+    \toprule
+    \textbf{Prefix} & \textbf{Key Endpoints} & \textbf{Description} \\
+    \midrule
+    \path{/api/v1/sentiment} & \makecell[tl]{\path{/analyze}\\\path{/batch}\\\path{/explain}\\\path{/narrative}} & FinBERT inference, batch analysis, LIME explanation, Groq-backed ticker narrative \\
+    \path{/api/v1/data} & \makecell[tl]{\path{/predictions}\\\path{/statistics}\\\path{/stock-quality/}\texttt{\{t\}}} & Historical records, global statistics, per-ticker data quality \\
+    \path{/api/v1/correlation} & \makecell[tl]{\texttt{\{ticker\}}\\\path{/timeseries}\\\path{/lag-analysis}\\\path{/granger}\\\path{/rolling}} & Sentiment--price statistics with configurable methodology \\
+    \path{/api/v1/stocks} & \makecell[tl]{\path{/analyze}\\\texttt{/\{t\}/sentiment}\\\path{/trending}\\\path{/compare}} & Entity-resolved per-ticker analytics \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+In lean deployment mode (\path{LEAN_API=1}), the \path{/sentiment} prefix is routed to \path{app/api/v1/sentiment_lean.py}, which returns \texttt{503 Service Unavailable} with a descriptive message for \path{/analyze}, \path{/batch}, and \path{/explain}, while \path{/narrative} (Groq-backed, no PyTorch dependency) remains operational.
+
+\subsection{Health Endpoints}
+
+Two health endpoints are provided for deployment monitoring:
+\begin{itemize}
+    \item \texttt{GET /health}: liveness probe; returns \texttt{\{"status": "ok"\}} immediately without dependency checks.
+    \item \texttt{GET /health/ready}: readiness probe; executes a \texttt{SELECT 1} against the database; returns 503 if the database is unreachable.
+\end{itemize}
+
+This split follows the Kubernetes liveness/readiness pattern and ensures that load balancers can distinguish between a process that is alive but waiting for the database (readiness failure) versus one that has crashed (liveness failure).
+
+\section{Correlation Analysis Implementation}
+\label{sec:correlation_impl}
+
+The \texttt{CorrelationAnalyzer} class (\path{app/analysis/correlation.py}) performs all statistical computations and is initialised once per process via \texttt{lru\_cache}.  Results are cached using a TTL-backed \texttt{cachetools.TTLCache} with a one-hour expiry and 256-entry capacity, preventing repeated computation of expensive Granger and OLS calculations for popular tickers.
+
+For Granger causality, the implementation first checks for \texttt{statsmodels} availability at import time and degrades gracefully to a no-test result if the package is absent.  When available, the augmented Dickey-Fuller test is applied to both series to verify stationarity before running the Granger F-test at configurable lag orders.  Market adjustment via SPY beta residualisation ($y_\text{adj} = y - \hat{\beta} \cdot x_\text{SPY}$) is optionally applied to the return series before correlation computation, isolating asset-specific sentiment signals from broad market co-movement.
+
+\section{React Frontend}
+\label{sec:frontend_impl}
+
+The React~18 single-page application is built with Vite~5 and TypeScript.  All chart components use \textbf{Recharts}, which provides a composable, SVG-based charting library well-suited for responsive financial time-series visualisation.  State management is handled via React hooks (\texttt{useState}, \texttt{useEffect}, \texttt{useMemo}), with all API calls centralised in \texttt{src/services/api.ts} using Axios.
+
+The \textbf{Market Overview} page (\texttt{MarketOverview.tsx}) renders a global sentiment distribution pie chart, a daily trend bar chart, and a per-source comparison using data from \texttt{/api/v1/data/statistics}.  Source filter controls (\textit{All}, \textit{Reddit}, \textit{News}, \textit{X}) and a date-range selector update all charts simultaneously via a shared filter state.
+
+The \textbf{Stock Analysis} page (\texttt{StockAnalysis.tsx}) provides per-ticker analytics: a sentiment time-series with price overlay sourced from the correlation timeseries route (\path{/api/v1/correlation/<ticker>/timeseries}, with \texttt{<ticker>} replaced by the selected symbol at runtime), a finance-emotion breakdown, LIME explanation heatmap (tokens coloured by weight), and a data quality indicator panel.  A dedicated narrative card calls \path{/api/v1/sentiment/narrative} to retrieve a Groq-generated LLM summary of recent ticker sentiment, grounded in database records.
+
+\subsection{Dashboard screenshots}
+\label{sec:frontend_screenshots}
+
+Figures~\ref{fig:screen_market_overview}--\ref{fig:screen_lime} show three principal views of the running dashboard.  Key screens are also reproduced in Appendix~\ref{app:screenshots}.
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_market_overview.png}{%
+    \includeDashboardShot{screen_market_overview.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2.5em}Market Overview (\texttt{screen\_market\_overview.png} not found)\vspace{2.5em}}}}
+  \caption{Market Overview: global sentiment distribution, daily trend, and per-source filter controls.}
+  \label{fig:screen_market_overview}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_stock_analysis.png}{%
+    \includeDashboardShot{screen_stock_analysis.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2.5em}Stock Analysis (\texttt{screen\_stock\_analysis.png} not found)\vspace{2.5em}}}}
+  \caption{Stock Analysis: per-ticker sentiment time-series, price overlay, emotion breakdown, and LIME heatmap.}
+  \label{fig:screen_stock_analysis}
+\end{figure}
+
+\begin{figure}[p]
+  \centering
+  \IfFileExists{figures/screen_lime.png}{%
+    \includeDashboardShot{screen_lime.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{2.5em}LIME heatmap (\texttt{screen\_lime.png} not found)\vspace{2.5em}}}}
+  \caption{LIME token heatmap rendered in the live dashboard, linking the explainability evaluation of Chapter~\ref{chap:evaluation} to the deployed user interface.}
+  \label{fig:screen_lime}
+\end{figure}
+
+\section{Implementation Challenges and Resolutions}
+\label{sec:challenges}
+
+No part of this project went smoothly from the start. This section describes the most significant problems I encountered and how I resolved them.
+
+\paragraph{Getting FinBERT to work at all.}
+My initial experience with FinBERT was not straightforward. The first time I ran it, the process crashed on my development machine, as I had not anticipated the memory requirements. I worked through three separate issues over the course of a few days: getting the Hugging Face \texttt{transformers} library \citep{wolf2020transformers} model to load and cache correctly, reducing the batch size from larger values down to 32 to stay within the 8~GB VRAM budget of my consumer GPU, and confirming that attention masking was being applied correctly. I confirmed GPU utilisation using \texttt{torch.cuda.memory\_allocated()} profiling, which gave me visibility into memory consumption per batch. Once these were resolved the model was fast and stable, but the initial setup took far longer than I had expected.
+
+\paragraph{Noticing the neutral recall problem.}
+Before I ran any formal benchmarks, I was manually checking predictions on a sample of posts and noticed something odd: text like ``The Federal Reserve held rates steady, in line with expectations'' was being labelled positive or negative rather than neutral. At first I thought I had a preprocessing bug. After investigating, I realised it was a characteristic of FinBERT's pre-training distribution, which is heavily skewed toward polarised financial language. The formal benchmark later confirmed this: FinBERT's neutral recall was 53.3\% while its precision was 97.0\%, meaning it was very conservative about labelling anything as neutral. I partially addressed this through the entropy score in the emotion taxonomy, which flags high-uncertainty predictions to the user rather than forcing a definitive label.
+
+\paragraph{LIME latency in an async context.}
+When I first tested LIME via the API, every request to the explanation endpoint blocked the entire server for the duration of the computation. LIME's perturbation sampling is CPU-bound and takes 15--40~seconds for a typical financial text. In a synchronous setup this would freeze all concurrent requests. I researched the correct pattern for offloading blocking work in FastAPI and found the \texttt{run\_in\_executor} approach, which hands the computation off to Python's thread pool while the event loop remains free to handle other requests. This was not something covered in my undergraduate modules and required independent reading of the asyncio documentation to implement correctly.
+
+\paragraph{Memory management at batch scale.}
+Processing large Reddit thread corpora occasionally produced out-of-memory errors even after the initial batch-size fix. I traced this to accumulated GPU memory not being released between batches. Adding explicit \texttt{torch.cuda.empty\_cache()} calls between batches resolved the issue, and I confirmed stable memory consumption with monitoring across several bulk ingestion runs.
+
+\paragraph{Lean deployment on constrained cloud instances.}
+Loading PyTorch and Transformers requires approximately 1.5~GB of RAM beyond the base Python process, which exceeds the free tier of several cloud hosting providers I evaluated. This is a concrete instance of the hidden dependency debt that Sculley et al.\ \citep{sculley2015debt} identify as one of the most common sources of maintenance cost in production ML systems. Rather than pay for a larger instance just to run FinBERT, I built the lean deployment mode: the \texttt{LEAN\_API} flag routes the \texttt{/sentiment} prefix to a stub module that returns \texttt{503 Service Unavailable} for inference-heavy endpoints while all database and correlation endpoints remain operational. This means the analytical side of the dashboard stays usable even when the ML components are turned off.

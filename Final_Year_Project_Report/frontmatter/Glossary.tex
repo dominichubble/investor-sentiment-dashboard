@@ -1,0 +1,45 @@
+\chapter*{Glossary and Abbreviations}
+\addcontentsline{toc}{chapter}{Glossary and Abbreviations}
+
+This glossary is intended as a plain-language reference for readers less familiar with the NLP, machine-learning, and finance terminology used throughout this dissertation. Entries are short and indicative rather than formal; the technical chapters remain the authoritative source.
+
+\begin{description}
+\setlength{\itemsep}{0.25em}
+
+\item[ABSA (Aspect-Based Sentiment Analysis)] Identifying which aspect of a company or asset a piece of text is commenting on (e.g.\ earnings, product, regulation) rather than only whether it is positive or negative overall.
+
+\item[API (Application Programming Interface)] A defined way for two programs to talk to each other; here, the backend exposes its functions to the dashboard through a REST API.
+
+\item[BERT] A family of language models that read a sentence in both directions to understand meaning; the basis for FinBERT.
+
+\item[FinBERT] A version of BERT that has been further trained on financial text, so it is better at judging sentiment in market-related language.
+
+\item[FastAPI] The Python web framework used to build the project's backend service.
+
+\item[Granger causality] A statistical test that asks whether past values of one time series (e.g.\ sentiment) help predict another (e.g.\ price) beyond what the series can predict about itself. Not the same as real-world causation.
+
+\item[LIME (Local Interpretable Model-agnostic Explanations)] A technique that highlights which words in a sentence most influenced a model's label, to help a human see \emph{why} the model decided the way it did.
+
+\item[NLP (Natural Language Processing)] The branch of AI concerned with getting computers to read and analyse human-written text.
+
+\item[NER (Named Entity Recognition)] Automatically spotting names of companies, people, or tickers inside text.
+
+\item[Pearson / Spearman correlation] Two ways of measuring how closely two series of numbers move together. Pearson assumes roughly straight-line relationships; Spearman uses ranks, which is more robust to outliers.
+
+\item[Quantitative easing (QE)] A central-bank policy of creating money to buy financial assets, used heavily after 2008. Referenced here as one reason market prices can drift away from company fundamentals.
+
+\item[REST endpoint] A single URL on the backend that performs one specific action (e.g.\ ``return sentiment for ticker AAPL'').
+
+\item[Rolling correlation] The same correlation calculation repeated across a sliding time window, so changes in the relationship can be seen over time rather than as one number.
+
+\item[SPA (Single-Page Application)] A web app (here built in React) that loads once and then updates its content without full page reloads.
+
+\item[Sentiment label] The category assigned to a piece of text: positive, neutral, or negative. The finance-emotion taxonomy extends this to six finance-specific emotions.
+
+\item[Stationarity] A statistical property meaning a series' behaviour (mean, variance) does not drift over time. Correlation and Granger tests are only trustworthy on stationary data, which is why the system runs checks first.
+
+\item[Ticker] The short symbol used to identify a traded asset (e.g.\ AAPL for Apple, BTC for Bitcoin).
+
+\item[XAI (Explainable Artificial Intelligence)] Techniques, such as LIME, that make AI model decisions understandable to humans.
+
+\end{description}

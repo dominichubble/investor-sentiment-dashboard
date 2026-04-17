@@ -70,3 +70,19 @@ yarn-error.log*
 .env.local
 .env.production
 stock_tweets.csv
+
+# Cursor / Claude Code local agent state
+.claude/
+
+# FYP report — LaTeX build outputs (keep .tex, .bib, figures)
+Final_Year_Project_Report/**/*.aux
+Final_Year_Project_Report/**/*.bbl
+Final_Year_Project_Report/**/*.blg
+Final_Year_Project_Report/**/*.fdb_latexmk
+Final_Year_Project_Report/**/*.fls
+Final_Year_Project_Report/**/*.lof
+Final_Year_Project_Report/**/*.log
+Final_Year_Project_Report/**/*.lot
+Final_Year_Project_Report/**/*.out
+Final_Year_Project_Report/**/*.toc
+Final_Year_Project_Report/**/*.synctex.gz

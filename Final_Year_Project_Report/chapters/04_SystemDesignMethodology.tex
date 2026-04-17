@@ -1,0 +1,432 @@
+\chapter{System Design and Methodology}
+\label{chap:system_design}
+
+This chapter describes the design decisions behind the \textit{Investor Sentiment Dashboard} and the reasoning that led to them. I cover the system architecture, ethical considerations, requirements, data collection strategy, preprocessing approach, and modelling choices that underpin the implementation described in Chapter~\ref{chap:implementation}. Where relevant I explain not just what I decided, but why.
+
+\section{System Overview}
+\label{sec:system_overview}
+
+I designed the system around a modular five-tier architecture, illustrated in Figure~\ref{fig:system_architecture}: (1)~\textit{data ingestion}, (2)~\textit{NLP processing and enrichment}, (3)~\textit{storage and entity resolution}, (4)~\textit{REST API}, and (5)~\textit{interactive frontend}. The reason for this layered structure was to keep computationally intensive inference components separate from the API serving layer, so that each tier could be developed, tested, and deployed independently.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  src/.style  ={draw, rounded corners=4pt, minimum width=3.2cm, minimum height=0.85cm,
+                fill=teal!18, align=center, inner sep=6pt},
+  proc/.style ={draw, rounded corners=4pt, minimum width=3.0cm, minimum height=0.85cm,
+                fill=blue!14, align=center, inner sep=6pt},
+  stor/.style ={draw, rounded corners=4pt, minimum width=3.2cm, minimum height=0.85cm,
+                fill=orange!18, align=center, inner sep=6pt},
+  apist/.style={draw, rounded corners=4pt, minimum width=4.0cm, minimum height=0.85cm,
+                fill=purple!15, align=center, inner sep=6pt},
+  front/.style={draw, rounded corners=4pt, minimum width=7.0cm, minimum height=0.85cm,
+                fill=red!12, align=center, inner sep=6pt},
+  lbl/.style  ={font=\small\bfseries, text=gray!65},
+  arr/.style  ={->, >=Stealth, thick},
+  darr/.style ={draw, dashed, gray!55, rounded corners=3pt}]
+
+%% ── Tier labels (left column) ────────────────────────────────────
+\node[lbl] at (-2.4,  0.0) {Ingestion};
+\node[lbl] at (-2.4, -2.2) {NLP};
+\node[lbl] at (-2.4, -4.2) {Storage};
+\node[lbl] at (-2.4, -6.0) {API};
+\node[lbl] at (-2.4, -7.8) {Frontend};
+
+%% ── Tier 1: Ingestion ─────────────────────────────────────────────
+\node[src] (reddit)  at (0.0,  0.0) {Reddit\\[-2pt]\scriptsize (PRAW)};
+\node[src] (twitter) at (4.0,  0.0) {X/Twitter\\[-2pt]\scriptsize (Multi-backend)};
+\node[src] (newsapi) at (8.0,  0.0) {NewsAPI\\[-2pt]\scriptsize (v2)};
+
+%% ── Tier 2: NLP Pipeline ─────────────────────────────────────────
+\node[proc] (preproc) at (0.0, -2.2) {Pre-\\[-2pt]processing};
+\node[proc] (finbert) at (3.3, -2.2) {FinBERT\\[-2pt]\scriptsize Inference};
+\node[proc] (taxon)   at (6.6, -2.2) {Emotion\\[-2pt]Taxonomy};
+\node[proc] (absa)    at (9.9, -2.2) {ABSA-lite};
+
+%% ── Tier 3: Storage ──────────────────────────────────────────────
+\node[stor] (entity)  at (2.4, -4.2) {Entity\\[-2pt]Resolution};
+\node[stor] (db)      at (6.6, -4.2) {PostgreSQL\\[-2pt]\scriptsize (Neon)};
+
+%% ── Tier 4: API ──────────────────────────────────────────────────
+\node[apist] (api)    at (4.5, -6.0) {FastAPI REST Backend};
+
+%% ── Tier 5: Frontend ─────────────────────────────────────────────
+\node[front] (front)  at (4.5, -7.8) {React SPA \quad (Vite + Recharts)};
+
+%% ── GitHub Actions dashed frame ──────────────────────────────────
+\node[darr, fit=(reddit)(twitter)(newsapi), inner sep=4pt,
+      label={[font=\scriptsize\itshape, text=gray!65]above:GitHub Actions (daily)}] (ghframe) {};
+
+%% ── Arrows T1 → T2 (all sources feed the shared preprocessing entry point) ──
+\draw[arr] (reddit.south)  -- ++(0,-0.45) -| (preproc.north);
+\draw[arr] (twitter.south) -- ++(0,-0.45) -| (preproc.north);
+\draw[arr] (newsapi.south) -- ++(0,-0.45) -| (preproc.north);
+
+%% ── Arrows within T2 (processing chain) ─────────────────────────
+\draw[arr] (preproc) -- (finbert);
+\draw[arr] (finbert) -- (taxon);
+\draw[arr] (taxon)   -- (absa);
+
+%% ── Arrows T2 → T3 (NLP output → entity resolution → database) ──
+\draw[arr] (absa.south) -- ++(0,-0.45) -| (entity.north);
+\draw[arr] (entity.east) -- node[above, font=\scriptsize]{resolved rows} (db.west);
+
+%% ── Arrows T3 → T4 ───────────────────────────────────────────────
+\draw[arr] (entity.south) -- ++(0,-0.4) -| (api.north);
+\draw[arr] (db.south)     -- ++(0,-0.4) -| (api.north);
+
+%% ── Arrows T4 → T5 ───────────────────────────────────────────────
+\draw[arr] (api) -- (front);
+\end{tikzpicture}}
+\caption{Five-tier system architecture of the Investor Sentiment Dashboard.  Ingested records from Reddit, X/Twitter, and NewsAPI all enter the same preprocessing and NLP chain (FinBERT, emotion taxonomy, ABSA), then pass through entity resolution before being written to PostgreSQL.  The REST API and React SPA sit above storage.  The dashed border marks ingestion components scheduled by the daily GitHub Actions workflow.}
+\label{fig:system_architecture}
+\end{figure}
+
+I collect text from three sources (Reddit, X/Twitter, and financial news) through dedicated pipelines that each handle their own rate limits and authentication. Each pipeline feeds into a shared preprocessing and FinBERT inference layer, after which the finance-emotion taxonomy and ABSA module enrich each record. A stock entity resolution layer then maps free-text mentions to canonical ticker symbols. Processed records go into a cloud PostgreSQL database (Neon), and a FastAPI backend serves aggregate statistics, per-ticker sentiment, LIME explanations, and correlation results to the React frontend. I automated daily collection using GitHub Actions so the corpus continues to grow without manual intervention.
+
+\section{Development Methodology and Project Management}
+\label{sec:dev_methodology}
+
+\subsection{Development Approach}
+
+I used an iterative, sprint-based approach rather than a strict waterfall model. I chose this for three practical reasons. First, my research questions were still being refined during the literature review, which made it impractical to lock down all requirements at the start. Second, each technical component had a clear dependency on the previous one: I could not build the API before the inference engine, and could not build the frontend before the API, so iterating through them in sequence made sense. Third, an iterative approach meant each completed sprint produced something I could write up immediately, which made the concurrent dissertation writing much more manageable.
+
+\subsection{Project Tracking and Tooling}
+
+I tracked progress at two levels. At the strategic level, I produced a Gantt chart (Appendix~\ref{app:gantt}) covering 31 August 2025 to 21 April 2026 across ten phases, included in my approved Project Brief in October 2025. At the tactical level, a Jira board decomposed each Gantt phase into individual tasks with unique identifiers. For example, the Data Collection \& Preprocessing phase (FYP-126) was broken into sub-tasks for PRAW integration, the multi-backend Twitter pipeline, NewsAPI setup, and the preprocessing module. The Sentiment Model phase (FYP-127) covered model setup, batch inference, error handling, and the preprocessing configuration in Listing~\ref{lst:finbert_config}.
+
+I reviewed and updated the Gantt at the January 2026 deliverable milestone. The first three phases had completed on schedule. The Sentiment Model phase had started slightly later than I originally targeted, because I had spent extra time on the NewsAPI robustness issues described in Chapter~\ref{chap:implementation}. That did not affect the overall schedule, but it reinforced for me that the data ingestion layer needs more time than it looks like it will.
+
+\subsection{Scope Management}
+
+I did not cut any planned objectives, but the scope grew in two ways I had not anticipated. The Twitter ingestion grew from a single Tweepy implementation into a three-backend architecture because the official API rate limits turned out to be far more restrictive than I had planned for. That expansion is described in detail in Section~\ref{sec:data_ingestion}. The correlation module also grew: I originally planned a simple Pearson correlation display, but reading the literature made it clear that a single coefficient is insufficient for financial time-series, so I extended it to include Spearman, lag analysis, Granger causality, rolling correlation, and market adjustment. Both expansions were absorbed into existing sprints without changing the high-level Gantt.
+
+\section{Ethical Considerations and Data Governance}
+\label{sec:ethics}
+
+Collecting data from social media and news outlets requires careful attention to ethical guidelines and platform terms of service. I restricted all data collection to publicly available text; the system does not access private communications, protected user data, or paywalled content. The completed Ethics Awareness Form was submitted with the approved Project Brief (October 2025); Appendix~\ref{app:ethics} explains where that signed form lives relative to this dissertation so it is not duplicated here.
+
+\subsection{Platform Terms of Service and API Compliance}
+
+Reddit data is collected using the Python Reddit API Wrapper (PRAW) with OAuth2 authentication, operating strictly within Reddit's published developer terms.  Rate limits are respected through automatic pagination and exponential backoff handling.  X/Twitter data is collected via the \texttt{snscrape} library by default, which accesses publicly available posts through the same pathway as the web interface.  Where an official API bearer token is configured, the system switches to Tweepy's X API v2 client, enforcing v2 rate limits automatically.  The system also supports a historical CSV ingestion backend to enable reproducible evaluation using pre-collected datasets.  NewsAPI data is retrieved through a registered developer account using the documented API interface.
+
+All pipelines implement rate-limit resilience through exponential backoff and configurable per-run quotas, preventing any risk of service disruption or account suspension.
+
+\subsection{Anonymisation and Storage}
+
+To protect individual privacy, I strip personally identifiable information (user handles, display names, and geolocation metadata) during ingestion and preprocessing. Each stored record contains only sanitised text, a timestamp, a source identifier, and any extracted ticker mentions. The database is accessible only through project-specific credentials and is used solely for academic research, in compliance with the Loughborough University ethical policy framework \citep{lboro_ethics}.
+
+\section{Requirements Analysis}
+\label{sec:requirements_analysis}
+
+I derived the system requirements from four sources: the gaps identified in my literature review, analysis of what existing sentiment tools do and do not provide, reflection on what the project needed to achieve its research objectives, and three structured expert interviews (two on 13 October 2025 and one on 21 October 2025) conducted during the project setup phase.
+
+During October 2025, I conducted these interviews with finance and technology practitioners to understand how sentiment data is used in practice and what analytical capabilities a dashboard would need to be genuinely useful.  Three themes emerged consistently: practitioners wanted per-source sentiment comparisons (not just an aggregate), they wanted some basis for trusting an automated sentiment label, and they were interested in correlating sentiment signals with price data.  These interviews directly influenced the decision to prioritise the per-source filtering interface, the LIME explainability endpoint, and the full-featured correlation engine.  A summary of the interviews is provided in Appendix~\ref{app:interviews}.
+
+\subsection{Functional Requirements}
+
+\begin{itemize}
+    \item Collect and preprocess text data from Reddit, X/Twitter, and financial news, with resilient multi-backend support for X.
+    \item Perform financial sentiment classification using FinBERT, producing a three-class label and per-class probability distribution.
+    \item Enrich FinBERT outputs with a finance-specific emotion label and score distribution (fear, optimism, uncertainty, confidence, scepticism, mixed).
+    \item Extract aspect-tagged evidence sentences for six financial aspect categories (ABSA-lite).
+    \item Resolve free-text stock and company mentions to canonical ticker symbols using NER and fuzzy matching.
+    \item Generate LIME token-level explanations via a dedicated REST endpoint, renderable in the frontend.
+    \item Persist all records to a relational database and expose aggregate statistics, per-ticker time-series, and data quality metrics via a versioned REST API.
+    \item Compute and expose Pearson, Spearman, lag, Granger causality, and rolling correlation between sentiment and real-time asset prices.
+    \item Provide an interactive React SPA with Market Overview and Stock Analysis views, plus Methodology and Legal pages.
+    \item Support a lean deployment mode in which computationally heavy components return graceful 503 responses rather than failing.
+\end{itemize}
+
+\subsection{Non-Functional Requirements}
+
+\begin{itemize}
+    \item \textbf{Performance:}  Standard API data endpoints should respond within 3~seconds; LIME explanations, which involve a CPU-bound background computation, are exempt and may take up to 120~seconds.
+    \item \textbf{Scalability:}  The system must support integration of new data sources, models, or asset classes without restructuring the core API.
+    \item \textbf{Reproducibility:}  All ingestion, preprocessing, and evaluation scripts must produce deterministic outputs from the same input; random states are fixed throughout.
+    \item \textbf{Usability:}  Dashboard visualisations must remain interpretable to a non-specialist financial audience; methodology and limitations must be prominently documented within the application.
+    \item \textbf{Security:}  Production deployments must use API key authentication and security headers; credentials are managed via environment variables and never committed to version control.
+    \item \textbf{Ethics:}  All data collection must comply with platform terms of service and the university ethical policy~\citep{lboro_ethics}.
+\end{itemize}
+
+\section{Data Collection and Preprocessing}
+\label{sec:data_collection}
+
+\subsection{Multi-Source Strategy and Rationale}
+
+One of my central aims was to aggregate sentiment from multiple online environments rather than relying on a single source. My reading of the literature made it clear that any single platform gives you a biased picture: social media captures short-term emotional reactions, financial news is more institutional and structured, and Reddit retail communities can diverge sharply from both \citep{tetlock2007giving, bollen2011twitter, long2023reddit, schumaker2009textmining}. I decided to collect from three complementary sources to mitigate those individual biases:
+
+\begin{itemize}
+    \item \textbf{Reddit} contributes long-form, discussion-driven sentiment from finance-oriented subreddits (e.g., r/stocks, r/investing, r/cryptocurrency).  Posts include justifications, counter-arguments, and structured analysis of market events, enriching the sentiment signal with contextual depth.
+    \item \textbf{X/Twitter} provides high-frequency short messages reacting to intraday price movements, earnings releases, and breaking news \citep{bollen2011twitter}, capturing rapid retail sentiment shifts that may precede news articles.
+    \item \textbf{Financial news} adds contextualised, professionally sourced text from outlets including Reuters and Bloomberg via NewsAPI, providing a lower-noise reference signal against which social media sentiment can be compared.
+\end{itemize}
+
+\subsection{Preprocessing Pipeline}
+
+Online text from these sources is inherently heterogeneous and noisy.  A standardised offline preprocessing pipeline, depicted in Figure~\ref{fig:preprocessing-pipeline}, transforms raw multi-source text into clean, model-ready inputs.
+
+\begin{figure}[ht]
+\centering
+\begin{tikzpicture}[
+  node distance=0.5cm,
+  flowbox/.style={draw, rounded corners=4pt, minimum width=10cm,
+                  minimum height=0.80cm, text width=9.4cm,
+                  fill=blue!10, align=left, inner sep=8pt, font=\small},
+  io/.style    ={draw, rounded corners=4pt, minimum width=10cm,
+                  minimum height=0.80cm, text width=9.4cm,
+                  fill=teal!18, align=center, font=\small\bfseries},
+  arr/.style   ={->, >=Stealth, thick}]
+
+\node[io]  (input)  {Raw Multi-source Text (Reddit post / Tweet / News article)};
+\node[flowbox, below=of input]  (clean)  {\textbf{Step 1:} URL, HTML tag, and emoji removal};
+\node[flowbox, below=of clean]  (case)   {\textbf{Step 2:} Case preservation (\texttt{lowercase: False}), retaining ticker symbols};
+\node[flowbox, below=of case]   (negat)  {\textbf{Step 3:} Negation rewriting (\texttt{"not profitable"} $\to$ negation prefix token)};
+\node[flowbox, below=of negat]  (punct)  {\textbf{Step 4:} Financial punctuation preserved (\%, \$, decimal separators left intact)};
+\node[flowbox, below=of punct]  (stop)   {\textbf{Step 5:} Stopwords retained, as full sentence structure is needed for attention};
+\node[flowbox, below=of stop]   (meta)   {\textbf{Step 6:} Source identifier and timestamp stored alongside the cleaned text};
+\node[io,  below=of meta]  (output) {FinBERT-ready token sequence + structured record $\to$ PostgreSQL};
+
+\draw[arr] (input)  -- (clean);
+\draw[arr] (clean)  -- (case);
+\draw[arr] (case)   -- (negat);
+\draw[arr] (negat)  -- (punct);
+\draw[arr] (punct)  -- (stop);
+\draw[arr] (stop)   -- (meta);
+\draw[arr] (meta)   -- (output);
+\end{tikzpicture}
+\caption{Offline preprocessing pipeline transforming raw multi-source financial text into structured, model-ready inputs.  All six steps are applied under the \texttt{finbert} configuration; lighter configurations (\texttt{minimal}, \texttt{standard}) omit or relax selected steps for non-transformer use cases.}
+\label{fig:preprocessing-pipeline}
+\end{figure}
+
+The pipeline applies a \textbf{source-specific configuration} determined by the \texttt{config} parameter passed to the preprocessing script.  Four named configurations are provided (\texttt{minimal}, \texttt{standard}, \texttt{full}, \texttt{finbert}); all sentiment inference uses the \texttt{finbert} configuration, which is specifically tuned for transformer input:
+
+\begin{itemize}
+    \item \textbf{Case preservation} (\texttt{lowercase: False}): FinBERT's vocabulary retains case sensitivity important for ticker symbols and proper nouns.
+    \item \textbf{URL and HTML removal} (\texttt{remove\_urls: True}): links and markup tokens contribute no semantic signal.
+    \item \textbf{Stopword retention} (\texttt{remove\_stopwords: False}): FinBERT is trained on full sentences; removing common words degrades attention patterns \citep{araci2019finbert}.
+    \item \textbf{No lemmatisation} (\texttt{lemmatize: False}): transformers use subword tokenisation and understand morphological variants directly.
+    \item \textbf{Financial punctuation preservation} (\path{preserve_financial_punctuation: True}): percentage signs, dollar symbols, and decimal separators carry semantic weight in financial text.
+    \item \textbf{Negation handling} (\texttt{handle\_negations: True}): phrases such as ``not profitable'' are rewritten to prevent polarity inversion in downstream classification.
+\end{itemize}
+
+Text fields processed per source are determined by a source-field mapping (\path{SOURCE_TEXT_FIELDS}), ensuring that Reddit post titles, Twitter post bodies, and NewsAPI article descriptions are each extracted from the correct JSON field before entering the shared cleaning pipeline.
+
+All cleaned records are stored in the database with both raw and cleaned text preserved, ensuring full reproducibility and the ability to reprocess data under alternative configurations without re-ingestion.
+
+\subsection{Data Quality and Deduplication}
+
+Duplicate detection applies content-hash comparison at ingestion time to avoid counting the same post or article multiple times.  Near-duplicate detection using TF-IDF cosine similarity removes paraphrased or lightly edited reposts.  Minimum content length thresholds are enforced to exclude noise artefacts (e.g., single-emoji posts).
+
+\section{Model Design}
+\label{sec:model_design}
+
+\subsection{Sentiment Classification: FinBERT}
+
+I chose FinBERT \citep{araci2019finbert} as the core classifier because it is domain-adaptively pre-trained on financial corpora, giving it a well-documented advantage over general-purpose models on finance-specific benchmarks \citep{malo2014financialphrasebank}. The model is loaded from the \texttt{ProsusAI/finbert} checkpoint via the Hugging Face \texttt{transformers} library \citep{wolf2020transformers} and used in zero-shot inference mode (no further fine-tuning), classifying text as \textit{positive}, \textit{neutral}, or \textit{negative} with associated probability scores. I chose to preserve the full probability distribution rather than just the label, because those scores feed directly into the emotion taxonomy and entropy calculation downstream.
+
+\subsection{Keyword Baseline}
+
+A keyword-based sentiment classifier using domain-specific financial vocabulary is maintained as a lightweight baseline.  This enables a formal comparative evaluation (see Chapter~\ref{chap:evaluation}) and provides a fast fallback in contexts where transformer inference is unavailable.
+
+\subsection{Novel: Finance-Emotion Taxonomy}
+\label{sec:emotion_design}
+
+The idea for the finance-emotion taxonomy came from noticing, during early testing, that FinBERT's three-class output was losing a lot of nuance that actually mattered. An investor expressing fear about a debt downgrade and an investor expressing scepticism about an overvalued growth stock both receive a ``negative'' label, but these are fundamentally different market signals. I designed the taxonomy to capture that distinction.  The taxonomy defines six domain emotions: \textit{fear}, \textit{optimism}, \textit{uncertainty}, \textit{confidence}, \textit{scepticism}, and \textit{mixed}.  These categories are grounded in prior behavioural finance research on investor mood states \citep{bollen2011twitter} and the lexical patterns that characterise different investor postures in financial text.
+
+The emotion inference engine receives FinBERT's softmax probability vector, a normalised Shannon entropy score (measuring the model's decisiveness), a set of aspect evidence snippets, and performs the following steps:
+\begin{enumerate}
+    \item Initialises base scores for each emotion from configurable priors.
+    \item Applies FinBERT probability-weighted increments: positive probability contributes to optimism and confidence; negative to fear and scepticism; neutral to uncertainty, weighted by entropy.
+    \item Applies domain lexicon matching, incrementing scores for each matched phrase from a curated finance lexicon covering each emotion category.
+    \item Applies aspect priors: each detected financial aspect (e.g., \texttt{risk\_liquidity}, \texttt{valuation}) contributes emotion-specific bonuses calibrated to the aspect's typical sentiment implications.
+    \item Normalises scores to a probability simplex and selects the dominant emotion; if the top score is insufficiently differentiated or entropy is high, the result defaults to \textit{mixed}.
+\end{enumerate}
+
+This architecture is novel in that it combines model-derived probabilistic signals, entropy-based uncertainty quantification, and lexical domain knowledge within a single unified scoring function, without requiring any labelled training data for the emotion layer itself.  Figure~\ref{fig:emotion_taxonomy} illustrates the inference logic.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  every node/.style={font=\small},
+  inpbox/.style={draw, rounded corners=4pt, fill=teal!18,
+                 minimum width=3.2cm, minimum height=0.85cm,
+                 align=center, inner sep=6pt},
+  procbox/.style={draw, rounded corners=4pt, fill=blue!12,
+                  minimum width=11cm, minimum height=0.85cm,
+                  align=center, inner sep=6pt},
+  dec/.style   ={draw, diamond, fill=yellow!20, aspect=2.2,
+                 minimum width=3.2cm, minimum height=0.75cm,
+                 align=center, inner sep=2pt},
+  outbox/.style={draw, rounded corners=4pt, minimum width=2.6cm,
+                 minimum height=0.75cm, align=center, inner sep=5pt},
+  arr/.style   ={->, >=Stealth, thick},
+  labl/.style  ={font=\scriptsize\bfseries}]
+
+%% ── Row 1: Four inputs ───────────────────────────────────────────
+\node[inpbox] (finbert) at (0,   0) {FinBERT\\[-2pt]\scriptsize$P_+,\,P_-,\,P_0$};
+\node[inpbox] (entropy) at (3.6, 0) {Shannon\\[-2pt]entropy $H$};
+\node[inpbox] (lexicon) at (7.2, 0) {Domain\\[-2pt]lexicons};
+\node[inpbox] (aspects) at (10.8,0) {Aspect\\[-2pt]priors};
+
+%% ── Row 2: Scoring ───────────────────────────────────────────────
+\node[procbox] (score)  at (5.4,-1.9) {Combine: $P_\pm$ weights + lexicon matches + aspect bonuses};
+
+%% ── Row 3: High entropy decision ─────────────────────────────────
+\node[dec] (hiH)   at (5.4, -3.6) {$H > \tau$\,?};
+\node[outbox, fill=purple!15] (mixed) at (9.6, -3.6) {\textit{mixed}};
+
+%% ── Row 4: Dominant polarity decision ────────────────────────────
+\node[dec] (dom)   at (5.4, -5.4) {Dominant $P$\,?};
+
+%% ── Row 5: Sub-decisions ─────────────────────────────────────────
+\node[dec] (highP) at (1.5, -7.1) {High conf.?};
+\node[outbox, fill=gray!18]   (unc)  at (5.4, -7.1) {\textit{uncertainty}};
+\node[dec] (highN) at (9.3, -7.1) {Reactive?};
+
+%% ── Row 6: Output labels ─────────────────────────────────────────
+\node[outbox, fill=green!28] (conf)  at (0.2, -8.8) {\textit{confidence}};
+\node[outbox, fill=green!18] (opt)   at (2.8, -8.8) {\textit{optimism}};
+\node[outbox, fill=red!20]   (fear)  at (7.9, -8.8) {\textit{fear}};
+\node[outbox, fill=orange!20](skep)  at (10.7,-8.8) {\textit{scepticism}};
+
+%% ── Arrows: inputs → scoring (split anchors so lines do not stack) ──
+\draw[arr] (finbert.south) -- ++(0,-0.55) -| (score.north west);
+\draw[arr] (entropy.south) -- ++(0,-0.55) -| ($(score.north west)!0.34!(score.north east)$);
+\draw[arr] (lexicon.south) -- ++(0,-0.55) -| ($(score.north west)!0.67!(score.north east)$);
+\draw[arr] (aspects.south) -- ++(0,-0.55) -| (score.north east);
+
+%% ── Arrows: scoring → hiH → dom ─────────────────────────────────
+\draw[arr] (score) -- (hiH);
+\draw[arr] (hiH.east)  -- node[labl, above=1pt]{yes} (mixed.west);
+\draw[arr] (hiH.south) -- node[labl, right=1pt]{no}  (dom.north);
+
+%% ── Arrows: dom → three branches ─────────────────────────────────
+\draw[arr] (dom.west)  -| node[labl, above=2pt, pos=0.2]{$P_+$} (highP.north);
+\draw[arr] (dom.south) -- node[labl, right=1pt]{$P_0$}           (unc.north);
+\draw[arr] (dom.east)  -| node[labl, above=2pt, pos=0.2]{$P_-$} (highN.north);
+
+%% ── Positive branch ──────────────────────────────────────────────
+\draw[arr] (highP.west) -| node[labl, above=1pt, pos=0.3]{high} (conf.north);
+\draw[arr] (highP.east) -| node[labl, above=1pt, pos=0.3]{low}  (opt.north);
+
+%% ── Negative branch ──────────────────────────────────────────────
+\draw[arr] (highN.west) -| node[labl, above=1pt, pos=0.3]{yes}  (fear.north);
+\draw[arr] (highN.east) -| node[labl, above=1pt, pos=0.3]{no}   (skep.north);
+\end{tikzpicture}}
+\caption{Finance-emotion taxonomy inference logic.  FinBERT's softmax probability vector, Shannon entropy, domain lexicon scores, and aspect priors are combined into per-emotion scores.  High entropy triggers a \textit{mixed} assignment; otherwise the dominant polarity determines the branch, with further subdivision based on confidence level (positive branch) or signal duration (negative branch).}
+\label{fig:emotion_taxonomy}
+\end{figure}
+
+\subsection{Novel: Lightweight ABSA Module}
+\label{sec:absa_design}
+
+To provide traceable justification for sentiment scores, the system implements a lightweight Aspect-Based Sentiment Analysis (ABSA) module \citep{pontiki2014semeval} that operates without fine-tuned sequence models.  Sentences in each document are segmented and matched against six financial aspect keyword buckets:
+
+\begin{itemize}
+    \item \textbf{revenue\_earnings}: profit, EPS, guidance, margin, beat/miss estimates.
+    \item \textbf{growth\_demand}: subscriber growth, capacity, adoption, expansion.
+    \item \textbf{risk\_liquidity}: debt, bankruptcy, SEC investigation, writedown.
+    \item \textbf{valuation}: P/E ratio, price target, overvalued/undervalued.
+    \item \textbf{product\_ai}: product launch, AI, GPU, innovation, patent.
+    \item \textbf{macro\_policy}: Fed rates, inflation, tariffs, stimulus.
+\end{itemize}
+
+Matched sentences are returned as tagged evidence snippets with their aspect category and, optionally, a per-snippet FinBERT label.  This lightweight design provides interpretable, aspect-grounded justifications for the headline sentiment label while remaining computationally tractable in high-throughput pipelines, an important practical constraint identified in the system requirements.
+
+\section{Explainability Integration}
+\label{sec:explainability_design}
+
+LIME \citep{ribeiro2016lime} is integrated as the primary user-facing explainability method.  For each sentiment prediction, LIME generates token-level importance weights by systematically perturbing the input text and fitting a local linear surrogate model.  The resulting weights are returned via a dedicated REST endpoint and rendered as an interactive token-level heatmap in the frontend's Stock Analysis page.
+
+SHAP \citep{lundberg2017shap} is implemented within the backend's explainability module and is accessible via the API for offline auditing and corpus-level analysis.  Given its substantially higher computational cost, SHAP is not exposed in the live frontend but is used in research notebooks and for generating summary importance statistics.
+
+I chose LIME for real-time API responses and reserved SHAP for offline analysis. The trade-off here is theoretical rigour (SHAP) versus practical latency (LIME), and the literature on deployable XAI supports that decision \citep{yeo2023xai}. SHAP's computational cost would have made it impossible to serve interactively from a cloud instance with realistic resource constraints.
+
+\section{Stock Entity Resolution}
+\label{sec:entity_design}
+
+To enable per-ticker analytics, a stock entity resolution pipeline links free-text mentions to canonical ticker symbols using a three-stage process:
+\begin{enumerate}
+    \item \textbf{Named Entity Recognition (NER)}: spaCy's \texttt{en\_core\_web\_sm} model extracts \texttt{ORG}, \texttt{PRODUCT}, and \texttt{GPE} entities from cleaned text.
+    \item \textbf{Exact matching}: extracted entity strings are compared against a curated stock database of ticker symbols and company names.
+    \item \textbf{Fuzzy matching}: entities not resolved by exact match are compared using the FuzzyWuzzy library's partial ratio scorer with a configurable similarity threshold (default 0.85), allowing resolution of common abbreviations and partial names.
+\end{enumerate}
+
+A curated blacklist prevents common false positives (``Fed'', ``SEC'', ``White House'') from being incorrectly resolved to tickers.  The three-stage pipeline is summarised in Figure~\ref{fig:entity_resolution}.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=0.6cm and 1.4cm,
+  every node/.style={font=\small},
+  io/.style  ={draw, rounded corners=4pt, fill=teal!18, minimum width=3.0cm,
+               minimum height=0.85cm, align=center, inner sep=6pt},
+  ebox/.style={draw, rounded corners=4pt, fill=blue!12, minimum width=3.2cm,
+               minimum height=1.2cm, align=center, inner sep=6pt},
+  note/.style={font=\scriptsize\itshape, text=gray!75, align=center},
+  arr/.style ={->, >=Stealth, thick}]
+
+\node[io]  (raw)    {Free-text\\mention};
+\node[ebox, right=of raw]    (ner)   {spaCy NER\\[-2pt]\scriptsize ORG / PRODUCT /\\GPE tags};
+\node[ebox, right=of ner]    (exact) {Exact ticker\\match\\[-2pt]\scriptsize Stock database\\$O(1)$ lookup};
+\node[ebox, right=of exact]  (fuzzy) {Fuzzy match\\[-2pt]\scriptsize FuzzyWuzzy\\partial-ratio $\geq 0.85$};
+\node[io,  right=of fuzzy]   (ticker){Canonical\\ticker};
+
+\node[note, below=0.5cm of ner]   {$\sim$3\,ms/doc\\(spaCy pipeline)};
+\node[note, below=0.5cm of fuzzy] {Handles abbreviations\\and partial names};
+
+\draw[arr] (raw)   -- (ner);
+\draw[arr] (ner)   -- (exact);
+\draw[arr] (exact) -- node[above, font=\scriptsize\itshape]{no match} (fuzzy);
+\draw[arr] (fuzzy) -- (ticker);
+
+%% Successful exact match: bypass fuzzy via a segment above the row (no crossing)
+\draw[arr] (exact.north) -- ++(0,0.55)
+           -| node[above, font=\scriptsize\itshape, pos=0.28]{match found} (ticker.north);
+\end{tikzpicture}}
+\caption{Three-stage entity resolution pipeline.  An exact ticker lookup is attempted first; if unsuccessful, FuzzyWuzzy partial-ratio scoring resolves abbreviations and partial company names.  A curated blacklist applied during the NER stage suppresses common false positives such as common words that match ticker symbols.}
+\label{fig:entity_resolution}
+\end{figure}
+
+\section{Sentiment--Price Correlation Engine}
+\label{sec:correlation_design}
+
+A dedicated correlation analysis module enables statistical examination of the relationship between aggregate daily sentiment scores and historical asset prices.  Real-time and historical price data are sourced via \texttt{yfinance}.  The correlation engine supports:
+\begin{itemize}
+    \item \textbf{Pearson correlation} for linear association between sentiment and price return series.
+    \item \textbf{Spearman rank correlation} for monotonic association without assuming normality.
+    \item \textbf{Lag analysis} with configurable lead/lag windows, testing whether sentiment at $t$ correlates with returns at $t+k$ for $k \in [-n, +n]$.
+    \item \textbf{Granger causality testing} \citep{granger1969} using the Augmented Dickey-Fuller stationarity pre-check and autoregressive F-tests implemented in \texttt{statsmodels}, testing whether lagged sentiment scores improve the prediction of future returns.
+    \item \textbf{Rolling correlation} with a configurable window to identify temporal regimes of sentiment--price co-movement.
+    \item \textbf{Market-adjustment} via SPY beta residualisation, isolating idiosyncratic sentiment signals from broad market co-movement.
+\end{itemize}
+
+Results are presented with explicit disclaimers that Granger causality is a statistical test of predictive precedence, not structural causation, and that all outputs are exploratory analytics, not investment advice.
+
+\section{Backend and Frontend Architecture}
+\label{sec:architecture}
+
+\subsection{Backend}
+
+The backend is implemented in Python~3.11 using \textbf{FastAPI} with \textbf{Uvicorn} as the ASGI server.  The canonical application entry point is \texttt{backend/app/main.py}, which registers middleware (CORS, API key authentication, and security headers) and assembles the versioned API router.  A secondary application entry point at \texttt{backend/api/main.py} provides an alternative router layout used for development testing.
+
+The primary router mounts: \texttt{/api/v1/sentiment} (inference, batch, LIME explain, ticker narrative), \texttt{/api/v1/data} (predictions, statistics, stock quality), \texttt{/api/v1/correlation} (price correlation endpoints), and \texttt{/api/v1/stocks} (entity analysis, trending, comparison).  A \textbf{lean deployment mode} (activated via the \texttt{LEAN\_API} environment variable) routes the \texttt{/sentiment} prefix to a stub module that returns \texttt{503 Service Unavailable} for FinBERT and LIME endpoints, allowing the API to operate on memory-constrained cloud instances without loading PyTorch or Transformers.  All stateful database and correlation endpoints remain functional in lean mode.
+
+\subsection{Frontend}
+
+The React~18 single-page application is built with \textbf{Vite~5} and uses \textbf{Recharts} for all interactive visualisations.  The application provides four routes:
+\begin{itemize}
+    \item \textbf{Market Overview}: global sentiment distribution (pie chart), daily trend (bar chart), per-source comparison (grouped bars), and top trending tickers, with source and date-range filter controls.
+    \item \textbf{Stock Analysis}: per-ticker sentiment time-series, price--sentiment overlay, finance-emotion breakdown, LIME explanation heatmap, and data quality indicators.
+    \item \textbf{Methodology}: in-application documentation mapping dissertation claims to code paths and dashboard views.
+    \item \textbf{Legal}: disclosures on data provenance, model limitations, and non-advisory intent.
+\end{itemize}
+
+\subsection{Automated Scheduling}
+
+Continuous data collection is managed by GitHub Actions workflows.  A daily workflow ingests posts from Reddit, X/Twitter, and NewsAPI, passes them through FinBERT inference and the enrichment stack, and persists results to the Neon PostgreSQL database.  A separate weekly workflow performs deeper Reddit bulk collection across a broader set of tickers.  Both workflows cache the HuggingFace model weights to avoid redundant downloads and are triggered on a schedule or can be invoked manually.

@@ -1,0 +1,231 @@
+\chapter{Appendices}
+\label{appendix:supplementary}
+
+\section{Project workplan and Gantt chart}
+\label{app:gantt}
+
+I maintained two views of the project plan throughout the year: a Gantt-style phase chart (strategic) and a Jira board decomposed into individual tasks (tactical). The Gantt chart was produced at project inception in September 2025, submitted with the approved Project Brief in October 2025, and updated at the January 2026 deliverable milestone to reflect actual progress.
+
+\subsection*{High-level phase timeline (September 2025--April 2026)}
+
+\begin{table}[!ht]
+\centering
+\small
+\begin{tabular}{@{}cl>{\raggedright\arraybackslash}p{6.85cm}@{}}
+\toprule
+\textbf{Weeks (approx.)} & \textbf{Phase} & \textbf{Key deliverables} \\
+\midrule
+Sep          & Project setup         & Repository layout, CI skeleton, supervisor alignment \\
+Sep--Oct     & Literature and brief  & Literature review, ethics form, requirements freeze \\
+Oct--Nov     & Data collection       & Reddit, Twitter, and NewsAPI ingestion; storage schema \\
+Nov--Jan     & Sentiment model       & FinBERT pipeline, preprocessing profiles, batch inference \\
+Jan          & January deliverable   & Gantt refresh, working demo, first full draft sections \\
+Feb--Mar     & Frontend and API      & React views, correlation module, LIME integration \\
+Mar--Apr     & Evaluation and write-up & Benchmark, figures, discussion, polish \\
+Apr          & Final submission      & Code freeze, proofread, appendix and PDF checks \\
+\bottomrule
+\end{tabular}
+\caption{Simplified workplan derived from the Gantt and Jira records.}
+\label{tab:appendix_workplan}
+\end{table}
+
+\subsection*{Gantt chart}
+
+Figure~\ref{fig:gantt} shows the exported Gantt chart.
+
+\begin{figure}[H]
+    \centering
+    \IfFileExists{figures/gantt_chart.png}{%
+      \includegraphics[width=\linewidth,height=0.92\textheight,keepaspectratio]{gantt_chart.png}%
+    }{%
+      \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}%
+      Gantt chart image not found (\texttt{figures/gantt\_chart.png}).%
+      \vspace{1.5em}}}%
+    }
+    \caption{Project workplan Gantt chart (September 2025--April 2026), updated at the January deliverable milestone.}
+    \label{fig:gantt}
+\end{figure}
+
+\section{Ethics awareness and data governance}
+\label{app:ethics}
+
+The project involved two distinct research activities, each with its own ethical classification.
+
+\paragraph{Primary research: expert interviews.}
+During the requirements and design phase (September--October 2025), a small number of structured interviews were conducted with finance and technology practitioners to understand how sentiment data is currently used in investment contexts and what features would make a sentiment dashboard genuinely useful. Participants were contacted via professional networks, informed of the academic purpose of the study, and their participation was entirely voluntary. No personally identifiable information was recorded; notes were taken with the assistance of an AI transcription tool (Notion AI) and are summarised in Appendix~\ref{app:interviews}. These interviews did not involve vulnerable populations, financial advice, or any form of compensation, and were therefore within the scope of the project's Ethics Awareness Form.
+
+\paragraph{Secondary data: public text corpus.}
+The Ethics Awareness Form (EAF) was completed with my supervisor in September 2025 and the primary data collection activity was classified as secondary use of publicly posted text: no surveys, no private messages, no paywalled content, and no attempt to re-identify individuals beyond information already publicly visible. The completed and signed EAF is included at the bottom of the approved Project Brief submitted in October 2025; this section summarises how those commitments were implemented in the codebase (see also Chapter~\ref{chap:system_design}).
+
+\begin{itemize}
+  \item Reddit: OAuth application registered; rate limits respected through exponential backoff and pagination.
+  \item X/Twitter: official documented interfaces used where possible; unofficial pathways kept within modest volume bounds with automatic fallback.
+  \item NewsAPI: API key stored only as an environment variable; never committed to the repository.
+  \item Storage: database credentials kept exclusively in environment variables; lean deployment mode prevents accidental ML stack loading on public-facing instances.
+\end{itemize}
+
+\section{Representative dataset sample}
+\label{app:dataset_sample}
+
+Table~\ref{tab:dataset_sample} shows five representative rows from the ingested corpus. Text is truncated to fit the table; actual records contain full post or article text.
+
+\begin{table}[!ht]
+\centering
+\small
+\caption{Representative sample of five ingested records from the multi-source corpus.}
+\label{tab:dataset_sample}
+\begin{tabular}{@{}p{2.6cm} p{6.4cm} p{1.6cm} p{1.4cm}@{}}
+\toprule
+\textbf{Source} & \textbf{Text (truncated)} & \textbf{Label} & \textbf{Ticker} \\
+\midrule
+Reddit (WSB)     & NVDA earnings beat again; price action discussed in thread. & positive & NVDA \\
+X (snscrape)     & Fed decision day: indices sold off hard into the close.    & negative & SPY  \\
+NewsAPI          & Apple Q4 revenue above analyst expectations; shares higher. & positive & AAPL \\
+Reddit (investing) & Bitcoin feels stretched here; unsure about adding.        & negative & BTC  \\
+NewsAPI          & Mixed session as investors wait for CPI print tomorrow.    & neutral  & \textit{n/a} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Extended evaluation results}
+\label{app:extended_results}
+
+Table~\ref{tab:full_results_appendix} presents the full per-class results underlying the summary in Chapter~\ref{chap:evaluation} (Tables~\ref{tab:benchmark_summary} and~\ref{tab:per_class}). The bar chart and confusion-matrix heatmap in that chapter are Figures~\ref{fig:metrics_barchart} and~\ref{fig:cm_heatmap}.
+
+\begin{table}[!ht]
+\centering
+\small
+\caption{Full per-class evaluation results for FinBERT and the keyword baseline on the 200-sample benchmark (values are proportions).}
+\label{tab:full_results_appendix}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Model} & \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+FinBERT & Positive  & 0.759 & 0.943 & 0.841 \\
+        & Negative  & 0.825 & 0.943 & 0.880 \\
+        & Neutral   & 0.970 & 0.533 & 0.688 \\
+        & \textbf{Macro avg} & \textbf{0.851} & \textbf{0.806} & \textbf{0.803} \\
+\midrule
+Keyword baseline & Positive  & 0.809 & 0.786 & 0.797 \\
+                 & Negative  & 0.750 & 0.471 & 0.579 \\
+                 & Neutral   & 0.557 & 0.817 & 0.662 \\
+                 & \textbf{Macro avg} & \textbf{0.705} & \textbf{0.691} & \textbf{0.679} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Single-annotator note.}
+Ground-truth labels were assigned by the author, cross-referenced against the Financial PhraseBank taxonomy \citep{malo2014financialphrasebank} for consistency. The absence of multi-annotator inter-rater reliability scores is acknowledged as a limitation; a crowdsourced re-annotation of a subset is identified as a priority for future work.
+
+\section{Illustrative API response schemas}
+\label{app:api_samples}
+
+The following JSON fragments illustrate the response shapes returned by two key endpoints. Field names reflect the codebase conventions; exact keys may vary slightly by route version.
+
+\subsection*{Sentiment prediction}
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single]
+{
+  "label": "positive",
+  "scores": {"positive": 0.87, "neutral": 0.08, "negative": 0.05},
+  "model": "ProsusAI/finbert",
+  "source": "reddit"
+}
+\end{lstlisting}
+
+\subsection*{LIME explanation}
+
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize,breaklines=true,frame=single]
+{
+  "tokens": ["Apple", "guidance", "was", "cautious"],
+  "weights": [0.31, 0.22, -0.02, 0.09],
+  "target_label": "negative",
+  "latency_ms": 1840
+}
+\end{lstlisting}
+
+\section{Environment variables and deployment switches}
+\label{app:env_table}
+
+Table~\ref{tab:env_vars} lists the principal environment variables controlling ingestion backend selection and deployment mode.
+
+\begin{table}[!ht]
+\centering
+\small
+\caption{Principal environment variables for ingestion, Twitter backend selection, and lean API mode.}
+\label{tab:env_vars}
+\begin{tabular}{@{}p{4.6cm}p{8.4cm}@{}}
+\toprule
+\textbf{Variable} & \textbf{Role} \\
+\midrule
+\texttt{DATABASE\_URL}            & Connection string for the Neon PostgreSQL instance. \\
+\texttt{NEWS\_API\_KEY}           & Authenticates NewsAPI requests. \\
+\texttt{TWITTER\_INGEST\_BACKEND} & Selects \texttt{api}, \texttt{snscrape}, \texttt{csv}, or \texttt{auto}. \\
+\texttt{TWITTER\_BEARER\_TOKEN}   & Enables the official X API v2 path when present. \\
+\texttt{LEAN\_API}                & When set, inference-heavy routes return \texttt{503} instead of loading PyTorch. \\
+\texttt{(CI secrets)}             & GitHub Actions supplies tokens and cache keys at runtime. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Expert interview summaries}
+\label{app:interviews}
+
+During the requirements phase of the project, three structured interviews were conducted with three separate finance and technology practitioners to validate the project's motivation and inform feature priorities. Two sessions took place on 13 October 2025 and a third on 21 October 2025; the interviews were conducted online, lasted approximately 60--70 minutes each, and were focused around three themes: (i) how investor sentiment is currently monitored in practice; (ii) what data sources are considered most reliable; and (iii) what analytical capabilities would make a sentiment dashboard genuinely useful to a practitioner. Table~\ref{tab:interview_sessions} lists the sessions.
+
+\begin{table}[!ht]
+\centering
+\small
+\begin{tabular}{@{}llp{6.8cm}@{}}
+\toprule
+\textbf{Date} & \textbf{Format} & \textbf{Scope of discussion} \\
+\midrule
+13 October 2025 (session 1) & Online, $\sim$70 min & Project scoping; sentiment tool landscape; market dynamics; ethics and commercialisation. \\
+13 October 2025 (session 2) & Online, $\sim$60 min & Feature priorities; data-source reliability; manipulation and signal quality. \\
+21 October 2025            & Online, $\sim$60 min & Follow-up on explainability requirements and commercialisation pathway. \\
+\bottomrule
+\end{tabular}
+\caption{Expert interview sessions conducted during the requirements phase (three interviewees in total, one per session).}
+\label{tab:interview_sessions}
+\end{table}
+
+Participants were three practitioners whose combined experience spans investment management, financial compliance, blockchain and fintech, software entrepreneurship, and financial-crime cybersecurity. In keeping with the project's ethics classification, all material below is anonymised: no participant names, employer names, or identifying details are retained.
+
+\paragraph{Key themes from the interviews.}
+The three sessions produced substantially overlapping insights, which are consolidated here thematically rather than reported session-by-session.
+
+\begin{itemize}
+  \item \textbf{Existing tool gap.} Practitioners described existing sentiment tooling (e.g.\ Brandwatch) as effective for brand and product sentiment but weaker for financial markets, and typically priced or positioned for enterprise use rather than individual investors. This directly supported the project's framing of an accessible, finance-specific sentiment dashboard as a genuine gap.
+  \item \textbf{Source manipulation and signal quality.} Participants were emphatic that social-media data is routinely shaped by bots, coordinated influence campaigns, and algorithmic feed curation controlled by a small number of platforms. They recommended explicit multi-source comparison rather than reliance on any single feed, and flagged bot/inauthenticity filtering as an important future capability. This reinforced the multi-source ingestion design (Chapter~\ref{chap:system_design}) and motivates a dedicated future-work item (Chapter~\ref{chap:conclusion}).
+  \item \textbf{Explainability and trust.} The ability to see \emph{why} a text received a particular label was raised independently across the sessions as important for building practitioner trust in automated sentiment. This directly shaped the decision to expose LIME explanations through the API and render them as a token-level heatmap in the UI.
+  \item \textbf{Market regime context.} Practitioners observed that recent markets have been partially decoupled from fundamentals by post-2008 quantitative easing and asset-price inflation, which weakens purely technical signals and makes behavioural and sentiment indicators comparatively more interesting. This informs the interpretive caveats applied to the correlation analysis in Chapter~\ref{chap:discussion}.
+  \item \textbf{Commercialisation pathway.} When prompted, the participants advised an MVP-first approach: ship a minimal useful version, obtain practitioner feedback, and iterate, rather than attempting to pre-engineer a complete product. This framing shaped the scope boundary between the submitted academic system and the longer-term productisation pathway (see the industry demonstration and future-work sections in Chapter~\ref{chap:conclusion}).
+  \item \textbf{Wider AI outlook.} Participants also observed that large language models are already writing a substantial share of production code at major firms and will continue to reshape both financial services and labour markets over the next several years. This is treated as contextual colour for the Discussion chapter rather than as a formal finding of the project.
+\end{itemize}
+
+\paragraph{Interview notes and recording status.}
+Notes were taken during the first session on 13 October 2025 with AI transcription assistance (Notion AI) and are available on request. Recordings for the second 13 October 2025 session and the 21 October 2025 session did not export successfully, so those sessions are represented here only through contemporaneous hand-written notes; the themes above were consistent across all three sessions, which is why they are reported in consolidated form. No personally identifiable information was retained in any case. The interviews are cited here as context for the requirements process rather than as formal qualitative data.
+
+\section{Dashboard screenshots}
+\label{app:screenshots}
+
+\clearpage
+Figures~\ref{fig:screen_market_overview_app}--\ref{fig:screen_stock_analysis_app} reproduce two principal dashboard screens from the running build (see also Section~\ref{sec:frontend_screenshots}).
+
+\begin{figure}[H]
+  \centering
+  \IfFileExists{figures/screen_market_overview.png}{%
+    \includeDashboardShot[\linewidth]{screen_market_overview.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}Market Overview screenshot (\texttt{figures/screen\_market\_overview.png} not found).\vspace{1.5em}}}}
+  \caption{Market Overview page: global sentiment distribution, daily trend, and per-source filter controls.}
+  \label{fig:screen_market_overview_app}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \IfFileExists{figures/screen_stock_analysis.png}{%
+    \includeDashboardShot[\linewidth]{screen_stock_analysis.png}}{%
+    \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}Stock Analysis screenshot (\texttt{figures/screen\_stock\_analysis.png} not found).\vspace{1.5em}}}}
+  \caption{Stock Analysis page: per-ticker sentiment time-series, price overlay, LIME heatmap, and data quality indicators.}
+  \label{fig:screen_stock_analysis_app}
+\end{figure}

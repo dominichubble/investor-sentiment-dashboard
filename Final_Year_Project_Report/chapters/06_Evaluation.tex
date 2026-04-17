@@ -1,0 +1,301 @@
+\chapter{Evaluation}
+\label{chap:evaluation}
+
+This chapter evaluates the system across four dimensions: (i)~quantitative benchmarking of the FinBERT classifier against a keyword baseline; (ii)~qualitative assessment of LIME explanations; (iii)~system performance characteristics; and (iv)~an honest assessment of the evaluation's limitations. I try to be direct about where the results are strong and where they are not.
+
+\section{Evaluation Methodology}
+\label{sec:eval_methodology}
+
+\subsection{Benchmark Dataset}
+
+I built a purpose-made evaluation dataset of 200 labelled financial text samples to measure classifier performance on text representative of what the system actually processes. I deliberately did not use Financial PhraseBank as the sole benchmark because it is composed of professionally written news sentences and does not reflect the more informal, noisy language that comes from Reddit or Twitter. My dataset was designed to reflect the real distribution across the three ingestion channels:
+
+\begin{itemize}
+    \item \textbf{Positive (70 samples)}: earnings beats, guidance raises, analyst upgrades, strong economic data.  Example: ``Apple reported record quarterly revenue of \$124~billion, beating analyst expectations by a wide margin.''
+    \item \textbf{Negative (70 samples)}: earnings misses, downgrades, insolvency concerns, market sell-offs.  Example: ``The company announced a profit warning after revenues fell 18\% year-over-year, missing estimates significantly.''
+    \item \textbf{Neutral (60 samples)}: factual announcements, regulatory disclosures, earnings on-par with expectations.  Example: ``The Federal Reserve held interest rates steady, in line with market expectations.''
+\end{itemize}
+
+I assigned the primary ground-truth labels myself, cross-referencing each example against the Financial PhraseBank taxonomy \citep{malo2014financialphrasebank} to keep labelling consistent. To strengthen this single-annotator starting point, I ran an inter-annotator reliability study (Section~\ref{sec:inter_annotator}) using an independent second annotator that was given the 200 raw texts with no access to my labels.
+
+\subsection{Inter-Annotator Reliability}
+\label{sec:inter_annotator}
+
+To address the single-annotator limitation that the January deliverable had flagged as an outstanding threat to validity, I produced an independent set of labels for the full 200-sample benchmark. A second annotator (a separately-invoked large language model instance, Anthropic Claude) was given the 200 raw texts via a dedicated annotation file \texttt{annotation\_task.json} that contains only the text of each sample and no labels. The annotator was instructed to label each text as \textit{positive}, \textit{negative}, or \textit{neutral} using the Financial PhraseBank taxonomy, and was not permitted to read the labelled dataset source file. I then computed Cohen's kappa \citep{cohen1960kappa} between my original labels and the second annotator's labels.
+
+\begin{table}[H]
+  \centering
+  \caption{Inter-annotator reliability on the 200-sample benchmark. Observed agreement is the proportion of samples where both annotators agree; expected agreement is the chance-agreement rate derived from the marginal class distributions.}
+  \label{tab:kappa}
+  \begin{tabular}{@{}lc@{}}
+    \toprule
+    \textbf{Statistic} & \textbf{Value} \\
+    \midrule
+    Samples ($n$)                       & 200 \\
+    Observed agreement                  & 99.50\% \\
+    Expected agreement (chance)         & 33.52\% \\
+    Cohen's $\kappa$                    & \textbf{0.9925} \\
+    $\kappa$ standard error             & 0.0075 \\
+    $z$ statistic ($\kappa = 0$)        & 132.28 \\
+    Two-sided $p$-value                 & $<0.001$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The computed kappa of 0.9925 falls in the ``almost perfect'' band of the \citet{landis1977measurement} interpretation scale ($\kappa > 0.81$), and observed agreement is 199/200 samples. Per-class agreement is 70/70 on both the positive and negative classes and 59/60 (98.3\%) on the neutral class; the single disagreement was a text that I had labelled \textit{neutral} and the second annotator labelled \textit{negative}. This is a reassuring result: the ambiguity cases that are genuinely hard for the classifiers (Section~\ref{sec:quant_results}) are not also hard for independent human-like annotators on this dataset, so the 18\% FinBERT error rate is a measure of classifier limitation rather than label noise.
+
+I am transparent about the methodology of this reliability check. Using an LLM as a second annotator is a non-standard choice driven by practical constraints (a single-author project without resources for a paid annotation panel), and its agreement with my labels may overstate human inter-rater reliability because both annotators were ultimately shaped by similar training data distributions. It does, however, meaningfully exceed the single-annotator baseline that I had disclosed in the January deliverable, and it is disclosed here exactly as conducted so future work can replace it with a full human-annotator study.
+
+\subsection{Metrics}
+
+The following standard classification metrics are reported:
+\begin{itemize}
+    \item \textbf{Accuracy}: proportion of correctly classified samples across all three classes.
+    \item \textbf{Macro precision, recall, and F1-score}: class-level metrics averaged with equal weight per class (i.e., not weighted by support), appropriate for the near-balanced class distribution.
+    \item \textbf{Per-class precision, recall, and F1-score}: breakdown by class to expose per-category strengths and weaknesses.
+    \item \textbf{Confusion matrix}: full cross-tabulation of predicted versus true labels.
+\end{itemize}
+
+Inference time is also recorded to contextualise deployment trade-offs.
+
+\section{Quantitative Benchmark Results}
+\label{sec:quant_results}
+
+\subsection{Summary Comparison}
+
+Table~\ref{tab:benchmark_summary} presents the headline comparison between FinBERT and the keyword-based baseline on the 200-sample evaluation dataset.
+
+\begin{table}[H]
+  \centering
+  \caption{Classification performance of FinBERT versus the keyword baseline on the 200-sample evaluation dataset.}
+  \label{tab:benchmark_summary}
+  \begin{tabular}{@{}lcccc@{}}
+    \toprule
+    \textbf{Model} & \textbf{Accuracy} & \textbf{Macro Precision} & \textbf{Macro Recall} & \textbf{Macro F1} \\
+    \midrule
+    Keyword baseline & 68.5\% & 70.5\% & 69.1\% & 67.9\% \\
+    FinBERT & \textbf{82.0\%} & \textbf{85.1\%} & \textbf{80.6\%} & \textbf{80.3\%} \\
+    \midrule
+    \textit{Delta} & \textit{+13.5 pp} & \textit{+14.6 pp} & \textit{+11.5 pp} & \textit{+12.4 pp} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+FinBERT outperforms the keyword baseline by 13.5 percentage points in accuracy and 12.4 percentage points in macro F1-score, consistent across all three metric dimensions.
+This confirms that domain-adaptive pre-training provides a generalised advantage over surface-level lexical matching on financial text.
+
+To contextualise these results against the literature: \citeauthor{araci2019finbert} (\citeyear{araci2019finbert}) report approximately 86\% accuracy on Financial PhraseBank using a high-agreement three-annotator subset, which deliberately excludes ambiguous examples.
+The 82.0\% achieved here, on a noisier multi-source dataset that includes informal Reddit and Twitter text, is broadly consistent with that ceiling and arguably a more realistic measure of deployed performance.
+Loughran and McDonald's \citeyearpar{loughran2011liability} finance-specific lexicon, a stronger baseline than the general dictionaries used in early financial NLP, typically achieves 65--72\% accuracy on phrase-level datasets \citep{malo2014financialphrasebank}; the keyword baseline in this evaluation (68.5\%) falls within that range, providing a reasonable lower anchor.
+The 13.5 percentage-point improvement over the keyword baseline is therefore not simply a comparison against a weak baseline: it reflects the genuine gain from contextual pre-training over the best-practice lexicon approach currently available for this domain.
+
+The keyword baseline's inference time is effectively instantaneous ($<$1~ms for 200 samples), while FinBERT requires 2.15~seconds for the same corpus ($\approx$10.8~ms per sample), a latency increase that is acceptable for batch processing but must be accounted for in real-time API design.
+
+\subsection{Paired Statistical Significance}
+\label{sec:mcnemar}
+
+Comparing two classifiers on the same test set by accuracy alone cannot distinguish a real performance gap from one that is consistent with sampling variation. The correct test for a paired classification comparison is McNemar's test on the discordant pairs: samples where one classifier is correct and the other is wrong \citep{dietterich1998statistical}. I computed the exact two-sided binomial variant and the continuity-corrected chi-square for cross-check.
+
+On the 200-sample benchmark the pairwise contingency is: both correct~= 115, both wrong~= 14, keyword-only-correct ($b$) = 22, FinBERT-only-correct ($c$) = 49. Out of 71 discordant samples, FinBERT is correct in 69.0\% of the cases where the two classifiers disagree.
+
+\begin{table}[H]
+  \centering
+  \caption{Paired McNemar test for the accuracy difference between FinBERT and the keyword baseline on the 200-sample benchmark.}
+  \label{tab:mcnemar}
+  \begin{tabular}{@{}lc@{}}
+    \toprule
+    \textbf{Statistic} & \textbf{Value} \\
+    \midrule
+    Discordant pairs ($n$)                         & 71 \\
+    $b$ (keyword-only correct)                     & 22 \\
+    $c$ (FinBERT-only correct)                     & 49 \\
+    Exact two-sided binomial $p$-value             & \textbf{0.00182} \\
+    Chi-square (continuity-corrected, df = 1)      & 9.52 \\
+    Approximate $p$-value from $\chi^2_{cc}$       & 0.00203 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Both tests reject the null hypothesis of equal error rates at the $p < 0.01$ level. The 13.5 percentage-point accuracy gap therefore cannot be attributed to sampling variation on this benchmark. This is an important addition to the raw accuracy numbers reported in Table~\ref{tab:benchmark_summary}: a head-line accuracy difference without a paired test is not a statistically defensible claim.
+
+\subsection{Per-Class Analysis}
+
+Table~\ref{tab:per_class} presents per-class metrics for both models.
+
+\begin{table}[H]
+  \centering
+  \caption{Per-class precision, recall, and F1-score for both classifiers on the 200-sample benchmark (support: pos=70, neg=70, neu=60).}
+  \label{tab:per_class}
+  \begin{tabular}{@{}llcccc@{}}
+    \toprule
+    \textbf{Model} & \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} & \textbf{Support} \\
+    \midrule
+    Keyword & Positive  & 80.9\% & 78.6\% & 79.7\% & 70 \\
+            & Negative  & 75.0\% & 47.1\% & 57.9\% & 70 \\
+            & Neutral   & 55.7\% & 81.7\% & 66.2\% & 60 \\
+    \midrule
+    FinBERT & Positive  & 75.9\% & 94.3\% & \textbf{84.1\%} & 70 \\
+            & Negative  & 82.5\% & 94.3\% & \textbf{88.0\%} & 70 \\
+            & Neutral   & \textbf{97.0\%} & 53.3\% & 68.8\% & 60 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{metrics_barchart.pdf}
+  \caption{Per-class precision, recall, and F1-score for FinBERT (coloured bars) versus the keyword baseline (grey bars) on the 200-sample benchmark.  FinBERT's large recall advantage on the negative class and the neutral class asymmetry (high precision, low recall) are immediately visible.}
+  \label{fig:metrics_barchart}
+\end{figure}
+
+\paragraph{Positive class.}  FinBERT achieves substantially higher recall (94.3\% vs.\ 78.6\%), capturing nearly all positive texts, at the cost of marginally lower precision (75.9\% vs.\ 80.9\%).  This pattern is consistent with FinBERT's pre-training emphasis on clearly sentiment-bearing financial phrases.
+
+\paragraph{Negative class.}  The most dramatic improvement is on the negative class, where FinBERT's recall (94.3\%) far exceeds the keyword baseline (47.1\%).  The keyword baseline struggles with negative texts that use implicit or nuanced phrasing (``margins compressed'', ``missed by a whisker''), whereas FinBERT's contextual representations handle these effectively.
+
+\paragraph{Neutral class.}  Both models show a characteristic asymmetry on the neutral class. The keyword baseline achieves high recall (81.7\%) but very low precision (55.7\%), effectively over-classifying anything ambiguous as neutral. FinBERT inverts this: very high precision (97.0\%) but only 53.3\% recall, erring toward positive or negative whenever any sentiment-bearing phrase is present. I first noticed this problem by eye. Before running any formal metrics, I was checking predictions manually and kept seeing obviously factual statements classified as positive or negative. The formal benchmark confirmed what I had already suspected. This neutral recall deficit is a known property of FinBERT's pre-training distribution and is discussed further in Section~\ref{sec:eval_limitations}.
+
+\subsection{Confusion Matrices}
+
+Tables~\ref{tab:cm_keyword} and~\ref{tab:cm_finbert} present the full confusion matrices (rows = true label, columns = predicted label).
+
+\begin{table}[H]
+  \centering
+  \caption{Confusion matrix -- keyword baseline (rows: true, columns: predicted).}
+  \label{tab:cm_keyword}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    & \textbf{Pred. Pos} & \textbf{Pred. Neg} & \textbf{Pred. Neu} \\
+    \midrule
+    \textbf{True Pos} & \textbf{55} & 7 & 8 \\
+    \textbf{True Neg} & 6 & \textbf{33} & 31 \\
+    \textbf{True Neu} & 7 & 4 & \textbf{49} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[H]
+  \centering
+  \caption{Confusion matrix -- FinBERT (rows: true, columns: predicted).}
+  \label{tab:cm_finbert}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    & \textbf{Pred. Pos} & \textbf{Pred. Neg} & \textbf{Pred. Neu} \\
+    \midrule
+    \textbf{True Pos} & \textbf{66} & 3 & 1 \\
+    \textbf{True Neg} & 4 & \textbf{66} & 0 \\
+    \textbf{True Neu} & 17 & 11 & \textbf{32} \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.62\textwidth]{confusion_matrix.pdf}
+  \caption{Row-normalised confusion matrix for FinBERT on the 200-sample benchmark.  Cell values show raw counts and recall fractions.  The strong diagonal on the positive and negative classes contrasts sharply with the dispersed neutral row, visualising the neutral recall deficit quantified in Table~\ref{tab:per_class}.}
+  \label{fig:cm_heatmap}
+\end{figure}
+
+The FinBERT confusion matrix reveals two principal error patterns.  First, 17 neutral texts are misclassified as positive and 11 as negative (total: 28/60 errors on neutral).  Many of these cases involve factual statements that contain sentiment-loaded vocabulary (e.g., ``The company \textit{raised} guidance to reflect \textit{stronger} demand''), which FinBERT correctly identifies as positive in isolation but which are neutrally framed in context.  Second, only 7 positive and 4 negative texts are misclassified out of 140 (5\% error rate on polarised classes), demonstrating strong performance where the signal is unambiguous.
+
+The keyword baseline's principal failure mode is the 31/70 false-neutral rate on negative texts, confirming that the lexicon lacks coverage for implicit negative financial language.
+
+\section{LIME Explanation Quality}
+\label{sec:lime_eval}
+
+To evaluate the quality and faithfulness of the LIME explanations, I ran the explainer directly on three representative financial sentences using the production FinBERT model and 300 perturbation samples per explanation.
+Figures~\ref{fig:lime_positive} and~\ref{fig:lime_negative} show the resulting token-importance bar charts for a high-confidence positive and a high-confidence negative prediction respectively.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{lime_positive.pdf}
+  \caption{LIME token weights for a positive financial sentence. Green bars indicate tokens that support the \textit{positive} prediction; red bars indicate tokens that push against it. FinBERT predicted \textit{positive} at 95\% confidence.}
+  \label{fig:lime_positive}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.82\textwidth]{lime_negative.pdf}
+  \caption{LIME token weights for a negative financial sentence. FinBERT predicted \textit{negative} at 97.6\% confidence. The explanation confirms that \textit{decline}, \textit{sharp}, and \textit{missing} are the principal drivers.}
+  \label{fig:lime_negative}
+\end{figure}
+
+Inspecting the explanations qualitatively, I found several patterns that confirmed the explanations were semantically meaningful rather than artefactual:
+
+\begin{enumerate}
+    \item \textbf{Correct attribution on unambiguous cases.}  For the positive sentence (Figure~\ref{fig:lime_positive}), LIME assigns the highest weights to ``surged'', ``raised'', and ``guidance'', precisely the vocabulary that would signal positive financial news to a human reader.  This is a useful sanity check: if the model were relying on superficial or spurious features, the weights would not cluster so cleanly around semantically relevant terms.
+
+    \item \textbf{Disambiguation of the negative error pattern.}  Figure~\ref{fig:lime_negative} shows that the negative prediction is driven by ``decline'', ``sharp'', and ``missing'', the explicit negative vocabulary.  Interestingly, ``margin'' also carries a small positive weight toward negative, consistent with FinBERT having learned that ``margin'' in financial contexts often appears in phrases like ``margins compressed'' or ``narrowing margins''.
+
+    \item \textbf{Reproducing the neutral recall failure in practice.}  When I ran LIME on the sentence ``The Federal Reserve kept interest rates unchanged, maintaining its cautious outlook on inflation'', FinBERT predicted \textit{negative} (55.9\% confidence) rather than neutral.  The LIME explanation identified ``cautious'' and ``inflation'' as the driving negative weights, both legitimate financial risk signals in isolation but contextually neutral in this sentence.  This is exactly the misclassification pattern identified in the confusion matrix (Table~\ref{tab:cm_finbert}), and LIME makes the mechanism transparent: the model conflates neutral-framed risk vocabulary with genuine negative sentiment.
+\end{enumerate}
+
+These observations are consistent with the interpretability objectives set out in the design and support the argument that LIME provides sufficient actionable transparency for financial dashboard users.  The third example in particular illustrates why XAI integration is valuable beyond just providing outputs: without LIME, the neutral recall deficit would be visible only as a number in a confusion matrix.  With it, the specific lexical failure mode is identifiable and could inform a targeted fine-tuning intervention.
+
+\section{Emotion Taxonomy Component Ablation}
+\label{sec:emotion_ablation}
+
+The finance-emotion taxonomy (Section~\ref{sec:emotion_design}, module \texttt{app.analysis.finance\_emotion}) composes several heterogeneous signals into a distribution over six emotion classes: a small prior, the FinBERT softmax probabilities, a Shannon-entropy contribution that lifts \textit{uncertainty} when the classifier is unsure, a lexicon of domain cues (e.g., \textit{rally}, \textit{plunge}, \textit{hedge}, \textit{guidance}), and aspect priors derived from the ABSA-lite module. Because no public benchmark annotates financial text at this granularity, an accuracy ablation is not possible; instead I conduct a component-contribution ablation that asks how often the dominant emotion label \emph{changes} when a component is removed. This is a structural measure of each component's influence and it is directly reproducible from the per-sample JSON logged to \texttt{backend/data/evaluation/emotion\_ablation.json}.
+
+I ran the taxonomy on the 200-sample benchmark under four configurations: the full pipeline, entropy zeroed, the domain lexicons disabled (by feeding a single space as the lowered text so no lexicon cues can fire), and aspect priors disabled (baseline aspects is empty, so this row honestly shows a 0\% change — it is included to document the ablation coverage rather than to claim a finding).
+
+\begin{table}[H]
+  \centering
+  \caption{Component-contribution ablation of the finance-emotion taxonomy on the 200-sample benchmark. The change fraction is the proportion of samples for which removing the named component flips the dominant emotion label relative to the full configuration. Label distribution abbreviations: O = optimism, F = fear, U = uncertainty, C = confidence.}
+  \label{tab:emotion_ablation}
+  \begin{tabular}{@{}lccc@{}}
+    \toprule
+    \textbf{Configuration} & \textbf{Mixed} & \textbf{Other labels} & \textbf{Change vs.\ full} \\
+    \midrule
+    Full                      & 168 & O=17, F=10, U=4, C=1 & --- \\
+    Entropy disabled          & 168 & O=17, F=10, U=4, C=1 & 0.0\% \\
+    Lexicons disabled         & 200 & ---                  & \textbf{16.0\%} \\
+    Aspect priors disabled    & 168 & O=17, F=10, U=4, C=1 & 0.0\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Three observations follow. First, the domain lexicon is the component that actually separates emotion labels on this dataset: without it, every sample collapses to \textit{mixed}, and 16\% of samples change dominant label. The lexicon is therefore load-bearing, not decorative. Second, zeroing the entropy contribution does not flip any dominant label on this benchmark; entropy still shifts the \emph{secondary} structure of the distribution (the magnitude of the \textit{uncertainty} component), but it is not strong enough on these samples to overturn a label that the lexicon and FinBERT probabilities already support. This is an honest negative finding and is discussed in the limitations. Third, the aspect row is a book-keeping entry: the benchmark was generated without ABSA input (\texttt{aspects=[]} is the default path used by the scraping pipeline when no aspects are extracted), so this ablation cannot distinguish the aspect component's contribution; doing so would require re-running the end-to-end pipeline on aspect-extracted inputs.
+
+Given this outcome I flag, in the limitations, that: (i)~the ``mixed'' label dominates the full distribution (168/200 samples), which is consistent with financial text frequently carrying competing signals but should prompt calibration work in future iterations; and (ii)~the entropy component's null structural effect suggests its coefficient should be re-tuned or the component should be re-designed so that high classifier uncertainty has a stronger claim on the \textit{uncertainty} label.
+
+\section{System Performance}
+\label{sec:system_performance}
+
+\begin{table}[H]
+  \centering
+  \caption{System performance characteristics under representative conditions.}
+  \label{tab:perf}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.52\linewidth}r@{}}
+    \toprule
+    \textbf{Metric} & \textbf{Value} \\
+    \midrule
+    FinBERT batch inference (batch size 32, 200 samples) & 2.15~s \\
+    FinBERT single-text inference & $\approx$11~ms \\
+    Keyword baseline (200 samples) & $<$1~ms \\
+    \texttt{/api/v1/data/statistics} response time & $<$300~ms \\
+    \texttt{/api/v1/correlation/\{ticker\}} (cached) & $<$100~ms \\
+    \texttt{/api/v1/correlation/\{ticker\}} (cold, 90-day window) & 1--3~s \\
+    LIME explanation (typical text, 5{,}000 perturbations) & 15--40~s \\
+    Database: total labelled records & $>$150{,}000 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Data and statistics endpoints consistently satisfy the 3-second non-functional requirement.  Correlation results are served from a TTL cache (1-hour expiry, 256-entry capacity) for popular tickers, yielding sub-100~ms responses.  Cold correlation computation for a 90-day window over dense tickers falls within the 1--3~second range on the development machine.  LIME explanation generation requires 15--40~seconds, consistent with the 120-second frontend timeout allocated for this endpoint.  This latency is a known characteristic of LIME's perturbation-based approach and is acceptable for an on-demand explanation feature rather than a bulk processing operation.
+
+\section{Limitations}
+\label{sec:eval_limitations}
+
+\begin{itemize}
+    \item \textbf{Benchmark dataset scope.}  The 200-sample evaluation dataset was constructed by the author rather than from a third-party annotated corpus.  Label consistency was maintained by cross-referencing Financial PhraseBank \citep{malo2014financialphrasebank} definitions, and the inter-annotator reliability check in Section~\ref{sec:inter_annotator} provides a Cohen's $\kappa$ of 0.9925 against an independent second annotator.  Two caveats remain.  First, the second annotator is a separately-invoked LLM instance rather than a human panel, which may inflate agreement relative to a paid-annotator study.  Second, the dataset size (200) is modest and was assembled to reflect the three ingestion channels rather than to sample a stratified news corpus; scaling to several thousand samples with human annotation is identified as future work.
+
+    \item \textbf{FinBERT neutral class recall.}  The 53.3\% neutral recall (28 misclassifications out of 60 neutral samples) represents the system's most significant classification weakness.  This is consistent with FinBERT's known pre-training bias toward polarised financial language.  Addressing this through domain-specific fine-tuning on a neutrally-balanced dataset, or through threshold calibration of the softmax distribution, is identified as a priority for future work.
+
+    \item \textbf{Zero-shot classification assumption.}  The system uses FinBERT in its pre-trained configuration without any task-specific fine-tuning on in-domain data collected by this project.  Fine-tuning on a sample of the collected Reddit, Twitter, and news data would likely improve performance, particularly on social media where informal financial language differs from the news-oriented Financial PhraseBank domain.
+
+    \item \textbf{Correlation is not causation.}  The Granger causality and correlation analyses presented by the system are exploratory statistical tools, not evidence of structural market relationships.  Short-window sentiment series are noisy and non-stationary; many market movements are driven by mechanical or non-sentiment factors.  This limitation is prominently disclosed on the Methodology and Legal pages of the dashboard.
+
+    \item \textbf{LIME stability.}  LIME explanations are locally linear approximations and can vary across runs for the same input due to the randomness of perturbation sampling.  While the \texttt{random\_state} is fixed for reproducibility in the evaluation artefacts, production explanations generated on demand may exhibit minor variation.
+
+    \item \textbf{Evaluation of novel modules.}  The finance-emotion taxonomy has now been subjected to a component-contribution ablation (Section~\ref{sec:emotion_ablation}), which shows that the domain lexicon is the dominant structural contributor (16\% of samples change label when it is removed) and that the entropy component does not flip any dominant label on this benchmark.  This falls short of a true accuracy ablation because no public benchmark annotates financial text at the emotion granularity used here; producing a purpose-built emotion benchmark and measuring accuracy against it is the natural next step and a clear candidate for a future journal paper.  The ABSA-lite module has not been formally evaluated and its separation of contribution was not measurable on this benchmark (aspects were empty in the baseline), which is disclosed honestly in the ablation table.
+\end{itemize}

@@ -1,0 +1,441 @@
+\chapter{Technical Background}\label{chap:theory}
+
+This chapter covers the theoretical foundations of the key methods I built on.
+My aim is not to reproduce full mathematical proofs but to explain clearly what each
+method does, present the central equations that govern its behaviour, and make the
+connection to how I applied it in this project explicit.
+
+The chapter is organised around five areas:
+(i)~the transformer architecture and self-attention mechanism that FinBERT is built on;
+(ii)~BERT's pre-training procedure and FinBERT's financial adaptation;
+(iii)~LIME's local surrogate model for explainability;
+(iv)~SHAP and its game-theoretic grounding; and
+(v)~the statistical correlation and causal inference methods used in the correlation engine.
+
+% ----------------------------------------------------------
+\section{The Transformer Architecture}
+% ----------------------------------------------------------
+
+The transformer \citep{vaswani2017attention} replaced recurrent and convolutional sequence
+models with a purely attention-based architecture.
+The key insight is that any two positions in a sequence can attend directly to one another,
+removing the sequential bottleneck that made RNNs slow to train and prone to forgetting
+over long contexts.  Figure~\ref{fig:transformer_encoder} shows the structure of a single encoder layer.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=0.75cm,
+  every node/.style={font=\small},
+  mainbox/.style={draw, rounded corners=4pt, minimum width=7cm,
+                  minimum height=0.80cm, fill=#1, align=center,
+                  inner sep=7pt, text width=6.6cm},
+  normbox/.style={draw, rounded corners=4pt, minimum width=7cm,
+                  minimum height=0.65cm, fill=gray!12, align=center,
+                  inner sep=5pt, font=\small},
+  arr/.style ={->, >=Stealth, thick},
+  skip/.style={->, >=Stealth, thick, dashed, blue!55}]
+
+\node[mainbox=teal!18]   (embed) {Token Embeddings + Positional Encoding};
+\node[mainbox=blue!15, below=of embed]  (mha)  {Multi-Head Self-Attention\\[-2pt]\scriptsize $h{=}12$ heads, $d_k{=}64$ per head};
+\node[normbox,  below=of mha]           (ln1)  {Add \& Layer Norm};
+\node[mainbox=purple!13, below=of ln1]  (ffn)  {Position-wise Feed-Forward Network\\[-2pt]\scriptsize $\mathrm{FFN}(\mathbf{x})=\mathrm{ReLU}(\mathbf{x}W_1+b_1)W_2+b_2$};
+\node[normbox,  below=of ffn]           (ln2)  {Add \& Layer Norm};
+\node[mainbox=teal!18, below=of ln2]    (outp) {Encoder Output\\[-2pt]\scriptsize ($\times\,12$ stacked layers in BERT-base)};
+
+\draw[arr] (embed) -- (mha);
+\draw[arr] (mha)   -- (ln1);
+\draw[arr] (ln1)   -- (ffn);
+\draw[arr] (ffn)   -- (ln2);
+\draw[arr] (ln2)   -- (outp);
+
+%% Residual connections (left rail, away from the main vertical flow)
+\draw[skip] (embed.west) -- ++(-1.15,0)
+    node[left, font=\scriptsize\itshape, text=gray!80] {residual}
+    |- (ln1.west);
+\draw[skip] (ln1.west) -- ++(-1.15,0)
+    node[left, font=\scriptsize\itshape, text=gray!80] {residual}
+    |- (ln2.west);
+\end{tikzpicture}
+\caption{Structure of a single transformer encoder layer as used in BERT and FinBERT.  Both the multi-head attention and feed-forward sub-layers are wrapped in a residual (skip) connection followed by layer normalisation, preserving gradient flow through the 12-layer stack.}
+\label{fig:transformer_encoder}
+\end{figure}
+
+% ............................................................
+\subsection{Positional Encoding}
+
+Because the attention mechanism has no inherent sense of word order, position information
+must be injected explicitly.
+Vaswani et al.\ achieve this with a fixed encoding that uses sinusoidal functions of token
+position $t$ and embedding dimension index $i$:
+\begin{align}
+  PE_{(t,\,2i)}   &= \sin\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right) \\[4pt]
+  PE_{(t,\,2i+1)} &= \cos\!\left(\frac{t}{10000^{2i/d_{\text{model}}}}\right)
+\end{align}
+where $d_{\text{model}} = 768$ in BERT-base.
+The sinusoidal choice means that each position gets a unique, smoothly varying signature
+across the embedding dimensions, and the model can learn to attend to relative positions
+rather than absolute ones.
+The positional encoding is added element-wise to the token embedding before the first
+encoder layer.
+
+% ............................................................
+\subsection{Scaled Dot-Product Attention}
+
+The central operation of the transformer is \emph{scaled dot-product attention}.
+Inputs are projected into three matrices: queries $\mathbf{Q}$, keys $\mathbf{K}$,
+and values $\mathbf{V}$. The output is a weighted sum of the values, where the
+weights reflect how relevant each key is to each query:
+\begin{equation}
+  \text{Attention}(\mathbf{Q},\mathbf{K},\mathbf{V})
+  = \text{softmax}\!\left(\frac{\mathbf{Q}\mathbf{K}^{\!\top}}{\sqrt{d_k}}\right)\mathbf{V}.
+  \label{eq:attention}
+\end{equation}
+
+Each entry of $\mathbf{Q}\mathbf{K}^{\!\top}$ scores how strongly one position
+attends to another.
+After the softmax, each row becomes a probability distribution over all positions, and
+multiplying by $\mathbf{V}$ produces a weighted average of value vectors.
+The $\sqrt{d_k}$ scaling prevents the dot products from growing so large that the
+softmax saturates into near-zero gradients, a practical issue that appeared
+consistently in early training runs before scaling was introduced.
+
+% ............................................................
+\subsection{Multi-Head Attention}
+
+Rather than applying one attention function to the full representation,
+the transformer runs $h$ parallel \emph{attention heads}, each projecting into a separate
+lower-dimensional subspace:
+\begin{equation}
+  \text{MultiHead}(\mathbf{Q},\mathbf{K},\mathbf{V})
+  = \text{Concat}(\text{head}_1,\ldots,\text{head}_h)\,\mathbf{W}^O
+  \label{eq:mha}
+\end{equation}
+where each $\text{head}_i = \text{Attention}(\mathbf{Q}\mathbf{W}_i^Q,\,
+\mathbf{K}\mathbf{W}_i^K,\, \mathbf{V}\mathbf{W}_i^V)$ and the results are concatenated
+and projected back via $\mathbf{W}^O$.
+BERT-base uses $h = 12$ heads.
+
+The motivation is that a single attention distribution must simultaneously resolve
+multiple linguistic tasks.
+Multiple heads allow the model to specialise: some learn local phrase-level dependencies,
+others capture long-range entity references.
+In financial text this matters because the sentiment-bearing term (e.g.\ ``surged'')
+may appear several tokens away from the company name it modifies.
+
+% ............................................................
+\subsection{Feed-Forward Sub-layers and Residual Connections}
+
+After the attention sub-layer, each encoder layer applies a two-layer feed-forward network
+independently at every position:
+\begin{equation}
+  \text{FFN}(\mathbf{x}) = \max(0,\;\mathbf{x}\mathbf{W}_1 + \mathbf{b}_1)\,\mathbf{W}_2 + \mathbf{b}_2.
+  \label{eq:ffn}
+\end{equation}
+Both the attention and FFN sub-layers are wrapped in a residual connection followed by
+layer normalisation, which stabilises training across the 12-layer stack by preserving
+a gradient path directly to earlier layers.
+
+% ----------------------------------------------------------
+\section{BERT and FinBERT}
+% ----------------------------------------------------------
+
+% ............................................................
+\subsection{BERT Pre-training}
+
+BERT \citep{devlin2019bert} pre-trains on two self-supervised objectives over large
+unlabelled text corpora.
+
+\textbf{Masked Language Modelling (MLM)} randomly selects 15\% of input tokens,
+replacing 80\% of those with a \texttt{[MASK]} token, 10\% with a random vocabulary
+token, and leaving 10\% unchanged.
+The model is trained to predict the original token at each masked position from the
+surrounding context.
+The 10\%/10\% split is deliberate: if every selected token became \texttt{[MASK]},
+the model would only learn to handle masked inputs, creating a mismatch at inference
+time where \texttt{[MASK]} never appears.
+
+\textbf{Next Sentence Prediction (NSP)} presents the model with pairs of sentences
+and asks it to predict whether the second genuinely follows the first.
+A special \texttt{[CLS]} token prepended to each input is used for the binary
+classification.
+RoBERTa \citep{liu2019roberta} later showed NSP to be unnecessary, but it is part of
+the BERT setup that FinBERT inherits.
+
+% ............................................................
+\subsection{FinBERT Fine-tuning for Sentiment Classification}
+
+Araci \citep{araci2019finbert} takes the pre-trained BERT-base weights, continues
+pre-training on the Reuters TRC2 corpus and the Financial PhraseBank
+\citep{malo2014financialphrasebank}, and then fine-tunes for three-class sentiment
+classification (positive, neutral, negative).
+
+Fine-tuning adds a single linear layer on top of the \texttt{[CLS]} token's final
+representation $\mathbf{h}_{\texttt{[CLS]}}$:
+\begin{equation}
+  \hat{\mathbf{y}}
+  = \text{softmax}\!\left(\mathbf{W}_c\,\mathbf{h}_{\texttt{[CLS]}} + \mathbf{b}_c\right),
+  \label{eq:finbert_clf}
+\end{equation}
+where $\mathbf{W}_c \in \mathbb{R}^{3 \times 768}$.
+Training minimises the standard cross-entropy loss between the predicted distribution
+$\hat{\mathbf{y}}$ and the one-hot ground-truth label.
+
+Domain pre-training matters because financial vocabulary is highly context-dependent.
+The phrase ``the company cut its losses'' carries a positive connotation in a trading
+context (implying a controlled exit), whereas a general-purpose model would classify
+``cut'' and ``losses'' together as negative.
+I chose FinBERT specifically because I needed financial understanding baked into the
+representations before fine-tuning, not retrofitted afterwards.
+
+% ----------------------------------------------------------
+\section{Local Interpretable Model-Agnostic Explanations (LIME)}
+% ----------------------------------------------------------
+
+% ............................................................
+\subsection{Core Idea}
+
+LIME \citep{ribeiro2016lime} explains the prediction of any black-box model $f$ at a
+specific input $x^*$ by fitting a simple, interpretable surrogate model in the local
+neighbourhood of $x^*$.
+Its \emph{model-agnostic} property means the same method applies regardless of whether
+$f$ is FinBERT, a decision tree, or any other classifier
+\citep{doshivelez2017interpretable}.  The end-to-end workflow is shown in Figure~\ref{fig:lime_process}.
+
+\begin{figure}[H]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tikzpicture}[
+  node distance=1.2cm and 1.6cm,
+  every node/.style={font=\small},
+  lmbox/.style={draw, rounded corners=5pt, fill=#1, minimum width=3.6cm,
+                minimum height=1.5cm, align=center, inner sep=9pt,
+                text width=3.2cm},
+  num/.style={circle, draw, fill=white, minimum size=0.6cm,
+              font=\small\bfseries, inner sep=0pt},
+  arr/.style={->, >=Stealth, very thick, line width=1.2pt}]
+
+%% Top row: steps 1–3
+\node[lmbox=teal!18]   (input)   {\textbf{1.\ Input text} $x^*$\\[4pt]
+  \scriptsize Raw financial sentence fed to the explainer};
+\node[lmbox=blue!14,  right=of input]   (perturb) {\textbf{2.\ Perturbation}\\[4pt]
+  \scriptsize $\sim$200 randomly masked variants of $x^*$ generated};
+\node[lmbox=orange!16, right=of perturb] (query)   {\textbf{3.\ FinBERT} $f(z)$\\[4pt]
+  \scriptsize Each variant scored; label + probability recorded};
+
+%% Bottom row: steps 4–5 (right to left to form a U-shape)
+\node[lmbox=purple!14, below=of query]   (fit)     {\textbf{4.\ Surrogate fitting}\\[4pt]
+  \scriptsize Proximity-weighted linear regression on perturbed outputs};
+\node[lmbox=green!16,  left=of fit]      (output)  {\textbf{5.\ Token weights} $w_i$\\[4pt]
+  \scriptsize Coefficient of each token = its influence on the prediction};
+\node[lmbox=teal!10,   left=of output]   (heatmap) {\textbf{Output: heatmap}\\[4pt]
+  \scriptsize Rendered in the dashboard's explainability panel};
+
+%% Step number badges
+\foreach \n/\nd in {1/input,2/perturb,3/query,4/fit,5/output}{
+  \node[num] at ($(\nd.north west)+(0.22,-0.22)$) {\n};
+}
+
+%% Arrows
+\draw[arr] (input)   -- (perturb);
+\draw[arr] (perturb) -- (query);
+\draw[arr] (query)   -- (fit);
+\draw[arr] (fit)     -- (output);
+\draw[arr] (output)  -- (heatmap);
+\end{tikzpicture}}
+\caption{LIME explanation process applied to financial text classification.  The explainer generates perturbed variants of the input, queries the black-box FinBERT model on each, and fits a proximity-weighted linear surrogate to recover per-token importance weights.  These weights are displayed as a colour-coded heatmap in the dashboard.}
+\label{fig:lime_process}
+\end{figure}
+
+% ............................................................
+\subsection{The LIME Objective}
+
+LIME searches for an interpretable model $g$ (here, a linear model) that balances
+fidelity to $f$ locally against simplicity:
+\begin{equation}
+  \xi(x^*)
+  = \arg\min_{g \;\in\; \mathcal{G}}
+    \;\mathcal{L}(f,\,g,\,\pi_{x^*}) + \Omega(g)
+  \label{eq:lime_obj}
+\end{equation}
+where $\mathcal{L}(f, g, \pi_{x^*})$ is the weighted prediction error between $f$ and $g$
+over perturbed samples near $x^*$, $\Omega(g)$ penalises the complexity of $g$, and
+$\pi_{x^*}(z) = \exp(-D(x^*, z)^2 / \sigma^2)$ is a proximity kernel that gives more
+weight to samples close to $x^*$.
+
+% ............................................................
+\subsection{Perturbation and Surrogate Fitting for Text}
+
+For a text input, LIME treats each word as a binary feature (present or absent).
+It generates a set of perturbed versions of $x^*$ by randomly masking tokens, queries $f$
+on each, and uses the resulting predictions as labels to fit the weighted linear surrogate.
+The coefficients of the fitted model are token importance scores: a positive weight on a
+word means that word pushed the prediction toward the target class; a negative weight means
+it pushed against it.
+This produces the token-level heatmap shown in the dashboard's explainability panel.
+
+The key limitation is that a linear surrogate cannot capture non-local interactions,
+for example negation that spans several tokens, which BERT's attention mechanism
+handles naturally.
+LIME's explanation is therefore an approximation of $f$'s behaviour near $x^*$, not a
+global account of the model.
+I accepted this trade-off because LIME's cost scales with the number of perturbations
+sampled (around 200 for the text lengths I was working with), making it fast enough to
+serve from a live API endpoint.
+
+% ----------------------------------------------------------
+\section{SHAP: SHapley Additive Explanations}
+% ----------------------------------------------------------
+
+% ............................................................
+\subsection{Game-theoretic Foundation and the Shapley Value}
+
+SHAP \citep{lundberg2017shap} grounds feature attribution in cooperative game theory.
+Each feature $x_i$ is treated as a ``player'', and the model's output is the
+``prize'' to be divided among the players.
+The \emph{Shapley value} $\phi_i$ measures the average marginal contribution of feature
+$i$ across all possible orderings in which features can be added to a coalition:
+\begin{equation}
+  \phi_i
+  = \sum_{S \;\subseteq\; F \setminus \{i\}}
+    \frac{|S|!\;(|F| - |S| - 1)!}{|F|!}
+    \;\bigl[f(S \cup \{i\}) - f(S)\bigr]
+  \label{eq:shapley}
+\end{equation}
+where $F$ is the full set of features, $S$ is a coalition not containing $i$,
+$f(S)$ is the model's expected output given only the features in $S$, and the
+combinatorial factor weights each coalition by how many orderings it corresponds to.
+
+The Shapley value is the unique attribution that satisfies a set of fairness axioms,
+including that attributions sum exactly to the model's output and that features with
+equal contribution receive equal attribution.
+
+% ............................................................
+\subsection{Computational Cost and the Choice of LIME at Runtime}
+
+Exactly evaluating~\eqref{eq:shapley} requires considering all $2^{|F|}$ subsets.
+For a 128-token input this is entirely intractable.
+KernelSHAP \citep{lundberg2017shap} approximates Shapley values by solving a
+specially weighted regression, conceptually similar to LIME but with a different
+kernel that is proven to recover the Shapley values in expectation.
+Even with this approximation, a single SHAP explanation requires several hundred model
+evaluations, versus LIME's $\sim$200 perturbations on comparable inputs.
+This is the practical reason I served LIME from the real-time API and reserved SHAP
+for offline notebook analysis.
+
+% ----------------------------------------------------------
+\section{Correlation and Causal Inference Methods}
+% ----------------------------------------------------------
+
+% ............................................................
+\subsection{Pearson and Spearman Correlation}
+
+Given two time series of length $T$, the Pearson correlation coefficient measures linear
+co-movement:
+\begin{equation}
+  r = \frac{\sum_{t=1}^T (x_t - \bar{x})(y_t - \bar{y})}
+           {\sqrt{\sum_{t=1}^T (x_t - \bar{x})^2}\;\;\sqrt{\sum_{t=1}^T (y_t - \bar{y})^2}},
+  \label{eq:pearson}
+\end{equation}
+$r$ lies in $[-1, 1]$, with $+1$ indicating perfect positive linear co-movement.
+Its limitation is that it assumes a bivariate normal distribution, which financial
+returns do not satisfy (heavy tails, occasional extreme values).
+
+Spearman's $r_s$ addresses this by applying the same formula to the \emph{ranks} of the
+observations rather than the raw values, which removes distributional assumptions.
+When there are no tied ranks it simplifies to:
+\begin{equation}
+  r_s = 1 - \frac{6\sum_{t=1}^T d_t^2}{T(T^2 - 1)},
+  \label{eq:spearman}
+\end{equation}
+where $d_t$ is the difference in ranks of $x_t$ and $y_t$.
+I report both measures so that the distance between them indicates how much of any
+apparent relationship is an artefact of outliers or non-normality.
+
+% ............................................................
+\subsection{Rolling Window Correlation}
+
+A single static correlation coefficient masks how the relationship changes over time;
+for instance, sentiment--price coupling may strengthen during high-volatility periods and
+weaken in calmer markets.
+Rolling correlation applies the Pearson formula within a sliding window of width $W$,
+producing a time series of coefficients $\{r_t^{(W)}\}$ that reveals these temporal
+shifts.
+I implemented this using \texttt{pandas.DataFrame.rolling().corr()} with a 30-day window,
+which balanced responsiveness to regime changes against the noise introduced by short
+windows.
+
+% ............................................................
+\subsection{Granger Causality}
+
+Granger causality \citep{granger1969} asks: do past values of series $X$ improve
+predictions of $Y$ beyond what $Y$'s own history alone provides?
+It is important to note that this is \emph{predictive precedence}, not physical causation
+in any deeper sense.
+
+\paragraph{Stationarity.}
+Both series must be stationary before the test is valid; non-stationary series can
+generate spurious correlations \citep{engle1987cointegration}.
+Sentiment scores are bounded and approximately stationary; stock prices are converted to
+log-differenced returns $r_t = \log(P_t / P_{t-1})$ to remove the price trend.
+
+\paragraph{Model comparison.}
+For lag order $p$ (chosen by the Akaike Information Criterion), two autoregressive
+models are fitted.
+The \emph{unrestricted} model regresses $Y$ on its own past values and the past values
+of $X$:
+\begin{equation}
+  y_t
+  = \alpha_0
+    + \sum_{k=1}^{p} \alpha_k\, y_{t-k}
+    + \sum_{k=1}^{p} \beta_k\, x_{t-k}
+    + \varepsilon_t.
+  \label{eq:var_unrest}
+\end{equation}
+The \emph{restricted} model uses only $Y$'s own history:
+\begin{equation}
+  y_t
+  = \alpha_0
+    + \sum_{k=1}^{p} \alpha_k\, y_{t-k}
+    + \varepsilon_t^R.
+  \label{eq:var_rest}
+\end{equation}
+
+\paragraph{The F-test.}
+The null hypothesis $H_0\colon \beta_1 = \cdots = \beta_p = 0$ is tested with:
+\begin{equation}
+  F = \frac{(RSS_R - RSS_U)\,/\,p}{RSS_U\,/\,(T - 2p - 1)}
+  \;\sim\; F\!\left(p,\;T - 2p - 1\right),
+  \label{eq:granger_f}
+\end{equation}
+where $RSS_R$ and $RSS_U$ are the residual sums of squares of the restricted and
+unrestricted models.
+A $p$-value below 0.05 means the added sentiment lags significantly reduce the
+prediction error for returns, and $X$ is said to Granger-cause $Y$.
+
+I found the results varied considerably by ticker.
+Sentiment appeared to Granger-cause returns for some large-cap, news-driven equities
+but showed no significant effect for others.
+This is consistent with theory: more heavily traded, high-coverage stocks are more
+sensitive to retail commentary than smaller or less liquid names where sentiment volume
+is too low for the test to have power.
+The inconsistency is itself a finding about which assets are most affected by public
+sentiment.
+
+% ----------------------------------------------------------
+\section{Summary}
+% ----------------------------------------------------------
+
+This chapter has covered the theoretical basis for five method families used in the project.
+The transformer's attention mechanism and FinBERT's domain pre-training explain why the
+model performs well on financial text; LIME and SHAP each provide a principled route to
+explaining individual predictions, with different cost and fidelity trade-offs; and
+Pearson, Spearman, rolling correlation, and the Granger F-test together give a layered
+view of the sentiment--price relationship that no single measure could provide alone.
+
+Understanding these foundations directly shaped how I built and debugged the system.
+Knowing that LIME approximates $f$ locally with a linear model, for instance, helped me
+interpret cases where the token heatmap contradicted my intuition, and the disagreement was
+not a bug in my code but a consequence of the linear surrogate breaking down in a
+non-linear region of the decision boundary.
+The next chapter describes how these methods were combined into a working system.
