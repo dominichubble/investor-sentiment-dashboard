@@ -231,9 +231,10 @@ $f$ is FinBERT, a decision tree, or any other classifier
 \node[lmbox=teal!10,   left=of output]   (heatmap) {\textbf{Output: heatmap}\\[4pt]
   \scriptsize Rendered in the dashboard's explainability panel};
 
-%% Step number badges
+%% Step number badges – centred exactly on each box's north-west corner so the
+%% disc straddles the corner (half inside / half outside) and never overlaps text.
 \foreach \n/\nd in {1/input,2/perturb,3/query,4/fit,5/output}{
-  \node[num] at ($(\nd.north west)+(0.22,-0.22)$) {\n};
+  \node[num] at (\nd.north west) {\n};
 }
 
 %% Arrows

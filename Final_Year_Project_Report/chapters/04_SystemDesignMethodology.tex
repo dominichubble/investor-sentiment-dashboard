@@ -59,10 +59,10 @@ I designed the system around a modular five-tier architecture, illustrated in Fi
 \node[darr, fit=(reddit)(twitter)(newsapi), inner sep=4pt,
       label={[font=\scriptsize\itshape, text=gray!65]above:GitHub Actions (daily)}] (ghframe) {};
 
-%% ── Arrows T1 → T2 (all sources feed the shared preprocessing entry point) ──
-\draw[arr] (reddit.south)  -- ++(0,-0.45) -| (preproc.north);
+%% ── Arrows T1 → T2 (staggered entry points so arrows don't stack on one spot) ──
+\draw[arr] (reddit.south)  -- ++(0,-0.45) -| ($(preproc.north)+(-0.30,0)$);
 \draw[arr] (twitter.south) -- ++(0,-0.45) -| (preproc.north);
-\draw[arr] (newsapi.south) -- ++(0,-0.45) -| (preproc.north);
+\draw[arr] (newsapi.south) -- ++(0,-0.45) -| ($(preproc.north)+(+0.30,0)$);
 
 %% ── Arrows within T2 (processing chain) ─────────────────────────
 \draw[arr] (preproc) -- (finbert);
@@ -73,9 +73,9 @@ I designed the system around a modular five-tier architecture, illustrated in Fi
 \draw[arr] (absa.south) -- ++(0,-0.45) -| (entity.north);
 \draw[arr] (entity.east) -- node[above, font=\scriptsize]{resolved rows} (db.west);
 
-%% ── Arrows T3 → T4 ───────────────────────────────────────────────
-\draw[arr] (entity.south) -- ++(0,-0.4) -| (api.north);
-\draw[arr] (db.south)     -- ++(0,-0.4) -| (api.north);
+%% ── Arrows T3 → T4 (split entry points to avoid overlap) ────────
+\draw[arr] (entity.south) -- ++(0,-0.4) -| ($(api.north)+(-0.35,0)$);
+\draw[arr] (db.south)     -- ++(0,-0.4) -| ($(api.north)+(+0.35,0)$);
 
 %% ── Arrows T4 → T5 ───────────────────────────────────────────────
 \draw[arr] (api) -- (front);
@@ -317,7 +317,7 @@ This architecture is novel in that it combines model-derived probabilistic signa
 \draw[arr] (highN.west) -| node[labl, above=1pt, pos=0.3]{yes}  (fear.north);
 \draw[arr] (highN.east) -| node[labl, above=1pt, pos=0.3]{no}   (skep.north);
 \end{tikzpicture}}
-\caption{Finance-emotion taxonomy inference logic.  FinBERT's softmax probability vector, Shannon entropy, domain lexicon scores, and aspect priors are combined into per-emotion scores.  High entropy triggers a \textit{mixed} assignment; otherwise the dominant polarity determines the branch, with further subdivision based on confidence level (positive branch) or signal duration (negative branch).}
+\caption{Finance-emotion taxonomy inference logic.  FinBERT's softmax probability vector, Shannon entropy, domain lexicon scores, and aspect priors are combined into per-emotion scores.  High entropy triggers a \textit{mixed} assignment; otherwise the dominant polarity determines the branch, with further subdivision based on confidence level (positive branch) or reactivity (negative branch).}
 \label{fig:emotion_taxonomy}
 \end{figure}
 
@@ -385,9 +385,12 @@ A curated blacklist prevents common false positives (``Fed'', ``SEC'', ``White H
 \draw[arr] (exact) -- node[above, font=\scriptsize\itshape]{no match} (fuzzy);
 \draw[arr] (fuzzy) -- (ticker);
 
-%% Successful exact match: bypass fuzzy via a segment above the row (no crossing)
-\draw[arr] (exact.north) -- ++(0,0.55)
-           -| node[above, font=\scriptsize\itshape, pos=0.28]{match found} (ticker.north);
+%% Successful exact match: bypass fuzzy via a short arc above the row.
+%% Label placed at the midpoint of the top horizontal segment.
+\coordinate (bypassT) at ($(exact.north)+(0,0.38)$);
+\draw[arr] (exact.north) -- (bypassT) -| (ticker.north);
+\node[above, font=\scriptsize\itshape]
+      at ($(bypassT)!0.5!(bypassT -| ticker.north)$) {match found};
 \end{tikzpicture}}
 \caption{Three-stage entity resolution pipeline.  An exact ticker lookup is attempted first; if unsuccessful, FuzzyWuzzy partial-ratio scoring resolves abbreviations and partial company names.  A curated blacklist applied during the NER stage suppresses common false positives such as common words that match ticker symbols.}
 \label{fig:entity_resolution}
