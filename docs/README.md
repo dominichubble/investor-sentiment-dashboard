@@ -1,14 +1,16 @@
 # Documentation
 
-This folder contains project documentation for the Investor Sentiment Dashboard.
+Technical notes for the Investor Sentiment Dashboard (beyond the root [README.md](../README.md) and dissertation in `Final_Year_Project_Report/`).
 
-## Contents
+## Guides
 
-- [Data Pipeline](data-pipeline.md) - Overview of data collection, preprocessing, and storage
-- [Preprocessing Guide](preprocessing-guide.md) - Text preprocessing pipeline for financial sentiment analysis
+- [Data pipeline](data-pipeline.md) — ingestion, preprocessing, storage overview
+- [Preprocessing guide](preprocessing-guide.md) — text pipeline for sentiment inputs
+- [FinBERT implementation](finbert-implementation.md) — model integration notes
+- [Error handling and logging](error-handling-logging.md) — backend logging patterns
 
-## Quick Links
+## Related
 
-- [Project README](../README.md)
 - [Backend README](../backend/README.md)
 - [Notebooks README](../notebooks/README.md)
+- [Development guide](../README-DEVELOPMENT.md)

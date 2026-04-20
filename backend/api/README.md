@@ -442,6 +442,5 @@ See main project LICENSE file.
 
 ## Support
 
-- **Documentation**: http://localhost:8000/docs
-- **Issues**: See project repository
-- **API Plan**: See `docs/api-endpoint-plan.md`
+- **OpenAPI / Swagger**: http://localhost:8000/docs (when the server is running)
+- **Dissertation and methodology mapping**: `Final_Year_Project_Report/` and the dashboard **`/methodology`** route

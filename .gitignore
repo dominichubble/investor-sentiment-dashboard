@@ -71,6 +71,9 @@ yarn-error.log*
 .env.production
 stock_tweets.csv
 
+# Local submission archive (build with: git archive ... -o F319859-COC251-2-Sourcezip.zip)
+F319859-COC251-2-Sourcezip.zip
+
 # Cursor / Claude Code local agent state
 .claude/
 

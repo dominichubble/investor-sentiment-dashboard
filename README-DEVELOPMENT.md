@@ -1,264 +1,132 @@
-# Development Setup Guide
+# Development guide
 
-## 🚀 Quick Start Options
+This document complements the root [README.md](README.md) with local setup, configuration, and troubleshooting.
 
-### Option 1: PowerShell Script (Recommended for Windows)
+## Run options
 
-**Single command to start both servers:**
+### PowerShell (recommended on Windows)
 
 ```powershell
 .\start-dev.ps1
 ```
 
-This will:
-- Check dependencies
-- Install frontend packages if needed
-- Start backend in a new window
-- Start frontend in a new window
-- Show you the URLs
+Starts `uvicorn` on `app.main:app` and the Vite dev server in separate windows.
 
-**URLs:**
-- Frontend: http://localhost:3000
-- Backend: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-
----
-
-### Option 2: NPM Concurrently (Cross-platform)
-
-**One-time setup:**
+### npm (one terminal)
 
 ```bash
-npm install
+npm install          # root: installs concurrently
+npm run dev          # backend + frontend
 ```
 
-**Then run:**
+Individual scripts (see root `package.json`):
 
-```bash
-npm run dev
-```
+- `npm run dev:backend` — `cd backend && python -m uvicorn app.main:app --reload --host localhost --port 8000`
+- `npm run dev:frontend` — `cd frontend && npm run dev`
+- `npm run install:all` — installs frontend packages
 
-This runs both servers in a single terminal window with nice output formatting.
-
-**Individual commands:**
-```bash
-npm run dev:backend    # Backend only
-npm run dev:frontend   # Frontend only
-npm run install:all    # Install frontend deps
-```
-
----
-
-### Option 3: Docker Compose (Most Isolated)
-
-**Build and start:**
+### Docker
 
 ```bash
 docker-compose up --build
 ```
 
-**Start (after first build):**
+### Manual (two terminals)
 
-```bash
-docker-compose up
-```
-
-**Stop:**
-
-```bash
-docker-compose down
-```
-
-**Rebuild after changes:**
-
-```bash
-docker-compose up --build
-```
-
----
-
-### Option 4: Manual (Two Terminals)
-
-**Terminal 1 - Backend:**
+**Terminal 1 — backend**
 
 ```bash
 cd backend
-python -m uvicorn api.main:app --reload --host localhost --port 8000
+python -m venv .venv
+# Windows: .venv\Scripts\activate
+# macOS/Linux: source .venv/bin/activate
+pip install -r requirements.txt
+python -m uvicorn app.main:app --reload --host localhost --port 8000
 ```
 
-**Terminal 2 - Frontend:**
+**Terminal 2 — frontend**
 
 ```bash
 cd frontend
-npm install  # first time only
+npm install
 npm run dev
 ```
 
 ---
 
-## 📋 Prerequisites
+## Prerequisites
 
-### Required:
-- **Python 3.11+**
-- **Node.js 18+**
-- **npm 9+**
-
-### Optional (for Docker):
-- **Docker Desktop**
-- **Docker Compose**
+- Python 3.11+
+- Node.js 18+ and npm 9+
+- Optional: Docker Desktop for Compose workflows
 
 ---
 
-## 🔧 Configuration
+## Configuration
 
-### Environment Variables
+### Backend
 
-**Backend** (`backend/.env`):
-```env
-# Will be used when you add database
-DATABASE_URL=postgresql://sentiment_user:password@localhost:5432/investor_sentiment
+Prefer a repo-root `.env` (see `.env.example`). Typical variables include `DATABASE_URL` and optional keys for Reddit, X, NewsAPI, Groq.
 
-# Optional
-LOG_LEVEL=info
-```
+Lean deployments: `pip install -r requirements-lean.txt` and set `LEAN_API=1` (see root README).
 
-**Frontend** (`frontend/.env`):
+### Frontend
+
+Optional `frontend/.env`:
+
 ```env
 VITE_API_URL=http://localhost:8000/api/v1
 VITE_ENV=development
 ```
 
----
-
-## 🎯 Recommended Workflow
-
-### Daily Development:
-
-**Option A - Separate Windows (Best for debugging):**
-```powershell
-.\start-dev.ps1
-```
-- Easier to see logs separately
-- Can restart each service independently
-- Better for debugging issues
-
-**Option B - Single Terminal (Cleaner):**
-```bash
-npm run dev
-```
-- All output in one place
-- Color-coded logs
-- Quick Ctrl+C stops both
+The dev server uses port **3000** by default (`frontend/vite.config.ts`) and proxies `/api` to port 8000.
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
-### Port Already in Use
+### Port already in use (8000)
 
-**Find and kill process:**
+PowerShell:
 
 ```powershell
-# Find what's using port 8000
 Get-NetTCPConnection -LocalPort 8000 | Select-Object OwningProcess
 Stop-Process -Id <PID> -Force
-
-# Or kill all python processes
-Get-Process python* | Stop-Process -Force
 ```
 
-### Backend Won't Start
+### Backend import errors
 
-1. Check Python version:
-   ```bash
-   python --version  # Should be 3.11+
-   ```
-
-2. Install dependencies:
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
-
-3. Check for import errors:
-   ```bash
-   cd backend
-   python -c "from api.main import app; print('OK')"
-   ```
-
-### Frontend Won't Start
-
-1. Check Node version:
-   ```bash
-   node --version  # Should be 18+
-   ```
-
-2. Reinstall dependencies:
-   ```bash
-   cd frontend
-   rm -rf node_modules package-lock.json
-   npm install
-   ```
-
-3. Clear Vite cache:
-   ```bash
-   cd frontend
-   rm -rf node_modules/.vite
-   ```
-
----
-
-## 📊 Performance Tips
-
-### Development Mode:
-- Backend auto-reloads on Python file changes
-- Frontend hot-reloads on TypeScript/CSS changes
-- No need to restart manually
-
-### Production Mode:
 ```bash
-# Frontend
+cd backend
+python -c "from app.main import app; print('OK')"
+```
+
+If this fails, reinstall dependencies and ensure the working directory is `backend/` when running Uvicorn.
+
+### Frontend dependency issues
+
+```bash
+cd frontend
+Remove-Item -Recurse -Force node_modules, .vite -ErrorAction SilentlyContinue
+npm install
+```
+
+On synced folders (e.g. OneDrive), `npm ci` can hit file locks; prefer `npm install` or clone to a local non-synced path for heavy installs.
+
+### Production-style frontend check
+
+```bash
 cd frontend
 npm run build
 npm run preview
-
-# Backend (use gunicorn in production)
-cd backend
-pip install gunicorn
-gunicorn api.main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8000
 ```
 
 ---
 
-## 🔗 Useful URLs
+## Useful URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Frontend | http://localhost:3000 | React Dashboard |
-| Backend | http://localhost:8000 | API Root |
-| API Docs | http://localhost:8000/docs | Swagger UI |
-| ReDoc | http://localhost:8000/redoc | Alternative docs |
-| Health | http://localhost:8000/health | Health check |
-
----
-
-## 🎯 Recommended Setup
-
-For your Windows environment, I recommend:
-
-**Daily Development:**
-```powershell
-.\start-dev.ps1
-```
-
-**Quick Testing:**
-```bash
-npm run dev
-```
-
-**Production Deployment:**
-```bash
-docker-compose up -d
-```
-
-This gives you flexibility based on what you're doing!
+| Service   | URL                     |
+|-----------|-------------------------|
+| Dashboard | http://localhost:3000 |
+| API docs  | http://localhost:8000/docs |
+| Health    | http://localhost:8000/health |

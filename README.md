@@ -1,12 +1,12 @@
 # Investor Sentiment Dashboard
 
-### BSc Computer Science — Final Year Project (COC251)
+### BSc Computer Science - Final Year Project (COC251)
 
 **Author:** Dominic Hubble  
 **Student ID:** F319859  
 **Supervisor:** Professor Stephen Lynch  
 **Department:** Computer Science, Loughborough University  
-**Academic year:** 2025–2026  
+**Academic year:** 2025-2026  
 **Dissertation sources:** `Final_Year_Project_Report/` (LaTeX, April 2026)
 
 ---
@@ -31,13 +31,13 @@ The system is **not** a regulated financial product: correlation and Granger-sty
 
 ### Quantitative headline results (200-sample benchmark)
 
-On a purpose-built benchmark reflecting **Reddit, news, and social-style** text (not Financial PhraseBank alone), **FinBERT** beats the **keyword baseline** by **13.5** points accuracy and **12.4** points macro **F1**; the gap is **statistically significant** under a paired **McNemar** test (continuity-corrected χ² = 9.52, *p* = 0.002) — see the dissertation evaluation chapter. The largest single-class gain is **negative recall** (**47.1% → 94.3%**), illustrating how lexicon methods miss implicit financial phrasing.
+On a purpose-built benchmark reflecting **Reddit, news, and social-style** text (not Financial PhraseBank alone), **FinBERT** beats the **keyword baseline** by **13.5** points accuracy and **12.4** points macro **F1**; the gap is **statistically significant** under a paired **McNemar** test (continuity-corrected chi-squared = 9.52, *p* = 0.002); see the dissertation evaluation chapter. The largest single-class gain is **negative recall** (**47.1% -> 94.3%**), illustrating how lexicon methods miss implicit financial phrasing.
 
-**Labelling quality (thesis):** labels are author-annotated with an **LLM cross-pass** (reported Cohen’s κ; interpret as **internal consistency**, not classical inter-rater reliability) and a **supplementary human** pass on a **100-sample** stratified subset (Cohen’s κ = 0.895, author vs volunteer). Full detail, confusion matrices, and limitations are in `Final_Year_Project_Report/chapters/06_Evaluation.tex`.
+**Labelling quality (thesis):** labels are author-annotated with an **LLM cross-pass** (reported Cohen's kappa; interpret as **internal consistency**, not classical inter-rater reliability) and a **supplementary human** pass on a **100-sample** stratified subset (Cohen's kappa = 0.895, author vs volunteer). Full detail, confusion matrices, and limitations are in `Final_Year_Project_Report/chapters/06_Evaluation.tex`.
 
 ### Correlation study (thesis, illustrative panel)
 
-A nine-ticker demonstrative run reports same-day Pearson *r* in **[-0.10, +0.24]** with **NVDA**, **AAPL**, and **AMZN** individually significant at α = 0.05 (uncorrected) and **SPY** near zero as a sanity check; **Granger** tests on the short lags examined do **not** reach significance at α = 0.05 — reported transparently in the evaluation chapter.
+A nine-ticker demonstrative run reports same-day Pearson *r* in **[-0.10, +0.24]** with **NVDA**, **AAPL**, and **AMZN** individually significant at alpha = 0.05 (uncorrected) and **SPY** near zero as a sanity check; **Granger** tests on the short lags examined do **not** reach significance at alpha = 0.05, as reported transparently in the evaluation chapter.
 
 ---
 
@@ -55,7 +55,7 @@ A nine-ticker demonstrative run reports same-day Pearson *r* in **[-0.10, +0.24]
 
 - **Python 3.11+** and pip  
 - **Node.js 18+** and npm  
-- A **PostgreSQL** URL (e.g. **Neon**) in a repo-root **`.env`** — see **`.env.example`**  
+- A **PostgreSQL** URL (e.g. **Neon**) in a repo-root **`.env`**; see **`.env.example`**  
 - Optional: API keys for Reddit, X, NewsAPI, Groq (see `.env.example` comments)
 
 ### Backend
@@ -85,9 +85,22 @@ npm install
 npm run dev
 ```
 
-Dev server: `http://localhost:5173`.
+Dev server: `http://localhost:3000` (see `frontend/vite.config.ts`; `/api` is proxied to the backend).
 
-**Monorepo helper (repo root):** after `npm install` at the root, `npm run dev` can run backend and frontend together via `concurrently` — see root `package.json`. On Windows, **`./start-dev.ps1`** is documented in `QUICKSTART.md`.
+**Monorepo helper (repo root):** after `npm install` at the root, `npm run dev` runs backend and frontend together via `concurrently` (see root `package.json`). On Windows, use **`./start-dev.ps1`** — summarised in [QUICKSTART.md](QUICKSTART.md), with more detail in [README-DEVELOPMENT.md](README-DEVELOPMENT.md).
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|----------|---------|
+| [QUICKSTART.md](QUICKSTART.md) | Short paths to run the stack |
+| [README-DEVELOPMENT.md](README-DEVELOPMENT.md) | Local setup, env vars, troubleshooting |
+| [docs/README.md](docs/README.md) | Index of technical deep-dives (pipeline, FinBERT, logging) |
+| [backend/README.md](backend/README.md) | Backend layout and operations |
+| [frontend/README.md](frontend/README.md) | Frontend commands and `src/` map |
+| `Final_Year_Project_Report/` | Dissertation (LaTeX sources and figures) |
 
 ---
 
@@ -99,20 +112,20 @@ investor-sentiment-dashboard/
 ├── backend/
 │   ├── app/
 │   │   ├── main.py                 # FastAPI entry
-│   │   ├── api/v1/                 # Versioned HTTP API (data, sentiment, correlation, …)
+│   │   ├── api/v1/                 # Versioned HTTP API (data, sentiment, correlation, ...)
 │   │   ├── analysis/               # Correlation, price service, emotion taxonomy, enrichment
 │   │   ├── entities/               # spaCy + fuzzy ticker resolution
 │   │   ├── evaluation/             # Benchmark runner, metrics, labelled dataset
 │   │   ├── explainability/         # LIME, SHAP helpers, plots
 │   │   ├── models/                 # FinBERT wrapper, keyword baseline
-│   │   ├── pipelines/              # Reddit, Twitter/X, news ingestion & preprocessing
-│   │   ├── preprocessing/        # FinBERT tokenization, text utilities
+│   │   ├── pipelines/              # Reddit, Twitter/X, news ingestion and preprocessing
+│   │   ├── preprocessing/          # FinBERT tokenization, text utilities
 │   │   ├── services/               # Import, statistics, narrative, windows
 │   │   └── storage/                # SQLAlchemy / PostgreSQL access
 │   ├── scripts/                    # e.g. generate_lime_examples.py, import helpers
 │   ├── tests/                      # Pytest suite
-│   ├── requirements.txt            # Full stack (torch, transformers, spaCy, LIME, …)
-│   └── requirements-lean.txt     # API-only / constrained deployments
+│   ├── requirements.txt            # Full stack (torch, transformers, spaCy, LIME, ...)
+│   └── requirements-lean.txt       # API-only / constrained deployments
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/                  # Market overview, stock analysis, methodology, legal, LIME
@@ -121,12 +134,13 @@ investor-sentiment-dashboard/
 │   │   ├── services/               # Axios API client
 │   │   └── types/
 │   └── package.json
+├── docs/                           # Technical guides (see docs/README.md)
 ├── data/                           # Gitignored raw/processed data; see .gitignore
 ├── notebooks/                      # Exploratory notebooks
 ├── docker-compose.yml
+├── LICENSE
 ├── README-DEVELOPMENT.md
-├── QUICKSTART.md
-└── CONTEXT.MD                      # Long-form project log / context
+└── QUICKSTART.md
 ```
 
 ---
@@ -140,7 +154,7 @@ cd backend
 python -m app.evaluation.benchmark --all --output data/evaluation/benchmark_results.json
 ```
 
-Committed reference output: `backend/data/evaluation/benchmark_results.json` (if present in your clone).
+Committed reference output: `backend/data/evaluation/benchmark_results.json`.
 
 | Metric          | Keyword baseline | FinBERT (thesis headline) |
 |-----------------|------------------|---------------------------|
@@ -166,7 +180,7 @@ cd backend
 python -m pytest tests/ -v
 ```
 
-**Note:** the full suite is large and some cases assume optional models / spaCy resources / data fixtures are available in the environment. If you see failures in entity or tokenizer-heavy tests, compare with a clean venv created from `requirements.txt` and the dissertation’s **Evaluation** / **Implementation** notes. For a fast API smoke pass:
+**Note:** the full suite is large and some cases assume optional models / spaCy resources / data fixtures are available in the environment. If you see failures in entity or tokenizer-heavy tests, compare with a clean venv created from `requirements.txt` and the dissertation **Evaluation** / **Implementation** notes. For a fast API smoke pass:
 
 ```bash
 python -m pytest tests/api/test_bootstrap_app.py tests/api/test_v1_sentiment.py -v
@@ -192,7 +206,7 @@ Frontend **`npm run build`** is the primary compile check. **`npm run test:run`*
 
 ## Objectives (summary)
 
-Derived from the dissertation introduction: aggregate heterogeneous sentiment; classify with **FinBERT** against a reproducible baseline; deploy the **emotion taxonomy** and **enrichment** layers at scale on the corpus; integrate **LIME** into the product surface; resolve **tickers** from free text; expose **sentiment–price** analytics (Pearson, Spearman, lag, Granger, rolling); ship a **Vite/React** SPA with **full** and **lean** backend deployment modes.
+Derived from the dissertation introduction: aggregate heterogeneous sentiment; classify with **FinBERT** against a reproducible baseline; deploy the **emotion taxonomy** and **enrichment** layers at scale on the corpus; integrate **LIME** into the product surface; resolve **tickers** from free text; expose **sentiment-price** analytics (Pearson, Spearman, lag, Granger, rolling); ship a **Vite/React** SPA with **full** and **lean** backend deployment modes.
 
 ---
 
@@ -205,3 +219,9 @@ git archive --format=zip --prefix=F319859-COC251-2-Sourcezip/ -o F319859-COC251-
 ```
 
 Unpacking creates a single top-level folder **`F319859-COC251-2-Sourcezip/`**. Install dependencies as in **Quick start**, then run **`pytest`** / **`npm run build`** as above.
+
+---
+
+## Licence
+
+See [LICENSE](LICENSE) in the repository root.

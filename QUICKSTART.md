@@ -1,120 +1,66 @@
-# 🚀 Quick Start Guide
+# Quick start
 
-## Three ways to run both servers
+Three ways to run the backend and frontend together. Use whichever fits your workflow.
 
-### 1️⃣ PowerShell Script (Easiest for Windows)
+## 1. PowerShell (Windows)
+
+From the repository root:
 
 ```powershell
 .\start-dev.ps1
 ```
 
-**What it does:**
-- ✅ Checks all dependencies
-- ✅ Installs frontend packages if needed
-- ✅ Opens backend in new window
-- ✅ Opens frontend in new window
-- ✅ Shows URLs for both
+Installs frontend dependencies if `frontend/node_modules` is missing, then opens two windows: FastAPI (port 8000) and Vite (port 3000).
 
-**Best for:** Daily development, easier debugging
+## 2. npm (single terminal)
 
----
+First time at repo root:
 
-### 2️⃣ NPM Script (Single Terminal)
+```bash
+npm install
+cd frontend && npm install && cd ..
+```
+
+Then:
 
 ```bash
 npm run dev
 ```
 
-**What it does:**
-- ✅ Runs both servers in one terminal
-- ✅ Color-coded output (backend/frontend)
-- ✅ Ctrl+C stops both
+Uses `concurrently` to run `dev:backend` and `dev:frontend` with coloured logs. `Ctrl+C` stops both.
 
-**First time only:**
-```bash
-npm install              # Install concurrently
-cd frontend && npm install  # Install frontend deps
-```
+## 3. Docker Compose
 
-**Best for:** Quick testing, cleaner output
-
----
-
-### 3️⃣ Docker Compose (Most Isolated)
-
-```bash
-docker-compose up
-```
-
-**What it does:**
-- ✅ Containerized environment
-- ✅ Consistent across machines
-- ✅ Easy to add databases later
-
-**First time:**
 ```bash
 docker-compose up --build
 ```
 
-**Best for:** Production-like environment
+Use `docker-compose down` to stop.
 
 ---
 
-## 📱 Access Your App
+## URLs
 
-After starting with any method:
+| Service   | URL                          |
+|-----------|------------------------------|
+| Dashboard | http://localhost:3000      |
+| API       | http://localhost:8000      |
+| OpenAPI   | http://localhost:8000/docs |
 
-- **Dashboard**: http://localhost:3000
-- **API**: http://localhost:8000
-- **API Docs**: http://localhost:8000/docs
+Vite is configured with `port: 3000` and proxies `/api` to the backend (`frontend/vite.config.ts`).
 
 ---
 
-## 🛑 Stopping Servers
+## First-time checklist
 
-### PowerShell Script:
-Press `Ctrl+C` in each window
+1. Copy `.env.example` to `.env` at the repo root and set `DATABASE_URL` (and optional API keys).
+2. Backend: `cd backend`, create a venv, `pip install -r requirements.txt`.
+3. Frontend: `cd frontend`, `npm install`.
 
-### NPM Script:
-Press `Ctrl+C` once (stops both)
+Health check:
 
-### Docker:
 ```bash
-docker-compose down
+curl http://localhost:8000/health
 ```
 
----
-
-## ⚡ Pro Tips
-
-1. **First time setup:**
-   ```bash
-   cd frontend && npm install
-   cd ../backend && pip install -r requirements.txt
-   ```
-
-2. **Check if running:**
-   ```bash
-   curl http://localhost:8000/health
-   ```
-
-3. **Kill stuck processes:**
-   ```powershell
-   Get-Process python* | Stop-Process -Force
-   Get-Process node* | Stop-Process -Force
-   ```
-
----
-
-## 🎯 My Recommendation
-
-**For you (Windows developer):**
-
-Use **`.\start-dev.ps1`** — it's the most Windows-friendly, gives you separate terminals for easier debugging, and handles setup automatically.
-
-Just run:
-```powershell
-.\start-dev.ps1
-```
-
-Done! Both servers start and you can see logs separately.
+More detail: [README-DEVELOPMENT.md](README-DEVELOPMENT.md) and the root [README.md](README.md).
