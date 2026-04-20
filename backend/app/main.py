@@ -13,7 +13,7 @@ from starlette.middleware.trustedhost import TrustedHostMiddleware
 from app.api.v1.router import api_router
 from app.middleware.http import APIKeyMiddleware, SecurityHeadersMiddleware
 from app.settings import allowed_hosts, cors_allow_origins, load_dotenv_from_repo
-from app.storage.database import get_engine
+from app.storage.database import get_engine, using_local_demo_database
 
 load_dotenv_from_repo()
 
@@ -112,4 +112,8 @@ async def health_ready():
             content={"status": "not_ready", "database": "unavailable"},
         )
 
-    return {"status": "ready", "database": "ok"}
+    body: dict = {"status": "ready", "database": "ok"}
+    if using_local_demo_database():
+        body["demo"] = True
+        body["note"] = "Synthetic SQLite dataset (no DATABASE_URL)."
+    return body

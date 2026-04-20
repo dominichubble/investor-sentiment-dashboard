@@ -1,7 +1,9 @@
 """
-PostgreSQL (Neon) database module using SQLAlchemy.
+SQLAlchemy database access: PostgreSQL (Neon) in production, optional SQLite demo.
 
-Requires DATABASE_URL (connection string). Tables are created on first engine use.
+When ``DATABASE_URL`` is unset, a file-backed SQLite database under
+``backend/data/demo/`` is created and populated with synthetic rows so the API
+and dashboard can be explored without secrets (see ``demo_seed``).
 """
 
 from __future__ import annotations
@@ -10,7 +12,7 @@ import logging
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Dict
+from typing import Any, Dict
 
 from sqlalchemy import (
     Column,
@@ -120,6 +122,17 @@ class SentimentNarrativeCacheRow(Base):
 _engine = None
 _SessionLocal = None
 _dotenv_attempted = False
+_using_sqlite_demo = False
+
+
+def using_local_demo_database() -> bool:
+    """True when DATABASE_URL was omitted and a file-backed SQLite demo DB is in use."""
+    return _using_sqlite_demo
+
+
+def _demo_sqlite_path() -> Path:
+    """``backend/data/demo/sentiment_demo.sqlite`` relative to this package tree."""
+    return Path(__file__).resolve().parents[2] / "data" / "demo" / "sentiment_demo.sqlite"
 
 
 def _ensure_sentiment_record_columns(engine) -> None:
@@ -194,20 +207,47 @@ def _widen_sentiment_source_columns(engine) -> None:
 
 def get_engine():
     """Get or create the SQLAlchemy engine (singleton)."""
-    global _engine
+    global _engine, _using_sqlite_demo
     if _engine is None:
         _load_dotenv_if_needed()
         url = os.environ.get("DATABASE_URL", "").strip()
         if not url:
-            raise RuntimeError(
-                "DATABASE_URL environment variable is not set. "
-                "Set it to your Neon PostgreSQL connection string."
+            demo_path = _demo_sqlite_path()
+            demo_path.parent.mkdir(parents=True, exist_ok=True)
+            url = f"sqlite:///{demo_path.as_posix()}"
+            _using_sqlite_demo = True
+            logger.warning(
+                "DATABASE_URL is not set; using local SQLite demo database at %s",
+                demo_path,
             )
-        _engine = create_engine(url, pool_pre_ping=True, echo=False)
+        else:
+            _using_sqlite_demo = False
+
+        connect_args: dict[str, Any] = {}
+        if url.startswith("sqlite"):
+            connect_args["check_same_thread"] = False
+
+        _engine = create_engine(
+            url,
+            pool_pre_ping=True,
+            echo=False,
+            connect_args=connect_args,
+        )
         Base.metadata.create_all(_engine)
         _widen_sentiment_source_columns(_engine)
         _ensure_sentiment_record_columns(_engine)
-        logger.info("PostgreSQL database initialized via %s", url.split("@")[-1])
+        if _using_sqlite_demo:
+            from app.storage.demo_seed import ensure_demo_dataset
+
+            ensure_demo_dataset(_engine)
+
+        if "@" in url:
+            log_ident = url.split("@")[-1]
+        elif url.startswith("sqlite"):
+            log_ident = url.split("///", 1)[-1][-80:]
+        else:
+            log_ident = "database"
+        logger.info("Database initialised (%s)", log_ident)
     return _engine
 
 

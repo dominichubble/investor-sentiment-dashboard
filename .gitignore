@@ -36,6 +36,9 @@ data/raw/**/*.txt
 # Local SQLite / DB files under data/db (Neon is canonical; no DB file in repo)
 data/db/*.db
 
+# Auto-generated local demo DB (see backend/data/demo/README.md)
+backend/data/demo/*.sqlite
+
 # Legacy / removed directories
 data/predictions/
 data/stock_sentiments/

@@ -55,8 +55,17 @@ A nine-ticker demonstrative run reports same-day Pearson *r* in **[-0.10, +0.24]
 
 - **Python 3.11+** and pip  
 - **Node.js 18+** and npm  
-- A **PostgreSQL** URL (e.g. **Neon**) in a repo-root **`.env`**; see **`.env.example`**  
+- **Database:** either a **PostgreSQL** URL (e.g. **Neon**) in repo-root **`.env`**, or **nothing** — see **Local demo (no `.env`)** below. Full variable list: **`.env.example`**.  
 - Optional: API keys for Reddit, X, NewsAPI, Groq (see `.env.example` comments)
+
+### Local demo (no `.env`, no Neon)
+
+If you **do not** set `DATABASE_URL` (and do not load a `.env` that defines it), the backend automatically uses a **SQLite** file at `backend/data/demo/sentiment_demo.sqlite`, creates it on first run, and inserts a **small synthetic** panel of sentiment rows (hand-authored text, not live market data). That path is for **examiners, zip downloads, and smoke tests** where sharing a real database string is impossible.
+
+- Charts and `/api/v1/data/*` statistics use this data; **correlation** views still call **yfinance** where applicable and may need network access.  
+- `GET /health/ready` returns `"demo": true` and a short note when this mode is active.  
+- For your real **150k+** corpus, set **`DATABASE_URL`** to Neon as documented in `.env.example`.  
+- Details: `backend/data/demo/README.md` and `backend/app/storage/demo_seed.py`.
 
 ### Backend
 
@@ -110,6 +119,7 @@ Dev server: `http://localhost:3000` (see `frontend/vite.config.ts`; `/api` is pr
 investor-sentiment-dashboard/
 ├── Final_Year_Project_Report/   # Dissertation LaTeX, figures, references.bib
 ├── backend/
+│   ├── data/demo/                  # README: auto SQLite + synthetic seed when no DATABASE_URL
 │   ├── app/
 │   │   ├── main.py                 # FastAPI entry
 │   │   ├── api/v1/                 # Versioned HTTP API (data, sentiment, correlation, ...)
@@ -218,7 +228,7 @@ For a **clean source archive** (tracked files only, no `.git/`, no `node_modules
 git archive --format=zip --prefix=F319859-COC251-2-Sourcezip/ -o F319859-COC251-2-Sourcezip.zip HEAD
 ```
 
-Unpacking creates a single top-level folder **`F319859-COC251-2-Sourcezip/`**. Install dependencies as in **Quick start**, then run **`pytest`** / **`npm run build`** as above.
+Unpacking creates a single top-level folder **`F319859-COC251-2-Sourcezip/`**. Install dependencies as in **Quick start**, then run **`pytest`** / **`npm run build`** as above. You do **not** need a `.env` file to try the API: omit **`DATABASE_URL`** and the backend will use the **synthetic SQLite demo** described under **Local demo (no `.env`, no Neon)**.
 
 ---
 

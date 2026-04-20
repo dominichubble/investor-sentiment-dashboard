@@ -68,6 +68,8 @@ npm run dev
 
 Prefer a repo-root `.env` (see `.env.example`). Typical variables include `DATABASE_URL` and optional keys for Reddit, X, NewsAPI, Groq.
 
+**Without `DATABASE_URL`:** the API uses `backend/data/demo/sentiment_demo.sqlite` and seeds synthetic rows (see root README, **Local demo**). Readiness: `GET /health/ready` includes `"demo": true` in that mode.
+
 Lean deployments: `pip install -r requirements-lean.txt` and set `LEAN_API=1` (see root README).
 
 ### Frontend
