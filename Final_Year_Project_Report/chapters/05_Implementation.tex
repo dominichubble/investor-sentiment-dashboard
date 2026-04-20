@@ -200,7 +200,7 @@ The entity resolution subsystem spans three files: \path{app/entities/stock_data
 
 The \texttt{EntityResolver.resolve()} method implements a three-stage priority cascade over its candidate input: (1)~exact cashtag match (\texttt{\$AAPL} → \texttt{AAPL}); (2)~exact company-name match against the canonical name index; (3)~fuzzy partial-ratio match using FuzzyWuzzy with a configurable similarity threshold (default 0.85). A blacklist of 12 common false-positive entities (``Fed'', ``SEC'', ``FBI'', ``White House'', etc.) is applied inside the resolver to prevent systematic misclassification of regulatory and government body mentions.
 
-\section{XAI: LIME Integration}
+\section{Novel: XAI -- LIME Integration}
 \label{sec:xai_impl}
 
 \subsection{LIME Explainer}

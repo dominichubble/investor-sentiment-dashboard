@@ -339,7 +339,7 @@ To provide traceable justification for sentiment scores, the system implements a
 
 Matched sentences are returned as tagged evidence snippets with their aspect category and, optionally, a per-snippet FinBERT label.  This lightweight design provides interpretable, aspect-grounded justifications for the headline sentiment label while remaining computationally tractable in high-throughput pipelines, an important practical constraint identified in the system requirements.
 
-\section{Explainability Integration}
+\section{Novel: Explainability Integration}
 \label{sec:explainability_design}
 
 LIME \citep{ribeiro2016lime} is integrated as the primary user-facing explainability method.  For each sentiment prediction, LIME generates token-level importance weights by systematically perturbing the input text and fitting a local linear surrogate model.  The resulting weights are returned via a dedicated REST endpoint and rendered as an interactive token-level heatmap in the frontend's Stock Analysis page.
