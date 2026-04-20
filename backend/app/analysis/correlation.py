@@ -20,11 +20,41 @@ from app.storage import StockSentimentStorage
 from .price_service import PriceService
 
 try:
-    from statsmodels.tsa.stattools import grangercausalitytests
+    from statsmodels.tsa.stattools import adfuller, grangercausalitytests
 
     HAS_STATSMODELS = True
 except ImportError:
     HAS_STATSMODELS = False
+
+
+def _adf_stationarity(series: np.ndarray, alpha: float = 0.05) -> Dict:
+    """
+    Augmented Dickey-Fuller stationarity pre-check.
+
+    Returns a dict with the ADF test statistic, p-value, and a boolean
+    ``stationary`` flag (True when the null of a unit root can be rejected
+    at the supplied alpha). If statsmodels is unavailable or the series is
+    too short to test, returns ``{"available": False}``; callers should treat
+    that as "no pre-check applied" rather than as an assertion of stationarity.
+    """
+    if not HAS_STATSMODELS:
+        return {"available": False, "reason": "statsmodels not installed"}
+    clean = series[~np.isnan(series)]
+    if clean.size < 12 or np.nanstd(clean) == 0.0:
+        return {"available": False, "reason": "series too short or constant"}
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            stat, p_value, _, _, _, _ = adfuller(clean, autolag="AIC")
+    except Exception as exc:
+        return {"available": False, "reason": f"adfuller failed: {exc}"}
+    return {
+        "available": True,
+        "statistic": round(float(stat), 4),
+        "p_value": round(float(p_value), 6),
+        "stationary": bool(p_value < alpha),
+        "alpha": alpha,
+    }
 
 logger = logging.getLogger(__name__)
 
@@ -644,6 +674,49 @@ class CorrelationAnalyzer:
                 "trailing_days": w,
             }
 
+        # Augmented Dickey-Fuller pre-check on both input series. Granger tests
+        # assume (weakly) stationary inputs; a unit root in either series can
+        # inflate the F statistic and produce spurious rejections. If either
+        # series fails the ADF test at alpha = 0.05, apply first-differencing
+        # to the offending series and re-test, then run Granger on the
+        # differenced series. The raw ADF verdicts are returned in the response
+        # so that users can see which series was transformed.
+        adf_sentiment = _adf_stationarity(sentiment_clean)
+        adf_price = _adf_stationarity(price_clean)
+        stationarity_note = "both series stationary at alpha=0.05"
+        transforms: List[str] = []
+
+        if adf_sentiment.get("available") and not adf_sentiment.get("stationary", True):
+            sentiment_clean = np.diff(sentiment_clean)
+            transforms.append("sentiment_first_difference")
+        if adf_price.get("available") and not adf_price.get("stationary", True):
+            price_clean = np.diff(price_clean)
+            transforms.append("price_first_difference")
+
+        # Realign lengths after any differencing (np.diff drops one observation).
+        if transforms:
+            n = min(len(sentiment_clean), len(price_clean))
+            sentiment_clean = sentiment_clean[-n:]
+            price_clean = price_clean[-n:]
+            stationarity_note = (
+                f"non-stationary input detected; applied {', '.join(transforms)} "
+                "before Granger F-test"
+            )
+            if n < max_lag + 10:
+                return {
+                    "ticker": ticker,
+                    "error": (
+                        "Insufficient data after stationarity differencing "
+                        f"(need {max_lag + 10}, have {n})"
+                    ),
+                    "trailing_days": w,
+                    "stationarity": {
+                        "sentiment": adf_sentiment,
+                        "price": adf_price,
+                        "transforms_applied": transforms,
+                    },
+                }
+
         results: Dict = {
             "ticker": ticker,
             "max_lag": max_lag,
@@ -652,6 +725,12 @@ class CorrelationAnalyzer:
             "sentiment_to_price": [],
             "price_to_sentiment": [],
             "summary": {},
+            "stationarity": {
+                "sentiment": adf_sentiment,
+                "price": adf_price,
+                "transforms_applied": transforms,
+                "note": stationarity_note,
+            },
         }
 
         # Test: sentiment -> price (does sentiment Granger-cause price?)

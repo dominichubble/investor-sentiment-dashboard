@@ -30,12 +30,22 @@
 \usepackage{listings}
 \lstset{
     breaklines=true,        % Forces code to wrap within margins
-    basicstyle=\ttfamily\small
+    basicstyle=\ttfamily\small,
+    columns=fullflexible,   % Honour natural character widths in monospace font
+    keepspaces=true,        % Preserve all literal whitespace (indentation, alignment)
+    showstringspaces=false  % Do not render visible space-glyph in string literals
 }
 \usepackage{color}        % For colouring text/code
 \usepackage{url}          % For clickable URLs
 \usepackage{fancybox}     % For boxed elements (used on title page)
 \usepackage{titlesec}     % For controlling spacing of section/chapter titles
+% Remove forced page break before every chapter (supervisor requested less whitespace
+% between chapters). Chapters still render with their heading; they just flow
+% continuously rather than starting on a new page.
+\titleclass{\chapter}{straight}
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{14pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{2.0ex plus 1ex minus .2ex}{2.3ex plus .2ex}
 \usepackage{natbib}
 \usepackage{float}
 \usepackage{tikz}
@@ -157,14 +167,17 @@ April 2026
 % ==========================================================
 % Each chapter is stored in its own .tex file for modular editing.
 % Files should be located in the 'chapters' directory.
-\include{chapters/01_Introduction}
-\include{chapters/02_LiteratureReview}
-\include{chapters/03_TechnicalBackground}
-\include{chapters/04_SystemDesignMethodology}
-\include{chapters/05_Implementation}
-\include{chapters/06_Evaluation}
-\include{chapters/07_Discussion}
-\include{chapters/08_Conclusion}
+% Using \input (not \include) so chapters flow continuously without a forced
+% \clearpage between them; combined with \titleclass{\chapter}{straight} above,
+% this removes the blank half-pages that previously separated chapters.
+\input{chapters/01_Introduction}
+\input{chapters/02_LiteratureReview}
+\input{chapters/03_TechnicalBackground}
+\input{chapters/04_SystemDesignMethodology}
+\input{chapters/05_Implementation}
+\input{chapters/06_Evaluation}
+\input{chapters/07_Discussion}
+\input{chapters/08_Conclusion}
 
 % ==========================================================
 % REFERENCES

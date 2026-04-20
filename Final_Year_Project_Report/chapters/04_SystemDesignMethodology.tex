@@ -6,7 +6,7 @@ This chapter describes the design decisions behind the \textit{Investor Sentimen
 \section{System Overview}
 \label{sec:system_overview}
 
-I designed the system around a modular five-tier architecture, illustrated in Figure~\ref{fig:system_architecture}: (1)~\textit{data ingestion}, (2)~\textit{NLP processing and enrichment}, (3)~\textit{storage and entity resolution}, (4)~\textit{REST API}, and (5)~\textit{interactive frontend}. The reason for this layered structure was to keep computationally intensive inference components separate from the API serving layer, so that each tier could be developed, tested, and deployed independently.
+I designed the system around a modular five-tier architecture, illustrated in Figure~\ref{fig:system_architecture}: (1)~\textit{data ingestion}, (2)~\textit{NLP processing and enrichment}, (3)~\textit{storage and entity resolution}, (4)~\textit{REST API}, and (5)~\textit{interactive frontend}. I chose this layered structure to keep computationally intensive inference components separate from the API serving layer. Each tier could then be developed, tested, and deployed independently.
 
 \begin{figure}[H]
 \centering
@@ -36,7 +36,7 @@ I designed the system around a modular five-tier architecture, illustrated in Fi
 
 %% ── Tier 1: Ingestion ─────────────────────────────────────────────
 \node[src] (reddit)  at (0.0,  0.0) {Reddit\\[-2pt]\scriptsize (PRAW)};
-\node[src] (twitter) at (4.0,  0.0) {X/Twitter\\[-2pt]\scriptsize (Multi-backend)};
+\node[src] (twitter) at (4.0,  0.0) {X/Twitter\\[-2pt]\scriptsize (X API v2)};
 \node[src] (newsapi) at (8.0,  0.0) {NewsAPI\\[-2pt]\scriptsize (v2)};
 
 %% ── Tier 2: NLP Pipeline ─────────────────────────────────────────
@@ -84,33 +84,35 @@ I designed the system around a modular five-tier architecture, illustrated in Fi
 \label{fig:system_architecture}
 \end{figure}
 
-I collect text from three sources (Reddit, X/Twitter, and financial news) through dedicated pipelines that each handle their own rate limits and authentication. Each pipeline feeds into a shared preprocessing and FinBERT inference layer, after which the finance-emotion taxonomy and ABSA module enrich each record. A stock entity resolution layer then maps free-text mentions to canonical ticker symbols. Processed records go into a cloud PostgreSQL database (Neon), and a FastAPI backend serves aggregate statistics, per-ticker sentiment, LIME explanations, and correlation results to the React frontend. I automated daily collection using GitHub Actions so the corpus continues to grow without manual intervention.
+I collect text from three sources (Reddit, X/Twitter, and financial news) through dedicated pipelines. Each pipeline handles its own rate limits and authentication. They all feed into a shared preprocessing and FinBERT inference layer, after which the finance-emotion taxonomy and ABSA module enrich each record. A stock entity resolution layer then maps free-text mentions to canonical ticker symbols. Processed records go into a cloud PostgreSQL database (Neon). A FastAPI backend serves aggregate statistics, per-ticker sentiment, LIME explanations, and correlation results to the React frontend. I automated daily collection using GitHub Actions so the corpus continues to grow without manual intervention.
 
 \section{Development Methodology and Project Management}
 \label{sec:dev_methodology}
 
 \subsection{Development Approach}
 
-I used an iterative, sprint-based approach rather than a strict waterfall model. I chose this for three practical reasons. First, my research questions were still being refined during the literature review, which made it impractical to lock down all requirements at the start. Second, each technical component had a clear dependency on the previous one: I could not build the API before the inference engine, and could not build the frontend before the API, so iterating through them in sequence made sense. Third, an iterative approach meant each completed sprint produced something I could write up immediately, which made the concurrent dissertation writing much more manageable.
+I used an iterative, sprint-based approach rather than a strict waterfall model. I chose this for three practical reasons. First, my research questions were still being refined during the literature review. That made it impractical to lock down all requirements at the start. Second, each technical component had a clear dependency on the previous one: I could not build the API before the inference engine, and could not build the frontend before the API. Iterating through them in sequence therefore made sense. Third, an iterative approach meant each completed sprint produced something I could write up immediately, which made the concurrent dissertation writing much more manageable.
 
 \subsection{Project Tracking and Tooling}
 
-I tracked progress at two levels. At the strategic level, I produced a Gantt chart (Appendix~\ref{app:gantt}) covering 31 August 2025 to 21 April 2026 across ten phases, included in my approved Project Brief in October 2025. At the tactical level, a Jira board decomposed each Gantt phase into individual tasks with unique identifiers. For example, the Data Collection \& Preprocessing phase (FYP-126) was broken into sub-tasks for PRAW integration, the multi-backend Twitter pipeline, NewsAPI setup, and the preprocessing module. The Sentiment Model phase (FYP-127) covered model setup, batch inference, error handling, and the preprocessing configuration in Listing~\ref{lst:finbert_config}.
+I tracked progress at two levels. At the strategic level, I produced a Gantt chart (Appendix~\ref{app:gantt}) covering 31 August 2025 to 21 April 2026 across ten phases, included in my approved Project Brief in October 2025. At the tactical level, a Jira board decomposed each Gantt phase into individual tasks with unique identifiers. For example, the Data Collection \& Preprocessing phase (FYP-126) was broken into sub-tasks for PRAW integration, the Twitter API v2 pipeline, NewsAPI setup, and the preprocessing module. The Sentiment Model phase (FYP-127) covered model setup, batch inference, error handling, and the preprocessing configuration in Listing~\ref{lst:finbert_config}.
 
 I reviewed and updated the Gantt at the January 2026 deliverable milestone. The first three phases had completed on schedule. The Sentiment Model phase had started slightly later than I originally targeted, because I had spent extra time on the NewsAPI robustness issues described in Chapter~\ref{chap:implementation}. That did not affect the overall schedule, but it reinforced for me that the data ingestion layer needs more time than it looks like it will.
 
 \subsection{Scope Management}
 
-I did not cut any planned objectives, but the scope grew in two ways I had not anticipated. The Twitter ingestion grew from a single Tweepy implementation into a three-backend architecture because the official API rate limits turned out to be far more restrictive than I had planned for. That expansion is described in detail in Section~\ref{sec:data_ingestion}. The correlation module also grew: I originally planned a simple Pearson correlation display, but reading the literature made it clear that a single coefficient is insufficient for financial time-series, so I extended it to include Spearman, lag analysis, Granger causality, rolling correlation, and market adjustment. Both expansions were absorbed into existing sprints without changing the high-level Gantt.
+I did not cut any planned objectives, but the scope grew in one way I had not anticipated. The correlation module grew. I originally planned a simple Pearson correlation display, but reading the literature made it clear that a single coefficient is insufficient for financial time-series. I therefore extended it to include Spearman, lag analysis, Granger causality, rolling correlation, and market adjustment. The Twitter ingestion also turned out to be more constrained than planned. The official X API v2 rate and quota limits (tightened during the 2023--2024 platform changes) were more restrictive within an undergraduate budget than I had initially anticipated. That constraint is discussed honestly in Section~\ref{sec:twitter_ingestion} and Section~\ref{sec:correlation_discussion}. Both issues were absorbed into existing sprints without changing the high-level Gantt.
 
 \section{Ethical Considerations and Data Governance}
 \label{sec:ethics}
 
 Collecting data from social media and news outlets requires careful attention to ethical guidelines and platform terms of service. I restricted all data collection to publicly available text; the system does not access private communications, protected user data, or paywalled content. The completed Ethics Awareness Form was submitted with the approved Project Brief (October 2025); Appendix~\ref{app:ethics} explains where that signed form lives relative to this dissertation so it is not duplicated here.
 
+Beyond the University's internal ethics process, I also sought an external professional perspective on the project's data-handling decisions. On 10 October 2025 I held a one-hour consultation with a Certified Data Ethics Professional working in the UK financial-services sector. I walked through the project's ingestion sources, the anonymisation pipeline, the retention policy, and the downstream uses of the derived sentiment scores. Three recommendations from that conversation are reflected in the final system: (i) the explicit restriction of X/Twitter collection to the official API rather than unofficial scrapers, so that collection sits cleanly inside the platform's terms of service; (ii) stripping author-identifying fields (handles, display names, geolocation) at ingestion rather than at storage, so that personally identifying information never enters the working database; and (iii) framing the dashboard's outputs as a decision-support signal rather than an investment recommendation, to avoid any implication of automated financial advice. The consultation did not constitute formal ethical approval, which remains the University's responsibility. It did, however, provide an independent sanity-check on the governance posture of the project and directly shaped the choices documented below.
+
 \subsection{Platform Terms of Service and API Compliance}
 
-Reddit data is collected using the Python Reddit API Wrapper (PRAW) with OAuth2 authentication, operating strictly within Reddit's published developer terms.  Rate limits are respected through automatic pagination and exponential backoff handling.  X/Twitter data is collected via the \texttt{snscrape} library by default, which accesses publicly available posts through the same pathway as the web interface.  Where an official API bearer token is configured, the system switches to Tweepy's X API v2 client, enforcing v2 rate limits automatically.  The system also supports a historical CSV ingestion backend to enable reproducible evaluation using pre-collected datasets.  NewsAPI data is retrieved through a registered developer account using the documented API interface.
+Reddit data is collected using the Python Reddit API Wrapper (PRAW) with OAuth2 authentication, operating strictly within Reddit's published developer terms. Rate limits are respected through automatic pagination and exponential backoff handling. X/Twitter data is collected exclusively via the official X API v2 (Tweepy with a bearer token), which enforces the platform's documented v2 rate limits automatically. This is a deliberate decision to keep the pipeline aligned with the X terms of service. The system also supports a historical CSV ingestion mode to enable reproducible evaluation against a fixed, pre-collected dataset. NewsAPI data is retrieved through a registered developer account using the documented API interface.
 
 All pipelines implement rate-limit resilience through exponential backoff and configurable per-run quotas, preventing any risk of service disruption or account suspension.
 
@@ -128,7 +130,7 @@ During October 2025, I conducted these interviews with finance and technology pr
 \subsection{Functional Requirements}
 
 \begin{itemize}
-    \item Collect and preprocess text data from Reddit, X/Twitter, and financial news, with resilient multi-backend support for X.
+    \item Collect and preprocess text data from Reddit, X/Twitter, and financial news via documented official interfaces, with rate-limit handling and a historical CSV path for reproducible evaluation.
     \item Perform financial sentiment classification using FinBERT, producing a three-class label and per-class probability distribution.
     \item Enrich FinBERT outputs with a finance-specific emotion label and score distribution (fear, optimism, uncertainty, confidence, scepticism, mixed).
     \item Extract aspect-tagged evidence sentences for six financial aspect categories (ABSA-lite).
@@ -168,7 +170,7 @@ One of my central aims was to aggregate sentiment from multiple online environme
 
 Online text from these sources is inherently heterogeneous and noisy.  A standardised offline preprocessing pipeline, depicted in Figure~\ref{fig:preprocessing-pipeline}, transforms raw multi-source text into clean, model-ready inputs.
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
   node distance=0.5cm,
@@ -225,7 +227,7 @@ Duplicate detection applies content-hash comparison at ingestion time to avoid c
 
 \subsection{Sentiment Classification: FinBERT}
 
-I chose FinBERT \citep{araci2019finbert} as the core classifier because it is domain-adaptively pre-trained on financial corpora, giving it a well-documented advantage over general-purpose models on finance-specific benchmarks \citep{malo2014financialphrasebank}. The model is loaded from the \texttt{ProsusAI/finbert} checkpoint via the Hugging Face \texttt{transformers} library \citep{wolf2020transformers} and used in zero-shot inference mode (no further fine-tuning), classifying text as \textit{positive}, \textit{neutral}, or \textit{negative} with associated probability scores. I chose to preserve the full probability distribution rather than just the label, because those scores feed directly into the emotion taxonomy and entropy calculation downstream.
+I chose FinBERT \citep{araci2019finbert} as the core classifier because it is domain-adaptively pre-trained on financial corpora. That gives it a well-documented advantage over general-purpose models on finance-specific benchmarks \citep{malo2014financialphrasebank}. The model is loaded from the \texttt{ProsusAI/finbert} checkpoint via the Hugging Face \texttt{transformers} library \citep{wolf2020transformers} and used in zero-shot inference mode (no further fine-tuning). It classifies text as \textit{positive}, \textit{neutral}, or \textit{negative} with associated probability scores. I chose to preserve the full probability distribution rather than just the label, because those scores feed directly into the emotion taxonomy and entropy calculation downstream.
 
 \subsection{Keyword Baseline}
 
@@ -234,7 +236,7 @@ A keyword-based sentiment classifier using domain-specific financial vocabulary 
 \subsection{Novel: Finance-Emotion Taxonomy}
 \label{sec:emotion_design}
 
-The idea for the finance-emotion taxonomy came from noticing, during early testing, that FinBERT's three-class output was losing a lot of nuance that actually mattered. An investor expressing fear about a debt downgrade and an investor expressing scepticism about an overvalued growth stock both receive a ``negative'' label, but these are fundamentally different market signals. I designed the taxonomy to capture that distinction.  The taxonomy defines six domain emotions: \textit{fear}, \textit{optimism}, \textit{uncertainty}, \textit{confidence}, \textit{scepticism}, and \textit{mixed}.  These categories are grounded in prior behavioural finance research on investor mood states \citep{bollen2011twitter} and the lexical patterns that characterise different investor postures in financial text.
+The idea for the finance-emotion taxonomy came from noticing, during early testing, that FinBERT's three-class output was losing a lot of nuance that actually mattered. An investor expressing fear about a debt downgrade and an investor expressing scepticism about an overvalued growth stock both receive a ``negative'' label. Those are fundamentally different market signals. I designed the taxonomy to capture that distinction.  The taxonomy defines six domain emotions: \textit{fear}, \textit{optimism}, \textit{uncertainty}, \textit{confidence}, \textit{scepticism}, and \textit{mixed}.  These categories are grounded in prior behavioural finance research on investor mood states \citep{bollen2011twitter} and the lexical patterns that characterise different investor postures in financial text.
 
 The emotion inference engine receives FinBERT's softmax probability vector, a normalised Shannon entropy score (measuring the model's decisiveness), a set of aspect evidence snippets, and performs the following steps:
 \begin{enumerate}
@@ -344,19 +346,24 @@ LIME \citep{ribeiro2016lime} is integrated as the primary user-facing explainabi
 
 SHAP \citep{lundberg2017shap} is implemented within the backend's explainability module and is accessible via the API for offline auditing and corpus-level analysis.  Given its substantially higher computational cost, SHAP is not exposed in the live frontend but is used in research notebooks and for generating summary importance statistics.
 
-I chose LIME for real-time API responses and reserved SHAP for offline analysis. The trade-off here is theoretical rigour (SHAP) versus practical latency (LIME), and the literature on deployable XAI supports that decision \citep{yeo2023xai}. SHAP's computational cost would have made it impossible to serve interactively from a cloud instance with realistic resource constraints.
+I chose LIME for real-time API responses and reserved SHAP for offline analysis. The trade-off here is theoretical rigour (SHAP) versus practical latency (LIME). The literature on deployable XAI supports that decision \citep{yeo2023xai}. SHAP's computational cost would have made it impossible to serve interactively from a cloud instance with realistic resource constraints.
 
 \section{Stock Entity Resolution}
 \label{sec:entity_design}
 
-To enable per-ticker analytics, a stock entity resolution pipeline links free-text mentions to canonical ticker symbols using a three-stage process:
+To enable per-ticker analytics, a stock entity resolution pipeline links free-text mentions to canonical ticker symbols. It is factored into two cooperating components rather than a single monolithic cascade:
+
 \begin{enumerate}
-    \item \textbf{Named Entity Recognition (NER)}: spaCy's \texttt{en\_core\_web\_sm} model extracts \texttt{ORG}, \texttt{PRODUCT}, and \texttt{GPE} entities from cleaned text.
-    \item \textbf{Exact matching}: extracted entity strings are compared against a curated stock database of ticker symbols and company names.
-    \item \textbf{Fuzzy matching}: entities not resolved by exact match are compared using the FuzzyWuzzy library's partial ratio scorer with a configurable similarity threshold (default 0.85), allowing resolution of common abbreviations and partial names.
+    \item \textbf{Candidate extraction (upstream).} The \texttt{CompanyExtractor} module runs spaCy's \texttt{en\_core\_web\_sm} pipeline over the cleaned text to produce candidate \texttt{ORG}, \texttt{PRODUCT}, and \texttt{GPE} spans, and in parallel tokenises for explicit cashtag matches (e.g., \texttt{\$AAPL}).
+    \item \textbf{Resolution cascade (\texttt{EntityResolver}).} Each candidate string is then resolved against the curated stock database in three priority stages:
+    \begin{enumerate}
+        \item \textit{Exact cashtag match} (\texttt{\$AAPL}~$\rightarrow$~\texttt{AAPL});
+        \item \textit{Exact company-name match} against the canonical name index;
+        \item \textit{Fuzzy match} using the \texttt{FuzzyWuzzy} partial-ratio scorer with a configurable similarity threshold (default 0.85), allowing resolution of common abbreviations and partial names.
+    \end{enumerate}
 \end{enumerate}
 
-A curated blacklist prevents common false positives (``Fed'', ``SEC'', ``White House'') from being incorrectly resolved to tickers.  The three-stage pipeline is summarised in Figure~\ref{fig:entity_resolution}.
+This split keeps the NER step, which depends on a heavyweight spaCy pipeline, separate from the pure-string matching logic, which can be unit-tested in isolation. A curated blacklist applied inside the resolver prevents common false positives (``Fed'', ``SEC'', ``FBI'', ``White House'') from being incorrectly resolved to tickers.  The three-stage pipeline is summarised in Figure~\ref{fig:entity_resolution}.
 
 \begin{figure}[H]
 \centering
@@ -396,7 +403,7 @@ A curated blacklist prevents common false positives (``Fed'', ``SEC'', ``White H
 \label{fig:entity_resolution}
 \end{figure}
 
-\section{Sentiment--Price Correlation Engine}
+\section{Sentiment-Price Correlation Engine}
 \label{sec:correlation_design}
 
 A dedicated correlation analysis module enables statistical examination of the relationship between aggregate daily sentiment scores and historical asset prices.  Real-time and historical price data are sourced via \texttt{yfinance}.  The correlation engine supports:
@@ -405,7 +412,7 @@ A dedicated correlation analysis module enables statistical examination of the r
     \item \textbf{Spearman rank correlation} for monotonic association without assuming normality.
     \item \textbf{Lag analysis} with configurable lead/lag windows, testing whether sentiment at $t$ correlates with returns at $t+k$ for $k \in [-n, +n]$.
     \item \textbf{Granger causality testing} \citep{granger1969} using the Augmented Dickey-Fuller stationarity pre-check and autoregressive F-tests implemented in \texttt{statsmodels}, testing whether lagged sentiment scores improve the prediction of future returns.
-    \item \textbf{Rolling correlation} with a configurable window to identify temporal regimes of sentiment--price co-movement.
+    \item \textbf{Rolling correlation} with a configurable window to identify temporal regimes of sentiment-price co-movement.
     \item \textbf{Market-adjustment} via SPY beta residualisation, isolating idiosyncratic sentiment signals from broad market co-movement.
 \end{itemize}
 
@@ -418,18 +425,18 @@ Results are presented with explicit disclaimers that Granger causality is a stat
 
 The backend is implemented in Python~3.11 using \textbf{FastAPI} with \textbf{Uvicorn} as the ASGI server.  The canonical application entry point is \texttt{backend/app/main.py}, which registers middleware (CORS, API key authentication, and security headers) and assembles the versioned API router.  A secondary application entry point at \texttt{backend/api/main.py} provides an alternative router layout used for development testing.
 
-The primary router mounts: \texttt{/api/v1/sentiment} (inference, batch, LIME explain, ticker narrative), \texttt{/api/v1/data} (predictions, statistics, stock quality), \texttt{/api/v1/correlation} (price correlation endpoints), and \texttt{/api/v1/stocks} (entity analysis, trending, comparison).  A \textbf{lean deployment mode} (activated via the \texttt{LEAN\_API} environment variable) routes the \texttt{/sentiment} prefix to a stub module that returns \texttt{503 Service Unavailable} for FinBERT and LIME endpoints, allowing the API to operate on memory-constrained cloud instances without loading PyTorch or Transformers.  All stateful database and correlation endpoints remain functional in lean mode.
+The primary router mounts: \texttt{/api/v1/sentiment} (inference, batch, LIME explain, ticker narrative), \texttt{/api/v1/data} (predictions, statistics, stock quality), \texttt{/api/v1/correlation} (price correlation endpoints), and \texttt{/api/v1/stocks} (entity analysis, trending, comparison).  A \textbf{lean deployment mode} (activated via the \texttt{LEAN\_API} environment variable) routes the \texttt{/sentiment} prefix to a stub module. That stub returns \texttt{503 Service Unavailable} for FinBERT and LIME endpoints, allowing the API to operate on memory-constrained cloud instances without loading PyTorch or Transformers.  All stateful database and correlation endpoints remain functional in lean mode.
 
 \subsection{Frontend}
 
 The React~18 single-page application is built with \textbf{Vite~5} and uses \textbf{Recharts} for all interactive visualisations.  The application provides four routes:
 \begin{itemize}
     \item \textbf{Market Overview}: global sentiment distribution (pie chart), daily trend (bar chart), per-source comparison (grouped bars), and top trending tickers, with source and date-range filter controls.
-    \item \textbf{Stock Analysis}: per-ticker sentiment time-series, price--sentiment overlay, finance-emotion breakdown, LIME explanation heatmap, and data quality indicators.
+    \item \textbf{Stock Analysis}: per-ticker sentiment time-series, price-sentiment overlay, finance-emotion breakdown, LIME explanation heatmap, and data quality indicators.
     \item \textbf{Methodology}: in-application documentation mapping dissertation claims to code paths and dashboard views.
     \item \textbf{Legal}: disclosures on data provenance, model limitations, and non-advisory intent.
 \end{itemize}
 
 \subsection{Automated Scheduling}
 
-Continuous data collection is managed by GitHub Actions workflows.  A daily workflow ingests posts from Reddit, X/Twitter, and NewsAPI, passes them through FinBERT inference and the enrichment stack, and persists results to the Neon PostgreSQL database.  A separate weekly workflow performs deeper Reddit bulk collection across a broader set of tickers.  Both workflows cache the HuggingFace model weights to avoid redundant downloads and are triggered on a schedule or can be invoked manually.
+Continuous data collection is managed by GitHub Actions workflows.  A daily workflow ingests posts from Reddit, X/Twitter, and NewsAPI, passes them through FinBERT inference and the enrichment stack, and persists results to the Neon PostgreSQL database.  A separate weekly workflow performs deeper Reddit bulk collection across a broader set of tickers.  Both workflows cache the Hugging Face model weights to avoid redundant downloads and are triggered on a schedule or can be invoked manually.

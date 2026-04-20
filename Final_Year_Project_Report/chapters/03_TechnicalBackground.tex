@@ -18,9 +18,9 @@ The chapter is organised around five areas:
 
 The transformer \citep{vaswani2017attention} replaced recurrent and convolutional sequence
 models with a purely attention-based architecture.
-The key insight is that any two positions in a sequence can attend directly to one another,
-removing the sequential bottleneck that made RNNs slow to train and prone to forgetting
-over long contexts.  Figure~\ref{fig:transformer_encoder} shows the structure of a single encoder layer.
+The key insight is that any two positions in a sequence can attend directly to one
+another. This removes the sequential bottleneck that made RNNs slow to train and prone
+to forgetting over long contexts.  Figure~\ref{fig:transformer_encoder} shows the structure of a single encoder layer.
 
 \begin{figure}[H]
 \centering
@@ -97,7 +97,7 @@ attends to another.
 After the softmax, each row becomes a probability distribution over all positions, and
 multiplying by $\mathbf{V}$ produces a weighted average of value vectors.
 The $\sqrt{d_k}$ scaling prevents the dot products from growing so large that the
-softmax saturates into near-zero gradients, a practical issue that appeared
+softmax saturates into near-zero gradients. This is a practical issue that appeared
 consistently in early training runs before scaling was introduced.
 
 % ............................................................
@@ -120,7 +120,7 @@ The motivation is that a single attention distribution must simultaneously resol
 multiple linguistic tasks.
 Multiple heads allow the model to specialise: some learn local phrase-level dependencies,
 others capture long-range entity references.
-In financial text this matters because the sentiment-bearing term (e.g.\ ``surged'')
+In financial text this matters because the sentiment-bearing term (e.g., ``surged'')
 may appear several tokens away from the company name it modifies.
 
 % ............................................................
@@ -259,10 +259,10 @@ fidelity to $f$ locally against simplicity:
     \;\mathcal{L}(f,\,g,\,\pi_{x^*}) + \Omega(g),
   \label{eq:lime_obj}
 \end{equation}
-where $\mathcal{L}(f, g, \pi_{x^*})$ is the weighted prediction error between $f$ and $g$
-over perturbed samples near $x^*$, $\Omega(g)$ penalises the complexity of $g$, and
-$\pi_{x^*}(z) = \exp(-D(x^*, z)^2 / \sigma^2)$ is a proximity kernel that gives more
-weight to samples close to $x^*$.
+In this expression, $\mathcal{L}(f, g, \pi_{x^*})$ is the weighted prediction error
+between $f$ and $g$ over perturbed samples near $x^*$, and $\Omega(g)$ penalises the
+complexity of $g$. The term $\pi_{x^*}(z) = \exp(-D(x^*, z)^2 / \sigma^2)$ is a proximity
+kernel that gives more weight to samples close to $x^*$.
 
 % ............................................................
 \subsection{Perturbation and Surrogate Fitting for Text}
@@ -270,9 +270,9 @@ weight to samples close to $x^*$.
 For a text input, LIME treats each word as a binary feature (present or absent).
 It generates a set of perturbed versions of $x^*$ by randomly masking tokens, queries $f$
 on each, and uses the resulting predictions as labels to fit the weighted linear surrogate.
-The coefficients of the fitted model are token importance scores: a positive weight on a
-word means that word pushed the prediction toward the target class; a negative weight means
-it pushed against it.
+The coefficients of the fitted model are token importance scores. A positive weight on a
+word means that word pushed the prediction toward the target class. A negative weight
+means it pushed against it.
 This produces the token-level heatmap shown in the dashboard's explainability panel.
 
 The key limitation is that a linear surrogate cannot capture non-local interactions,
@@ -357,7 +357,7 @@ apparent relationship is an artefact of outliers or non-normality.
 \subsection{Rolling Window Correlation}
 
 A single static correlation coefficient masks how the relationship changes over time;
-for instance, sentiment--price coupling may strengthen during high-volatility periods and
+for instance, sentiment-price coupling may strengthen during high-volatility periods and
 weaken in calmer markets.
 Rolling correlation applies the Pearson formula within a sliding window of width $W$,
 producing a time series of coefficients $\{r_t^{(W)}\}$ that reveals these temporal
@@ -417,9 +417,9 @@ prediction error for returns, and $X$ is said to Granger-cause $Y$.
 I found the results varied considerably by ticker.
 Sentiment appeared to Granger-cause returns for some large-cap, news-driven equities
 but showed no significant effect for others.
-This is consistent with theory: more heavily traded, high-coverage stocks are more
-sensitive to retail commentary than smaller or less liquid names where sentiment volume
-is too low for the test to have power.
+This is consistent with theory. More heavily traded, high-coverage stocks are more
+sensitive to retail commentary. For smaller or less liquid names the sentiment volume
+is too low for the test to have meaningful statistical power.
 The inconsistency is itself a finding about which assets are most affected by public
 sentiment.
 
@@ -429,14 +429,14 @@ sentiment.
 
 This chapter has covered the theoretical basis for five method families used in the project.
 The transformer's attention mechanism and FinBERT's domain pre-training explain why the
-model performs well on financial text; LIME and SHAP each provide a principled route to
-explaining individual predictions, with different cost and fidelity trade-offs; and
-Pearson, Spearman, rolling correlation, and the Granger F-test together give a layered
-view of the sentiment--price relationship that no single measure could provide alone.
+model performs well on financial text. LIME and SHAP each provide a principled route to
+explaining individual predictions, with different cost and fidelity trade-offs. Pearson,
+Spearman, rolling correlation, and the Granger F-test together give a layered view of the
+sentiment-price relationship that no single measure could provide alone.
 
 Understanding these foundations directly shaped how I built and debugged the system.
 Knowing that LIME approximates $f$ locally with a linear model, for instance, helped me
-interpret cases where the token heatmap contradicted my intuition, and the disagreement was
-not a bug in my code but a consequence of the linear surrogate breaking down in a
-non-linear region of the decision boundary.
+interpret cases where the token heatmap contradicted my intuition. In several such cases
+the disagreement was not a bug in my code, but a consequence of the linear surrogate
+breaking down in a non-linear region of the decision boundary.
 The next chapter describes how these methods were combined into a working system.

@@ -18,13 +18,13 @@ Chapter~\ref{chap:introduction} listed eight objectives. Table~\ref{tab:objectiv
 \toprule
 \textbf{\#} & \textbf{Objective (short)} & \textbf{Status} & \textbf{Evidence in this document} \\
 \midrule
-1 & Multi-source ingestion with scheduling and rate limits & Met & Chs.~\ref{chap:system_design}--\ref{chap:implementation}; Fig.~\ref{fig:system_architecture}; App.~\ref{app:env_table}. \\
+1 & Multi-source ingestion with scheduling and rate limits & Met & Chs.~\ref{chap:system_design} to \ref{chap:implementation}; Fig.~\ref{fig:system_architecture}; App.~\ref{app:env_table}. \\
 2 & FinBERT classification plus benchmark vs.\ keyword baseline & Met & Ch.~\ref{chap:evaluation}; Tabs.~\ref{tab:benchmark_summary}, \ref{tab:per_class}; App.~\ref{app:extended_results}. \\
 3 & Finance-emotion taxonomy over FinBERT probabilities & Partially met & Designed and deployed (Ch.~\ref{chap:system_design}, Sec.~\ref{sec:emotion_design}); formal accuracy still open (Ch.~\ref{chap:discussion}, Sec.~\ref{sec:against_objectives}). \\
 4 & ABSA-lite evidence tagging & Met & Sec.~\ref{sec:absa_design} and implementation notes in Ch.~\ref{chap:implementation}. \\
 5 & LIME via API and token heatmap in the SPA & Met & Chs.~\ref{chap:implementation}, \ref{chap:evaluation}; Figs.~\ref{fig:lime_positive}, \ref{fig:lime_negative}; neutral misclassification example in Sec.~\ref{sec:lime_eval}. \\
 6 & Entity resolution (NER + exact + fuzzy) & Met & Sec.~\ref{sec:entity_design}; Fig.~\ref{fig:entity_resolution}. \\
-7 & Sentiment--price correlation engine (Pearson, Spearman, lag, Granger, rolling, adjustment) & Met & Ch.~\ref{chap:system_design} (design); Ch.~\ref{chap:discussion} (interpretation caveats). \\
+7 & Sentiment-price correlation engine (Pearson, Spearman, lag, Granger, rolling, adjustment) & Met & Ch.~\ref{chap:system_design} (design); Ch.~\ref{chap:discussion} (interpretation caveats). \\
 8 & React SPA (Vite, Recharts) and lean deployment mode & Met & Ch.~\ref{chap:implementation}; App.~\ref{app:env_table} (\texttt{LEAN\_API}). \\
 \bottomrule
 \end{tabularx}
@@ -38,7 +38,7 @@ Ingestion runs from three distinct source feeds into a shared database schema; F
 \paragraph{FinBERT Evaluation.}
 On the purpose-built 200-sample benchmark, FinBERT achieved 82.0\% accuracy and 80.3\% macro F1, compared with 68.5\% and 67.9\% for the keyword baseline. The most notable individual result is the 47.2 percentage-point improvement in negative recall, which is consistent with qualitative observations made during manual inspection of classifier failures prior to formal tabulation.
 
-\paragraph{Sentiment--Price Analysis.}
+\paragraph{Sentiment-Price Analysis.}
 The correlation engine is the component with the most remaining scope for extension: not because the implementation is incomplete, but because the relationship between sentiment and price movement is genuinely sensitive to window length and ticker-specific data volume. Chapter~\ref{chap:discussion} discusses these patterns directly, including cases where Granger causality results varied by ticker and where correlation estimates shifted substantially with the choice of window.
 
 \section{Contributions to Knowledge}
@@ -54,6 +54,7 @@ Three contributions are claimed as genuinely novel, consistent with the framing 
 \end{enumerate}
 
 \section{Future Work}
+\label{sec:future_work}
 
 \subsection{Fine-Tuning for Neutral Class Recovery}
 
@@ -61,7 +62,7 @@ The most pressing model improvement is addressing FinBERT's neutral recall defic
 
 \subsection{Formal Evaluation of the Emotion Taxonomy}
 
-A quantitative evaluation of the finance-emotion taxonomy requires a purpose-built, annotated emotion corpus.  A crowdsourced annotation study using financial domain workers (e.g., via Prolific with domain qualification filters) could produce a dataset of 1,000--2,000 texts labelled for the six emotion categories.  Inter-rater agreement (Fleiss' kappa) would provide a formal upper bound for classifier performance, and ablation studies could isolate the contribution of entropy, lexicons, and aspect priors to overall classification accuracy.  This evaluation would constitute the empirical foundation of a journal submission.
+A quantitative evaluation of the finance-emotion taxonomy requires a purpose-built, annotated emotion corpus.  A crowdsourced annotation study using financial domain workers (e.g., via Prolific with domain qualification filters) could produce a dataset of 1,000 to 2,000 texts labelled for the six emotion categories.  Inter-rater agreement (Fleiss' kappa) would provide a formal upper bound for classifier performance, and ablation studies could isolate the contribution of entropy, lexicons, and aspect priors to overall classification accuracy.  This evaluation would constitute the empirical foundation of a journal submission.
 
 \subsection{Journal Publication Pathway}
 
@@ -69,8 +70,8 @@ The three novel contributions identified above provide sufficient material for a
 
 \begin{itemize}
     \item Formally describe the finance-emotion taxonomy algorithm and compare it against prior three-class and multi-class emotion approaches on a standard financial emotion dataset.
-    \item Report the ABSA-lite extraction results on the 150k+ corpus, characterising the distribution of discussed aspects across sources, tickers, and temporal windows.
-    \item Demonstrate the sentiment--price correlation analysis with Granger testing on a representative set of tickers, with appropriate statistical caveats and market adjustment.
+    \item Report the ABSA-lite extraction results on the 150{,}000-record corpus, characterising the distribution of discussed aspects across sources, tickers, and temporal windows.
+    \item Demonstrate the sentiment-price correlation analysis with Granger testing on a representative set of tickers, with appropriate statistical caveats and market adjustment.
     \item Evaluate the end-to-end XAI integration through a user study measuring the extent to which LIME explanations improve user trust calibration and label agreement rates.
 \end{itemize}
 
@@ -82,7 +83,11 @@ The current system operates on a daily batch ingestion schedule.  Replacing this
 
 \subsection{Bot and Inauthenticity Filtering}
 
-A consistent warning from the expert interviews (Appendix~\ref{app:interviews}) was that social-media sentiment signals are routinely distorted by automated accounts, coordinated influence campaigns, and algorithmic feed curation. The current system mitigates this at the \emph{architectural} level by combining multiple independent sources (Reddit, X, and news), so that any one manipulated channel is diluted in aggregate views. It does not, however, attempt to detect or down-weight individual inauthentic posts. A natural extension is an inauthenticity-scoring stage inserted between ingestion and FinBERT classification: per-account behavioural features (posting cadence, burstiness, account age, lexical repetition, cross-account text similarity) combined with a lightweight classifier would produce a confidence score that could either filter or re-weight records before aggregation. This would materially strengthen the reliability of the sentiment signal for finance use and directly answers an externally identified gap.
+A consistent warning from the expert interviews (Appendix~\ref{app:interviews}) was that social-media sentiment signals are routinely distorted by automated accounts, coordinated influence campaigns, and algorithmic feed curation. The current system mitigates this at the \emph{architectural} level by combining multiple independent sources (Reddit, X, and news), so that any one manipulated channel is diluted in aggregate views. It does not, however, attempt to detect or down-weight individual inauthentic posts. A natural extension is an inauthenticity-scoring stage inserted between ingestion and FinBERT classification. Per-account behavioural features (posting cadence, burstiness, account age, lexical repetition, cross-account text similarity) combined with a lightweight classifier would produce a confidence score. That score could either filter or re-weight records before aggregation. This would materially strengthen the reliability of the sentiment signal for finance use and directly answers an externally identified gap.
+
+\subsection{Engagement-Weighted Sentiment Aggregation}
+
+The present aggregation layer treats every ingested post as equally informative: a tweet with two likes contributes the same weight to a ticker's daily sentiment score as a tweet with fifty thousand impressions. In practice this is unlikely to reflect how information actually propagates through the market. Posts that reach and are validated by larger audiences plausibly exert greater influence on collective investor mood than those that are seen by almost no one. A natural extension is therefore to weight each record by an engagement signal drawn from the platform metadata already returned by the X API v2 (impressions, likes, retweets, and replies) and by Reddit's upvote score, replacing the uniform mean with a weighted aggregate. A log-transform of the engagement count is likely to be preferable to a raw multiplier, so that viral outliers do not entirely dominate a day's signal. A small sensitivity study comparing unweighted, linearly-weighted, and log-weighted aggregates against next-day returns would establish which variant produces the strongest correlations on the existing evaluation corpus. This extension requires no new ingestion infrastructure, integrates cleanly with the existing correlation engine, and sits alongside the bot-filtering work above as a second mechanism for prioritising higher-quality signal.
 
 \subsection{LLM-Based Sentiment and Emotion Classification}
 
@@ -95,11 +100,7 @@ The current entity resolution database covers equities, ETFs, and major cryptocu
 \section{Industry Demonstration and Practitioner Validation}
 \label{sec:industry_demo}
 
-The project's novelty has been shaped and corroborated by practitioners throughout (Appendix~\ref{app:interviews}), and the next step is to expose the delivered system to a wider audience of domain experts under realistic conditions. An opportunity has been arranged for the summer 2026 period to present the system and its findings to a room of senior practitioners from the finance and AI sectors, in a live-demonstration format followed by structured Q\&A.
-
-The demonstration has three aims, each of which maps onto a gap that a purely academic evaluation cannot close. First, it stress-tests the system's user interface and narrative against practitioner expectations rather than researcher expectations; the interviews made clear that trust, source attribution, and explainability matter at least as much as raw classification accuracy, and these qualities are only really assessed when the system is used by people who carry those concerns professionally. Second, it provides a structured setting in which to gather feedback on the three novel contributions (the finance-emotion taxonomy, the ABSA-lite evidence layer, and the production-grade LIME integration), separating those that practitioners find genuinely useful from those that are academically interesting but operationally peripheral. Third, it creates a realistic route toward potential real-world adoption: several practitioners during the requirements phase advised an MVP-first commercialisation pathway, and a live demonstration to a relevant audience is the natural first step along that pathway.
-
-Any feedback collected during the demonstration will be recorded, anonymised in line with the project's ethics classification, and used to prioritise the future-work items listed in the preceding section. The demonstration is external to the academic submission and its outcomes are not a basis on which this dissertation should be graded; it is described here because it is the concrete next stage of the project's broader trajectory, and because the interviews that informed the current system design will be complemented by a second, practitioner-facing validation loop over the summer.
+The project's motivation and novelty were shaped by practitioner input throughout the requirements and design phases (Appendix~\ref{app:interviews}), and a natural next step beyond the academic submission is to expose the delivered system to a wider practitioner audience. A live demonstration to a small group of finance and AI practitioners is scheduled for the summer 2026 period, organised in a structured Q\&A format so that feedback can be gathered specifically on the three novel contributions and used to prioritise the future-work items listed in Section~\ref{sec:future_work}. This demonstration is external to the academic submission, and its outcomes are \emph{not} a basis on which this dissertation should be graded; it is recorded here purely as the concrete next stage of the project's broader trajectory.
 
 \section{Personal and Professional Development}
 \label{sec:ppd}
@@ -110,7 +111,7 @@ This project has been the most demanding thing I have done at university, and al
 
 I produced a Gantt chart at project inception in September 2025 (included in the approved Project Brief and reproduced in Appendix~\ref{app:gantt}), breaking the academic year into ten phases from Project Setup through Final Submission. I also set up a Jira board to track the same phases at individual task level, which gave me a way to manage day-to-day work without losing sight of the bigger schedule. Maintaining both artefacts proved useful in practice: the Gantt chart provided a strategic view of progress against the academic year timeline, while Jira provided a tactical task queue for day-to-day work.
 
-At the January milestone I reviewed and updated the Gantt. The first three phases had come in on schedule, but the Sentiment Model phase had started slightly later than I originally planned, because I had invested extra time making the NewsAPI ingestion pipeline more robust than I initially thought was necessary. That proved to be the correct prioritisation, as the deduplication problem discovered in the NewsAPI corpus would have introduced inflated record counts into downstream charts had it not been addressed early. The one structural change I made in January was to embed dissertation writing as a concurrent activity rather than leaving it to the end. That decision genuinely improved the quality of this report, because I was documenting the system while building it rather than trying to reconstruct decisions months later.
+At the January milestone I reviewed and updated the Gantt. The first three phases had come in on schedule, but the Sentiment Model phase had started slightly later than I originally planned. I had invested extra time making the NewsAPI ingestion pipeline more robust than I initially thought was necessary. That proved to be the correct prioritisation: the deduplication problem discovered in the NewsAPI corpus would have introduced inflated record counts into downstream charts had it not been addressed early. The one structural change I made in January was to embed dissertation writing as a concurrent activity rather than leaving it to the end. That decision genuinely improved the quality of this report, because I was documenting the system while building it rather than trying to reconstruct decisions months later.
 
 In retrospect, the combination of a strategic Gantt chart and a tactical Jira board is an approach that would be applicable to any project of similar complexity.
 
@@ -122,7 +123,7 @@ Coming into this project I had solid Python fundamentals and had done some basic
 Getting FinBERT to work correctly was harder than I expected. The first time I ran it, it crashed. I then worked through memory issues, batch size tuning, and tokenisation configuration over several days before the model was stable. Understanding \textit{why} each configuration decision mattered (why stopwords should not be removed, why case needs to be preserved, why negation handling is important) required reading the original BERT \citep{devlin2019bert} and FinBERT \citep{araci2019finbert} papers rather than just following tutorials. That depth of understanding ended up being necessary to design the emotion taxonomy correctly.
 
 \paragraph{Asynchronous backend development.}
-Integrating LIME with FastAPI exposed an async/sync interoperability problem that had not been covered in the undergraduate curriculum: LIME is a CPU-bound computation that blocks the event loop if called directly from an async handler. Resolving it required independent research into Python's \texttt{asyncio} model and the \texttt{run\_in\_executor} pattern, and the debugging process considerably deepened my understanding of concurrent programming in production web services.
+Integrating LIME with FastAPI exposed an async/sync interoperability problem that had not been covered in the undergraduate curriculum: LIME is a CPU-bound computation that blocks the event loop if called directly from an async handler. Resolving it required independent research into Python's \texttt{asyncio} model and the executor-dispatch pattern (\texttt{asyncio.to\_thread}, the Python~3.9+ wrapper over \texttt{loop.run\_in\_executor}), and the debugging process considerably deepened my understanding of concurrent programming in production web services.
 
 \paragraph{Statistical analysis.}
 Implementing the correlation engine correctly required learning the assumptions behind each method from scratch. Granger causality in particular (the stationarity pre-check, the autoregressive F-test, and the interpretation caveats) is not something I could implement reliably without reading the original paper \citep{granger1969} and the \texttt{statsmodels} documentation carefully. I found that the results were more nuanced than I expected, but that process of understanding \textit{why} the results looked the way they did was one of the most genuinely educational parts of the whole project.
@@ -136,7 +137,7 @@ The central challenge of the project was its breadth: production NLP, asynchrono
 
 The project has produced three capabilities of direct professional relevance. First, the ability to deploy machine learning models within production web environments, managing the real trade-offs between inference latency, memory consumption, and API throughput, which I encountered concretely rather than abstractly. Second, the ability to explain and justify AI model outputs to non-technical stakeholders, a skill whose importance is increasing as AI regulation develops in financial services. Third, the ability to read academic literature, identify a genuine gap, and build something that addresses it.
 
-If I were starting again, I would sort out the Twitter data situation much earlier. I lost several weeks to the API rate limit problem that eventually led to the multi-backend architecture. Designing that resilience from day one would have freed up time I could have spent deepening the evaluation or building the formal emotion taxonomy annotation study that the journal paper pathway requires.
+If I were starting again, I would confront the Twitter data situation much earlier. I lost several weeks to the X API v2 quota constraint before internalising that an undergraduate budget simply cannot reach the tweet volumes reported in pre-2023 studies. I should have scoped the Twitter signal as a secondary, corroborating input from day one rather than trying to make it a peer of Reddit and NewsAPI. Accepting that limit sooner would have freed up time I could have spent deepening the evaluation or building the formal emotion taxonomy annotation study that the journal paper pathway requires.
 
 \section{Closing Remarks}
 

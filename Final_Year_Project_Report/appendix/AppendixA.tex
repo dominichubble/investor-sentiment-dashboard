@@ -6,7 +6,7 @@
 
 I maintained two views of the project plan throughout the year: a Gantt-style phase chart (strategic) and a Jira board decomposed into individual tasks (tactical). The Gantt chart was produced at project inception in September 2025, submitted with the approved Project Brief in October 2025, and updated at the January 2026 deliverable milestone to reflect actual progress.
 
-\subsection*{High-Level Phase Timeline (September 2025--April 2026)}
+\subsection*{High-Level Phase Timeline (September 2025 to April 2026)}
 
 \begin{table}[!ht]
 \centering
@@ -16,12 +16,12 @@ I maintained two views of the project plan throughout the year: a Gantt-style ph
 \textbf{Weeks (approx.)} & \textbf{Phase} & \textbf{Key deliverables} \\
 \midrule
 Sep          & Project setup         & Repository layout, CI skeleton, supervisor alignment \\
-Sep--Oct     & Literature and brief  & Literature review, ethics form, requirements freeze \\
-Oct--Nov     & Data collection       & Reddit, Twitter, and NewsAPI ingestion; storage schema \\
-Nov--Jan     & Sentiment model       & FinBERT pipeline, preprocessing profiles, batch inference \\
+Sep to Oct     & Literature and brief  & Literature review, ethics form, requirements freeze \\
+Oct to Nov     & Data collection       & Reddit, Twitter, and NewsAPI ingestion; storage schema \\
+Nov to Jan     & Sentiment model       & FinBERT pipeline, preprocessing profiles, batch inference \\
 Jan          & January deliverable   & Gantt refresh, working demo, first full draft sections \\
-Feb--Mar     & Frontend and API      & React views, correlation module, LIME integration \\
-Mar--Apr     & Evaluation and write-up & Benchmark, figures, discussion, polish \\
+Feb to Mar     & Frontend and API      & React views, correlation module, LIME integration \\
+Mar to Apr     & Evaluation and write-up & Benchmark, figures, discussion, polish \\
 Apr          & Final submission      & Code freeze, proofread, appendix and PDF checks \\
 \bottomrule
 \end{tabular}
@@ -31,20 +31,92 @@ Apr          & Final submission      & Code freeze, proofread, appendix and PDF 
 
 \subsection*{Gantt Chart}
 
-Figure~\ref{fig:gantt} shows the exported Gantt chart.
+Figures~\ref{fig:gantt_original} and~\ref{fig:gantt} show the original and January-refresh versions of the exported Gantt chart, respectively.
 
 \begin{figure}[H]
     \centering
-    \IfFileExists{figures/gantt_chart.png}{%
-      \includegraphics[width=\linewidth,height=0.92\textheight,keepaspectratio]{gantt_chart.png}%
+    \IfFileExists{figures/gantt_chart_original.png}{%
+      \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{gantt_chart_original.png}%
     }{%
       \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}%
-      Gantt chart image not found (\texttt{figures/gantt\_chart.png}).%
+      Gantt chart image not found (\texttt{figures/gantt\_chart\_original.png}).%
       \vspace{1.5em}}}%
     }
-    \caption{Project workplan Gantt chart (September 2025--April 2026), updated at the January deliverable milestone.}
+    \caption{Original project Gantt chart produced at project inception (September 2025) and submitted with the approved Project Brief.}
+    \label{fig:gantt_original}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \IfFileExists{figures/gantt_chart_january.png}{%
+      \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{gantt_chart_january.png}%
+    }{%
+      \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}%
+      Gantt chart image not found (\texttt{figures/gantt\_chart\_january.png}).%
+      \vspace{1.5em}}}%
+    }
+    \caption{Project Gantt chart updated at the January 2026 deliverable milestone to reflect actual progress and to embed dissertation writing as a concurrent activity for the remainder of the year.}
     \label{fig:gantt}
 \end{figure}
+
+\subsection*{Jira Workbase and Example Work Items}
+\label{app:jira}
+
+Alongside the Gantt chart I maintained a Jira board (project key \texttt{FYP}) decomposed into sprints that mapped onto the phases listed in Table~\ref{tab:appendix_workplan}. Each phase was broken into individual tickets covering features, bugs, spikes, and writing tasks, and the board was the canonical day-to-day task queue throughout the year. Figures~\ref{fig:jira_gantt_original} and~\ref{fig:jira_gantt_january} show the Jira-generated timeline view of the workplan at project inception and at the January 2026 refresh respectively, with the sprint decomposition visible alongside the phase structure, and Table~\ref{tab:jira_examples} reproduces two example tickets in the form they appeared on the board so the level of task decomposition is also visible.
+
+\begin{figure}[H]
+    \centering
+    \IfFileExists{figures/jira_gantt_chart_original.png}{%
+      \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{jira_gantt_chart_original.png}%
+    }{%
+      \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}%
+      Jira Gantt snapshot not found (\texttt{figures/jira\_gantt\_chart\_original.png}).%
+      \vspace{1.5em}}}%
+    }
+    \caption{Jira-generated timeline view of the workplan at project inception, showing the sprint decomposition used to manage day-to-day tasks.}
+    \label{fig:jira_gantt_original}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \IfFileExists{figures/jira_gantt_chart_january.png}{%
+      \includegraphics[width=\linewidth,height=0.46\textheight,keepaspectratio]{jira_gantt_chart_january.png}%
+    }{%
+      \fbox{\parbox{0.88\linewidth}{\centering\vspace{1.5em}%
+      Jira Gantt snapshot not found (\texttt{figures/jira\_gantt\_chart\_january.png}).%
+      \vspace{1.5em}}}%
+    }
+    \caption{Jira-generated timeline view of the workplan at the January 2026 deliverable milestone, showing the re-planned sprints with dissertation writing embedded as a concurrent activity.}
+    \label{fig:jira_gantt_january}
+\end{figure}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{2.2cm}>{\raggedright\arraybackslash}p{11.0cm}@{}}
+\toprule
+\textbf{Field} & \textbf{Value} \\
+\midrule
+Key           & FYP-202 \\
+Summary       & Cron job for daily multi-source data collection \\
+Type          & Story \\
+Sprint        & Sprint 4 (Sentiment Model phase) \\
+Status        & Done \\
+Description   & Wire a scheduled job that invokes the Reddit, X/Twitter, and NewsAPI ingestion scripts once per day, writes results into the PostgreSQL store, and produces a per-source log line with record counts and any rate-limit events. The job must be idempotent so a repeated run on the same calendar date does not create duplicate records. \\
+Acceptance    & (i) Job runs on schedule for seven consecutive days without manual intervention; (ii) duplicate-insertion attempts are detected and skipped; (iii) per-source counts are visible in the run log. \\
+\midrule
+Key           & FYP-201 \\
+Summary       & Add error handling and structured logging to ingestion pipelines \\
+Type          & Story \\
+Sprint        & Sprint 4 (Sentiment Model phase) \\
+Status        & To Do \\
+Description   & Replace ad-hoc \texttt{print} calls in the ingestion scripts with a single structured logger, and wrap each external API call in a try/except that classifies the failure (transient network, rate-limited, auth, malformed response) and records it under a stable schema so failures can be aggregated across runs. Rate-limit responses must trigger exponential backoff rather than terminating the run. \\
+Acceptance    & (i) A run log can be parsed mechanically; (ii) 429 responses trigger retry-with-backoff and are not counted as fatal; (iii) unit tests cover each failure class. \\
+\bottomrule
+\end{tabular}
+\caption{Two representative Jira tickets reproduced verbatim from the Sprint 4 backlog, illustrating the level of decomposition used on the board.}
+\label{tab:jira_examples}
+\end{table}
 
 \section{Ethics Awareness and Data Governance}
 \label{app:ethics}
@@ -52,14 +124,14 @@ Figure~\ref{fig:gantt} shows the exported Gantt chart.
 The project involved two distinct research activities, each with its own ethical classification.
 
 \paragraph{Primary research: expert interviews.}
-During the requirements and design phase (September--October 2025), a small number of structured interviews were conducted with finance and technology practitioners to understand how sentiment data is currently used in investment contexts and what features would make a sentiment dashboard genuinely useful. Participants were contacted via professional networks, informed of the academic purpose of the study, and their participation was entirely voluntary. No personally identifiable information was recorded; notes were taken with the assistance of an AI transcription tool (Notion AI) and are summarised in Appendix~\ref{app:interviews}. These interviews did not involve vulnerable populations, financial advice, or any form of compensation, and were therefore within the scope of the project's Ethics Awareness Form.
+During the requirements and design phase (September to October 2025), a small number of structured interviews were conducted with finance and technology practitioners to understand how sentiment data is currently used in investment contexts and what features would make a sentiment dashboard genuinely useful. Participants were contacted via professional networks, informed of the academic purpose of the study, and their participation was entirely voluntary. No personally identifiable information was recorded; notes were taken with the assistance of an AI transcription tool (Notion AI) and are summarised in Appendix~\ref{app:interviews}. These interviews did not involve vulnerable populations, financial advice, or any form of compensation, and were therefore within the scope of the project's Ethics Awareness Form.
 
 \paragraph{Secondary data: public text corpus.}
 The Ethics Awareness Form (EAF) was completed with my supervisor in September 2025 and the primary data collection activity was classified as secondary use of publicly posted text: no surveys, no private messages, no paywalled content, and no attempt to re-identify individuals beyond information already publicly visible. The completed and signed EAF is included at the bottom of the approved Project Brief submitted in October 2025; this section summarises how those commitments were implemented in the codebase (see also Chapter~\ref{chap:system_design}).
 
 \begin{itemize}
   \item Reddit: OAuth application registered; rate limits respected through exponential backoff and pagination.
-  \item X/Twitter: official documented interfaces used where possible; unofficial pathways kept within modest volume bounds with automatic fallback.
+  \item X/Twitter: collection restricted to the official X API v2 (Tweepy with a bearer token) to stay aligned with platform terms of service, with automatic exponential backoff on 429 rate-limit responses.
   \item NewsAPI: API key stored only as an environment variable; never committed to the repository.
   \item Storage: database credentials kept exclusively in environment variables; lean deployment mode prevents accidental ML stack loading on public-facing instances.
 \end{itemize}
@@ -79,7 +151,7 @@ Table~\ref{tab:dataset_sample} shows five representative rows from the ingested 
 \textbf{Source} & \textbf{Text (truncated)} & \textbf{Label} & \textbf{Ticker} \\
 \midrule
 Reddit (WSB)     & NVDA earnings beat again; price action discussed in thread. & positive & NVDA \\
-X (snscrape)     & Fed decision day: indices sold off hard into the close.    & negative & SPY  \\
+X (API v2)       & Fed decision day: indices sold off hard into the close.    & negative & SPY  \\
 NewsAPI          & Apple Q4 revenue above analyst expectations; shares higher. & positive & AAPL \\
 Reddit (investing) & Bitcoin feels stretched here; unsure about adding.        & negative & BTC  \\
 NewsAPI          & Mixed session as investors wait for CPI print tomorrow.    & neutral  & \textit{n/a} \\
@@ -160,7 +232,7 @@ Table~\ref{tab:env_vars} lists the principal environment variables controlling i
 \midrule
 \texttt{DATABASE\_URL}            & Connection string for the Neon PostgreSQL instance. \\
 \texttt{NEWS\_API\_KEY}           & Authenticates NewsAPI requests. \\
-\texttt{TWITTER\_INGEST\_BACKEND} & Selects \texttt{api}, \texttt{snscrape}, \texttt{csv}, or \texttt{auto}. \\
+\texttt{TWITTER\_INGEST\_BACKEND} & Selects \texttt{api} (live X API v2) or \texttt{csv} (historical corpus for reproducible evaluation). \\
 \texttt{TWITTER\_BEARER\_TOKEN}   & Enables the official X API v2 path when present. \\
 \texttt{LEAN\_API}                & When set, inference-heavy routes return \texttt{503} instead of loading PyTorch. \\
 \texttt{(CI secrets)}             & GitHub Actions supplies tokens and cache keys at runtime. \\
@@ -171,7 +243,7 @@ Table~\ref{tab:env_vars} lists the principal environment variables controlling i
 \section{Expert Interview Summaries}
 \label{app:interviews}
 
-During the requirements phase of the project, three structured interviews were conducted with three separate finance and technology practitioners to validate the project's motivation and inform feature priorities. Two sessions took place on 13 October 2025 and a third on 21 October 2025; the interviews were conducted online, lasted approximately 60--70 minutes each, and were focused around three themes: (i) how investor sentiment is currently monitored in practice; (ii) what data sources are considered most reliable; and (iii) what analytical capabilities would make a sentiment dashboard genuinely useful to a practitioner. Table~\ref{tab:interview_sessions} lists the sessions.
+During the requirements phase of the project, four structured meetings were held with external practitioners to validate the project's motivation, inform feature priorities, and obtain an independent perspective on its data-governance posture. Three of these were finance and technology interviews focused on sentiment tooling (two sessions on 13 October 2025 and one on 21 October 2025). The fourth was a dedicated consultation with a Certified Data Ethics Professional on 10 October 2025. The three sentiment-tooling interviews were focused around three themes: (i) how investor sentiment is currently monitored in practice; (ii) what data sources are considered most reliable; and (iii) what analytical capabilities would make a sentiment dashboard genuinely useful to a practitioner. The ethics consultation covered the ingestion sources, the anonymisation pipeline, the retention policy, and the downstream uses of the derived sentiment scores. Table~\ref{tab:interview_sessions} lists the sessions.
 
 \begin{table}[!ht]
 \centering
@@ -183,25 +255,29 @@ During the requirements phase of the project, three structured interviews were c
 13 October 2025 (session 1) & Online, $\sim$70 min & Project scoping; sentiment tool landscape; market dynamics; ethics and commercialisation. \\
 13 October 2025 (session 2) & Online, $\sim$60 min & Feature priorities; data-source reliability; manipulation and signal quality. \\
 21 October 2025            & Online, $\sim$60 min & Follow-up on explainability requirements and commercialisation pathway. \\
+10 October 2025            & Online, $\sim$60 min & Data ethics and governance consultation with a Certified Data Ethics Professional (UK financial-services sector): ingestion sources, anonymisation, retention, and framing of derived outputs. \\
 \bottomrule
 \end{tabular}
-\caption{Expert interview sessions conducted during the requirements phase (three interviewees in total, one per session).}
+\caption{External practitioner sessions conducted during the requirements phase (four interviewees in total, one per session): three finance-and-technology interviews focused on sentiment tooling plus one dedicated data-ethics consultation.}
 \label{tab:interview_sessions}
 \end{table}
 
-Participants were three practitioners whose combined experience spans investment management, financial compliance, blockchain and fintech, software entrepreneurship, and financial-crime cybersecurity. In keeping with the project's ethics classification, all material below is anonymised: no participant names, employer names, or identifying details are retained.
+Participants were four practitioners whose combined experience spans investment management, financial compliance, blockchain and fintech, software entrepreneurship, financial-crime cybersecurity, and certified data-ethics and data-governance practice. In keeping with the project's ethics classification, all material below is anonymised: no participant names, employer names, or identifying details are retained.
 
-\paragraph{Key themes from the interviews.}
-The three sessions produced substantially overlapping insights, which are consolidated here thematically rather than reported session-by-session.
+\paragraph{Key themes from the sentiment-tooling interviews.}
+The three sentiment-tooling sessions produced substantially overlapping insights, which are consolidated here thematically rather than reported session-by-session.
 
 \begin{itemize}
-  \item \textbf{Existing tool gap.} Practitioners described existing sentiment tooling (e.g.\ Brandwatch) as effective for brand and product sentiment but weaker for financial markets, and typically priced or positioned for enterprise use rather than individual investors. This directly supported the project's framing of an accessible, finance-specific sentiment dashboard as a genuine gap.
+  \item \textbf{Existing tool gap.} Practitioners described existing sentiment tooling (e.g., Brandwatch) as effective for brand and product sentiment but weaker for financial markets, and typically priced or positioned for enterprise use rather than individual investors. This directly supported the project's framing of an accessible, finance-specific sentiment dashboard as a genuine gap.
   \item \textbf{Source manipulation and signal quality.} Participants were emphatic that social-media data is routinely shaped by bots, coordinated influence campaigns, and algorithmic feed curation controlled by a small number of platforms. They recommended explicit multi-source comparison rather than reliance on any single feed, and flagged bot/inauthenticity filtering as an important future capability. This reinforced the multi-source ingestion design (Chapter~\ref{chap:system_design}) and motivates a dedicated future-work item (Chapter~\ref{chap:conclusion}).
   \item \textbf{Explainability and trust.} The ability to see \emph{why} a text received a particular label was raised independently across the sessions as important for building practitioner trust in automated sentiment. This directly shaped the decision to expose LIME explanations through the API and render them as a token-level heatmap in the UI.
   \item \textbf{Market regime context.} Practitioners observed that recent markets have been partially decoupled from fundamentals by post-2008 quantitative easing and asset-price inflation, which weakens purely technical signals and makes behavioural and sentiment indicators comparatively more interesting. This informs the interpretive caveats applied to the correlation analysis in Chapter~\ref{chap:discussion}.
-  \item \textbf{Commercialisation pathway.} When prompted, the participants advised an MVP-first approach: ship a minimal useful version, obtain practitioner feedback, and iterate, rather than attempting to pre-engineer a complete product. This framing shaped the scope boundary between the submitted academic system and the longer-term productisation pathway (see the industry demonstration and future-work sections in Chapter~\ref{chap:conclusion}).
+  \item \textbf{Commercialisation pathway.} When prompted, the participants advised an MVP-first approach: ship a minimal useful version, obtain practitioner feedback, and iterate, rather than attempting to pre-engineer a complete product. This framing shaped the scope boundary between the submitted academic system and the longer-term productisation pathway (see the future-work section in Chapter~\ref{chap:conclusion}).
   \item \textbf{Wider AI outlook.} Participants also observed that large language models are already writing a substantial share of production code at major firms and will continue to reshape both financial services and labour markets over the next several years. This is treated as contextual colour for the Discussion chapter rather than as a formal finding of the project.
 \end{itemize}
+
+\paragraph{Data-ethics consultation (10 October 2025).}
+A separate, one-hour online consultation was held with a Certified Data Ethics Professional working in the UK financial-services sector, whose remit covers data-governance frameworks and AI-system assurance. The session walked through the project's ingestion sources, its anonymisation pipeline, its retention policy, and the downstream uses of the derived sentiment scores. Three recommendations from this conversation are reflected in the final system and are cross-referenced from the main ethics discussion in Section~\ref{sec:ethics}: (i)~restricting X/Twitter collection to the official API rather than unofficial scrapers, so that ingestion sits cleanly inside the platform's published terms of service; (ii)~stripping author-identifying fields (handles, display names, geolocation) at ingestion time rather than at storage, so that personally identifying information never enters the working database; and (iii)~framing the dashboard's outputs as a decision-support signal rather than an investment recommendation, to avoid any implication of automated financial advice. The consultation was a governance sanity-check and did not constitute formal ethical approval, which remains the University's responsibility. It is recorded here so that the external perspective it contributed is traceable. No personally identifying information about the consultant has been retained.
 
 \paragraph{Interview notes and recording status.}
 Notes were taken during the first session on 13 October 2025 with AI transcription assistance (Notion AI) and are available on request. Recordings for the second 13 October 2025 session and the 21 October 2025 session did not export successfully, so those sessions are represented here only through contemporaneous hand-written notes; the themes above were consistent across all three sessions, which is why they are reported in consolidated form. No personally identifiable information was retained in any case. The interviews are cited here as context for the requirements process rather than as formal qualitative data.

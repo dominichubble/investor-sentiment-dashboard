@@ -11,51 +11,59 @@ Three novel contributions are presented, each supported by empirical or
 demonstrable results.
 First, a \textit{finance-specific emotion taxonomy} layers six domain emotions
 (fear, optimism, uncertainty, confidence, scepticism, and mixed) over FinBERT's
-softmax probabilities using normalised Shannon entropy, domain lexicon matching,
-and financial aspect priors.
-No prior system in the reviewed literature combines these signals within a single,
-architecture-agnostic scoring function; the module is deployed in production and
-annotates the full 150{,}000-record corpus.
+softmax probabilities. It combines normalised Shannon entropy, domain lexicon
+matching, and financial aspect priors.
+This specific combination of signals within a single, architecture-agnostic
+scoring function does not appear in the reviewed literature. The module is
+deployed as part of the delivered system and annotates the full
+150{,}000-record corpus.
 Second, a lightweight \textit{Aspect-Based Sentiment Analysis (ABSA)} module
 extracts and tags evidence sentences across six financial aspect categories without
 requiring fine-tuned sequence models, providing traceable justification for each
 headline sentiment label.
-Third, \textit{production-grade XAI integration}: LIME \citep{ribeiro2016lime} is
+Third, \textit{end-to-end XAI integration}: LIME \citep{ribeiro2016lime} is
 wired through the full application stack as a REST endpoint and rendered as a
-token-level heatmap within the React SPA, making this one of the first reported
-financial sentiment systems to surface token-level explanations directly in a
-deployed user interface rather than an offline notebook.
-The LIME integration also yielded a concrete diagnostic finding: contextually neutral
-risk vocabulary (e.g.\ ``cautious'', ``inflation'') is systematically pushed toward
-the negative class, directly identifying the mechanism behind FinBERT's neutral
-recall deficit and pointing to a targeted fine-tuning strategy.
+token-level heatmap within the React SPA. Surveys of XAI in finance report
+that such explanations typically remain confined to offline notebooks
+\citep{yeo2023xai, biswas2024xai}; embedding them directly in a deployed user
+interface addresses this deployment gap.
+The LIME integration also yielded a concrete diagnostic finding: contextually
+neutral risk vocabulary (e.g., ``cautious'', ``inflation'') is systematically
+pushed toward the negative class. This identifies the mechanism behind
+FinBERT's neutral recall deficit and points to a targeted fine-tuning strategy.
 
 To underpin these contributions, \textbf{FinBERT} \citep{araci2019finbert} is
 deployed as the core classifier on text aggregated from three distinct channels:
-Reddit (via PRAW), X/Twitter (via a resilient multi-backend layer), and financial
-news (via NewsAPI).
+Reddit (via PRAW), X/Twitter (via the official X API v2 with a historical CSV
+fallback for reproducibility), and financial news (via NewsAPI).
 On a purpose-built, 200-sample evaluation benchmark reflecting the real
 distribution of multi-source financial text, FinBERT achieves \textbf{82.0\%}
 accuracy and \textbf{80.3\%} macro F1-score, \textbf{outperforming a
-keyword-based baseline by 13.5 and 12.4 percentage points respectively}.
-The most striking individual gain is on the negative class, where FinBERT recall
-improves from 47.1\% to 94.3\%, a 47.2 percentage-point improvement that
-illustrates the inherent limitation of lexicon-based methods on implicit financial
-phrasing.
+keyword-based baseline by 13.5 and 12.4 percentage points respectively}, a
+difference that is statistically significant under a paired McNemar test
+($\chi^2_{cc} = 9.52$, $p = 0.002$).
+The most striking individual gain is on the negative class, where FinBERT
+recall improves from 47.1\% to 94.3\%. This 47.2 percentage-point improvement
+illustrates the inherent limitation of lexicon-based methods on implicit
+financial phrasing.
 
-In addition to the three primary contributions, a \textit{sentiment--price
+In addition to the three primary contributions, a \textit{sentiment-price
 correlation engine} provides Pearson and Spearman correlation, configurable lag
 analysis, Granger causality testing \citep{granger1969}, rolling correlation, and
-market-adjusted metrics within a single interactive interface; a combination of
-statistical methods not previously described together in an integrated,
-ticker-agnostic dashboard.
+market-adjusted metrics within a single interactive interface. A demonstrative
+run against the live corpus across a nine-ticker panel is reported in the
+evaluation chapter: same-day Pearson coefficients span $r \in [-0.10, +0.24]$,
+with NVDA, AAPL, and AMZN individually significant at $\alpha = 0.05$
+(uncorrected) and SPY producing the expected near-zero null for a diversified
+index tracker. No Granger test reaches significance at $\alpha = 0.05$ on the
+one- or two-day lags examined, which is reported transparently rather than
+selectively.
 
 Overall, the project demonstrates that multi-source, domain-adaptive sentiment
 analysis can be deployed transparently and at scale within a single academic
-system, and that the finance-emotion taxonomy, ABSA enrichment layer, and
-production XAI integration in particular offer a publishable contribution at the
-intersection of NLP, behavioural finance, and explainable AI.
-A live industry demonstration of the delivered system to senior finance and AI
-practitioners has been arranged for the summer 2026 period, with a view to
-obtaining structured practitioner feedback and exploring potential real-world
-adoption pathways beyond the scope of this dissertation.
+system. The finance-emotion taxonomy, ABSA enrichment layer, and end-to-end
+XAI integration together map onto a coherent set of research contributions at
+the intersection of NLP, behavioural finance, and explainable AI. Limitations,
+including the modest size of the Twitter subcorpus and the use of an LLM
+rather than a human panel for cross-annotation, are recorded transparently in
+the evaluation and discussion chapters.
