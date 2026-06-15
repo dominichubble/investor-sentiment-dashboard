@@ -1,0 +1,17 @@
+[
+  {
+    "_README": "TEMPLATE ONLY. Replace this file's contents with the real 300-sample, neutral-but-lexically-loaded fine-tuning corpus described in the manuscript (Section 3.3): regulatory filing excerpts (8-K, 10-Q), central-bank statements, and earnings-release language that is sentiment-neutral but contains sentiment-loaded vocabulary. Save the real file as finetune_corpus.json (drop this _README object). The corpus MUST be held disjoint from the 200-sample evaluation benchmark in app/evaluation/labeled_dataset.py."
+  },
+  {
+    "text": "The Federal Reserve kept interest rates unchanged, maintaining its cautious outlook on inflation.",
+    "label": "neutral"
+  },
+  {
+    "text": "The company filed its Form 10-Q reporting results in line with the guidance issued in the prior quarter.",
+    "label": "neutral"
+  },
+  {
+    "text": "Management noted that margins may face pressure from elevated input costs over the coming periods.",
+    "label": "neutral"
+  }
+]

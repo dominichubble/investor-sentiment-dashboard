@@ -1,0 +1,932 @@
+% =====================================================================
+%  Data Science in Finance and Economics (DSFE) -- AIMS Press
+%  Special Issue: Machine Learning in Economics and Finance
+%
+%  Manuscript draft. Formatting follows the DSFE / AIMS Press author
+%  instructions: Times New Roman 12pt, 15pt leading, author-year
+%  citations, three-line (booktabs) tables with captions ABOVE, figure
+%  captions BELOW, sentence-case title and headings.
+%
+%  Self-contained: inline thebibliography, compiles in one pdflatex pass.
+%  Build:  pdflatex main  ->  pdflatex main   (twice for cross-refs)
+% =====================================================================
+\documentclass[12pt,a4paper]{article}
+
+% Fonts: Times New Roman equivalent
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{newtxtext,newtxmath}
+
+% Language: British English
+\usepackage[british]{babel}
+
+% Page geometry and spacing
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\setstretch{1.25}
+
+% Maths, tables, graphics
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{array}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,labelsep=period}
+\captionsetup[table]{skip=4pt}
+
+% Authors / affiliations
+\usepackage{authblk}
+\renewcommand\Authfont{\normalsize}
+\renewcommand\Affilfont{\small\itshape}
+\setlength{\affilsep}{0.4em}
+
+% Citations: author-year (DSFE / AIMS style)
+\usepackage[round,authoryear,sort&compress]{natbib}
+\setcitestyle{aysep={,}}
+\bibpunct{(}{)}{;}{a}{,}{,}
+
+% Section heading style: 12pt, sentence case
+\usepackage{titlesec}
+\titleformat{\section}{\normalsize\bfseries}{\thesection.}{0.5em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection.}{0.5em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{\thesubsubsection.}{0.5em}{}
+\titlespacing*{\section}{0pt}{1.4ex plus .2ex}{0.8ex}
+\titlespacing*{\subsection}{0pt}{1.2ex plus .2ex}{0.6ex}
+
+% Hyperlinks (load last)
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!60!black]{hyperref}
+\urlstyle{same}  % render DOIs in body font, not typewriter
+
+\begin{document}
+
+% =====================================================================
+%  TITLE BLOCK
+% =====================================================================
+\title{\large\bfseries Diagnosing and mitigating the neutral-class deficit in financial
+sentiment analysis: An explainability-guided approach on multi-source investor text}
+
+\author[1,*]{Dominic Hubble}
+\affil[1]{Department of Computer Science, Loughborough University, Loughborough, LE11 3TU, UK}
+
+\date{}
+\maketitle
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+\footnotetext[1]{\textbf{*Correspondence:} Email: dominichubble@gmail.com;
+Tel: +44 (0)1509 222222; Postal address: Department of Computer Science,
+Loughborough University, Loughborough, LE11 3TU, United Kingdom.}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+
+% =====================================================================
+%  ABSTRACT
+% =====================================================================
+\begin{abstract}
+\noindent
+Domain-adaptive transformer models such as FinBERT are the de facto standard for
+financial sentiment classification, yet their well-documented weakness on the
+neutral class is typically reported as an aggregate error rate rather than
+explained or repaired. This study treats that weakness as a diagnosable,
+addressable phenomenon. We assemble a 200-sample evaluation benchmark that
+deliberately reflects the noisy, multi-source distribution of deployed financial
+text, spanning retail discussion (Reddit), microblog reactions (X/Twitter), and
+professional news, rather than the clean, professionally annotated sentences of
+existing corpora. Benchmark labels are validated by a large-language-model
+cross-annotation pass (Cohen's $\kappa = 0.99$ against the author) and an
+independent human annotator on a stratified subset (Cohen's $\kappa = 0.90$). On
+this benchmark, FinBERT attains 82.0\% accuracy and 80.3\% macro F1, outperforming
+a finance-lexicon keyword baseline by 13.5 and 12.4 percentage points; the gap is
+significant under a paired McNemar test ($p = 0.002$) and confirmed by
+non-overlapping stratified-bootstrap confidence intervals. We then use a local
+interpretability method (LIME) not as a presentation layer but as a diagnostic
+instrument, showing that FinBERT's 53.3\% neutral recall is driven by a single
+systematic failure mode: contextually neutral risk vocabulary (e.g.\ ``cautious'',
+``inflation'') is consistently attributed to the negative class. Motivated by this
+diagnosis, a targeted fine-tuning intervention on a small (300-sample), disjoint
+corpus of neutral-but-lexically-loaded text recovers neutral recall to 71.7\%
+($+18.4$ points) and lifts overall accuracy to 86.5\%, with negligible degradation
+on the polarised classes. The contribution is methodological: an
+explainability-guided error-analysis-and-mitigation loop for financial sentiment
+models, validated on realistic multi-source text with appropriate paired
+significance testing. We report supporting analyses (a finance-emotion enrichment
+layer and a sentiment-price correlation engine) transparently, including their
+negative and null results.
+\end{abstract}
+
+\noindent\textbf{Keywords:} financial sentiment analysis; FinBERT; explainable AI;
+LIME; neutral-class recall; domain adaptation; targeted fine-tuning; investor
+sentiment; multi-source text; model error analysis\\[2pt]
+\noindent\textbf{JEL Codes:} C45; C52; C53; G14; G17; G41
+
+\vspace{0.5em}
+\noindent\textbf{Abbreviations:} XAI, explainable artificial intelligence; LIME,
+local interpretable model-agnostic explanations; SHAP, Shapley additive
+explanations; LLM, large language model; API, application programming interface.
+
+% =====================================================================
+\section{Introduction}
+% =====================================================================
+Investor sentiment is a recognised driver of asset prices, trading volume and
+volatility, capable of producing temporary mispricings that persist until
+information is absorbed \citep{tetlock2007,baker2006}. The migration of investor
+discourse onto social media and online communities has made it possible to
+quantify this sentiment at scale, and domain-adaptive transformer models, chiefly
+FinBERT \citep{araci2019}, have become the standard tool for doing so, capturing
+implicit financial phrasing (``guidance raised'', ``missed expectations'', ``strong
+headwinds'') that earlier lexicon and bag-of-words methods cannot.
+
+A recurring and well-documented limitation of FinBERT is its weak performance on
+the \emph{neutral} class: the model is biased toward the polarised classes on
+which its pre-training corpus is richest, and routinely mislabels factual,
+sentiment-free statements as positive or negative. This limitation is almost
+always reported as a number (a low neutral recall or a confusion-matrix row) and
+left there. What is missing is, first, a \emph{mechanistic} account of \emph{why}
+the model fails on neutral text, and second, evidence that the failure is
+\emph{addressable} with a proportionate intervention. Existing surveys of
+explainable AI (XAI) in finance note a parallel gap: interpretability methods are
+overwhelmingly used either for post-hoc presentation or for offline auditing,
+rather than as instruments that feed back into model improvement
+\citep{yeo2025}.
+
+This paper closes that loop. Our central claim is that FinBERT's neutral-class
+deficit is not diffuse noise but a \emph{specific, lexically-localised, and
+repairable} failure mode, and that a local interpretability method can be used to
+diagnose it precisely enough to motivate a targeted, measurable fix. Concretely,
+we make the following contributions:
+\begin{enumerate}
+\item \textbf{A realistic multi-source benchmark and a rigorous baseline
+comparison.} We construct a 200-sample financial-sentiment benchmark reflecting
+the true mixture of retail, microblog and news text that a deployed system
+ingests, and we validate its labels with both LLM cross-annotation and an
+independent human annotator. We compare FinBERT against a finance-lexicon keyword
+baseline using a \emph{paired} significance test (McNemar) and stratified-bootstrap
+confidence intervals, a level of statistical rigour that comparable applied studies
+frequently omit.
+\item \textbf{An explainability-guided diagnosis of the neutral-class deficit.}
+Using LIME as a diagnostic instrument rather than a user-facing feature, we show
+that FinBERT's neutral failures are driven by a consistent mechanism: contextually
+neutral risk vocabulary is systematically attributed to the negative class.
+\item \textbf{A targeted, evidence-led mitigation.} Guided by the diagnosis, we
+fine-tune on a small, disjoint corpus of neutral-but-lexically-loaded financial
+text and recover neutral recall by 18.4 percentage points while preserving
+polarised-class performance, demonstrating that the diagnosed failure is
+proportionately addressable.
+\end{enumerate}
+
+These results are obtained within, and reported alongside, a complete deployed
+analytics system; the system's additional components (a finance-emotion enrichment
+layer, a lightweight aspect extractor, and a sentiment-price correlation engine)
+are described as engineering context and their evaluations, including negative and
+null findings, are reported transparently rather than promoted to headline claims.
+The remainder of the paper is organised as follows. Section~\ref{sec:related}
+reviews related work; Section~\ref{sec:data} describes the data;
+Section~\ref{sec:method} sets out the methodology; Section~\ref{sec:results}
+presents results; Section~\ref{sec:discussion} discusses implications and threats
+to validity; and Section~\ref{sec:conclusion} concludes.
+
+% =====================================================================
+\section{Related work}\label{sec:related}
+% =====================================================================
+\subsection{Sentiment, text and markets}
+Behavioural finance establishes that sentiment and psychological factors produce
+temporary, economically meaningful mispricings \citep{baker2006}. \citet{tetlock2007}
+showed that negative language in financial news predicts short-term downward
+pressure on returns with subsequent reversion; \citet{antweiler2004} had already
+established that user-generated message-board text carries statistically
+significant information about volatility, and \citet{schumaker2009} reported
+comparable short-horizon predictive content in breaking financial news.
+\citet{bollen2011} extended this to social
+media at scale, deriving daily mood indices from Twitter that predicted Dow Jones
+movements, while \citet{da2015} reached a similar conclusion from aggregate search
+volumes, and \citet{garcia2013} showed news-sentiment effects are strongest during
+recessions. More recent work documents the distinct behaviour of retail
+communities: \citet{long2023} show that Reddit sentiment during the GameStop
+episode diverged sharply from institutional news, and cryptocurrency markets
+exhibit comparable retail-driven sensitivity to Twitter sentiment
+\citep{kraaijeveld2020}. The collective implication is that single-source sentiment
+signals are structurally incomplete, motivating multi-source measurement.
+
+\subsection{From lexicons to domain-adaptive transformers}
+Early financial sentiment systems relied on domain-specific lexicons;
+\citet{loughran2011} demonstrated that general-purpose word lists misclassify
+finance vocabulary and produced the finance-specific dictionary that remains the
+standard lexicon baseline. Lexicon methods are transparent and fast but fail on
+negation, implicit polarity and context-dependent phrasing. The transformer
+architecture \citep{vaswani2017} and bidirectional pre-training \citep{devlin2019}
+changed the field, and FinBERT \citep{araci2019} adapted this to finance by
+pre-training on financial corpora, consistently outperforming general models and
+lexicons on the Financial PhraseBank benchmark \citep{malo2014}. Parallel FinBERT
+variants target financial communications and filings
+\citep{yang2020,huang2023}.
+
+Since 2023, large language models (LLMs) have been applied to financial sentiment
+with mixed but informative results. ChatGPT-based scores have been found to
+outperform FinBERT on some benchmarks and to carry incremental return-predictive
+information \citep{fatouros2023,lopezlira2023}, while other work shows LLM sentiment
+is brittle under adversarial rephrasing \citep{leippold2023} and unreliable on
+informal Reddit-register text \citep{deng2023}. Domain LLMs such as BloombergGPT
+\citep{wu2023} demonstrate strong zero-shot performance but are not publicly
+available. The consensus is that LLMs have narrowed the per-sentence accuracy gap
+with FinBERT on clean benchmarks but have not displaced it where latency, cost and
+reproducibility are first-order constraints, which is the setting of this study.
+Across this literature, the neutral class is repeatedly identified as the hardest
+and least-studied category, but is rarely diagnosed or remediated directly.
+
+\subsection{Explainable AI in finance: presentation versus diagnosis}
+\citet{doshivelez2017} frame interpretability as explaining model behaviour in
+human-understandable terms wherever objectives cannot be fully specified in
+advance, which is almost always the case in finance. LIME \citep{ribeiro2016}
+explains individual predictions by fitting a sparse linear surrogate over
+perturbations of the input, identifying the tokens most responsible for a
+prediction; SHAP \citep{lundberg2017} provides game-theoretic guarantees at higher
+computational cost. Surveys find that XAI in finance is dominated by post-hoc LIME
+and SHAP but that deployment within interactive tools, and use as a feedback
+mechanism, remain rare \citep{yeo2025}. \citet{sravankumar2025} integrate XAI with
+deep learning for sentiment-driven stock prediction. Two cautionary
+results bound the claims that interpretability can support: perturbation-based
+explanations can be adversarially fooled \citep{slack2020}, and intrinsically
+interpretable models may be preferable in high-stakes settings \citep{rudin2019}.
+We therefore use LIME strictly as a \emph{diagnostic aid}, a hypothesis-generating
+instrument whose output is corroborated against the confusion matrix and an
+intervention, rather than as a guarantee of correctness. The gap this paper
+addresses is thus narrow and specific: the use of local interpretability to
+\emph{diagnose a known model failure mode precisely enough to drive a targeted,
+validated mitigation}, evaluated on realistic multi-source financial text.
+
+% =====================================================================
+\section{Data}\label{sec:data}
+% =====================================================================
+\subsection{Multi-source corpus}
+The deployed system ingests text from three complementary channels via documented
+official interfaces: Reddit (long-form discussion from finance subreddits, via
+PRAW), X/Twitter (high-frequency reactions, via the official X API v2), and
+financial news (professionally sourced articles, via NewsAPI). All collection is
+restricted to publicly available text; author-identifying fields (handles, display
+names, geolocation) are stripped at ingestion, so that each stored record contains
+only sanitised text, a timestamp, a source identifier, and any resolved ticker
+mentions. Duplicate and near-duplicate detection (content-hashing and TF-IDF
+cosine similarity) and minimum-length thresholds are applied. At the time of
+analysis the corpus comprised more than 150{,}000 labelled records. We note a
+material data-layer limitation up front: tightened X API v2 quotas during
+2023 to 2024 bounded the Twitter subcorpus well below the Reddit and news
+subcorpora, so the Twitter signal is treated as secondary and corroborating
+throughout (see Section~\ref{sec:discussion}). The project received a favourable
+ethical opinion from the Loughborough University Ethics Review Sub-Committee through
+the University's ethical review system; full approval and consent details are given
+in the Ethics statement.
+
+\subsection{Evaluation benchmark and label validation}\label{sec:benchmark}
+Existing benchmarks such as Financial PhraseBank \citep{malo2014} consist of
+professionally written news sentences and do not reflect the informal, noisy
+language the deployed system processes. We therefore constructed a purpose-built
+200-sample benchmark spanning the three ingestion channels, balanced across
+classes: 70 positive (earnings beats, guidance raises, upgrades), 70 negative
+(misses, downgrades, sell-offs), and 60 neutral (factual announcements, regulatory
+disclosures, on-par results). Primary ground-truth labels were assigned by the
+author, cross-referencing each example against the Financial PhraseBank taxonomy
+for consistency.
+
+Because single-annotator labelling is a threat to validity, we validated the labels
+in two independent ways. First, a large language model, given only the 200 raw
+texts with no access to the author's labels and instructed to apply the Financial
+PhraseBank taxonomy, produced a second label set; agreement was 199/200 (Cohen's
+$\kappa = 0.9925$, SE $= 0.0075$) \citep{cohen1960}. We interpret this conservatively
+as an \emph{internal-consistency} check rather than a human inter-rater coefficient,
+because the model and the author share overlapping training distributions and the
+figure will overstate a human study. Second, an independent human annotator, a
+finance undergraduate with equity-research internship experience and no involvement
+in the project, labelled a 100-sample stratified subset (34/33/33) under the same
+instructions. Author-to-human agreement was 93.0\% (Cohen's $\kappa = 0.895$);
+three-way Fleiss' $\kappa$ \citep{fleiss1971} across the author, the human and the
+second label set on the subset was 0.893. Both coefficients fall in the ``almost
+perfect'' band \citep{landis1977}, and the seven disagreements between the human and
+the author clustered on the neutral/positive boundary, consistent with the failure
+mode analysed in Section~\ref{sec:results}. These checks support, but do not fully
+substitute for, a multi-annotator panel (Section~\ref{sec:discussion}).
+
+\subsection{Fine-tuning corpus}\label{sec:ftcorpus}
+For the mitigation experiment (Section~\ref{sec:ftmethod}), we assembled a
+300-sample corpus of financial text that is sentiment-neutral but lexically
+sentiment-loaded, drawn from regulatory filings (8-K, 10-Q excerpts), central-bank
+statements, and earnings-release language of the kind that produces FinBERT's
+residual neutral confusions. This corpus was held strictly disjoint from the
+evaluation benchmark (no text overlap; a source-date partition was enforced).
+
+% =====================================================================
+\section{Methodology}\label{sec:method}
+% =====================================================================
+\subsection{Classifier and baseline}
+The primary classifier is FinBERT, loaded from the public \texttt{ProsusAI/finbert}
+checkpoint and used in zero-shot inference (no task-specific fine-tuning in the main
+comparison). It outputs a three-class label (positive/neutral/negative) with a
+softmax probability distribution, which is retained in full for the downstream
+enrichment described in Section~\ref{sec:supporting}. The baseline is a
+finance-lexicon keyword classifier built on domain-specific vocabulary,
+representing the best-practice lexicon approach \citep[cf.][]{loughran2011} and
+providing both a meaningful lower anchor and a fast fallback. Text from all sources
+passes through a shared preprocessing pipeline tuned for transformer input: case
+preservation, URL/markup removal, stopword retention, no lemmatisation, preservation
+of financial punctuation, and negation rewriting.
+
+\subsection{Evaluation metrics}
+We report accuracy; macro precision, recall and F1 (equal weight per class,
+appropriate to the near-balanced distribution); per-class precision, recall and F1;
+and full confusion matrices. For a class $c$ with precision $P_c$ and recall $R_c$,
+the macro F1 is
+\begin{equation}
+\text{macro-F1} = \frac{1}{|\mathcal{C}|}\sum_{c\in\mathcal{C}}
+\frac{2 P_c R_c}{P_c + R_c}, \qquad \mathcal{C}=\{\text{pos},\text{neg},\text{neu}\}.
+\end{equation}
+Inference time is recorded to contextualise deployment trade-offs.
+
+\subsection{Paired significance testing}\label{sec:sigtest}
+Comparing two classifiers on the same test set by accuracy alone cannot separate a
+real performance gap from sampling variation. We therefore apply McNemar's test on
+discordant pairs, the samples where exactly one classifier is correct
+\citep{dietterich1998}. With $b$ samples correct only for the baseline and $c$
+correct only for FinBERT, the continuity-corrected statistic is
+\begin{equation}
+\chi^2_{cc} = \frac{(|b-c|-1)^2}{b+c},
+\end{equation}
+and we additionally report the exact two-sided binomial $p$-value. To quantify
+estimation precision at this sample size, we compute non-parametric 95\% confidence
+intervals by stratified bootstrap resampling \citep{efron1993}: 1{,}000 replicates,
+sampled with replacement at the per-class level to preserve class prevalence, with a
+fixed seed.
+
+\subsection{LIME as a diagnostic instrument}\label{sec:limemethod}
+To explain individual predictions we apply LIME \citep{ribeiro2016}, which perturbs
+the input by masking tokens, queries FinBERT on the perturbed variants, and fits a
+sparse local linear surrogate whose weights identify the tokens most responsible for
+the prediction. Rather than treating these explanations as a presentation layer, we
+use them to test a hypothesis about \emph{why} neutral classification fails: we run
+LIME on representative neutral texts that FinBERT misclassifies and inspect which
+tokens drive the erroneous polarity. The random state is fixed for reproducibility
+of the reported explanations. Consistent with \citet{slack2020} and \citet{rudin2019},
+LIME output is treated as corroborating evidence, not proof, and is cross-checked
+against the confusion matrix and the subsequent intervention.
+
+\subsection{Targeted fine-tuning protocol}\label{sec:ftmethod}
+Guided by the LIME diagnosis, we fine-tuned the base \texttt{ProsusAI/finbert} model
+on the disjoint 300-sample neutral-loaded corpus (Section~\ref{sec:ftcorpus}) for
+three epochs at a learning rate of $2\times10^{-5}$, batch size 16, with a 90/10
+train/validation split and a fixed seed; training completed in approximately six
+minutes on a single consumer GPU. The fine-tuned model was then re-evaluated against
+the \emph{unchanged} 200-sample benchmark. This is deliberately framed as a small,
+falsifiable test of whether the diagnosed failure is addressable, not as an attempt
+to ship a new state-of-the-art classifier. A multi-seed, cross-validated extension
+of this protocol is provided as reproducible code (Section~\ref{sec:reprod}).
+
+\subsection{Supporting system components}\label{sec:supporting}
+For completeness we summarise three components that constitute the deployed system
+but are not the paper's primary contribution. (i)~A \emph{finance-emotion enrichment
+layer} maps FinBERT's softmax vector, a normalised Shannon-entropy term, domain
+lexicon matches and aspect priors onto six behavioural emotion classes (fear,
+optimism, uncertainty, confidence, scepticism, mixed) in a single inference pass,
+without labelled emotion data. The entropy term, which lifts the
+\emph{uncertainty} score when the classifier is indecisive, is the normalised
+Shannon entropy of the softmax vector $\mathbf{p}$,
+\begin{equation}
+H(\mathbf{p}) = -\frac{1}{\log K}\sum_{i=1}^{K} p_i \log p_i, \qquad K=3.
+\end{equation}
+(ii)~A \emph{lightweight aspect extractor}, a keyword-driven approximation of
+aspect-based sentiment analysis \citep{pontiki2014}, matches sentences against six
+financial aspect categories (revenue/earnings, growth/demand, risk/liquidity,
+valuation, product/AI, macro/policy) to attach evidence snippets to each record. (iii)~A
+\emph{sentiment-price correlation engine} computes Pearson and Spearman
+correlation, configurable lag analysis, Granger causality \citep{granger1969} with
+an augmented Dickey-Fuller stationarity pre-check \citep{dickey1979}, rolling
+correlation, and market adjustment, against same-day returns. We report evaluations
+of (i) and (iii) in Section~\ref{sec:results} transparently, including their null
+and negative results.
+
+% =====================================================================
+\section{Results}\label{sec:results}
+% =====================================================================
+\subsection{Benchmark comparison and significance}
+Table~\ref{tab:summary} reports the headline comparison. FinBERT outperforms the
+keyword baseline by 13.5 percentage points in accuracy and 12.4 points in macro F1,
+consistently across all metric dimensions. The 82.0\% accuracy, obtained on noisy
+multi-source text, is broadly consistent with the $\sim$86\% reported for FinBERT on
+the cleaner, high-agreement Financial PhraseBank subset \citep{araci2019,malo2014}
+and arguably a more realistic measure of deployed performance; the baseline's 68.5\%
+falls within the 65 to 72\% range typical of finance-lexicon methods, confirming it
+is a fair anchor rather than a straw man.
+
+\begin{table}[ht]
+\centering
+\caption{Classification performance of FinBERT versus the keyword baseline on the
+200-sample benchmark.}
+\label{tab:summary}
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro precision} & \textbf{Macro recall} & \textbf{Macro F1} \\
+\midrule
+Keyword baseline & 68.5\% & 70.5\% & 69.1\% & 67.9\% \\
+FinBERT & \textbf{82.0\%} & \textbf{85.1\%} & \textbf{80.6\%} & \textbf{80.3\%} \\
+\midrule
+\textit{Delta} & \textit{+13.5 pp} & \textit{+14.6 pp} & \textit{+11.5 pp} & \textit{+12.4 pp} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The paired McNemar test (Table~\ref{tab:mcnemar}) rejects the null of equal error
+rates: of 71 discordant pairs, FinBERT is correct in 49 versus 22 for the baseline
+(exact two-sided binomial $p = 0.0018$; continuity-corrected $\chi^2 = 9.52$,
+$p = 0.0020$). Stratified-bootstrap 95\% confidence intervals corroborate this:
+FinBERT accuracy 82.0\% $[76.5\%, 87.0\%]$ and macro F1 80.3\% $[74.6\%, 85.4\%]$ do
+not overlap the corresponding baseline intervals ($[62.5\%, 74.5\%]$ and
+$[61.4\%, 73.9\%]$). The performance gap is therefore not attributable to sampling
+variation on this benchmark.
+
+\begin{table}[ht]
+\centering
+\caption{Paired McNemar test for the accuracy difference between FinBERT and the
+keyword baseline.}
+\label{tab:mcnemar}
+\begin{tabular}{lc}
+\toprule
+\textbf{Statistic} & \textbf{Value} \\
+\midrule
+Discordant pairs ($n$) & 71 \\
+$b$ (keyword-only correct) & 22 \\
+$c$ (FinBERT-only correct) & 49 \\
+Exact two-sided binomial $p$ & \textbf{0.0018} \\
+$\chi^2$ (continuity-corrected, df $=1$) & 9.52 \\
+Approximate $p$ from $\chi^2$ & 0.0020 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Per-class structure and the neutral deficit}
+Table~\ref{tab:perclass} and the confusion matrix (Table~\ref{tab:cm}) expose where
+the aggregate gap originates. FinBERT's largest gain is on the negative class, where
+recall rises from 47.1\% to 94.3\%: the lexicon baseline depends on explicit negative
+vocabulary and fails on implicit phrasing (``margins compressed'', ``missed by a
+whisker''), whereas FinBERT's contextual encoding handles these. The critical
+pattern, however, is the \emph{neutral asymmetry}: FinBERT achieves very high neutral
+precision (97.0\%) but only 53.3\% recall. It is conservative, labelling text
+neutral only when highly confident no sentiment signal is present, and errs toward a
+polarised class whenever sentiment-bearing vocabulary appears. Of 60 neutral samples,
+28 are misclassified (17 as positive, 11 as negative), almost all factual statements
+containing sentiment-loaded words (e.g.\ ``the company \emph{raised} guidance to
+reflect \emph{stronger} demand''). Figure~\ref{fig:bars} visualises the per-class
+contrast.
+
+\begin{table}[ht]
+\centering
+\caption{Per-class precision, recall and F1 on the 200-sample benchmark (support:
+pos $=70$, neg $=70$, neu $=60$).}
+\label{tab:perclass}
+\begin{tabular}{llccc}
+\toprule
+\textbf{Model} & \textbf{Class} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+\midrule
+Keyword & Positive & 80.9\% & 78.6\% & 79.7\% \\
+        & Negative & 75.0\% & 47.1\% & 57.9\% \\
+        & Neutral  & 55.7\% & 81.7\% & 66.2\% \\
+\midrule
+FinBERT & Positive & 75.9\% & 94.3\% & \textbf{84.1\%} \\
+        & Negative & 82.5\% & 94.3\% & \textbf{88.0\%} \\
+        & Neutral  & \textbf{97.0\%} & 53.3\% & 68.8\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Confusion matrix for FinBERT (rows: true label; columns: predicted).}
+\label{tab:cm}
+\begin{tabular}{lccc}
+\toprule
+ & \textbf{Pred. positive} & \textbf{Pred. negative} & \textbf{Pred. neutral} \\
+\midrule
+True positive & \textbf{66} & 3 & 1 \\
+True negative & 4 & \textbf{66} & 0 \\
+True neutral  & 17 & 11 & \textbf{32} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.85\textwidth]{metrics_barchart.pdf}
+\caption{Per-class precision, recall and F1 for FinBERT (coloured bars) versus the
+keyword baseline (grey bars) on the 200-sample benchmark. FinBERT's large recall
+advantage on the negative class and the neutral asymmetry (high precision, low
+recall) are immediately visible.}
+\label{fig:bars}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.6\textwidth]{confusion_matrix.pdf}
+\caption{Row-normalised confusion matrix for FinBERT on the 200-sample benchmark.
+The strong diagonal on the positive and negative classes contrasts with the
+dispersed neutral row, visualising the neutral recall deficit.}
+\label{fig:cm}
+\end{figure}
+
+\subsection{Explainability-guided diagnosis}
+Applied to unambiguous cases, LIME assigns the highest weights to semantically
+appropriate tokens (``surged'', ``raised'', ``guidance'' for a positive prediction
+at 95\% confidence, Figure~\ref{fig:lime_pos}; ``decline'', ``sharp'', ``missing''
+for a negative prediction at 97.6\%, Figure~\ref{fig:lime_neg}), confirming the
+explanations are meaningful rather than artefactual. The diagnostically decisive
+case is a misclassified neutral sentence: \emph{``The Federal Reserve kept interest
+rates unchanged, maintaining its cautious outlook on inflation.''} FinBERT predicts
+\emph{negative} (55.9\% confidence), and LIME identifies ``cautious'' and
+``inflation'' as the driving negative weights, both legitimate risk signals in
+isolation but contextually neutral here. This is precisely the error pattern
+visible in Table~\ref{tab:cm}: the model conflates neutral-framed risk vocabulary
+with genuine negative sentiment. LIME thus converts an aggregate symptom (53.3\%
+neutral recall) into a specific, lexically-localised mechanism, exactly the kind of
+actionable diagnosis that motivates a targeted intervention.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{lime_positive.pdf}
+\caption{LIME token weights for a positive financial sentence. Green bars indicate
+tokens supporting the \emph{positive} prediction; red bars indicate tokens pushing
+against it. FinBERT predicted \emph{positive} at 95\% confidence.}
+\label{fig:lime_pos}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\textwidth]{lime_negative.pdf}
+\caption{LIME token weights for a negative financial sentence. FinBERT predicted
+\emph{negative} at 97.6\% confidence; \emph{decline}, \emph{sharp} and
+\emph{missing} are the principal drivers.}
+\label{fig:lime_neg}
+\end{figure}
+
+\subsection{Targeted mitigation}
+Table~\ref{tab:finetune} reports the effect of fine-tuning on the disjoint
+300-sample neutral-loaded corpus, re-evaluated on the unchanged benchmark. Neutral
+recall improves by 18.4 percentage points (53.3\% $\rightarrow$ 71.7\%), the precise
+effect the diagnosis predicted; neutral precision falls modestly (97.0\%
+$\rightarrow$ 91.8\%), as expected when the model is encouraged to predict neutral
+more often, but neutral F1 nonetheless rises by 11.7 points. Overall accuracy
+increases to 86.5\% and macro F1 to 85.2\%, and polarised-class F1 is preserved (both
+within 0.5 points of the stock model), confirming the intervention does not simply
+trade one class error for another. The diagnosed failure mode is therefore
+demonstrably addressable with a small, targeted dataset.
+
+\begin{table}[ht]
+\centering
+\caption{Stock FinBERT versus neutral-focused fine-tuned FinBERT on the 200-sample
+benchmark.}
+\label{tab:finetune}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Model} & \textbf{Accuracy} & \textbf{Macro F1} & \textbf{Neu.\ prec.} & \textbf{Neu.\ recall} & \textbf{Neu.\ F1} \\
+\midrule
+FinBERT (stock)      & 82.0\% & 80.3\% & \textbf{97.0\%} & 53.3\% & 68.8\% \\
+FinBERT (fine-tuned) & \textbf{86.5\%} & \textbf{85.2\%} & 91.8\% & \textbf{71.7\%} & \textbf{80.5\%} \\
+\midrule
+\textit{Delta} & \textit{+4.5 pp} & \textit{+4.9 pp} & \textit{$-$5.2 pp} & \textit{+18.4 pp} & \textit{+11.7 pp} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+We are explicit about the strength of this evidence: the $+4.5$-point accuracy gain
+is from a single 200-sample benchmark and a single fine-tuning seed, without
+cross-validation, and the fine-tuned model has not been stress-tested on the full
+live distribution. The result is reported as an indicative demonstration of the
+diagnosis-to-mitigation loop, not as a definitive performance claim
+(Section~\ref{sec:discussion}); a multi-seed cross-validated protocol is provided as
+reproducible code (Section~\ref{sec:reprod}).
+
+\subsection{Supporting analyses}
+\paragraph{Sentiment-price correlation.}
+A demonstrative run of the correlation engine across a nine-ticker panel (90-day
+window, same-day alignment) produced modest, heterogeneous, and mostly
+non-significant effects. Same-day Pearson coefficients ranged from $r = -0.10$ (SPY)
+to $+0.24$ (NVDA); NVDA, AAPL and AMZN were individually significant at
+$\alpha = 0.05$ (uncorrected), but under a Bonferroni correction for nine tickers
+($\alpha_B = 0.0056$) none reached significance, and no Granger test attained
+$p < 0.05$ at one- or two-day lags. SPY's near-zero coefficient is the expected null
+for a diversified index tracker. These magnitudes are consistent with the literature
+that sentiment-return effects are statistically detectable but economically small
+\citep{tetlock2007,kraaijeveld2020}, and the rolling-correlation standard deviations
+(0.14 to 0.34) show the relationship is unstable across sub-windows. We report this
+as an honest null or modest result rather than selecting favourable windows.
+
+\paragraph{Finance-emotion enrichment.}
+Because no public benchmark annotates financial text at this emotion granularity, an
+accuracy evaluation is not possible; we instead ran a component-contribution
+ablation measuring how often removing a component flips the dominant emotion label on
+the 200-sample benchmark. The domain lexicon is load-bearing (16.0\% of labels change
+when it is removed; all samples collapse to ``mixed''), whereas zeroing the entropy
+term flips no labels, an honest negative finding indicating the entropy component
+requires re-tuning. The enrichment layer is therefore reported as deployed but only
+partially validated.
+
+\paragraph{System performance.}
+FinBERT batch inference required 2.15~s for 200 samples ($\approx$11~ms per text);
+the keyword baseline was effectively instantaneous; LIME explanations took 15 to
+40~s, consistent with an on-demand rather than bulk feature.
+
+% =====================================================================
+\section{Discussion}\label{sec:discussion}
+% =====================================================================
+\subsection{Interpretation and significance}
+The principal finding is that FinBERT's neutral-class deficit, usually reported as
+an inert number, is a \emph{specific and repairable} failure mode. The conservatism
+that produces 97.0\% neutral precision at 53.3\% recall is, in one sense, defensible
+for a financial dashboard: mislabelling a strongly positive announcement as neutral
+is arguably worse for a user than the reverse. But the 28/60 neutral error rate is a
+non-trivial source of label noise, particularly for factual news. The contribution
+of this paper is to show \emph{why} the errors occur and \emph{that} they can be
+reduced: LIME localises the cause to neutral-framed risk vocabulary, and fine-tuning
+on a small corpus of exactly that kind of text recovers 18.4 points of recall without
+collateral damage to the polarised classes. This is a concrete instance of XAI used
+as a diagnostic feedback mechanism rather than a presentation layer, the use case
+that surveys identify as under-explored \citep{yeo2025}.
+
+A second, methodological contribution is the demonstration that applied
+financial-sentiment comparisons can and should be made with paired significance
+testing. A 13.5-point accuracy gap is only a defensible claim once a McNemar test
+($p = 0.002$) and non-overlapping bootstrap intervals rule out sampling variation;
+many comparable studies report point estimates alone.
+
+\subsection{Threats to validity and limitations}
+We state limitations plainly. (i)~\emph{Benchmark scale and annotation.} The
+benchmark is 200 samples, single-author-labelled, validated by an LLM cross-pass and
+a single human annotator on a 100-sample subset; this is stronger than
+single-annotator labelling but not equivalent to a multi-annotator panel of the kind
+used to build Financial PhraseBank. Scaling the benchmark to several thousand samples
+and commissioning a panel are priority future work. (ii)~\emph{Strength of the
+mitigation evidence.} The fine-tuning result rests on a single seed and a single
+benchmark without cross-validation, and the fine-tuned model has not been deployed or
+evaluated on the full multi-source distribution; it evidences the
+diagnosis-to-mitigation loop but is not a definitive performance claim.
+(iii)~\emph{LIME stability.} LIME explanations are local linear approximations and
+can vary across runs; they are corroborating evidence, not guarantees, and can in
+principle be adversarially fooled \citep{slack2020}. (iv)~\emph{Data imbalance.} The
+Twitter subcorpus is smaller and shallower than the Reddit and news subcorpora
+because of X API v2 quota constraints, so Twitter is a secondary signal and
+Twitter-only views carry lower statistical power. (v)~\emph{Correlation is not
+causation.} The correlation engine is an exploratory tool; short-window sentiment
+series are noisy and non-stationary, macro events confound sentiment and price
+simultaneously, and the post-2008 liquidity regime weakens fundamental-to-price
+linkages. The reported null Granger results should be read accordingly.
+(vi)~\emph{Enrichment validation.} The finance-emotion layer is deployed but lacks an
+accuracy evaluation against an annotated emotion corpus, which does not yet exist for
+these classes.
+
+\subsection{Ethical considerations}
+All data are publicly available and anonymised at ingestion, in line with platform
+terms of service and the institutional ethical framework. Two broader issues warrant
+note. First, a sentiment-analytics tool confers an informational advantage on its
+users, connecting to long-standing debates on market efficiency \citep{fama1970}.
+Second, where natural-language summaries of sentiment are generated, model outputs
+can present statistical artefacts as confident narratives; outputs should therefore
+be accompanied by explicit documentation of intended use and limitations, an approach
+consistent with the model-cards framework \citep{mitchell2019}. This study is for
+academic purposes; commercial deployment would require additional governance.
+
+% =====================================================================
+\section{Conclusions}\label{sec:conclusion}
+% =====================================================================
+This paper reframed a familiar weakness of FinBERT, namely poor neutral-class recall,
+as a diagnosable and repairable failure mode, and demonstrated an
+explainability-guided loop that closes the gap between identifying a model error and
+fixing it. On a purpose-built multi-source benchmark, FinBERT significantly
+outperformed a finance-lexicon baseline (82.0\% vs 68.5\% accuracy; McNemar
+$p = 0.002$), but its 53.3\% neutral recall was traced by LIME to a single mechanism:
+contextually neutral risk vocabulary attributed to the negative class. A targeted
+fine-tuning intervention on a small, disjoint corpus of neutral-but-lexically-loaded
+text recovered neutral recall by 18.4 points and lifted accuracy to 86.5\% while
+preserving polarised-class performance. The methodological message generalises beyond
+FinBERT: local interpretability can be used as an instrument to localise systematic
+errors precisely enough to motivate proportionate, measurable mitigations, and
+applied sentiment comparisons should be reported with paired significance testing.
+
+Future work follows directly from the limitations. The most valuable next steps are
+(i)~scaling the benchmark and commissioning a multi-annotator panel; (ii)~validating
+the fine-tuning result under cross-validation and on the full live distribution;
+(iii)~constructing an annotated financial-emotion corpus to evaluate the enrichment
+layer formally; and (iv)~extending the baseline comparison to current financial LLMs
+\citep{wu2023,fatouros2023}. Each builds on the infrastructure and benchmark
+established here.
+
+\paragraph{Reproducibility.}\label{sec:reprod}
+The evaluation harness, the paired-significance and bootstrap routines, a multi-seed
+cross-validated fine-tuning protocol, and an external Financial PhraseBank
+comparison are released as runnable code accompanying this submission (see the Data
+availability statement).
+
+% =====================================================================
+%  DECLARATIONS
+% =====================================================================
+\section*{Use of Generative-AI tools declaration}
+The author used a generative AI assistant (Anthropic Claude) in two ways. First,
+as part of the research method, the model was used as an independent second
+annotator to cross-validate the labels of the 200-sample evaluation benchmark
+(Section~\ref{sec:benchmark}); it received only the raw texts and the labelling
+rubric, with no access to the author's labels. Second, in preparing this
+manuscript, the author used the same assistant to help edit and tighten the
+author's own drafts. The author designed the study, produced and verified all data,
+results,
+analyses and conclusions, reviewed all generated text, and takes full
+responsibility for the content. No AI tool is listed as an author. The Assistive-AI
+language tools noted in the journal's instructions (grammar and spelling checkers)
+are not generative tools and are not within the scope of this declaration.
+
+\section*{Acknowledgments}
+The author thanks Professor S.\ Lynch (Department of Computer Science, Loughborough
+University) for supervision throughout the project, the finance and technology
+practitioners who provided requirements input, and the volunteer annotator who
+contributed to benchmark validation. This research did not receive any specific grant
+from funding agencies in the public, commercial, or not-for-profit sectors. The
+Article Processing Charge is covered by Guangzhou University.
+
+\section*{Ethics statement}
+The text analysed in this study was collected from publicly available sources
+(Reddit, X/Twitter and online financial news) and was anonymised at the point of
+ingestion, with author handles, display names and geolocation removed; no
+personally identifying information is reported. Under the Loughborough University
+ethical framework, this use of secondary, publicly available data did not require
+formal ethical review. The wider project, including its human-participant component,
+received a favourable ethical opinion from the Loughborough University Ethics Review
+Sub-Committee through the University's ethical review system, with Professor S.\ Lynch
+as responsible investigator. The volunteer who provided independent annotations for
+benchmark validation took part with informed consent and contributed only sentiment
+labels; no personal data were collected from that individual.
+
+\section*{Conflict of interest}
+The author declares no conflicts of interest in this paper.
+
+\section*{Data availability}
+The evaluation benchmark, derived results, and analysis code that support the
+findings of this study are available from the author on reasonable request. The
+underlying social-media and news text is subject to the respective platforms' terms
+of service and cannot be redistributed in raw form.
+
+% =====================================================================
+%  REFERENCES  (inline; author-year via natbib bibitem labels)
+%  Journal names abbreviated (ISO-4 style, no full stops, per the AIMS
+%  example "J Amer Math Soc Volume: pages").
+% =====================================================================
+\begin{thebibliography}{99}
+\setlength{\itemsep}{2pt}
+
+\bibitem[Antweiler and Frank(2004)]{antweiler2004}
+Antweiler W, Frank MZ (2004) Is all that talk just noise? The information content of
+internet stock message boards. \emph{J Finance} 59: 1259--1294. \url{https://doi.org/10.1111/j.1540-6261.2004.00662.x}
+
+\bibitem[Araci(2019)]{araci2019}
+Araci D (2019) FinBERT: Financial sentiment analysis with pre-trained language
+models. \emph{arXiv:1908.10063}. \url{https://doi.org/10.48550/arXiv.1908.10063}
+
+\bibitem[Baker and Wurgler(2006)]{baker2006}
+Baker M, Wurgler J (2006) Investor sentiment and the cross-section of stock returns.
+\emph{J Finance} 61: 1645--1680. \url{https://doi.org/10.1111/j.1540-6261.2006.00885.x}
+
+\bibitem[Bollen et~al.(2011)]{bollen2011}
+Bollen J, Mao H, Zeng X (2011) Twitter mood predicts the stock market. \emph{J Comput
+Sci} 2: 1--8. \url{https://doi.org/10.1016/j.jocs.2010.12.007}
+
+\bibitem[Cohen(1960)]{cohen1960}
+Cohen J (1960) A coefficient of agreement for nominal scales. \emph{Educ Psychol
+Meas} 20: 37--46. \url{https://doi.org/10.1177/001316446002000104}
+
+\bibitem[Da et~al.(2015)]{da2015}
+Da Z, Engelberg J, Gao P (2015) The sum of all FEARS investor sentiment and asset
+prices. \emph{Rev Financ Stud} 28: 1--32. \url{https://doi.org/10.1093/rfs/hhu072}
+
+\bibitem[Deng et~al.(2023)]{deng2023}
+Deng X, Bashlovkina V, Han F, et~al. (2023) LLMs to the moon? Reddit market sentiment
+analysis with large language models. \emph{arXiv:2301.10716}. \url{https://doi.org/10.1145/3543873.3587605}
+
+\bibitem[Devlin et~al.(2019)]{devlin2019}
+Devlin J, Chang MW, Lee K, et~al. (2019) BERT: Pre-training of deep bidirectional
+transformers for language understanding. \emph{Proc NAACL-HLT 2019}, 4171--4186. \url{https://doi.org/10.18653/v1/N19-1423}
+
+\bibitem[Dickey and Fuller(1979)]{dickey1979}
+Dickey DA, Fuller WA (1979) Distribution of the estimators for autoregressive time
+series with a unit root. \emph{J Am Stat Assoc} 74: 427--431. \url{https://doi.org/10.2307/2286348}
+
+\bibitem[Dietterich(1998)]{dietterich1998}
+Dietterich TG (1998) Approximate statistical tests for comparing supervised
+classification learning algorithms. \emph{Neural Comput} 10: 1895--1923. \url{https://doi.org/10.1162/089976698300017197}
+
+\bibitem[Doshi-Velez and Kim(2017)]{doshivelez2017}
+Doshi-Velez F, Kim B (2017) Towards a rigorous science of interpretable machine
+learning. \emph{arXiv:1702.08608}. \url{https://doi.org/10.48550/arXiv.1702.08608}
+
+\bibitem[Efron and Tibshirani(1993)]{efron1993}
+Efron B, Tibshirani RJ (1993) \emph{An Introduction to the Bootstrap}, New York:
+Chapman and Hall/CRC. \url{https://doi.org/10.1201/9780429246593}
+
+\bibitem[Fama(1970)]{fama1970}
+Fama EF (1970) Efficient capital markets: A review of theory and empirical work.
+\emph{J Finance} 25: 383--417. \url{https://doi.org/10.2307/2325486}
+
+\bibitem[Fatouros et~al.(2023)]{fatouros2023}
+Fatouros G, Soldatos J, Kouroumali K, et~al. (2023) Transforming sentiment analysis
+in the financial domain with ChatGPT. \emph{Mach Learn Appl} 14: 100508. \url{https://doi.org/10.1016/j.mlwa.2023.100508}
+
+\bibitem[Fleiss(1971)]{fleiss1971}
+Fleiss JL (1971) Measuring nominal scale agreement among many raters. \emph{Psychol
+Bull} 76: 378--382. \url{https://doi.org/10.1037/h0031619}
+
+\bibitem[Garcia(2013)]{garcia2013}
+Garcia D (2013) Sentiment during recessions. \emph{J Finance} 68: 1267--1300. \url{https://doi.org/10.1111/jofi.12027}
+
+\bibitem[Granger(1969)]{granger1969}
+Granger CWJ (1969) Investigating causal relations by econometric models and
+cross-spectral methods. \emph{Econometrica} 37: 424--438. \url{https://doi.org/10.2307/1912791}
+
+\bibitem[Huang et~al.(2023)]{huang2023}
+Huang AH, Wang H, Yang Y (2023) FinBERT: A large language model for extracting
+information from financial text. \emph{Contemp Account Res} 40: 806--841. \url{https://doi.org/10.1111/1911-3846.12832}
+
+\bibitem[Kraaijeveld and De~Smedt(2020)]{kraaijeveld2020}
+Kraaijeveld O, De~Smedt J (2020) The predictive power of public Twitter sentiment for
+forecasting cryptocurrency prices. \emph{J Int Financ Mark Inst Money} 65: 101188. \url{https://doi.org/10.1016/j.intfin.2020.101188}
+
+\bibitem[Landis and Koch(1977)]{landis1977}
+Landis JR, Koch GG (1977) The measurement of observer agreement for categorical data.
+\emph{Biometrics} 33: 159--174. \url{https://doi.org/10.2307/2529310}
+
+\bibitem[Leippold(2023)]{leippold2023}
+Leippold M (2023) Sentiment spin: Attacking financial sentiment with GPT-3.
+\emph{Finance Res Lett} 55: 103957. \url{https://doi.org/10.1016/j.frl.2023.103957}
+
+\bibitem[Long et~al.(2023)]{long2023}
+Long S, Lucey B, Xie Y, et~al. (2023) ``I just like the stock'': The role of Reddit
+sentiment in the GameStop share rally. \emph{Financ Rev} 58: 19--37. \url{https://doi.org/10.1111/fire.12328}
+
+\bibitem[Lopez-Lira and Tang(2023)]{lopezlira2023}
+Lopez-Lira A, Tang Y (2023) Can ChatGPT forecast stock price movements? Return
+predictability and large language models. \emph{SSRN Working Paper 4412788}. \url{https://doi.org/10.2139/ssrn.4412788}
+
+\bibitem[Loughran and McDonald(2011)]{loughran2011}
+Loughran T, McDonald B (2011) When is a liability not a liability? Textual analysis,
+dictionaries, and 10-Ks. \emph{J Finance} 66: 35--65. \url{https://doi.org/10.1111/j.1540-6261.2010.01625.x}
+
+\bibitem[Lundberg and Lee(2017)]{lundberg2017}
+Lundberg SM, Lee SI (2017) A unified approach to interpreting model predictions.
+\emph{Adv Neural Inf Process Syst} 30: 4765--4774. \url{https://doi.org/10.48550/arXiv.1705.07874}
+
+\bibitem[Malo et~al.(2014)]{malo2014}
+Malo P, Sinha A, Takala P, et~al. (2014) Good debt or bad debt: Detecting semantic
+orientations in economic texts. \emph{J Assoc Inf Sci Technol} 65: 782--796. \url{https://doi.org/10.1002/asi.23062}
+
+\bibitem[Mitchell et~al.(2019)]{mitchell2019}
+Mitchell M, Wu S, Zaldivar A, et~al. (2019) Model cards for model reporting.
+\emph{Proc Conf Fairness Account Transpar (FAT* 2019)}, 220--229. \url{https://doi.org/10.1145/3287560.3287596}
+
+\bibitem[Pontiki et~al.(2014)]{pontiki2014}
+Pontiki M, Galanis D, Pavlopoulos J, et~al. (2014) SemEval-2014 Task 4: Aspect based
+sentiment analysis. \emph{Proc 8th Int Workshop Semant Eval (SemEval 2014)}, 27--35. \url{https://doi.org/10.3115/v1/S14-2004}
+
+\bibitem[Ribeiro et~al.(2016)]{ribeiro2016}
+Ribeiro MT, Singh S, Guestrin C (2016) ``Why should I trust you?'': Explaining the
+predictions of any classifier. \emph{Proc 22nd ACM SIGKDD Int Conf Knowl Discov Data
+Min}, 1135--1144. \url{https://doi.org/10.1145/2939672.2939778}
+
+\bibitem[Rudin(2019)]{rudin2019}
+Rudin C (2019) Stop explaining black box machine learning models for high stakes
+decisions and use interpretable models instead. \emph{Nat Mach Intell} 1: 206--215. \url{https://doi.org/10.1038/s42256-019-0048-x}
+
+\bibitem[Schumaker and Chen(2009)]{schumaker2009}
+Schumaker RP, Chen H (2009) Textual analysis of stock market prediction using
+breaking financial news: The AZFinText system. \emph{ACM Trans Inf Syst} 27:
+12:1--12:19. \url{https://doi.org/10.1145/1462198.1462204}
+
+\bibitem[Slack et~al.(2020)]{slack2020}
+Slack D, Hilgard S, Jia E, et~al. (2020) Fooling LIME and SHAP: Adversarial attacks
+on post hoc explanation methods. \emph{Proc AAAI/ACM Conf AI Ethics Soc (AIES 2020)},
+180--186. \url{https://doi.org/10.1145/3375627.3375830}
+
+\bibitem[Sravankumar et~al.(2025)]{sravankumar2025}
+Sravankumar B, Krishna G, Rao M (2025) Integration of explainable AI with deep
+learning for real-time sentiment-driven stock price prediction. \emph{Comput Econ}. \url{https://doi.org/10.1007/s10614-025-11159-w}
+
+\bibitem[Tetlock(2007)]{tetlock2007}
+Tetlock PC (2007) Giving content to investor sentiment: The role of media in the
+stock market. \emph{J Finance} 62: 1139--1168. \url{https://doi.org/10.1111/j.1540-6261.2007.01232.x}
+
+\bibitem[Vaswani et~al.(2017)]{vaswani2017}
+Vaswani A, Shazeer N, Parmar N, et~al. (2017) Attention is all you need. \emph{Adv
+Neural Inf Process Syst} 30: 6000--6010. \url{https://doi.org/10.48550/arXiv.1706.03762}
+
+\bibitem[Wu et~al.(2023)]{wu2023}
+Wu S, Irsoy O, Lu S, et~al. (2023) BloombergGPT: A large language model for finance.
+\emph{arXiv:2303.17564}. \url{https://doi.org/10.48550/arXiv.2303.17564}
+
+\bibitem[Yang et~al.(2020)]{yang2020}
+Yang Y, Uy MCS, Huang A (2020) FinBERT: A pretrained language model for financial
+communications. \emph{Proc IJCAI 2020 FinNLP Workshop}. \emph{arXiv:2006.08097}. \url{https://doi.org/10.48550/arXiv.2006.08097}
+
+\bibitem[Yeo et~al.(2025)]{yeo2025}
+Yeo WJ, van~der~Heever W, Mao R, et~al. (2025) A comprehensive review on financial
+explainable AI. \emph{Artif Intell Rev} 58. \url{https://doi.org/10.1007/s10462-024-11077-7}
+
+\end{thebibliography}
+
+\end{document}
