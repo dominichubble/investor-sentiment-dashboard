@@ -8,10 +8,10 @@ Special Issue: Machine Learning in Economics and Finance
 
 Dear Editors,
 
-I am pleased to submit my manuscript, "Diagnosing and mitigating the neutral-class
+We are pleased to submit our manuscript, "Diagnosing and mitigating the neutral-class
 deficit in financial sentiment analysis: An explainability-guided approach on
 multi-source investor text," for consideration in the special issue on Machine
-Learning in Economics and Finance.
+Learning in Economics and Finance, following your kind invitation.
 
 **Why this paper is a valuable addition.** Domain-adaptive models such as FinBERT
 are the default tool for financial sentiment classification, and their weakness on
@@ -40,16 +40,17 @@ rigour (paired testing and bootstrap intervals) that is often missing from appli
 sentiment comparisons. Limitations, including benchmark scale and the single-seed
 nature of the fine-tuning result, are stated plainly in the manuscript, and reusable
 code for a cross-validated extension and an external benchmark comparison accompanies
-the submission.
+the submission. The work originated in the second author's undergraduate project at
+Loughborough University.
 
 **Reviewers.** I have not nominated specific reviewers and am happy to leave
 referee selection to the editorial team. I have no opposed reviewers to declare.
 
-**Declarations.** I confirm that this manuscript is original, has not been published
-elsewhere, and is not under consideration for publication by another journal. All
-authors (sole author) agree to publication in AIMS Press Open Access format under the
-Creative Commons Attribution License. I understand the submission may be screened by
-the CrossCheck originality-detection service. I confirm that permission has been
+**Declarations.** We confirm that this manuscript is original, has not been published
+elsewhere, and is not under consideration for publication by another journal. Both
+authors agree to publication in AIMS Press Open Access format under the Creative
+Commons Attribution License. We understand the submission may be screened by the
+CrossCheck originality-detection service. We confirm that permission has been
 obtained for any reproduced material. Generative-AI use is disclosed in the manuscript
 in the dedicated declaration section. The Article Processing Charge is covered by
 Guangzhou University.
@@ -58,7 +59,9 @@ Thank you for your consideration.
 
 Yours sincerely,
 
+Professor Stephen Lynch (corresponding author)
 Dominic Hubble
-Department of Computer Science, Loughborough University
-Email: dominichubble@gmail.com
-Tel: +44 (0)1509 222222
+Department of Computer Science, Loughborough University, Loughborough, LE11 3TU, UK
+Email: s.lynch@lboro.ac.uk
+Tel: +44 (0)1509 225854
+ORCID: https://orcid.org/0000-0002-4183-5122
