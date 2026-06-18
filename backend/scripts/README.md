@@ -25,6 +25,26 @@ cd backend
 python scripts/process_existing_data.py --input ../data/twitter_*.csv --source twitter
 ```
 
+### Convert TweetClaw Exports
+
+TweetClaw can export X/Twitter results as JSON, JSONL, NDJSON, or CSV. Convert
+those exports into the existing `stock_tweets.csv` shape before using the local
+Twitter CSV backend:
+
+```bash
+cd backend
+python scripts/tweetclaw_to_stock_tweets_csv.py ../tweetclaw-export.jsonl \
+  --fallback-ticker AAPL \
+  --output ../stock_tweets.csv
+
+TWITTER_INGEST_BACKEND=csv TWITTER_CSV_PATH=../stock_tweets.csv \
+  python -m app.pipelines.ingest_twitter --max-tweets 50
+```
+
+The converter writes `Date`, `Tweet`, `Stock Name`, and `Company Name` columns.
+It uses explicit ticker fields when present, falls back to cashtags in the tweet
+text, and leaves `Company Name` blank for downstream enrichment.
+
 ### Process News Data
 
 ```bash
