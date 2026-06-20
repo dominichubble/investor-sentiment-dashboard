@@ -9,30 +9,40 @@ scraping at any time; respect their terms and rate limits.
 **Optional official API:** set ``TWITTER_INGEST_BACKEND=api`` and ``TWITTER_BEARER_TOKEN``.
 
 **Local CSV (no X):** set ``TWITTER_INGEST_BACKEND=csv`` and optionally ``TWITTER_CSV_PATH``
-(path to a file with columns ``Date``, ``Tweet``, ``Stock Name`` — same shape as ``stock_tweets.csv``).
+(path to a file with columns ``Date``, ``Tweet``, ``Stock Name`` - same shape as ``stock_tweets.csv``).
+
+**Optional Xquik API:** set ``TWITTER_INGEST_BACKEND=xquik`` and ``XQUIK_API_KEY``.
 
 **Auto:** ``TWITTER_INGEST_BACKEND=auto`` uses the API when ``TWITTER_BEARER_TOKEN`` is set,
 otherwise falls back to snscrape.
 
 Env:
-    TWITTER_INGEST_BACKEND   ``snscrape`` (default), ``api``, ``csv``, or ``auto``
+    TWITTER_INGEST_BACKEND   ``snscrape`` (default), ``api``, ``csv``, ``xquik``, or ``auto``
     TWITTER_CSV_PATH       CSV file for ``csv`` backend (default: repo ``stock_tweets.csv``)
+    XQUIK_API_KEY          API key for ``xquik`` backend
+    XQUIK_BASE_URL         Optional API base URL (default: ``https://xquik.com``)
 
 Usage:
     python -m app.pipelines.ingest_twitter --max-tweets 50
     python -m app.pipelines.ingest_twitter --tickers AAPL TSLA BTC --max-tweets 40
     python -m app.pipelines.ingest_twitter --backend api --max-tweets 50
+    python -m app.pipelines.ingest_twitter --backend xquik --max-tweets 50
     python -m app.pipelines.ingest_twitter --keywords earnings "fed rate"
 """
 
 import argparse
 import csv
+import hashlib
+import json
 import logging
 import os
 import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+from urllib.error import HTTPError, URLError
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 
 try:
     from dotenv import load_dotenv
@@ -40,8 +50,6 @@ try:
     load_dotenv()
 except ImportError:
     pass
-
-from app.services.import_service import ImportService
 
 # Configure logging
 logging.basicConfig(
@@ -60,7 +68,7 @@ _URL_RE = re.compile(
 )
 
 
-# Default: cashtag search — tweets must match at least one symbol (recent search).
+# Default: cashtag search - tweets must match at least one symbol (recent search).
 PRIORITY_TICKERS = ["BTC", "GOOGL", "NVDA", "ETH", "META"]
 
 # Optional keyword mode (--keywords); broader but noisier than cashtags.
@@ -80,6 +88,8 @@ DEFAULT_MIN_ENGAGEMENT = 0
 # Repo root (…/investor-sentiment-dashboard) for default CSV path
 _REPO_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_CSV_REL = _REPO_ROOT / "stock_tweets.csv"
+_DEFAULT_XQUIK_BASE_URL = "https://xquik.com"
+_XQUIK_SEARCH_PATH = "/api/v1/x/tweets/search"
 
 
 def clean_text(txt: Optional[str]) -> str:
@@ -108,6 +118,32 @@ def clean_text(txt: Optional[str]) -> str:
     txt = re.sub(r"\s+", " ", txt)
 
     return txt.strip()
+
+
+def _to_int(value: Any) -> int:
+    """Coerce API numeric fields to integers."""
+    try:
+        return int(value or 0)
+    except (TypeError, ValueError):
+        return 0
+
+
+def _metric(tweet: Dict[str, Any], camel_key: str, snake_key: str) -> int:
+    """Read a numeric metric from camelCase or snake_case API fields."""
+    if camel_key in tweet:
+        return _to_int(tweet.get(camel_key))
+    return _to_int(tweet.get(snake_key))
+
+
+def _tweet_id(value: Any) -> int:
+    """Return a stable integer ID for downstream CSV and DB import."""
+    if value is None:
+        return 0
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        digest = hashlib.sha256(str(value).encode("utf-8")).hexdigest()
+        return int(digest[:12], 16)
 
 
 def normalize_tweet(tweet) -> Dict[str, Any]:
@@ -143,6 +179,32 @@ def normalize_tweet(tweet) -> Dict[str, Any]:
         "like_count": metrics.get("like_count", 0),
         "quote_count": metrics.get("quote_count", 0),
         "lang": tweet.lang if hasattr(tweet, "lang") else None,
+    }
+
+
+def normalize_xquik_tweet(tweet: Dict[str, Any]) -> Dict[str, Any]:
+    """Map an Xquik Search Tweets row into the same dict shape as other backends."""
+    raw = str(tweet.get("text") or "")
+    author = tweet.get("author")
+    author_id = None
+    if isinstance(author, dict):
+        author_id = author.get("id")
+    if author_id is None:
+        author_id = tweet.get("authorId") or tweet.get("author_id")
+
+    return {
+        "id": _tweet_id(tweet.get("id")),
+        "data_source": "twitter",
+        "text": clean_text(raw),
+        "raw_text": raw,
+        "hint_tickers": extract_cashtags(raw),
+        "author_id": str(author_id) if author_id is not None else None,
+        "created_at": tweet.get("createdAt") or tweet.get("created_at"),
+        "retweet_count": _metric(tweet, "retweetCount", "retweet_count"),
+        "reply_count": _metric(tweet, "replyCount", "reply_count"),
+        "like_count": _metric(tweet, "likeCount", "like_count"),
+        "quote_count": _metric(tweet, "quoteCount", "quote_count"),
+        "lang": tweet.get("lang") or tweet.get("language"),
     }
 
 
@@ -261,7 +323,7 @@ def normalize_csv_finance_row(row: Dict[str, str], seq: int) -> Dict[str, Any]:
 
 def filter_low_quality_tweets(tweets: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
-    Drop obvious spam / empty noise. Ticker posts are often short — keep a low
+    Drop obvious spam / empty noise. Ticker posts are often short - keep a low
     character floor when a cashtag is present.
     """
     filtered: List[Dict[str, Any]] = []
@@ -366,12 +428,14 @@ def _apply_filters(records: List[Dict[str, Any]], min_engagement: int) -> List[D
 
 
 def resolve_ingest_backend(explicit: Optional[str] = None) -> str:
-    """Return ``snscrape``, ``api``, ``csv``, or ``auto`` (normalized)."""
+    """Return ``snscrape``, ``api``, ``csv``, ``xquik``, or ``auto`` (normalized)."""
     raw = (explicit or os.getenv("TWITTER_INGEST_BACKEND") or "snscrape").strip().lower()
     if raw in ("api", "official", "twitter_api", "tweepy"):
         return "api"
     if raw in ("csv", "file", "local", "dataset"):
         return "csv"
+    if raw in ("xquik", "xquik_api"):
+        return "xquik"
     if raw == "auto":
         token = (os.getenv("TWITTER_BEARER_TOKEN") or "").strip()
         return "api" if token else "snscrape"
@@ -384,6 +448,28 @@ def resolve_csv_path() -> Path:
     if env:
         return Path(env).expanduser().resolve()
     return _DEFAULT_CSV_REL.resolve()
+
+
+def resolve_xquik_base_url() -> str:
+    """Base URL for the Xquik API."""
+    return (os.getenv("XQUIK_BASE_URL") or _DEFAULT_XQUIK_BASE_URL).rstrip("/")
+
+
+def build_xquik_search_url(
+    query: str,
+    max_results: int,
+    base_url: Optional[str] = None,
+) -> str:
+    """Build the Xquik Search Tweets URL."""
+    root = (base_url or resolve_xquik_base_url()).rstrip("/")
+    params = urlencode(
+        {
+            "q": query,
+            "queryType": "Latest",
+            "limit": str(max(1, max_results)),
+        }
+    )
+    return f"{root}{_XQUIK_SEARCH_PATH}?{params}"
 
 
 def initialize_twitter_client() -> Any:
@@ -538,6 +624,55 @@ def fetch_tweets_api(
     return _apply_filters(tweets, min_engagement)
 
 
+def fetch_tweets_xquik(
+    max_results: int,
+    lang: str,
+    min_engagement: int,
+    tickers: Optional[List[str]] = None,
+    keywords: Optional[List[str]] = None,
+    base_url: Optional[str] = None,
+    api_key: Optional[str] = None,
+    opener: Any = urlopen,
+) -> List[Dict[str, Any]]:
+    """Fetch recent tweets via Xquik Search Tweets."""
+    key = (api_key or os.getenv("XQUIK_API_KEY") or "").strip()
+    if not key:
+        raise ValueError("Missing Xquik API key. Set XQUIK_API_KEY.")
+
+    query = _resolve_search_query(lang, tickers, keywords)
+    url = build_xquik_search_url(query, max_results, base_url)
+    request = Request(
+        url,
+        headers={
+            "Accept": "application/json",
+            "x-api-key": key,
+        },
+    )
+    logger.info("Fetching up to %s tweets via Xquik...", max_results)
+
+    response = None
+    try:
+        response = opener(request, timeout=30)
+        payload = response.read()
+        data = json.loads(payload.decode("utf-8"))
+    except (HTTPError, URLError, json.JSONDecodeError) as e:
+        logger.error("Xquik search failed: %s", e)
+        return []
+    finally:
+        if response is not None:
+            close = getattr(response, "close", None)
+            if callable(close):
+                close()
+
+    rows = data.get("tweets") if isinstance(data, dict) else None
+    if not isinstance(rows, list):
+        logger.warning("Xquik response did not include a tweets array")
+        return []
+
+    records = [normalize_xquik_tweet(row) for row in rows if isinstance(row, dict)]
+    return _apply_filters(records, min_engagement)
+
+
 def fetch_tweets_csv(
     max_results: int,
     lang: str,
@@ -675,7 +810,7 @@ def run_ingestion(
         output_dir: Output directory path
         tickers: Cashtag symbols (without $); defaults to PRIORITY_TICKERS
         keywords: If set, keyword search instead of tickers
-        backend: ``snscrape``, ``api``, ``csv``, or ``auto``; default from env
+        backend: ``snscrape``, ``api``, ``csv``, ``xquik``, or ``auto``; default from env
         run_id: Optional run identifier (defaults to current date)
         store_db: If True, persist records directly to the database
         write_files: If True, also export CSV files to local data directory
@@ -718,6 +853,14 @@ def run_ingestion(
             tickers=tickers,
             keywords=keywords,
         )
+    elif mode == "xquik":
+        tweets = fetch_tweets_xquik(
+            max_results=max_tweets,
+            lang=lang,
+            min_engagement=min_engagement,
+            tickers=tickers,
+            keywords=keywords,
+        )
     else:
         tweets = fetch_tweets_snscrape(
             max_results=max_tweets,
@@ -735,6 +878,8 @@ def run_ingestion(
         return ""
 
     if store_db:
+        from app.services.import_service import ImportService
+
         import_result = ImportService().import_from_records(tweets)
         logger.info(
             "Imported into DB: loaded=%s inserted=%s",
@@ -793,9 +938,9 @@ Examples:
 
     parser.add_argument(
         "--backend",
-        choices=["snscrape", "api", "csv", "auto"],
+        choices=["snscrape", "api", "csv", "xquik", "auto"],
         default=None,
-        help="Override TWITTER_INGEST_BACKEND (snscrape | api | csv | auto)",
+        help="Override TWITTER_INGEST_BACKEND (snscrape | api | csv | xquik | auto)",
     )
 
     parser.add_argument(
