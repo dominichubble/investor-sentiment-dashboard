@@ -10,11 +10,13 @@ Tests cover:
 - Data structures
 """
 
+import json
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
+from urllib.parse import parse_qs, urlparse
 
 import pytest
 
@@ -25,16 +27,33 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from app.pipelines.ingest_twitter import (  # noqa: E402
     build_keyword_query,
     build_ticker_search_query,
+    build_xquik_search_url,
     clean_text,
     extract_cashtags,
     fetch_tweets_csv,
+    fetch_tweets_xquik,
     filter_by_engagement,
     filter_low_quality_tweets,
     normalize_csv_finance_row,
     normalize_snscrape_tweet,
     normalize_tweet,
+    normalize_xquik_tweet,
     resolve_ingest_backend,
 )
+
+
+class FakeHttpResponse:
+    """Minimal response object for URL opener tests."""
+
+    def __init__(self, payload: dict):
+        self._payload = payload
+        self.closed = False
+
+    def read(self):
+        return json.dumps(self._payload).encode("utf-8")
+
+    def close(self):
+        self.closed = True
 
 
 class TestCleanText:
@@ -168,6 +187,11 @@ class TestResolveIngestBackend:
             monkeypatch.setenv("TWITTER_INGEST_BACKEND", v)
             assert resolve_ingest_backend() == "csv"
 
+    def test_xquik_aliases(self, monkeypatch):
+        for v in ("xquik", "xquik_api"):
+            monkeypatch.setenv("TWITTER_INGEST_BACKEND", v)
+            assert resolve_ingest_backend() == "xquik"
+
     def test_auto_uses_api_when_token(self, monkeypatch):
         monkeypatch.setenv("TWITTER_INGEST_BACKEND", "auto")
         monkeypatch.setenv("TWITTER_BEARER_TOKEN", "x")
@@ -177,6 +201,160 @@ class TestResolveIngestBackend:
         monkeypatch.setenv("TWITTER_INGEST_BACKEND", "auto")
         monkeypatch.delenv("TWITTER_BEARER_TOKEN", raising=False)
         assert resolve_ingest_backend() == "snscrape"
+
+
+class TestXquikBackend:
+    def test_build_xquik_search_url(self):
+        url = build_xquik_search_url(
+            '("fed rate" OR $NVDA) lang:en -is:retweet',
+            50,
+            base_url="https://example.test/",
+        )
+        parsed = urlparse(url)
+        query = parse_qs(parsed.query)
+        assert parsed.scheme == "https"
+        assert parsed.netloc == "example.test"
+        assert parsed.path == "/api/v1/x/tweets/search"
+        assert query["q"] == ['("fed rate" OR $NVDA) lang:en -is:retweet']
+        assert query["queryType"] == ["Latest"]
+        assert query["limit"] == ["50"]
+
+    def test_normalize_xquik_tweet_maps_fields(self):
+        row = {
+            "id": "1234567890",
+            "text": "Long $NVDA into earnings",
+            "createdAt": "2026-06-20T12:00:00Z",
+            "likeCount": 12,
+            "retweetCount": 3,
+            "replyCount": 2,
+            "quoteCount": 1,
+            "author": {"id": "user-1"},
+            "lang": "en",
+        }
+        out = normalize_xquik_tweet(row)
+        assert out["id"] == 1234567890
+        assert out["hint_tickers"] == ["NVDA"]
+        assert out["author_id"] == "user-1"
+        assert out["created_at"] == "2026-06-20T12:00:00Z"
+        assert out["like_count"] == 12
+        assert out["retweet_count"] == 3
+        assert out["reply_count"] == 2
+        assert out["quote_count"] == 1
+        assert out["data_source"] == "twitter"
+
+    def test_fetch_tweets_xquik_uses_key_and_maps_response(self):
+        captured = {}
+        response = FakeHttpResponse(
+            {
+                "tweets": [
+                    {
+                        "id": "55",
+                        "text": "Market likes $AAPL results today",
+                        "createdAt": "2026-06-20T12:00:00Z",
+                        "likeCount": 7,
+                        "retweetCount": 1,
+                        "replyCount": 1,
+                        "quoteCount": 0,
+                        "author": {"id": "42"},
+                        "lang": "en",
+                    }
+                ]
+            }
+        )
+
+        def opener(request, timeout):
+            captured["url"] = request.full_url
+            captured["api_key"] = request.get_header("X-api-key")
+            captured["timeout"] = timeout
+            return response
+
+        out = fetch_tweets_xquik(
+            max_results=5,
+            lang="en",
+            min_engagement=0,
+            tickers=["AAPL"],
+            base_url="https://example.test",
+            api_key="xq_test",
+            opener=opener,
+        )
+
+        parsed = urlparse(captured["url"])
+        query = parse_qs(parsed.query)
+        assert parsed.path == "/api/v1/x/tweets/search"
+        assert query["limit"] == ["5"]
+        assert query["queryType"] == ["Latest"]
+        assert "$AAPL" in query["q"][0]
+        assert captured["api_key"] == "xq_test"
+        assert captured["timeout"] == 30
+        assert response.closed is True
+        assert len(out) == 1
+        assert out[0]["id"] == 55
+        assert out[0]["author_id"] == "42"
+
+    def test_fetch_tweets_xquik_follows_cursor_pages(self):
+        responses = [
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": str(index),
+                            "text": f"Market likes $AAPL result {index}",
+                            "createdAt": "2026-06-20T12:00:00Z",
+                        }
+                        for index in range(200)
+                    ],
+                    "has_next_page": True,
+                    "next_cursor": "next-page",
+                }
+            ),
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": "200",
+                            "text": "Market likes $AAPL result 200",
+                            "createdAt": "2026-06-20T12:01:00Z",
+                        }
+                    ],
+                    "has_next_page": False,
+                    "next_cursor": "",
+                }
+            ),
+        ]
+        captured_urls = []
+
+        def opener(request, timeout):
+            captured_urls.append(request.full_url)
+            return responses.pop(0)
+
+        out = fetch_tweets_xquik(
+            max_results=250,
+            lang="en",
+            min_engagement=0,
+            tickers=["AAPL"],
+            base_url="https://example.test",
+            api_key="xq_test",
+            opener=opener,
+        )
+
+        first_query = parse_qs(urlparse(captured_urls[0]).query)
+        second_query = parse_qs(urlparse(captured_urls[1]).query)
+        assert first_query["limit"] == ["200"]
+        assert "cursor" not in first_query
+        assert second_query["limit"] == ["50"]
+        assert second_query["cursor"] == ["next-page"]
+        assert len(out) == 201
+
+    def test_fetch_tweets_xquik_requires_key(self, monkeypatch):
+        monkeypatch.delenv("XQUIK_API_KEY", raising=False)
+        with pytest.raises(ValueError, match="XQUIK_API_KEY"):
+            fetch_tweets_xquik(
+                max_results=5,
+                lang="en",
+                min_engagement=0,
+                tickers=["AAPL"],
+                base_url="https://example.test",
+            )
 
 
 class TestNormalizeCsvFinanceRow:
