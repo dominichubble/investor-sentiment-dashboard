@@ -90,6 +90,7 @@ _REPO_ROOT = Path(__file__).resolve().parents[3]
 _DEFAULT_CSV_REL = _REPO_ROOT / "stock_tweets.csv"
 _DEFAULT_XQUIK_BASE_URL = "https://xquik.com"
 _XQUIK_SEARCH_PATH = "/api/v1/x/tweets/search"
+_XQUIK_SEARCH_PAGE_SIZE = 200
 
 
 def clean_text(txt: Optional[str]) -> str:
@@ -459,17 +460,18 @@ def build_xquik_search_url(
     query: str,
     max_results: int,
     base_url: Optional[str] = None,
+    cursor: str = "",
 ) -> str:
     """Build the Xquik Search Tweets URL."""
     root = (base_url or resolve_xquik_base_url()).rstrip("/")
-    params = urlencode(
-        {
-            "q": query,
-            "queryType": "Latest",
-            "limit": str(max(1, max_results)),
-        }
-    )
-    return f"{root}{_XQUIK_SEARCH_PATH}?{params}"
+    params = {
+        "q": query,
+        "queryType": "Latest",
+        "limit": str(max(1, min(_XQUIK_SEARCH_PAGE_SIZE, max_results))),
+    }
+    if cursor:
+        params["cursor"] = cursor
+    return f"{root}{_XQUIK_SEARCH_PATH}?{urlencode(params)}"
 
 
 def initialize_twitter_client() -> Any:
@@ -638,38 +640,72 @@ def fetch_tweets_xquik(
     key = (api_key or os.getenv("XQUIK_API_KEY") or "").strip()
     if not key:
         raise ValueError("Missing Xquik API key. Set XQUIK_API_KEY.")
+    if max_results <= 0:
+        return []
 
     query = _resolve_search_query(lang, tickers, keywords)
-    url = build_xquik_search_url(query, max_results, base_url)
-    request = Request(
-        url,
-        headers={
-            "Accept": "application/json",
-            "x-api-key": key,
-        },
-    )
     logger.info("Fetching up to %s tweets via Xquik...", max_results)
 
-    response = None
-    try:
-        response = opener(request, timeout=30)
-        payload = response.read()
-        data = json.loads(payload.decode("utf-8"))
-    except (HTTPError, URLError, json.JSONDecodeError) as e:
-        logger.error("Xquik search failed: %s", e)
-        return []
-    finally:
-        if response is not None:
-            close = getattr(response, "close", None)
-            if callable(close):
-                close()
+    records: List[Dict[str, Any]] = []
+    seen: set[int] = set()
+    cursor = ""
 
-    rows = data.get("tweets") if isinstance(data, dict) else None
-    if not isinstance(rows, list):
-        logger.warning("Xquik response did not include a tweets array")
-        return []
+    while len(records) < max_results:
+        remaining = max_results - len(records)
+        url = build_xquik_search_url(
+            query,
+            remaining,
+            base_url,
+            cursor=cursor,
+        )
+        request = Request(
+            url,
+            headers={
+                "Accept": "application/json",
+                "x-api-key": key,
+            },
+        )
 
-    records = [normalize_xquik_tweet(row) for row in rows if isinstance(row, dict)]
+        response = None
+        try:
+            response = opener(request, timeout=30)
+            payload = response.read()
+            data = json.loads(payload.decode("utf-8"))
+        except (HTTPError, URLError, json.JSONDecodeError) as e:
+            logger.error("Xquik search failed: %s", e)
+            break
+        finally:
+            if response is not None:
+                close = getattr(response, "close", None)
+                if callable(close):
+                    close()
+
+        rows = data.get("tweets") if isinstance(data, dict) else None
+        if not isinstance(rows, list):
+            logger.warning("Xquik response did not include a tweets array")
+            break
+
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            record = normalize_xquik_tweet(row)
+            tweet_id = record.get("id")
+            if isinstance(tweet_id, int) and tweet_id not in seen:
+                seen.add(tweet_id)
+                records.append(record)
+                if len(records) >= max_results:
+                    break
+
+        has_next = bool(
+            data.get("has_next_page") or data.get("hasNextPage")
+        ) if isinstance(data, dict) else False
+        next_cursor = (
+            data.get("next_cursor") or data.get("nextCursor")
+        ) if isinstance(data, dict) else ""
+        cursor = next_cursor if isinstance(next_cursor, str) else ""
+        if not has_next or not cursor:
+            break
+
     return _apply_filters(records, min_engagement)
 
 

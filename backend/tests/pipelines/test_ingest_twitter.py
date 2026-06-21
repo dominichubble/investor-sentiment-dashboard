@@ -291,6 +291,60 @@ class TestXquikBackend:
         assert out[0]["id"] == 55
         assert out[0]["author_id"] == "42"
 
+    def test_fetch_tweets_xquik_follows_cursor_pages(self):
+        responses = [
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": str(index),
+                            "text": f"Market likes $AAPL result {index}",
+                            "createdAt": "2026-06-20T12:00:00Z",
+                        }
+                        for index in range(200)
+                    ],
+                    "has_next_page": True,
+                    "next_cursor": "next-page",
+                }
+            ),
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": "200",
+                            "text": "Market likes $AAPL result 200",
+                            "createdAt": "2026-06-20T12:01:00Z",
+                        }
+                    ],
+                    "has_next_page": False,
+                    "next_cursor": "",
+                }
+            ),
+        ]
+        captured_urls = []
+
+        def opener(request, timeout):
+            captured_urls.append(request.full_url)
+            return responses.pop(0)
+
+        out = fetch_tweets_xquik(
+            max_results=250,
+            lang="en",
+            min_engagement=0,
+            tickers=["AAPL"],
+            base_url="https://example.test",
+            api_key="xq_test",
+            opener=opener,
+        )
+
+        first_query = parse_qs(urlparse(captured_urls[0]).query)
+        second_query = parse_qs(urlparse(captured_urls[1]).query)
+        assert first_query["limit"] == ["200"]
+        assert "cursor" not in first_query
+        assert second_query["limit"] == ["50"]
+        assert second_query["cursor"] == ["next-page"]
+        assert len(out) == 201
+
     def test_fetch_tweets_xquik_requires_key(self, monkeypatch):
         monkeypatch.delenv("XQUIK_API_KEY", raising=False)
         with pytest.raises(ValueError, match="XQUIK_API_KEY"):
