@@ -242,6 +242,19 @@ class TestXquikBackend:
         assert out["quote_count"] == 1
         assert out["data_source"] == "twitter"
 
+    def test_normalize_xquik_tweet_uses_stable_fallback_id(self):
+        row = {
+            "text": "Long $NVDA into earnings",
+            "createdAt": "2026-06-20T12:00:00Z",
+            "author": {"id": "user-1"},
+        }
+
+        first = normalize_xquik_tweet(row)
+        second = normalize_xquik_tweet(row)
+
+        assert first["id"] == second["id"]
+        assert first["id"] == 250005204715079
+
     def test_fetch_tweets_xquik_uses_key_and_maps_response(self):
         captured = {}
         response = FakeHttpResponse(
@@ -345,6 +358,50 @@ class TestXquikBackend:
         assert second_query["cursor"] == ["next-page"]
         assert len(out) == 201
 
+    def test_fetch_tweets_xquik_stops_on_repeated_cursor(self):
+        responses = [
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": "1",
+                            "text": "Market likes $AAPL result one",
+                        }
+                    ],
+                    "has_next_page": True,
+                    "next_cursor": "repeated",
+                }
+            ),
+            FakeHttpResponse(
+                {
+                    "tweets": [
+                        {
+                            "id": "2",
+                            "text": "Market likes $AAPL result two",
+                        }
+                    ],
+                    "has_next_page": True,
+                    "next_cursor": "repeated",
+                }
+            ),
+        ]
+
+        def opener(request, timeout):
+            return responses.pop(0)
+
+        out = fetch_tweets_xquik(
+            max_results=5,
+            lang="en",
+            min_engagement=0,
+            tickers=["AAPL"],
+            base_url="https://example.test",
+            api_key="xq_test",
+            opener=opener,
+        )
+
+        assert [row["id"] for row in out] == [1, 2]
+        assert responses == []
+
     def test_fetch_tweets_xquik_requires_key(self, monkeypatch):
         monkeypatch.delenv("XQUIK_API_KEY", raising=False)
         with pytest.raises(ValueError, match="XQUIK_API_KEY"):
@@ -370,13 +427,26 @@ class TestNormalizeCsvFinanceRow:
         assert out["like_count"] == 0
         assert out["data_source"] == "twitter"
 
+    def test_uses_stable_id_for_repeated_imports(self):
+        row = {
+            "Date": "2022-01-01T00:00:00+00:00",
+            "Tweet": "Long $NVDA and $AAPL",
+            "Stock Name": "NVDA",
+        }
+
+        first = normalize_csv_finance_row(row, 1)
+        second = normalize_csv_finance_row(row, 1)
+
+        assert first["id"] == second["id"]
+        assert first["id"] == 227328205859087
+
 
 class TestFetchTweetsCsv:
     def test_reads_rows(self, tmp_path):
         p = tmp_path / "t.csv"
         p.write_text(
             "Date,Tweet,Stock Name\n"
-            "2022-01-01T00:00:00+00:00,\"Hello $TSLA world with enough chars\",TSLA\n",
+            '2022-01-01T00:00:00+00:00,"Hello $TSLA world with enough chars",TSLA\n',
             encoding="utf-8",
         )
         out = fetch_tweets_csv(
@@ -410,6 +480,22 @@ class TestNormalizeSnscrapeTweet:
         assert out["author_id"] == "999"
         assert "2025-06-01" in (out["created_at"] or "")
         assert out["data_source"] == "twitter"
+
+    def test_uses_stable_id_when_source_id_is_missing(self):
+        item = SimpleNamespace(
+            rawContent="Long $NVDA",
+            cashtags=["NVDA"],
+            user=None,
+            date=None,
+            id=None,
+            retweetCount=0,
+            replyCount=0,
+            likeCount=0,
+            quoteCount=0,
+            lang="en",
+        )
+
+        assert normalize_snscrape_tweet(item)["id"] == 247757363543202
 
 
 class TestNormalizeTweet:

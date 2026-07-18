@@ -136,10 +136,8 @@ def _metric(tweet: Dict[str, Any], camel_key: str, snake_key: str) -> int:
     return _to_int(tweet.get(snake_key))
 
 
-def _tweet_id(value: Any) -> int:
+def _stable_int_id(value: Any) -> int:
     """Return a stable integer ID for downstream CSV and DB import."""
-    if value is None:
-        return 0
     try:
         return int(value)
     except (TypeError, ValueError):
@@ -186,21 +184,25 @@ def normalize_tweet(tweet) -> Dict[str, Any]:
 def normalize_xquik_tweet(tweet: Dict[str, Any]) -> Dict[str, Any]:
     """Map an Xquik Search Tweets row into the same dict shape as other backends."""
     raw = str(tweet.get("text") or "")
+    created_at = tweet.get("createdAt") or tweet.get("created_at")
     author = tweet.get("author")
     author_id = None
     if isinstance(author, dict):
         author_id = author.get("id")
     if author_id is None:
         author_id = tweet.get("authorId") or tweet.get("author_id")
+    source_id = tweet.get("id")
+    if source_id is None:
+        source_id = f"{created_at}:{author_id}:{raw}"
 
     return {
-        "id": _tweet_id(tweet.get("id")),
+        "id": _stable_int_id(source_id),
         "data_source": "twitter",
         "text": clean_text(raw),
         "raw_text": raw,
         "hint_tickers": extract_cashtags(raw),
         "author_id": str(author_id) if author_id is not None else None,
-        "created_at": tweet.get("createdAt") or tweet.get("created_at"),
+        "created_at": created_at,
         "retweet_count": _metric(tweet, "retweetCount", "retweet_count"),
         "reply_count": _metric(tweet, "replyCount", "reply_count"),
         "like_count": _metric(tweet, "likeCount", "like_count"),
@@ -272,10 +274,8 @@ def normalize_snscrape_tweet(tweet: Any) -> Dict[str, Any]:
     created_at = created.isoformat() if created is not None else None
 
     tid = getattr(tweet, "id", None)
-    try:
-        id_int = int(tid) if tid is not None else 0
-    except (TypeError, ValueError):
-        id_int = abs(hash(str(tid))) % (10**12)
+    id_source = tid if tid is not None else f"{created_at}:{author_id}:{raw}"
+    id_int = _stable_int_id(id_source)
 
     return {
         "id": id_int,
@@ -304,7 +304,7 @@ def normalize_csv_finance_row(row: Dict[str, str], seq: int) -> Dict[str, Any]:
     if sym:
         hints = [sym] + [h for h in hints if h != sym]
     id_src = f"{row.get('Date', '')}:{raw[:240]}:{seq}"
-    id_int = abs(hash(id_src)) % (10**12) or seq
+    id_int = _stable_int_id(id_src)
 
     return {
         "id": id_int,
@@ -414,7 +414,9 @@ def _resolve_search_query(
     return q
 
 
-def _apply_filters(records: List[Dict[str, Any]], min_engagement: int) -> List[Dict[str, Any]]:
+def _apply_filters(
+    records: List[Dict[str, Any]], min_engagement: int
+) -> List[Dict[str, Any]]:
     logger.info("Fetched %d raw tweets", len(records))
     logger.info("Applying light quality filters...")
     filtered_spam = filter_low_quality_tweets(records)
@@ -430,7 +432,9 @@ def _apply_filters(records: List[Dict[str, Any]], min_engagement: int) -> List[D
 
 def resolve_ingest_backend(explicit: Optional[str] = None) -> str:
     """Return ``snscrape``, ``api``, ``csv``, ``xquik``, or ``auto`` (normalized)."""
-    raw = (explicit or os.getenv("TWITTER_INGEST_BACKEND") or "snscrape").strip().lower()
+    raw = (
+        (explicit or os.getenv("TWITTER_INGEST_BACKEND") or "snscrape").strip().lower()
+    )
     if raw in ("api", "official", "twitter_api", "tweepy"):
         return "api"
     if raw in ("csv", "file", "local", "dataset"):
@@ -648,6 +652,7 @@ def fetch_tweets_xquik(
 
     records: List[Dict[str, Any]] = []
     seen: set[int] = set()
+    seen_cursors: set[str] = set()
     cursor = ""
 
     while len(records) < max_results:
@@ -696,15 +701,23 @@ def fetch_tweets_xquik(
                 if len(records) >= max_results:
                     break
 
-        has_next = bool(
-            data.get("has_next_page") or data.get("hasNextPage")
-        ) if isinstance(data, dict) else False
+        has_next = (
+            bool(data.get("has_next_page") or data.get("hasNextPage"))
+            if isinstance(data, dict)
+            else False
+        )
         next_cursor = (
-            data.get("next_cursor") or data.get("nextCursor")
-        ) if isinstance(data, dict) else ""
+            (data.get("next_cursor") or data.get("nextCursor"))
+            if isinstance(data, dict)
+            else ""
+        )
         cursor = next_cursor if isinstance(next_cursor, str) else ""
         if not has_next or not cursor:
             break
+        if cursor in seen_cursors:
+            logger.warning("Xquik response repeated a pagination cursor")
+            break
+        seen_cursors.add(cursor)
 
     return _apply_filters(records, min_engagement)
 
