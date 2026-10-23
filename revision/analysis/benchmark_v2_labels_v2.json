@@ -1,0 +1,1467 @@
+{
+ "meta": {
+  "labeller": "Claude (claude-opus-5-5), in-context",
+  "rubric": "v2",
+  "rubric_file": "analysis/LABELLING_RUBRIC_v2.md",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "benchmark_file": "analysis/benchmark_v2_final.json",
+  "benchmark_sha256": "22e42d9c32c13f25558af725d14bd8bbe346326524f2568a93fce0de67ce5ee8",
+  "date": "2026-10-20",
+  "n_items": 359,
+  "fields_shown_to_labeller": [
+   "item",
+   "channel",
+   "ticker",
+   "text"
+  ],
+  "blindness": "Labelled blind to Dom check #1 and check #2 labels (neither file opened before this file was saved), to FinBERT outputs, and to the item kind (random/top-up/replacement). v1 labels were hidden from the labelling view; disclosure: the v1 labels of b2_000-b2_027 were seen once in a file-format check before labelling.",
+  "tuning_caveat": "Rubric v2 was written from the disagreements in Dom check #1 (items in analysis/labels/dom_check_items.json) and cites 30+ of those items as worked examples; agreement with check #1 under v2 is therefore optimistic. Check #2 (analysis/labels/dom_check2_items.json) was not used to write v2 and gives the unbiased figure.",
+  "low_information": "R6 factual filler (holdings lists, transcripts, event notices, how-to, roundups with no direction)"
+ },
+ "labels": {
+  "b2_000": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_001": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_002": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_003": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_004": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_005": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_006": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_007": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_008": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_009": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_010": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_011": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_012": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_013": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_014": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_015": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_016": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_017": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_018": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_019": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_020": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_021": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_022": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_023": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_024": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_025": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_026": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_027": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_028": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_029": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_030": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_031": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_032": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_033": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_034": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_036": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_037": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_038": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_039": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_040": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_041": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_042": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_043": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_044": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_045": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_046": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_047": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_048": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_049": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_050": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_051": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_052": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_053": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_054": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_055": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_056": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_057": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_058": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_060": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_061": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_062": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_063": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_064": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_066": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_067": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_068": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_070": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_071": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_072": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_073": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_074": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_075": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_076": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_077": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_078": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_079": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_080": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_081": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_082": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_083": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_084": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_085": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_086": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_087": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_088": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_089": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_090": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_091": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_092": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_093": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_094": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_095": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_096": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_097": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_098": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_099": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_100": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_101": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_102": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_103": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_104": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_105": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_106": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_107": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_108": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_109": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_111": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_112": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_113": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_114": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_115": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_116": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_117": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_118": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_119": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_120": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_121": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_122": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_123": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_124": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_125": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_126": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_127": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_128": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_129": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_130": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_131": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_132": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_133": {
+   "label": "exclude",
+   "low_information": false
+  },
+  "b2_134": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_135": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_136": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_137": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_138": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_139": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_140": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_141": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_142": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_143": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_144": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_145": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_146": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_147": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_148": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_150": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_151": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_152": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_153": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_154": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_155": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_156": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_157": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_158": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_159": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_160": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_161": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_162": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_164": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_165": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_166": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_167": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_168": {
+   "label": "exclude",
+   "low_information": false
+  },
+  "b2_169": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_171": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_172": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_173": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_175": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_176": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_178": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_179": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_180": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_181": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_182": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_183": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_184": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_185": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_186": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_187": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_188": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_189": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_190": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_191": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_192": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_193": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_194": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_195": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_196": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_197": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_198": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_199": {
+   "label": "exclude",
+   "low_information": false
+  },
+  "b2_200": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_201": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_202": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_203": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_204": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_205": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_206": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_207": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_208": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_209": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_210": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_211": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_212": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_213": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_214": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_215": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_216": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_217": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_218": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_219": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_220": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_221": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_222": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_223": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_225": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_226": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_227": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_228": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_229": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_230": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_231": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_233": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_234": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_235": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_236": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_237": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_238": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_239": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_240": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_241": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_242": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_243": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_244": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_245": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_246": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_247": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_248": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_249": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_250": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_251": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_252": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_253": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_254": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_255": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_256": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_257": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_260": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_261": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_262": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_263": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_264": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_265": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_266": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_267": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_268": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_270": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_271": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_272": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_273": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_274": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_275": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_276": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_277": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_278": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_279": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_280": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_281": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_282": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_283": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_284": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_285": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_286": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_287": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_288": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_289": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_290": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_291": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_292": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_293": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_294": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_295": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_296": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_297": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_299": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_300": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_302": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_303": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_304": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_305": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_306": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_307": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_308": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_309": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_310": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_311": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_312": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_313": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_314": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_315": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_316": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_317": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_318": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_319": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_320": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_321": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_322": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_323": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_324": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_325": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_326": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_327": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_328": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_329": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_330": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_331": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_332": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_333": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_334": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_335": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_336": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_337": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_338": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_339": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_340": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_341": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_342": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_343": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_344": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_345": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_346": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_347": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_348": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_349": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_350": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_351": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_352": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_353": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_354": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_355": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_356": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_357": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_358": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_359": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_360": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_361": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_362": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_363": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_364": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_365": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_366": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_367": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_368": {
+   "label": "neutral",
+   "low_information": false
+  },
+  "b2_369": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_370": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_371": {
+   "label": "negative",
+   "low_information": false
+  },
+  "b2_372": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_373": {
+   "label": "positive",
+   "low_information": false
+  },
+  "b2_374": {
+   "label": "neutral",
+   "low_information": true
+  },
+  "b2_375": {
+   "label": "positive",
+   "low_information": false
+  }
+ },
+ "notes": {
+  "b2_133": "R7 bare mention list (\"Watching $QQQ $RBLX ... today!\"); flagged for Dom at Checkpoint A",
+  "b2_168": "R7 thread header (\"Sneak Peek - 4 weekly charts ... follow the thread\"); flagged for Dom at Checkpoint A",
+  "b2_199": "R7 bare mention list (\"Heavy Volume high: $VG, $VERU, ...\"); flagged for Dom at Checkpoint A",
+  "b2_154": "borderline R7; kept as R6 scheduled-event notice (earnings-calendar list)",
+  "b2_256": "borderline: bearish VXX position vs stated risk of VXX staying elevated; mixed -> neutral",
+  "b2_024": "rubric v2 worked example (R2 -> negative)"
+ }
+}

@@ -1,0 +1,16 @@
+{
+  "updated": "2026-10-23",
+  "files_sha256": {
+    "tasks/todo.md": "8c5bd7a5fe08dd15eabaa76f5d70bebf2ffb2925365abb229a88d3305a303622",
+    "tasks/plan.md": "2b83e19bb765b1da3cb72e1779ad153fbdd6ff4d86e84c7cb61ad6412e9414ad",
+    "analysis/benchmark_v2_final.json": "22e42d9c32c13f25558af725d14bd8bbe346326524f2568a93fce0de67ce5ee8",
+    "analysis/benchmark_v2_labels_v2.json": "ec01c024d2b2c36e78cf4ba9032d0df57ae2dad9c05a8a0e6eae37d90b3071c7",
+    "analysis/benchmark_v2_frozen.json": "f6be08fced2b15be75f0b594e81c28eedd94b2bd12a6e7a61a669b6708d82008",
+    "analysis/CHECKPOINT_A_APPROVAL.md": "901bbbb88407716e9cd0224155f8721bf14eb4a83312fcec2a721bd8215ae90b",
+    "analysis/LABELLING_RUBRIC.md": "c520c9e3c636f93352e728bd753a681e386705037b722f8fbcd2928877cf1c99",
+    "analysis/LABELLING_RUBRIC_v2.md": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+    "analysis/score_kappa.py": "e59d64a7af111662fc961939bbeef21e8ac4b60e80e0a07e1d6fa40c450d3e16",
+    "analysis/scores/check1_v1_v2.json": "504ff05415a973ccb99da2570d081551fd1f88e02105e21ca4ac7fb064a92857",
+    "analysis/scores/check2_v1_v2.json": "739a7c933bcf6df271e1151414a7e465887d5ff8dbe715ec9cc7bfc262c7c34c"
+  }
+}

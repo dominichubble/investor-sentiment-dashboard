@@ -1,0 +1,113 @@
+{
+ "check_file": "analysis/dom_label_check_2_completed.csv",
+ "check_sha256": "b18d533e22c5f68681aa0c8b030808964c4014d6c7679bbab3c9b8924bc52f8e",
+ "n_items": 50,
+ "check_label_counts": {
+  "negative": 10,
+  "neutral": 12,
+  "positive": 9,
+  "exclude": 19
+ },
+ "v1": {
+  "n_scored": 31,
+  "agreement": 0.871,
+  "kappa": 0.805,
+  "kappa_ci95": [
+   0.608,
+   0.951
+  ],
+  "excluded_by_check": 19,
+  "excluded_by_llm": 0,
+  "confusion_rows_check_cols_llm": {
+   "positive": {
+    "positive": 8,
+    "neutral": 1,
+    "negative": 0
+   },
+   "neutral": {
+    "positive": 1,
+    "neutral": 10,
+    "negative": 1
+   },
+   "negative": {
+    "positive": 0,
+    "neutral": 1,
+    "negative": 9
+   }
+  },
+  "disagreements": [
+   {
+    "item": "b2_351",
+    "check": "negative",
+    "llm": "neutral"
+   },
+   {
+    "item": "b2_125",
+    "check": "neutral",
+    "llm": "positive"
+   },
+   {
+    "item": "b2_106",
+    "check": "positive",
+    "llm": "neutral"
+   },
+   {
+    "item": "b2_364",
+    "check": "neutral",
+    "llm": "negative"
+   }
+  ]
+ },
+ "v2": {
+  "n_scored": 31,
+  "agreement": 0.871,
+  "kappa": 0.8075,
+  "kappa_ci95": [
+   0.61,
+   0.951
+  ],
+  "excluded_by_check": 19,
+  "excluded_by_llm": 1,
+  "confusion_rows_check_cols_llm": {
+   "positive": {
+    "positive": 9,
+    "neutral": 0,
+    "negative": 0
+   },
+   "neutral": {
+    "positive": 1,
+    "neutral": 9,
+    "negative": 2
+   },
+   "negative": {
+    "positive": 1,
+    "neutral": 0,
+    "negative": 9
+   }
+  },
+  "disagreements": [
+   {
+    "item": "b2_351",
+    "check": "negative",
+    "llm": "positive"
+   },
+   {
+    "item": "b2_125",
+    "check": "neutral",
+    "llm": "positive"
+   },
+   {
+    "item": "b2_364",
+    "check": "neutral",
+    "llm": "negative"
+   },
+   {
+    "item": "b2_302",
+    "check": "neutral",
+    "llm": "negative"
+   }
+  ]
+ },
+ "v2_labeller": "Claude (claude-opus-5-5), in-context",
+ "v2_sha256": "ec01c024d2b2c36e78cf4ba9032d0df57ae2dad9c05a8a0e6eae37d90b3071c7"
+}
