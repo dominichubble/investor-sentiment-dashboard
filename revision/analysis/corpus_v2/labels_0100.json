@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context manual model judgement of each full text",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "a3fe590e074074bbf631177c06bab5c54fd71ac2b2bdca568242cd6a07669fe8",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0100": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Bubble and downturn concern dominates."
+  },
+  "c2_0101": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Explicit price decline."
+  },
+  "c2_0102": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Strong revenue balanced with layoffs and compensation concerns."
+  },
+  "c2_0103": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Mixed sector directions."
+  },
+  "c2_0104": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Falling Bitcoin and liquidations."
+  },
+  "c2_0105": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Explicit bearish spreads."
+  },
+  "c2_0106": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Derogatory asset assessment."
+  },
+  "c2_0107": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "Reaction without interpretable direction or facts."
+  },
+  "c2_0108": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Puts and skeptical outlook dominate."
+  },
+  "c2_0109": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Support level without direction."
+  },
+  "c2_0110": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Options mechanics question without asset thesis."
+  },
+  "c2_0111": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Endorses long-term purchase."
+  },
+  "c2_0112": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Increased bid benefits acquisition target."
+  },
+  "c2_0113": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Weakness and downside forecast."
+  },
+  "c2_0114": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish breakout and successful upside targets."
+  },
+  "c2_0115": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "References absent newsletter without substantive content."
+  },
+  "c2_0116": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit bullish divergence."
+  },
+  "c2_0117": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Reversal direction unspecified."
+  },
+  "c2_0118": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Share holdings gained during rally."
+  },
+  "c2_0119": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Current rejection dominates prior bullish pattern."
+  },
+  "c2_0120": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Large trade without direction."
+  },
+  "c2_0121": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit bullish chart."
+  },
+  "c2_0122": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Losing long position and averaging down."
+  },
+  "c2_0123": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Mixed index performance."
+  },
+  "c2_0124": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Geopolitical question without asset impact."
+  },
+  "c2_0125": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Profitable bullish shares and calls."
+  },
+  "c2_0126": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Relative strength and bullish continuation setup."
+  },
+  "c2_0127": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Accumulation endorsement."
+  },
+  "c2_0128": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish holding through product release."
+  },
+  "c2_0129": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Price breakout and bullish put-selling gains."
+  },
+  "c2_0130": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable deal and missed share upside."
+  },
+  "c2_0131": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "Earnings notice without direction."
+  },
+  "c2_0132": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal wallet issue without asset direction."
+  },
+  "c2_0133": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Political criticism and volume without price direction."
+  },
+  "c2_0134": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Downtrend concern balanced with dismissal and consolidation."
+  },
+  "c2_0135": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit bullish breakout."
+  },
+  "c2_0136": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable regulatory relief dominates caveat."
+  },
+  "c2_0137": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Procedural spread-rolling question."
+  },
+  "c2_0138": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Book-recommendation joke without asset thesis."
+  },
+  "c2_0139": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Balanced conditional support and resistance scenarios."
+  },
+  "c2_0140": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Expects upside breakout."
+  },
+  "c2_0141": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "New high and favourable prospects."
+  },
+  "c2_0142": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "Company-profile headline without direction."
+  },
+  "c2_0143": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Selloff and worst performance."
+  },
+  "c2_0144": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "Earnings-call transcript R6."
+  },
+  "c2_0145": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Bare launch with competition caveat R5."
+  },
+  "c2_0146": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Hypothetical token question."
+  },
+  "c2_0147": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Current rejection and skeptical assessment."
+  },
+  "c2_0148": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Gross-margin decline forecast."
+  },
+  "c2_0149": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Large medium-term selloff dominates initial bounce."
+  }
+ }
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context manual model judgement of each full text",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-21",
+  "input_sha256": "6b71a42c525bf6d42c6d68e10a53fda4131372c118926fb9a8b8d268eb3b3dd5",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0050": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Forecast smartphone market growth."
+  },
+  "c2_0051": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable shorts and added bearish position R1."
+  },
+  "c2_0052": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Expects robust earnings from AI spending."
+  },
+  "c2_0053": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reports upward move and bounce."
+  },
+  "c2_0054": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Explicit bearish support breakdown."
+  },
+  "c2_0055": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Reported oil decline conflicts with stated upward expectation."
+  },
+  "c2_0056": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish squeeze narrative portraying bears under pressure."
+  },
+  "c2_0057": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reports increasing relative strength across sectors."
+  },
+  "c2_0058": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal investing-strategy request."
+  },
+  "c2_0059": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Reports relative-strength deterioration across sectors."
+  },
+  "c2_0060": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Frames Bitcoin as superior safe haven despite flat price."
+  },
+  "c2_0061": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Higher copper prices framed as company opportunity."
+  },
+  "c2_0062": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Tightening pattern without explicit breakout direction."
+  },
+  "c2_0063": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Apple rally and new index highs."
+  },
+  "c2_0064": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Rejection signals adverse momentum shift."
+  },
+  "c2_0065": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Share fall and leadership conduct concerns."
+  },
+  "c2_0066": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Recent rally balanced with correction expectation."
+  },
+  "c2_0067": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal position losses without identifiable asset direction R1."
+  },
+  "c2_0068": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Price level alone without direction."
+  },
+  "c2_0069": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit favourable endorsement of new initiative."
+  },
+  "c2_0070": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Coinbase product functionality blocked."
+  },
+  "c2_0071": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Failed rallies balanced with improving technical indicators."
+  },
+  "c2_0072": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Short-float and level test without explicit direction."
+  },
+  "c2_0073": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Names demand zone without direction."
+  },
+  "c2_0074": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "New service expands access and benefits customers."
+  },
+  "c2_0075": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish double-bottom formation approaching completion."
+  },
+  "c2_0076": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Commercial partnership expands product distribution."
+  },
+  "c2_0077": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal spread PnL and volatile trading without net asset view."
+  },
+  "c2_0078": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bounce and further upside setups."
+  },
+  "c2_0079": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profits from bearish short positions R1."
+  },
+  "c2_0080": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Asks for transaction app recommendation."
+  },
+  "c2_0081": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Closing highs and higher after-hours target."
+  },
+  "c2_0082": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Net skeptical assessment of Robinhood service R3."
+  },
+  "c2_0083": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Balanced earnings rally-versus-pullback question."
+  },
+  "c2_0084": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable puts and further downside forecast."
+  },
+  "c2_0085": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Trading educator criticism without an asset-value claim."
+  },
+  "c2_0086": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Falling inverted SPY chart implies rising underlying SPY."
+  },
+  "c2_0087": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Rapid move reported without its direction."
+  },
+  "c2_0088": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal retirement-allocation question."
+  },
+  "c2_0089": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reports strong recovery and gains."
+  },
+  "c2_0090": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Sarcastic quotation skeptically frames bullish market narrative R3."
+  },
+  "c2_0091": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal options-account losses without asset direction R1."
+  },
+  "c2_0092": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Favourable clinical results balanced with price fall and weak earnings."
+  },
+  "c2_0093": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable high-volume buy and retest setup."
+  },
+  "c2_0094": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Anticipates bullish squeeze conditional on macro news."
+  },
+  "c2_0095": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Requests ideas with balanced call interest and flat-price risk."
+  },
+  "c2_0096": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Skeptical mania and leverage-risk framing R3."
+  },
+  "c2_0097": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Forecasts higher VERB price."
+  },
+  "c2_0098": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable conditional upside breakout."
+  },
+  "c2_0099": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit favourable chart assessment."
+  }
+ }
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context manual model judgement of each full text",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-21",
+  "input_sha256": "c3b53832ddf9a601cf00cac99b95ceb1a0a66b16aaf61cc492b8b399285d9df5",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0000": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reports a 30 percent asset price rise."
+  },
+  "c2_0001": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Anticipates reversal and strong upward wave."
+  },
+  "c2_0002": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable bearish SPY puts and downward outlook R1."
+  },
+  "c2_0003": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Stock recovery and oil retreat give mixed asset directions."
+  },
+  "c2_0004": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Explicit weak outlook and lower price target."
+  },
+  "c2_0005": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Mining ban is adverse policy for crypto activity."
+  },
+  "c2_0006": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Strong construction with upside price target."
+  },
+  "c2_0007": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicitly extremely bullish on Google."
+  },
+  "c2_0008": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Gains from Google puts imply bearish asset direction R1."
+  },
+  "c2_0009": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Asks about staking distribution without directional view."
+  },
+  "c2_0010": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Recommends buying pullbacks."
+  },
+  "c2_0011": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit bullish strength and valuation upside."
+  },
+  "c2_0012": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "AWS misses and further spending compression."
+  },
+  "c2_0013": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Explicit bearish throwback."
+  },
+  "c2_0014": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Conditional calls and puts balanced without net direction."
+  },
+  "c2_0015": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Profitable bullish calls across three assets R1."
+  },
+  "c2_0016": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Procedural question about selling options without asset forecast."
+  },
+  "c2_0017": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal insurance question without stated asset-value effect."
+  },
+  "c2_0018": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Floats an upside all-time-high target."
+  },
+  "c2_0019": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable index inclusion announcement."
+  },
+  "c2_0020": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Requests portfolio advice without net asset view."
+  },
+  "c2_0021": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Expects a lower bottom test."
+  },
+  "c2_0022": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Personal account-fee complaint rather than asset direction."
+  },
+  "c2_0023": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Suggests shorting on diminished product demand."
+  },
+  "c2_0024": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Anticipates bounce despite risk caveat."
+  },
+  "c2_0025": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Price below multiple supports."
+  },
+  "c2_0026": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Describes consolidation on support without directional forecast."
+  },
+  "c2_0027": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Portfolio allocation question without a net directional thesis."
+  },
+  "c2_0028": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable Netflix short and skeptical thesis R1."
+  },
+  "c2_0029": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Lists levels and required support without clear net direction."
+  },
+  "c2_0030": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "Generic government-borrowing quotation."
+  },
+  "c2_0031": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Current update expects lower demand test and downside targets."
+  },
+  "c2_0032": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Overweight rating and increased price target."
+  },
+  "c2_0033": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Four downgrades or cuts dominate one raised target R5."
+  },
+  "c2_0034": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Reports share decline despite rebound question."
+  },
+  "c2_0035": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Higher target and favourable investment thesis."
+  },
+  "c2_0036": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Rejects longs and seeks shorts on GBP."
+  },
+  "c2_0037": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "Factual fund-holdings list R6."
+  },
+  "c2_0038": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Seized-coin holdings update without stated market impact."
+  },
+  "c2_0039": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bounce and conditional bullish breakout."
+  },
+  "c2_0040": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Risk-allocation advice question without asset thesis."
+  },
+  "c2_0041": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Options gains without call or put direction R1."
+  },
+  "c2_0042": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Requests ETF selection under sector-employment scenario."
+  },
+  "c2_0043": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Favourable bounce and risk-reward assessment."
+  },
+  "c2_0044": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Well-positioned company and long-term buying thesis."
+  },
+  "c2_0045": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Positive RBLX endorsement and profit-taking context."
+  },
+  "c2_0046": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Explicit undervaluation and expected upside run."
+  },
+  "c2_0047": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Identifies demand zone and average without direction."
+  },
+  "c2_0048": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Net-interest-income miss with other metric in line."
+  },
+  "c2_0049": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Growth and earnings beats with strong guidance."
+  }
+ }
+}

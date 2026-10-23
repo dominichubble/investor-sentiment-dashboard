@@ -39,6 +39,10 @@
     "analysis/corpus_v2/blind_0900.json": "52ad9772dfcf1e7ad3144ab6d69a2f3c10c535c0259990f2e7cc6e3e60a45dd0",
     "analysis/corpus_v2/blind_0950.json": "3d64a9d04e24567a7af6d05700979972e9815e487298465eae32465ddb891cbc",
     "analysis/corpus_v2/blind_1000.json": "57c23d37b9b0312af18147d2bbf27c9f3fa1cf1db63c8d53a03d4ffcadcc6e98",
-    "analysis/corpus_v2/blind_1050.json": "39b88871eede1411f4db65433113567552c23f05127ac2dbe2680a3889cbdf61"
+    "analysis/corpus_v2/blind_1050.json": "39b88871eede1411f4db65433113567552c23f05127ac2dbe2680a3889cbdf61",
+    "analysis/save_corpus_labels.py": "0655f3c9e758168d614073d0566f0ae037fc4c57ca6e718c22882fb9a2c08395",
+    "analysis/corpus_v2/labels_0000.json": "be889eb6f06e66018853ec2e2351a14bd7ae6cb82d4a07c6085dff3e81eb3c2e",
+    "analysis/corpus_v2/labels_0050.json": "068babdf944c5922ed950677b69bb9805187bd98abb46181a4382afa22d7dbb2",
+    "analysis/corpus_v2/labels_0100.json": "bef394299fc34d420dee2897346b889d3488181f4715cc4f02f73b580224c123"
   }
 }
