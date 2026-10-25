@@ -1,6 +1,6 @@
 {
  "meta": {
-  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "labeller": "OpenAI gpt-6.1-sol (gpt-6.1-sol)",
   "reasoning_effort": "high",
   "method": "in-context manual model judgement of each full text",
   "rubric": "v2",

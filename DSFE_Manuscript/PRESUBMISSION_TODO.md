@@ -11,14 +11,14 @@ Line numbers refer to /workspace/dsfe/aims_october/DFSE_Lynch.tex.
 - [x] 6. Reword or remove the "Also outstanding" footer in the response table. -- Done: footer removed.
 - [x] 7. The reproducibility paragraph (l.890-905) should mention the Twitter-RoBERTa, LIME v2 and partial_items scripts. -- Done: sentence added at l.908-912 (plus the enrichment rerun script).
 - [ ] 8. Commit the work done since 479ff47 (only on Dom's go-ahead) and sync the box and Mac copies.
-- [ ] 9. Dom confirms the AI declaration items: Claude for the benchmark, the 2,300 pool, no overrides recorded, the AI coding/editing sentence.
-- [ ] 10. labels_0100.json metadata says Astra but the batch was Sol: fix it (with OK) or leave it with the README caveat.
-- [ ] 11. Check whether the alphabetical news tickers are an artefact (tab:source, about l.652).
-- [ ] 12. The rebuttal says explicitly that R1-3 is only partly addressed.
+- [x] 9. Dom confirms the AI declaration items: Claude for the benchmark, the 2,300 pool, no overrides recorded, the AI coding/editing sentence. -- Confirmed by Dom 25 Oct 17:26 GMT; wording unchanged.
+- [x] 10. labels_0100.json metadata says Astra but the batch was Sol: fix it (with OK) or leave it with the README caveat. -- Done 25 Oct 17:28 GMT: labeller field set to gpt-6.1-sol; labels unchanged.
+- [x] 11. Check whether the alphabetical news tickers are an artefact (tab:source, about l.652). -- Decided by Dom 25 Oct 17:33 GMT: checked (confirmed alphabetical-ingest artefact), no caveat added, figures unchanged, no re-scrape or rebuild.
+- [ ] 12. The rebuttal says explicitly that R1-3 is only partly addressed. -- Response table already says "Partly addressed". Dom wants Stephen's editor/cover letter to say R1-3 is only partly addressed, matching the response table and rebuttal (tell Stephen when sending; not sent yet).
 - [x] 13. Remove the uncited fleiss1971 and landis1977 references, or cite Landis & Koch at about l.818. -- Done: landis1977 cited at l.822; fleiss1971 bibitem removed.
 ## Nice to have
 - [x] 14. Unify the LIME figure title (97%) with the caption (96.9%). -- Done: plots redrawn from lime_v2.json with 1-dp titles (96.9%; pos 95.0%, neu 55.9%). LIME not rerun.
-- [ ] 15. Confirm the Guangzhou University APC line (l.940).
+- [ ] 15. Confirm the Guangzhou University APC line (l.947). -- PARKED 25 Oct 17:34 GMT: Dom hasn't confirmed whether Guangzhou University is paying the APC. Revisit before submission (check with Stephen or remove). Line unchanged for now.
 - [ ] 16. Optionally mention Twitter-RoBERTa in the contributions (l.120-145).
 
 ## Done

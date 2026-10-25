@@ -1,7 +1,7 @@
 \documentclass{aims}
 %DIF LATEXDIFF DIFFERENCE FILE
 %DIF DEL DFSE_Lynch_original.tex   Sat Oct 24 11:29:48 2026
-%DIF ADD DFSE_Lynch.tex            Sun Oct 25 17:11:18 2026
+%DIF ADD DFSE_Lynch.tex            Sun Oct 25 18:15:28 2026
 
 
 \usepackage{txfonts}
@@ -568,7 +568,7 @@ split }\DIFaddend 90/10 \DIFdelbegin \DIFdel{train/validation split and a fixed 
 }\DIFaddend seed. Training \DIFdelbegin \DIFdel{completed in approximately six
 minutes on a single consumer GPU. The fine-tuned model was then re-evaluated against
 the }\emph{\DIFdel{unchanged}} %DIFAUXCMD
-\DIFdel{200-sample benchmark. This is deliberately framed as a small, falsifiable test of whether the diagnosed failure is addressable, not as an attempt
+\DIFdel{200-sample benchmark . This is deliberately framed as a small, falsifiable test of whether the diagnosed failure is addressable, not as an attempt
 to ship a new state-of-the-art classifier. A multi-seed,cross-validated extension
 of this protocol is provided as reproducible code (Section~\ref{sec:reprod})}\DIFdelend \DIFaddbegin \DIFadd{used AdamW (learning rate $2\times10^{-5}$, weight decay 0.01, not
 applied to bias and layer-normalisation parameters), a linear schedule with
@@ -897,7 +897,9 @@ misclassifies (illustrative). Stock FinBERT assigned 55.9\% probability to
 \subsection{Fine-tuning arms on the benchmark}
 \DIFadd{Table~\ref{tab:armres} summarises the 15 }\DIFaddend fine-tuning \DIFdelbegin \DIFdel{on the disjoint
 300-sample neutral-loaded corpus, re-evaluated on the unchanged benchmark. Neutral
-recall improves by 18.4 percentage points (53.3\%$\rightarrow$ 71.7\% )}\DIFdelend \DIFaddbegin \DIFadd{runs. All three arms raise
+recall improves by 18.4 percentage points (53.3\%$\rightarrow$ 71.7\% ), the precise
+effect the diagnosis predicted; neutral precision falls modestly (97.0\%
+$\rightarrow$ 91.8\% )}\DIFdelend \DIFaddbegin \DIFadd{runs. All three arms raise
 macro-F1 above stock FinBERT (49.8\%): to 59.1\% for the lexicon-loaded arm (a),
 60.7\% for the random-neutral arm (b) and 53.4\% for the mixed arm (c), averaged over
 five seeds. The gains come from the polarised classes. Every arm raises positive and
@@ -909,7 +911,10 @@ is also the least stable across seeds (macro-F1 standard deviation 3.7 points).
 The off-the-shelf Twitter-RoBERTa baseline (56.8\%) does not beat the two best
 fine-tuned arms: it is 2.3 points below arm (a) and 3.9 points below arm (b), and 3.4
 points above arm (c), but none of these differences is statistically distinguishable
-(95\% CIs $[-8.8, +4.2]$, $[-10.1, +2.3]$ and $[-3.2, +10.1]$; Holm $p = 0.67$ for each;
+(95\% CIs $[-8.8, +4.2]$}\DIFaddend , \DIFdelbegin \DIFdel{as expected when the model is encouraged to predict neutral
+more often, but neutral F1 nonetheless rises by 11.7 points. Overall accuracy
+increases to 86.5\%}\DIFdelend \DIFaddbegin \DIFadd{$[-10.1, +2.3]$ }\DIFaddend and \DIFdelbegin \DIFdel{macro F1 to 85.2\%, and polarised-class F1 is preserved (both
+within 0.5 points of }\DIFdelend \DIFaddbegin \DIFadd{$[-3.2, +10.1]$; Holm $p = 0.67$ for each;
 Table~\ref{tab:boot}). Domain fine-tuning of FinBERT therefore matches, but is not
 shown to exceed, a general social-media sentiment model.
 }
@@ -935,19 +940,14 @@ Twitter-RoBERTa & 56.8\% & 59.2\% & 45.1\% & 40.7\% & 83.0\% \\
 \end{tabular}
 \end{table}
 
-\DIFadd{Table~\ref{tab:boot} gives the paired comparisons. Against stock FinBERT, the
-item-level bootstrap supports gains for arm (a) ($+9.3$ points of macro-F1}\DIFaddend , \DIFdelbegin \DIFdel{the precise
-effect the diagnosis predicted; neutral precision falls modestly (97.0\%
-$\rightarrow$ 91.8\% )}\DIFdelend \DIFaddbegin \DIFadd{95\% CI
-$[+3.7, +15.1]$}\DIFaddend , \DIFdelbegin \DIFdel{as expected when the model is encouraged to predict neutral
-more often, but neutral F1 nonetheless rises by 11.7 points. Overall accuracy
-increases to 86.5\%and macro F1 to 85.2\% }\DIFdelend \DIFaddbegin \DIFadd{Holm-adjusted $p = 0.004$) and arm (b) ($+11.0$ points,
-$[+5.6, +16.5]$}\DIFaddend , \DIFdelbegin \DIFdel{and polarised-class F1 is preserved (both
-within 0.5 points of the stock model) }\DIFdelend \DIFaddbegin \DIFadd{Holm-adjusted $p < 0.001$), but not for arm (c) ($+3.6$ points,
-$[-2.6, +10.0]$}\DIFaddend , \DIFdelbegin \DIFdel{confirming the intervention does not
-simply
+\DIFadd{Table~\ref{tab:boot} gives the paired comparisons. Against stock FinBERT, }\DIFaddend the
+\DIFdelbegin \DIFdel{stock model), confirming the
+intervention does not simply
 trade one class error for another. The diagnosed failure mode is therefore
-demonstrably addressable with asmall, targeted dataset}\DIFdelend \DIFaddbegin \DIFadd{Holm-adjusted $p = 0.51$). The central comparison for the LIME
+demonstrably addressable with a small, targeted dataset}\DIFdelend \DIFaddbegin \DIFadd{item-level bootstrap supports gains for arm (a) ($+9.3$ points of macro-F1, 95\% CI
+$[+3.7, +15.1]$, Holm-adjusted $p = 0.004$) and arm (b) ($+11.0$ points,
+$[+5.6, +16.5]$, Holm-adjusted $p < 0.001$), but not for arm (c) ($+3.6$ points,
+$[-2.6, +10.0]$, Holm-adjusted $p = 0.51$). The central comparison for the LIME
 hypothesis, lexicon-loaded versus random neutrals, shows no advantage for lexical
 targeting: arm (a) is 1.6 points }\emph{\DIFadd{below}} \DIFadd{arm (b) ($[-5.0, +1.7]$,
 Holm-adjusted $p = 0.51$; seed-paired $t$-test $p = 0.20$, Wilcoxon $p = 0.31$). Both
@@ -958,16 +958,28 @@ before correction, the minimum attainable with five seeds). At the level of sing
 runs, exact McNemar tests against stock reach uncorrected $p < 0.05$ in all five arm
 (b) runs and one arm (a) run, and in no arm (c) run; after Holm correction across the
 15 runs only one (arm (b), seed 21; adjusted $p = 0.019$) remains below 0.05. Gains
-are thus clearer when seeds are pooled than for any individual run.
-}
+are thus clearer when seeds are pooled than for any individual run}\DIFaddend .
 
 \begin{table}[ht]
 \centering
-\caption{\DIFaddFL{Item-level paired bootstrap of seed-averaged macro-F1 on the benchmark
-($B = 10{,}000$; differences in percentage points; Holm correction over the six
+\caption{\DIFdelbeginFL \DIFdelFL{Stock FinBERT versus neutral-focused fine-tuned FinBERT }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Item-level paired bootstrap of seed-averaged macro-F1 }\DIFaddendFL on the \DIFdelbeginFL \DIFdelFL{200-sample
+}\DIFdelendFL benchmark
+\DIFaddbeginFL \DIFaddFL{($B = 10{,}000$; differences in percentage points; Holm correction over the six
 comparisons in the upper block; the Twitter-RoBERTa comparisons in the lower block
-form a separate family of four).}}
-\label{tab:boot}
+form a separate family of four)}\DIFaddendFL .}
+\DIFdelbeginFL %DIFDELCMD < \label{tab:finetune}
+%DIFDELCMD < \begin{tabular}{lccccc}
+%DIFDELCMD < \toprule
+%DIFDELCMD < \textbf{Model} & \textbf{Accuracy} & \textbf{Macro F1} & \textbf{Neu.\ prec.} & \textbf{Neu.\ recall} & \textbf{Neu.\ F1} \\
+%DIFDELCMD < \midrule
+%DIFDELCMD < FinBERT (stock)      & 82.0\% & 80.3\% & \textbf{97.0\%} & 53.3\% & 68.8\% \\
+%DIFDELCMD < FinBERT (fine-tuned) & \textbf{86.5\%} & \textbf{85.2\%} & 91.8\% & \textbf{71.7\%} & \textbf{80.5\%} \\
+%DIFDELCMD < \midrule
+%DIFDELCMD < \textit{Delta} & \textit{+4.5 pp} & \textit{+4.9 pp} & \textit{$-$5.2 pp} & \textit{+18.4 pp} & \textit{+11.7 pp} \\
+%DIFDELCMD < \bottomrule
+%DIFDELCMD < \end{tabular}
+%DIFDELCMD < %%%
+\DIFdelendFL \DIFaddbeginFL \label{tab:boot}
 \begin{tabular}{lccc}
 \toprule
 \textbf{Comparison} & \textbf{Difference} & \textbf{95\% CI} & \textbf{Holm $p$} \\
@@ -985,37 +997,40 @@ Twitter-RoBERTa vs (b) & $-3.9$ & $[-10.1, +2.3]$ & 0.672 \\
 Twitter-RoBERTa vs (c) & $+3.4$ & $[-3.2, +10.1]$ & 0.672 \\
 \bottomrule
 \end{tabular}
-\end{table}
+\DIFaddendFL \end{table}
 
-\DIFadd{Table~\ref{tab:source} breaks the benchmark down by channel. The channels differ
+\DIFdelbegin \DIFdel{We are explicit about the strength of
+this evidence: the $+4.5$-point accuracy gain
+is from a single 200-sample benchmark and a single }\DIFdelend \DIFaddbegin \DIFadd{Table~\ref{tab:source} breaks the benchmark down by channel. The channels differ
 in class mix (news is 57\% neutral, Twitter 24\%) and in ticker concentration (the
 five most frequent tickers cover 48\% of news items but 24\% of Twitter items).
 Stock FinBERT and the keyword baseline are strongest on news and weakest on Twitter,
-and the fine-tuning gains are concentrated on Twitter, where arms (a) and (b) reach
+and the }\DIFaddend fine-tuning \DIFdelbegin \DIFdel{seed, without
+cross-validation,
+}\DIFdelend \DIFaddbegin \DIFadd{gains are concentrated on Twitter, where arms (a) and (b) reach
 63.5\% and 63.3\% macro-F1 against 39.9\% for stock; on news only arm (b) exceeds
 stock, and on Reddit no system exceeds 52\%. Each channel has only 108--115 items,
 with 17 to 29 items in the smallest class, so these per-channel figures are
-descriptive and were not tested for significance}\DIFaddend .
+descriptive and were not tested for significance.
+Most benchmark news items are short headlines that came from a public financial-news
+dataset ordered alphabetically by ticker, which the system's ingestion read only
+partially. As a result, news tickers are concentrated early in the alphabet (66\% of
+news items have tickers beginning with `A'; the top five tickers account for 47.8\%),
+and news-channel results may not generalise to the wider range of companies covered in
+financial news. As a sensitivity check using the existing per-item predictions,
+excluding the 76 news items with `A' tickers leaves 262 items, on which arms (a) and (b)
+still exceed stock FinBERT (mean macro-F1 57.3\% and 56.8\% against 44.1\%; bootstrap
+gains of 13.2 }\DIFaddend and \DIFdelbegin \DIFdel{the }\DIFdelend \DIFaddbegin \DIFadd{12.7 points, 95\% CIs $[+6.7, +20.0]$ and $[+6.2, +19.2]$), so the
+main conclusion is unchanged; the 39 remaining news items are too few to separate any
+system from stock FinBERT.
+}
 
 \begin{table}[ht]
 \centering
-\caption{\DIFdelbeginFL \DIFdelFL{Stock FinBERT versus neutral-focused fine-tuned FinBERT on }\DIFdelendFL \DIFaddbeginFL \DIFaddFL{Benchmark composition and macro-F1 (\%) by channel. Arms are means over five
-seeds. Tickers are }\DIFaddendFL the \DIFdelbeginFL \DIFdelFL{200-sample
-benchmark}\DIFdelendFL \DIFaddbeginFL \DIFaddFL{stored ticker tag; every item has one. Per-channel macro-F1 is
-descriptive only (small $n$, no significance tests)}\DIFaddendFL .}
-\DIFdelbeginFL %DIFDELCMD < \label{tab:finetune}
-%DIFDELCMD < \begin{tabular}{lccccc}
-%DIFDELCMD < \toprule
-%DIFDELCMD < \textbf{Model} & \textbf{Accuracy} & \textbf{Macro F1} & \textbf{Neu.\ prec.} & \textbf{Neu.\ recall} & \textbf{Neu.\ F1} \\
-%DIFDELCMD < \midrule
-%DIFDELCMD < FinBERT (stock)      & 82.0\% & 80.3\% & \textbf{97.0\%} & 53.3\% & 68.8\% \\
-%DIFDELCMD < FinBERT (fine-tuned) & \textbf{86.5\%} & \textbf{85.2\%} & 91.8\% & \textbf{71.7\%} & \textbf{80.5\%} \\
-%DIFDELCMD < \midrule
-%DIFDELCMD < \textit{Delta} & \textit{+4.5 pp} & \textit{+4.9 pp} & \textit{$-$5.2 pp} & \textit{+18.4 pp} & \textit{+11.7 pp} \\
-%DIFDELCMD < \bottomrule
-%DIFDELCMD < \end{tabular}
-%DIFDELCMD < %%%
-\DIFdelendFL \DIFaddbeginFL \label{tab:source}
+\caption{\DIFaddFL{Benchmark composition and macro-F1 (\%) by channel. Arms are means over five
+seeds. Tickers are the stored ticker tag; every item has one. Per-channel macro-F1 is
+descriptive only (small $n$, no significance tests).}}
+\label{tab:source}
 \small
 \begin{tabular}{lcccc}
 \toprule
@@ -1034,14 +1049,11 @@ Twitter-RoBERTa & 62.4 & 51.7 & 51.4 & 56.8 \\
 Keyword baseline & 64.3 & 40.2 & 35.5 & 46.7 \\
 \bottomrule
 \end{tabular}
-\DIFaddendFL \end{table}
+\end{table}
 
-\DIFdelbegin \DIFdel{We are explicit about the strength of this evidence: the $+4.5$-point accuracy gain
-is from a single 200-sample benchmark and a single fine-tuning seed, without
-cross-validation,
-}\DIFdelend \DIFaddbegin \DIFadd{Table~\ref{tab:neuerr} aggregates the errors that involve the neutral class.
+\DIFadd{Table~\ref{tab:neuerr} aggregates the errors that involve the neutral class.
 Stock FinBERT and Twitter-RoBERTa err mainly by absorbing polar items into neutral
-(118 }\DIFaddend and \DIFdelbegin \DIFdel{the }\DIFdelend \DIFaddbegin \DIFadd{102 such errors), and their few errors on gold-neutral items lean slightly
+(118 and 102 such errors), and their few errors on gold-neutral items lean slightly
 negative (15 vs 10 and 14 vs 9). Fine-tuning reverses the direction: errors into
 neutral fall to 38.2 (a), 46.2 (b) and 11.0 (c), while gold-neutral items are pushed
 out of neutral, mostly towards positive for arms (a) and (c) (45.4 and 59.6 items)

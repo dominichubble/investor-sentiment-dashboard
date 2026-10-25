@@ -643,6 +643,17 @@ and the fine-tuning gains are concentrated on Twitter, where arms (a) and (b) re
 stock, and on Reddit no system exceeds 52\%. Each channel has only 108--115 items,
 with 17 to 29 items in the smallest class, so these per-channel figures are
 descriptive and were not tested for significance.
+Most benchmark news items are short headlines that came from a public financial-news
+dataset ordered alphabetically by ticker, which the system's ingestion read only
+partially. As a result, news tickers are concentrated early in the alphabet (66\% of
+news items have tickers beginning with `A'; the top five tickers account for 47.8\%),
+and news-channel results may not generalise to the wider range of companies covered in
+financial news. As a sensitivity check using the existing per-item predictions,
+excluding the 76 news items with `A' tickers leaves 262 items, on which arms (a) and (b)
+still exceed stock FinBERT (mean macro-F1 57.3\% and 56.8\% against 44.1\%; bootstrap
+gains of 13.2 and 12.7 points, 95\% CIs $[+6.7, +20.0]$ and $[+6.2, +19.2]$), so the
+main conclusion is unchanged; the 39 remaining news items are too few to separate any
+system from stock FinBERT.
 
 \begin{table}[ht]
 \centering
