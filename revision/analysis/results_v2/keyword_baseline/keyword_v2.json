@@ -1,0 +1,1724 @@
+{
+ "n_items": 338,
+ "macro_f1": 0.46654104396794455,
+ "accuracy": 0.4881656804733728,
+ "per_class": {
+  "positive": {
+   "precision": 0.5512820512820513,
+   "recall": 0.3524590163934426,
+   "predicted": 78
+  },
+  "negative": {
+   "precision": 0.43661971830985913,
+   "recall": 0.38271604938271603,
+   "predicted": 71
+  },
+  "neutral": {
+   "precision": 0.48148148148148145,
+   "recall": 0.674074074074074,
+   "predicted": 189
+  }
+ },
+ "bootstrap_keyword_minus_stock": {
+  "diff": -0.03124221852120035,
+  "ci95": [
+   -0.09641068728281693,
+   0.03426985382640914
+  ],
+  "p_two_sided": 0.3574,
+  "B": 10000,
+  "seed": 20261024
+ },
+ "predictions": [
+  {
+   "id": "stock_ef250eb61f33646b",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_576cc17f3881ad32",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_b4e8e6247d6d4cf4",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_832adbdfb6693da9",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1a0e9e983de7ec87",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f339c8f6b3d21cd3",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_a3d9699b9ede25f7",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_73b4ae9a7ef917c4",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_b8fe139a76b7f5cf",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_8e4e539cd914b8f4",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_ba60c58194cfcffa",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_82b7ec4f05c70358",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ad033e7be46cbe0d",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_85a3f1c1681f5a92",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4f4404169524462a",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_75986c353594801b",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9c7dd23d1499f0c2",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_209eb9dff37c5111",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_70e56915451c2891",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9e75340342f0efc6",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4c662717f04f47ac",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9c83c42919b55843",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9adc77fda2d6d081",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2844b36eb97a35d4",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_5ec514500eb87bfa",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4f0be77b0a11cbd4",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_401473e1b4a979b5",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c5ac56b636221182",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6e6c8e829c923437",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_fba6d83e74509c09",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2cc7195f3493ad3f",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_62ae89e473148891",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ab2f27ca260c1644",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_93e37641a42e1742",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2edab01076b4f0e1",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_86da5f770a5a007f",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ccec9fa1f76952c8",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_9326540e0a966787",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9a36f77d4b735613",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_23f3c90e3d3cf861",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_25589b74d4010ea1",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9b87461a48eb2caa",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c0c853a58f1986dc",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e579f2c8000f1d31",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_039525b7d038780c",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_acf8af41c0b2ecfb",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3a971cb259504f6e",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_166e53bf2740d3c7",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_75e931d908319ba6",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4b1e3921b79692d2",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_2db62a15230901fd",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_7aed4aaa17096cc8",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_0b8f262d035d873f",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4df7104f2af7a146",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_577fb3bc741adf7e",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_83fc2b6ba4beb31f",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_a9f6c9a8dde40617",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_41265c8d070a6382",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c75e931b07e76a58",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_401858e3a9b422de",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_8f6cad6c8a80c76e",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1f0ef935b6683825",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_581be999e99bcf45",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_701293608bd7b711",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ef8cc7cb3083b655",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_a84b52e28ac14064",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f8cc831976bf9ce8",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_f1845e26294f458c",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_2c62940fbebb7fbb",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_80b9a2664dce765d",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_ad8f46ee6ab48183",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_0b32f062dabddf95",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_019f93ebd5442f63",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_97c71eda2beb81fa",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1004b167d55cead9",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_628fd6fa62ada196",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e2d26eda78937cfc",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_cdf41fd09f1af65f",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_cebe1b81cf9b2393",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_b18670d6aa640317",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7e96fd759314155a",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6e4aa0ba1fe49457",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_32ac81a15e486e1a",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2a5fa99634b09984",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_53678630ed16855b",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_ab52bea5f43bdd61",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_0ecb3b81b9cd9d93",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_8757a7eb2b673256",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_370b7c8cb2620bd0",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_62d0256a6d6da36b",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2085cd01169c17fa",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_8beccbc6ae43dee4",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_04a55f662bf0d54c",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_430c4e6296c23735",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_788d971676fbaefb",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7236e52efc2ebd70",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4ccebab4ebbc2d83",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_ecec5a1a9c63771e",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_8f8cffd52296b548",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4f468a1d2fddf956",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_ddd653fc2e4bd44c",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3332235a8b8e0b75",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_ffd15e35c5351510",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_37270f3b7f9642b4",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3e6ec54480c05f43",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_08cf7dd61566c806",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6dbd647cebdeee54",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_007943e3f719a0e3",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_df81ac692829444a",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e2108bdff6351add",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_540add1fdf976864",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_33da5c7b491068ea",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_95c5bd9fefc78eaf",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_24e0c6c9347b2db9",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_adbfd6eb724d5c9e",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3c7cfaf8e403f7c7",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_afcbe2cabcdda4e8",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_dbe94a8350e80261",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_683e2e8b5e7cec85",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c0b30d1c3305aa9d",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_33acdf554e2061fc",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9b0d958ccaa79141",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9451cf34f65f4737",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_a6bacfef56c6de8d",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e2aee108e36d99d4",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6ab197ca7b35b6ea",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_93616719852727ad",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f66e5de52f212896",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_c7ae57381154e0f4",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3694b2630d379c1a",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_0279ca3b2eddd521",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_4a28a94a8a002f6b",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_47c3df1d86d431c0",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_131d3f37e0bb7f1a",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4b6585de797f3256",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_924da12f1c1e6e05",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f9cb8132f798452d",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_2f75388e93f82c5c",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_90ed2bb443ed8322",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_077c35cec93ef821",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_04e9e1e8b4c0406f",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f2011edda79c97d5",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_589bc8d6243fbd57",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e9a499ba7b1fc34b",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_e8d3100164929ac4",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_d40646e25ba1f43f",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_48ec612697be91a6",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_97c9b6d0fcee26f3",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_bbd055cdced81967",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9f46379458ee28a2",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_926abd0e9eeec2ab",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c607822efd05f41d",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_aa66434b0b0c5240",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_10715b0f24380ee5",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_23d46519243460ff",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ee7a2a7dbeedd9f4",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4d0b2ed93d6db83d",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3803aff950b6e19c",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_091f07874669678d",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_c5cbf66c75263b81",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_a00c6db56b650778",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_cec4769e4070fd8c",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_bd220468afc8e6a7",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2d7590f14eb97c06",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_6d27dedc91306d7d",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_f98b2d2114e7f93a",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_efc4649bc6c513d8",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7626d44a8338d6ba",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4e44950534a89e42",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e70404423c5ee35b",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_739cf4c9fd1ce8a8",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_235bfe6f73963c59",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_f458c28ed26d7385",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_703e9135e50062e9",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_588b29edae50be0b",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_d620498e4f7f7947",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_fecb1c2d4396d07d",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7e642de3507e91d3",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_d2e5ed2f6c9063c0",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9cca1dcc160e8f5e",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3c1111c21fa48be9",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_7271ee952062d43c",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_eac80eda6bc1a99a",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1db5774fef3d3fcd",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_6137e0fec6e94fe4",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7fa210b7580110a7",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_27a58d75712349e1",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5111ae46d56b084d",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_0b1b54edfb02b7eb",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_228407eaaa850df7",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_162104bc7ac2f5ff",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_18bde9f8b6e54fc8",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_bba6b8e9a04c93c1",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_015b84f37e222604",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_70980c55e7f35967",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5a8d94cee7625947",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_790ea024b107d1a6",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_74a4b3043001da69",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_4108ca264db34871",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e651d5b5881e2343",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_956ff9aa0af8c7ab",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_814e7ac6daacc8e4",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_152bb892bd919bf0",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_db61bffca696dde5",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1c76c5550ae88615",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_15e128d79c1a4bcd",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9da40882dca31fa5",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3b8862cc505981a1",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_d2a58d01e4afd9a4",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_7dbf3c9ac9d7cc6e",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1ada4da2a4e0f9e1",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_9be18dae243c5215",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_9314334dcd2a751d",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3705d5300d5c5c0a",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_616d01428df437ef",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_bd0d8261663c03ad",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2d89b45008f96238",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_38ae8d5406464035",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3ac7f4c9c94c5c27",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_51c0d4dec45cb766",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3b070ebb741ed220",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_b28a7ac82776ce28",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_73c17b12de5ab809",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6b52e81b0df86531",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e2d7fe1db09b4827",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_7bb5b1ae537519cc",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3ebee8af3216ec69",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_99060408a7063f89",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6ade34c51a2e39e6",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_643d291668c2f35c",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ab03dcae485f9846",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2fbd5cf4860e762a",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_02f6d383d70c6cbb",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_fa191216bf2893e0",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_49e4d522d4451efd",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_11eecc2ba90c626e",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_7e4c7caee33b8ef7",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_352b27f93925c067",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_7e6370efac671065",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_0e538bf7a44664e4",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_52f13ab189f77d41",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1bfd3917bc366762",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_223144d22c9d0b69",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_196b677c14cf623e",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_987cdb0e912dc16c",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_757d0d74be899558",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_53ba89f2379ed717",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_a4296a1c740020ad",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_d7e7c3062ce3a17f",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_09c3e85d831e8feb",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_a57633664f3e6e2e",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_372c5799bf83a9b7",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_3d678f488557e5b6",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4e17641441f227c0",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_1f2598010092d073",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_20ae8e66b4b44102",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_2a245c0ed565ff20",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_a41d9fd0eb2d57bd",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2837384984c05cfa",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_beb47dfd35ebecf8",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_6da45a1707cc9e53",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5d43f6408ad26967",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_e110621d03e6e2ec",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ab06588a35956436",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_95b5cc7b87824c9c",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_dd700b0a169cef3b",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_e22910f85e5806a4",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_d95c2968463a2a54",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_b618c1f76e088064",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5684416eb7a7c0f5",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_355ad802d0185972",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_67cdd8f438dfec44",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_302942dbf7ca8f80",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3edfd698904d68f8",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_b40a95cf7df62fb8",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_6829daaff4758852",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_26817b8d05bf23ba",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_3c9c442c76bd8e09",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_285901f48f3c5a08",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_4cfcbfc70a311e82",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_4179eba7d4675213",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_c8a6cd10e4ad2e40",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_205f00e051b3a56c",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_4ff018111dd96b7f",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_d97567fde2a820a8",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_0b74c2fc9155f84a",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_a40fb10702fe7ad0",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_f33aba10e7063026",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ef63f69a82bfd270",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_38e96add91a15073",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_679458aa5985c9a2",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_ec6f1b2a3c596792",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3539e0b08e48c973",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9edfb0eaa27f98fe",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_406920aa2421e41e",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_4fcafe1a3617fce8",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_efe2ab17d875a299",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5c5e9d31c708d0e4",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_a0dc6be01a6e2a82",
+   "gold": "negative",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3fb2836b0735c8f3",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_1ab8a584db903041",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_7486d923b952ab2b",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_0ee427c0ad75b694",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_8fe16e28721c3d3a",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_9a39a5ab0218761c",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_21743bea84972b33",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_3d20a1f087000d5e",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3d2f054f77a6352b",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_92f5f45c85db26a7",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_772457d968245e79",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_65b90d5239073411",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_2a665d9d844d0ea4",
+   "gold": "negative",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_8c8955c35a24720b",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_18034386455da415",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_08dbe0b5f45aeda0",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_e3e75d1789225e5c",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_a4b7897cab817e1c",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5a4ec8391f9fe867",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_c88ed4fa830e04b9",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_83b35380f2404427",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_9f5f6f41a38df3c7",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_76297972438f1c7d",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_28677b7aca7ef8fc",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_06cfcf4f1628d309",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_559014d5b440cb0a",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_b081f0340a12e670",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_5fbff48f72399885",
+   "gold": "positive",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_ed18fdeb69968be8",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_f9d0517c39d1e898",
+   "gold": "neutral",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_e34575e5e29c9515",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_3c78c8c68a994d1f",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_5be8fdbba2885381",
+   "gold": "neutral",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_2c0316ef09c93772",
+   "gold": "neutral",
+   "pred": "positive"
+  },
+  {
+   "id": "stock_b88ec1ea0cf73f3d",
+   "gold": "positive",
+   "pred": "neutral"
+  },
+  {
+   "id": "stock_fe1a3f4ebe2e5e60",
+   "gold": "negative",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_e9b564f998e40365",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_3fd67f46486ac96b",
+   "gold": "positive",
+   "pred": "negative"
+  },
+  {
+   "id": "stock_4c653da9566c7b7f",
+   "gold": "positive",
+   "pred": "neutral"
+  }
+ ]
+}

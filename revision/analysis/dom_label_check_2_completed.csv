@@ -1,0 +1,51 @@
+item,channel,ticker,text,your_label (positive/negative/neutral/exclude)
+b2_013,twitter,COIN,$COIN Goblin town incoming. Chart looks absolutely horrific. [Nebraskangooner tweeted about COIN],negative
+b2_282,news,ABR,"Arbor Realty Trust, Inc. Announces Initial Conversion Rate of 4. ...",neutral
+b2_373,news,AAL,American Airlines (AAL) Clears Doubts Over Bankruptcy Filing,positive
+b2_342,twitter,BA,"Today's plays, Both open positions in $BA $SPY Not a lot that I fell in love with today. Went with the better r:r plays, will see if taking a shot pays off or not. 😀 [optionsprochick tweeted about BA, SPY]",neutral
+b2_303,news,V,A former Oracle engineer on an H-1B visa says AI and tech layoffs pushed him into constant career-prep mode,exclude
+b2_357,reddit,LCID,"It’s LUCID a dead end? my Lucid shares, hoping for a turnaround, but the stock remains flat. Fundamentally, I feel the worst is behind us, or perhaps bankruptcy is the next step. High cash burn, recent production guidance cuts (18k-20k for 2025), and deep negative margins are concerning. What are your thoughts on LCID's future? Is a rebound imminent or are the risks too high? Any advice or insights welcomed!",negative
+b2_351,reddit,TSLA,"No one knows anything… Over the past two weeks : China increase tariffs, market went up. Trump increased tariffs, market went up. Rumours came out that Trump might ease down on tariffs but hasn’t done anything, market went up 3 days passed and still no official deal or agreement with China, market went up. I bought puts thinking a fall is going to happen because no real agreement is made.. lost. Tesla was supposed to crash, it didn’t.",negative
+b2_095,twitter,NVDA,$NVDA (weekly) closed over resistances. Looks harmless and safe... (posts the chart on twitter as a bullish breakout targeting ATHs) [kpak82 tweeted about NVDA],positive
+b2_060,twitter,OKTA,"$OKTA Has taken a beating lately, but approaching the listing vwap has options 11/12 [StonkTrump tweeted about OKTA]",neutral
+b2_006,news,WMT,"How much the typical worker made last year at 16 top retailers, from Amazon to Walmart",exclude
+b2_102,reddit,NBIS,"Nebius Signs $27B AI Infrastructure Deal with Meta [ Nebius just announced a 5-year, $27B AI infrastructure deal with Meta. They'll provide $12B in dedicated capacity using NVIDIA Vera Rubin starting early 2027, plus Meta committed to buying up to $15B in additional compute across upcoming Nebius clusters. Disclosure: I'm Long NBIS",positive
+b2_055,reddit,GME,GME Fiscal 2025 and Q4 Earnings Estimate: $0.52 and $0.10 EPS (diluted) | $300M+ Net Income on $3.9B Revenue. Balance Sheet tells a similar story as Retained Earnings start to accumulate: Book Value Per Share rises to $12.75 from $11.84 in Q3 ($11.02 to close 2024). Notes in comments!,positive
+b2_316,news,A,"Barclays bearish on Teva, sees 14% downside risk in premarket analyst action",negative
+b2_040,reddit,AAPL,"Deck calls gain and pls don't don't fomo or yolo like me Lol, iv was like 110% when i bought it.",exclude
+b2_345,news,ABR,Arbor Realty Trust Schedules First Quarter —…–9 Earnings Conference Call,exclude
+b2_125,news,AAP,Auto Retail & Wholesale Parts Industry Near-Term Ride Smooth,neutral
+b2_014,news,BA,"Wesleyan Assurance Society Buys Boeing Co, Walgreens Boots Alliance Inc, Alphabet Inc, Sells ...",exclude
+b2_103,twitter,MRNA,$MRNA 🟦🟦 Moderna Q2 2024 GAAP EPS $(3.33) Beats $(3.36) Estimate Sales $241.000M Beat $132.183M Estimate [Mr Chart Norris tweeted about MRNA],positive
+b2_089,news,ABBV,"Carolina Wealth Advisors, LLC Buys NetApp Inc, H&R Block Inc, City Holding Co, Sells Schwab ...",exclude
+b2_133,twitter,QQQ,"Watching $QQQ $RBLX $ROKU $GME $CRWD $FB $BA today! [optionsprochick tweeted about QQQ, RBLX, ROKU, GME, CRWD, FB, BA]",exclude
+b2_356,news,DXC,"DXC Technology (DXC) Q4 Earnings Top Estimates, Revenues Miss",neutral
+b2_106,twitter,MIN,"$SPY 10 MIN Chart Mini bullish flag BREAKOUT , does it hold ? We shall see [Mr Chart Norris tweeted about SPY]",positive
+b2_009,twitter,SBUX,Good night @X fam / $SBUX Daily D/B [Mr Chuck Norris tweeted about SBUX],exclude
+b2_360,reddit,MSFT,"Fed recap: Powell says no decision on September, must wait to see tariff impact on inflation",exclude
+b2_349,reddit,AMD,"Option Trading Hello, Im new to option tradings and want to know if you have any tips or recommendations regarding risk management and strategies. I have a bit of experience trading stocks amd crypto, but not in options. I have been reading, studying and using the think or swim platform to practice. However, I must recognize that I am a bit scared to take that initial step. I already opened and account and put 2k to start soon. PS. Sorry for the errors, english is not my first language.",exclude
+b2_327,reddit,COIN,"Trump coin up 12% the last few hours I wonder what is causing the trump coin to jump during the early morning hours on the east coast. It is up 12%. It had a spike to $8.70 around 5:15am ET. Smells a bit fishy to me. It has been hovering between $7.5 and $8 the last week. I don't have a position in this, nor intend to. What do you think is causing this?",neutral
+b2_070,reddit,MSTR,Any chance? Should I hodl on till Friday? Or just cut me losses now:(,negative
+b2_104,reddit,NVDA,Yolo'd $NVDA calls. I know it dumped the last couple of earning but anyone else buying calls? Made about 10k over the last 2 weeks and decided to yolo 1\\3 of it on calls.,positive
+b2_359,reddit,COIN,Official Trump Coin Price Falls 90% As $340M Token Unlock Looms,negative
+b2_229,news,AA,"Alcoa, New York reach deal on low-cost power for Massena smelter",exclude
+b2_205,reddit,CC,META | CC $690 + CSP $590 | Both expired worthless today | $5490 collected,neutral
+b2_341,twitter,PLTR,$PLTR Bear flag breakdown and loss of recent uptrend as well as volume point of control. [Theta Warrior tweeted about PLTR],negative
+b2_054,news,ABR,Arbor Realty Trust (ABR) is a Great Momentum Stock: Should You Buy?,positive
+b2_364,twitter,BAC,"$BAC Already closed a lot of this position since it was a large one but letting the rest ride. Moving nicely so far [@Nebraskangooner]( $BAC Looks ready to fall. Short the banks. [Nebraskangooner 🔁 Nebraskangooner about BAC, BAC]",neutral
+b2_151,twitter,MCD,$MCD Daily Chart 🐔 Breakdown / Bounce / Retest Scenario [Mr Chart Norris tweeted about MCD],neutral
+b2_007,reddit,CMP,"GODFRYPHLP CMP Stock: GODFRYPHLP Any suggestions are welcome. ₹1700–1650 looks like a strong demand zone based on previous price action and structure. The stock is already on my watchlist. Also, if the stock reclaims and sustains above ₹1850, it could turn positive again in the short term. Plan: * Watching for price reaction near the demand zone * If it holds → possible bounce play * If it breaks → will wait for further confirmation before entering Would like to hear your views on this setup.",neutral
+b2_074,twitter,INTC,$INTC Cantor Fitzgerald analyst C.J. Muse reaffirms a Neutral rating on Intel and keeps the price target at $40. [Mr Chart Norris tweeted about INTC],neutral
+b2_374,news,AAP,An 'All-Weather' Income Portfolio For Financial Independence,exclude
+b2_235,twitter,MRNA,"I kinda want to keep some shares short on $MRNA for the long term, but I’m up so much atm. Might have to take profits and revaluate later. [yatesinvesting tweeted about MRNA]",negative
+b2_302,news,CSCO,Cisco’s John Chambers lived through the dot-com crash. He says the AI bubble is harder to navigate,neutral
+b2_180,twitter,SNAP,$SNaP needs that 35.25 break to the downside [yatesinvesting tweeted about SNAP],negative
+b2_042,reddit,BTC,Maker or Taker algo trading. I am running a bot with my strategy and few cash applied to the 1m BTC chart. It makes good trades but maket maker fees and stop losses are erasing the profits. I usually trade the 4h and 3D BTC chart with this strategy. The 1m scalps is just for testing. How sould I place the limit orders to pay taker fees which are 67% lower. I am actually pushing 1% slippage on BTC to all the orders. Should I buy -0.1% the price to be a taker?,exclude
+b2_194,reddit,RENT,Chipotle hikes same-store sales forecast as diners return for burrito bowls,exclude
+b2_140,twitter,TSLA,Textbook 1m double top on $TSLA These make for nice high confirmation trades [Nebraskangooner tweeted about TSLA],negative
+b2_322,reddit,BTC,Turn around story Recently lost 30K I was heavily concentrated on a few certain stocks Arvn Cai amongst others I still have high convictions for Arvn and Cai but want to protect my principal. I was fortunate to turn a small amount into 200k+ now I want to create wealth. I’m 36 and want to be in good shape between 45-55. Never came from money but I hope I can change that away Here’s my current list to allocate 200k+ in Any feedback I’ll be greatly appreciated Elv ci bsx pep mcd pg amt ups pypl,exclude
+b2_245,news,A,"Pershing Square Capital Management, L.P. Buys Agilent Technologies Inc, Sells Automatic Data ...",exclude
+b2_117,twitter,UNH,$UNH Strong reaction at gap low Could see this break back into resistance above [Nebraskangooner tweeted about UNH],exclude
+b2_290,news,A,"Your Daily Pharma Scoop: Audentes's New Designation, Esmya Rejected, Agilent Approved",exclude
+b2_062,twitter,SPY,"$SPY $SPX closed higher 8th consecutive weeks. Last time it closed 9th straight was 20 years ago. [kpak tweeted about SPY, SPX]",positive
+b2_318,reddit,MSTR,People have started stamping “buy bitcoin” on paper money in Europe,exclude

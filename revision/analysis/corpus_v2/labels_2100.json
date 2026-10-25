@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a3e-b754-7ec0-8003-2293a5436b2d, prompt labelling_pipeline/batches/prompt_2100.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "2e2fb873f9642b9a9b1f2d9effb7d50484ea7e4baa21cff565cff0d2f746358b",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_2100": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks about news sources without expressing an asset view."
+  },
+  "c2_2101": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The headline is market-research SEO boilerplate."
+  },
+  "c2_2102": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "GameStop gained 3.2% alongside favorable earnings expectations and warrant strength."
+  },
+  "c2_2103": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The weekly chart is described as close to breaking down."
+  },
+  "c2_2104": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author requests arguments about replacing gold with Bitcoin without endorsing a direction."
+  },
+  "c2_2105": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline suggests the workforce cuts could trigger a Bitcoin rally."
+  },
+  "c2_2106": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about purchase timing without stating a Bitcoin price outlook."
+  },
+  "c2_2107": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The analyst list mixes price-target cuts with an increase."
+  },
+  "c2_2108": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects renewed buying pressure to benefit markets and Tesla."
+  },
+  "c2_2109": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks how oil-stock prices respond to oil increases without a clear directional conclusion."
+  },
+  "c2_2110": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "High volatility is framed as increasing market risk and making prolonged positions dangerous."
+  },
+  "c2_2111": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The question frames crypto projects around collapse risk and avoidance."
+  },
+  "c2_2112": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports bullish call gains and describes Dell as undervalued."
+  },
+  "c2_2113": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Institutional Bitcoin purchases and increased holdings dominate the roundup."
+  },
+  "c2_2114": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author calls Coinbase a buy and considers its decline unjustified."
+  },
+  "c2_2115": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author enthusiastically endorses the token launch and its stronger community backing."
+  },
+  "c2_2116": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart identifies a bullish double bottom and falling-wedge breakout."
+  },
+  "c2_2117": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author recommends a conditional short trade anticipating a reversal."
+  },
+  "c2_2118": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post is a bare list of recommended accounts."
+  },
+  "c2_2119": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post describes a holdings tracker and requests feature suggestions without an investment view."
+  },
+  "c2_2120": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author seeks a convenient gold investment vehicle without predicting gold's direction."
+  },
+  "c2_2121": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Ark's Pinterest purchase is explicitly presented as continued confidence in the company."
+  },
+  "c2_2122": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline recommends dividend picks as resilient to coronavirus disruption."
+  },
+  "c2_2123": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Powell's inflation-expectations assessment is explicitly disappointing."
+  },
+  "c2_2124": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The chart presents both conditional upside targets and downside risk."
+  },
+  "c2_2125": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports a long position and stop rule without a directional forecast or gain."
+  },
+  "c2_2126": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Nvidia rises 8% as its CEO supports the sustainability of capital spending."
+  },
+  "c2_2127": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author compares Bitcoin investment vehicles without favoring a return outlook."
+  },
+  "c2_2128": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses adjusted-cost-base administration rather than an asset's prospects."
+  },
+  "c2_2129": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline reports gains in biopharma and diagnostics stocks driven by innovation."
+  },
+  "c2_2130": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "All listed trade plans target bullish breakouts using calls."
+  },
+  "c2_2131": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The options-flow figures mix bullish positioning with increased put activity and weaker call volume."
+  },
+  "c2_2132": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects another upward move in Procter & Gamble."
+  },
+  "c2_2133": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Bitcoin falls sharply to $65,000 under heavy selling."
+  },
+  "c2_2134": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The text describes dashboard features without expressing a crypto investment outlook."
+  },
+  "c2_2135": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Oil-company shares are reported soaring to all-time highs."
+  },
+  "c2_2136": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SPY breaks above the stated price level and VWAP with volume."
+  },
+  "c2_2137": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item contains only a discussion-thread header and an unavailable-content notice."
+  },
+  "c2_2138": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "BP's profits more than doubled as gas prices reached multiyear highs."
+  },
+  "c2_2139": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author describes recurring Bitcoin price dumps around the US market open."
+  },
+  "c2_2140": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects a V-shaped recovery with multiple higher price targets."
+  },
+  "c2_2141": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The chart caption provides no explicit price move or directional call."
+  },
+  "c2_2142": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author recounts a simulated trading loss and overall profits without a current asset outlook."
+  },
+  "c2_2143": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Unresolved lawsuits are framed as a major headwind suppressing Meta's stock price."
+  },
+  "c2_2144": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The fundraising headline is framed around an AI-market rout."
+  },
+  "c2_2145": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart identifies a falling wedge, a bullish technical pattern."
+  },
+  "c2_2146": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author emphasizes a substantial gain from a Microsoft purchase."
+  },
+  "c2_2147": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "An upside breakout and bullish momentum divergence dominate the CPI caution."
+  },
+  "c2_2148": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author warns of a severe decline unless an imminent bounce occurs."
+  },
+  "c2_2149": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Losing $16 is described negatively, with $14 identified as the next downside area."
+  }
+ }
+}

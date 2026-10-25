@@ -1,0 +1,3890 @@
+{
+ "arm": "b",
+ "note": "random-neutral: seeded sample of all labelled neutrals, overlap with (a) allowed",
+ "seed": 20261023,
+ "n": 300,
+ "label_counts": {
+  "neutral": 300
+ },
+ "low_information": 87,
+ "per_channel": {
+  "reddit": 181,
+  "twitter": 99,
+  "news": 20
+ },
+ "per_sampling_group": {
+  "lexicon_hit": 171,
+  "random": 129
+ },
+ "data_file": "arm_b.json",
+ "data_sha256": "2add3f5c56e60b5c56301f0099232cd627e4923168b7d542fc108931b366f0ee",
+ "rows": [
+  {
+   "item": "c2_0003",
+   "id": "stock_702e3dfd3dc33473",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "highs",
+    "losses"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0009",
+   "id": "stock_697c1687d9f77096",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ETHE",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0014",
+   "id": "stock_9388a024f198c43b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ROKU",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "high",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0016",
+   "id": "stock_735169ec12c50706",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSFT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "sell",
+    "selling",
+    "success"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0017",
+   "id": "stock_84151f9619879a2d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "rise"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0020",
+   "id": "stock_ba624bba6acc5062",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "momentum"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0022",
+   "id": "stock_0942132deede8820",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TS",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "unemployed"
+  },
+  {
+   "item": "c2_0026",
+   "id": "stock_b4b1336bff6bba31",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ROKU",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0027",
+   "id": "stock_dbf75c3b396bb1e4",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "UTI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0029",
+   "id": "stock_91cba6241f9b75da",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0030",
+   "id": "stock_24874ce2d289b1db",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "MSTR",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0037",
+   "id": "stock_92d8d5306395633d",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "TJX",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0038",
+   "id": "stock_308b6a9760624c2f",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "seized"
+  },
+  {
+   "item": "c2_0040",
+   "id": "stock_a8a128adce898215",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BLK",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0041",
+   "id": "stock_405688506f043063",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "gains",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0042",
+   "id": "stock_8b119cb6fab6c54c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0047",
+   "id": "stock_65761d83f24fd1a8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "WMT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "demand"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0055",
+   "id": "stock_167fc820410e3bcf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0058",
+   "id": "stock_4655c79e0f0e149a",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profitable"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0062",
+   "id": "stock_d5c3ee3c5ce05407",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "RAMP",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "falling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0066",
+   "id": "stock_40e65eb46abc4ebe",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bull",
+    "momentum"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0067",
+   "id": "stock_5ceb774d3e7ac5c7",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losses",
+    "wins"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0068",
+   "id": "stock_8cc1a14cf44e516a",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MBLY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0071",
+   "id": "stock_92373e5eaa85e7a9",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "RSI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "positive"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0072",
+   "id": "stock_5668809d82e335df",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CVNA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0073",
+   "id": "stock_d8a8e69e73171a35",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "BROS",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "demand"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0077",
+   "id": "stock_1eb9d615a2dee630",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "drop",
+    "high",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0080",
+   "id": "stock_4974a39682170812",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0083",
+   "id": "stock_095daba8c51eb715",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "META",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "momentum",
+    "rally",
+    "risk",
+    "strong"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0085",
+   "id": "stock_9249aa96ad3cef2d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "fraud"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0087",
+   "id": "stock_43f15dc34cc8db4f",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0088",
+   "id": "stock_01ee9ba3ceb685e4",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0091",
+   "id": "stock_03a00db94051e974",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SMCI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0092",
+   "id": "stock_21aa5c3ae825f07c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SMMT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0095",
+   "id": "stock_5c07404465f30fcc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "LEA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0102",
+   "id": "stock_93f785a72d739170",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "META",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "cut",
+    "record"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0103",
+   "id": "stock_42e7a06e151de969",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "QQQ",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "strongest",
+    "worst"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0109",
+   "id": "stock_e43eb3a861cdfbc2",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CVS",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0110",
+   "id": "stock_03b3b8b71c65c1bf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "risky"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0117",
+   "id": "stock_83cc0f60ae0d26f2",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "WEN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0120",
+   "id": "stock_1dd4723f99cad4be",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MSFT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth",
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0123",
+   "id": "stock_19ba0cedeb8026a1",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "DIA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "highs"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0124",
+   "id": "stock_26d9b97f71666564",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMZN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "able"
+  },
+  {
+   "item": "c2_0131",
+   "id": "stock_1da7791d90cc1397",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "volatility"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0132",
+   "id": "stock_97cb81a1c2fdce63",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "missing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0133",
+   "id": "stock_e9fbbb5bce5fb584",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "surged"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0134",
+   "id": "stock_a36666b5099764fc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0137",
+   "id": "stock_61ce98ac8ef95298",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "drops",
+    "wins"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0138",
+   "id": "stock_021dee8896c5ae8e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AAPL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0139",
+   "id": "stock_14cef8bdf5649cfc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "AMZN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bullish"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0142",
+   "id": "stock_14bb81b3b2dde9db",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "COST",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0144",
+   "id": "stock_48a736509712eec8",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABR",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0145",
+   "id": "stock_0d1ea7749d10d822",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AAPL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0146",
+   "id": "stock_1d805d9fd5f8d0aa",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSFT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "popular"
+  },
+  {
+   "item": "c2_0155",
+   "id": "stock_82da2fd713693fb1",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABBV",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "opportunities"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0159",
+   "id": "stock_4c1042aad9b2208b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "AMD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "loss",
+    "profit",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0172",
+   "id": "stock_3886ba6c51f41c32",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "WFC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0176",
+   "id": "stock_3836593a1888b72a",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0184",
+   "id": "stock_022d791581ad77b8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain",
+    "risk",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0186",
+   "id": "stock_ce574f920a50a059",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0187",
+   "id": "stock_2c6fd63d0173498e",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "HOOD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0189",
+   "id": "stock_7a53bc58cffdb720",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0190",
+   "id": "stock_390155fffc1837f0",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "AAPL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0191",
+   "id": "stock_5684d70920ed7fd1",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "momentum"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0200",
+   "id": "stock_da90da60184edde4",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gained",
+    "high",
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0204",
+   "id": "stock_500425241221603b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "PT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "downgrade"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0207",
+   "id": "stock_d024006f360db0eb",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSTR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "drop",
+    "recovered"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0216",
+   "id": "stock_05ae98a6b6ed984b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "META",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "climb",
+    "losing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0218",
+   "id": "stock_cf2cb02288356845",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ATO",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0223",
+   "id": "stock_8d54ec0d22e553c8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0225",
+   "id": "stock_af0807065db71c94",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "positive",
+    "volatility"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0234",
+   "id": "stock_81fbf239a45ff717",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0235",
+   "id": "stock_a6ae22b6cb67baf9",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "RDDT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bubble",
+    "growth"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0238",
+   "id": "stock_4b5caf9eff75c32a",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain",
+    "win"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0239",
+   "id": "stock_23ed138f573cece4",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "AAP",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0241",
+   "id": "stock_04f0464b9c9a2552",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "AD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0242",
+   "id": "stock_5d7e8ef2ff065743",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "WFC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0244",
+   "id": "stock_014e2cadbd4bdcd9",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "FTNT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0255",
+   "id": "stock_3e7b7282ad2ccd12",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "demand"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0257",
+   "id": "stock_1a8916cd70df7c60",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0260",
+   "id": "stock_6aed7faa0bed302b",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0261",
+   "id": "stock_1523f0ce5d108376",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BABA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "able"
+  },
+  {
+   "item": "c2_0268",
+   "id": "stock_762983b3a9d6b1b7",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MAPS",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0271",
+   "id": "stock_57cf7e1dc2c69037",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "CSCO",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0272",
+   "id": "stock_611b9986be53ba20",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0273",
+   "id": "stock_3afc235c253025c5",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "loss",
+    "profit",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0279",
+   "id": "stock_71490a172191c1ec",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0281",
+   "id": "stock_789040fe690040b2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0282",
+   "id": "stock_920d8e07863c513f",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NFLX",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "drop"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0284",
+   "id": "stock_0cc5c766de7be0c8",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "warning"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0303",
+   "id": "stock_6990adb1e518a91d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0319",
+   "id": "stock_488568a00d46c851",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "cut"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0322",
+   "id": "stock_6c24736b8fcef700",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "RENT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0323",
+   "id": "stock_c7a0c5bfa515e672",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "terrible"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0335",
+   "id": "stock_17d4e14b559b8e72",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0339",
+   "id": "stock_82a1fc16e7b10621",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "COIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bearish",
+    "bullish",
+    "selling",
+    "solid"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0341",
+   "id": "stock_5ad844ed247a4605",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0343",
+   "id": "stock_2561c5a596bf34d3",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bear",
+    "bull",
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0346",
+   "id": "stock_7f2c2c87400e13b2",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high",
+    "positive"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0348",
+   "id": "stock_12f794c5b77a8e64",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0364",
+   "id": "stock_da6c58af3e3ea040",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "PYPL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0368",
+   "id": "stock_ae4332dba745ddc7",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0372",
+   "id": "stock_f7ba654fe23892e0",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "news",
+   "ticker": "LEA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "beats"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0374",
+   "id": "stock_556623c66d3ac8ec",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "KEY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "breakout"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0375",
+   "id": "stock_bd474384cb418d83",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "debt",
+    "lost",
+    "win"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0383",
+   "id": "stock_b6746f019283ff30",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0389",
+   "id": "stock_c6cffe4cbdcb2e5d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ROKU",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0391",
+   "id": "stock_b1093011f70723f9",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "ill"
+  },
+  {
+   "item": "c2_0393",
+   "id": "stock_168d7767eb1bd340",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "gain"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0398",
+   "id": "stock_f1d29c00d2c21c8b",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "jumping",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0407",
+   "id": "stock_7b6fb74f7e5bab1f",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth",
+    "profit",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0415",
+   "id": "stock_960fb8216d9ecefe",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0416",
+   "id": "stock_9add2fee874968f3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "WSBC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "cut"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0418",
+   "id": "stock_f7c0a81401e38e18",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0428",
+   "id": "stock_c9492ca6f0bf47ef",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMZN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0439",
+   "id": "stock_0a9b0b16d63ae5ef",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "DIA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0441",
+   "id": "stock_092ad4d9597cafd5",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "META",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "breakdown"
+  },
+  {
+   "item": "c2_0454",
+   "id": "stock_681afdb958255b7c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "DUOL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0457",
+   "id": "stock_ba980b7ba1c005ad",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "FLEX",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "miss"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0460",
+   "id": "stock_6b9f4fdb74d2867c",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bear",
+    "bull",
+    "high",
+    "weaker"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0461",
+   "id": "stock_8a7178e01c6fcdaf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "QQQ",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0469",
+   "id": "stock_2636d32604ee9b42",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "highs"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0475",
+   "id": "stock_37c84b7bc0d99e23",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0476",
+   "id": "stock_553a24a0929c51f8",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0480",
+   "id": "stock_477f653d885bf2d7",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain",
+    "gains",
+    "reduce",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0483",
+   "id": "stock_c36ae001fffbdfaf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CAT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0484",
+   "id": "stock_cf48448c0371a912",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "TD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "declines"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0491",
+   "id": "stock_aafa3d1fd75a06b2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0501",
+   "id": "stock_10902807b72c526c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MARA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "highs"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0507",
+   "id": "stock_4b793eff0a56a333",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOG",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "gains",
+    "sell",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0512",
+   "id": "stock_863b28971e8eb39d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "lost",
+    "weak"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0515",
+   "id": "stock_8a8a0fcb196574cb",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CNQ",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0516",
+   "id": "stock_6a0b956e5f0c3c58",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0517",
+   "id": "stock_f6f4d7fd7dba5b0d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0519",
+   "id": "stock_fdd7db6e670ea7ea",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSTR",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0524",
+   "id": "stock_04ee2a4e5a246dd7",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains",
+    "solid"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0526",
+   "id": "stock_dfcb297ebc3d028d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MSFT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0535",
+   "id": "stock_9107abe8b43d17ae",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "AMZN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0536",
+   "id": "stock_e41ca7f2b556b402",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0537",
+   "id": "stock_128cd187d3b47e8e",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "IREN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0538",
+   "id": "stock_95bf53502b4be794",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0540",
+   "id": "stock_ea8f9461c75ccf84",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ROKU",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0541",
+   "id": "stock_62d10d37eff9482c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "highs",
+    "recovers"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0542",
+   "id": "stock_04b032e7649eec95",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "THC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0545",
+   "id": "stock_e6be4ad77202af4b",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0548",
+   "id": "stock_1df035544f8ccf29",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SI",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0553",
+   "id": "stock_429cc4950b315e28",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "DNP",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0554",
+   "id": "stock_27238b20bc340ebd",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "against"
+  },
+  {
+   "item": "c2_0555",
+   "id": "stock_5c710c13bc1dd067",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "MSCI",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0561",
+   "id": "stock_09b0da04a8a0ec1d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "NYC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "record"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0565",
+   "id": "stock_a9f847248f64c3c2",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0572",
+   "id": "stock_cdd6e56add957ccc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "fear"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0583",
+   "id": "stock_2fa631cf3c4993d5",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "loss",
+    "missing",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0584",
+   "id": "stock_feb108ea9acab055",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GME",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "optimistic"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0585",
+   "id": "stock_5dad16a028f479c7",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "V",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0589",
+   "id": "stock_cf9499dedb223cd1",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "BENF",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0590",
+   "id": "stock_2714f7633bb19100",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "WMT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "positive"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0593",
+   "id": "stock_21bad0a52a4156b7",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SHOP",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "downgraded",
+    "outperform",
+    "upgraded"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0597",
+   "id": "stock_2753d4a8f1462575",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "BJDX",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0598",
+   "id": "stock_cfeefebcce8044a3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "loss"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0600",
+   "id": "stock_0e4a767d60eaea70",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "highs"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0605",
+   "id": "stock_2aa04b1cf9df6225",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0609",
+   "id": "stock_f12d4a28d49cd69b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bear"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0613",
+   "id": "stock_030b8c82f4368985",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0614",
+   "id": "stock_2266d17c84025522",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "fall"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0616",
+   "id": "stock_70a1c87c99bbf5a4",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0620",
+   "id": "stock_8b1dfdb0d99629a2",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0627",
+   "id": "stock_688a95cb6906efcf",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "A",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0629",
+   "id": "stock_2c475e9b22a02e8f",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "friendly"
+  },
+  {
+   "item": "c2_0633",
+   "id": "stock_3aff8d3670e629d6",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0641",
+   "id": "stock_285142267461ef0a",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSFT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bullish",
+    "buy",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0650",
+   "id": "stock_0173430f8f545823",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "DDOG",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "demand"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0655",
+   "id": "stock_98cdd6b952ced774",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "good"
+  },
+  {
+   "item": "c2_0660",
+   "id": "stock_0223e35de1efbc01",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "volatile"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0661",
+   "id": "stock_d8449f889759e294",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CRSP",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "good"
+  },
+  {
+   "item": "c2_0664",
+   "id": "stock_fdf32aa4e899c7e8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "jump"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0665",
+   "id": "stock_33fc0363978bb020",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "EXC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "beat",
+    "misses"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0668",
+   "id": "stock_2aec423490ebd9c0",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0671",
+   "id": "stock_1fad06f653f5379e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "TSM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains",
+    "high",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0675",
+   "id": "stock_09df5a3630fdf0a4",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0681",
+   "id": "stock_099a721d98a12a37",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "soars"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0682",
+   "id": "stock_2d4de2c66e1dc109",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "AMZN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bearish",
+    "bullish",
+    "high",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0684",
+   "id": "stock_c36df09720676b2f",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "RA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "debt"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0688",
+   "id": "stock_30f13636fb45b6e2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0691",
+   "id": "stock_5d9ad2f0c987bb3a",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0696",
+   "id": "stock_6f623b44e1dbfc1e",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0702",
+   "id": "stock_089ff98e1edeee30",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "PLTR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "beat",
+    "volatility"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0705",
+   "id": "stock_e0538a714ab7f6c3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "news",
+   "ticker": "ABG",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0709",
+   "id": "stock_fd2069474848d281",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "growth"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0712",
+   "id": "stock_be0a61f7ab7d8f10",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "INR",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0717",
+   "id": "stock_2e1a91ee9f9d9b2d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losses",
+    "profit",
+    "wins"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0718",
+   "id": "stock_bb005adc92469453",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ASX",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0726",
+   "id": "stock_77c1a2a80299d114",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NFLX",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0732",
+   "id": "stock_a6dfdd24924df07b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "breakout"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0733",
+   "id": "stock_577da4d50eee6f1e",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "CD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "good"
+  },
+  {
+   "item": "c2_0735",
+   "id": "stock_599ea810d9e68e0a",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "revenue"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0737",
+   "id": "stock_f50cf6bc70e7ae4c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "FF",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "better"
+  },
+  {
+   "item": "c2_0740",
+   "id": "stock_0104f2f883e69961",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losses"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0748",
+   "id": "stock_ee9e2dd526837c67",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0750",
+   "id": "stock_d3fe1d983ea8c47e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "cut",
+    "profitable",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0753",
+   "id": "stock_17874c4d1a711bf0",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "QQQ",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bearish",
+    "jumped"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0757",
+   "id": "stock_d3e0e28e5e7b07e8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bubble"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0763",
+   "id": "stock_72030ecaded956c8",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ITP",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0764",
+   "id": "stock_f9b8c869ee0d97e3",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "CSCO",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0765",
+   "id": "stock_10dce01a911b53bf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "BOOM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "boom",
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0772",
+   "id": "stock_1bcd2fb0e8799ad7",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0783",
+   "id": "stock_3ab852477e14e69b",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "A",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0792",
+   "id": "stock_a7701810632719de",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains",
+    "profits",
+    "recovered"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0797",
+   "id": "stock_1a34da8ba93e1f98",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "drop"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0798",
+   "id": "stock_69420c3e1d059921",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BABA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0802",
+   "id": "stock_cbc0a2fb69047fe1",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "better"
+  },
+  {
+   "item": "c2_0803",
+   "id": "stock_243d3c4358b03a63",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TFSA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0805",
+   "id": "stock_2b6ae9abcb1618eb",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "SPXC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0810",
+   "id": "stock_5098e6eb8b49047c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "EMA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gain",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0812",
+   "id": "stock_0aefd1b2e3f4a1ec",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABG",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0814",
+   "id": "stock_6bd323637e77b51a",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy",
+    "deficit",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0816",
+   "id": "stock_525fc2b4d7f5b33e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dropped"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0818",
+   "id": "stock_00c0be48481768f8",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "twitter",
+   "ticker": "MET",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0825",
+   "id": "stock_d7de5b78cf9f6808",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NIO",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "fell",
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0826",
+   "id": "stock_056d4a756563aefd",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "CE",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy",
+    "struggling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0830",
+   "id": "stock_dd008b05cabf2604",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "news",
+   "ticker": "AMZN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "fear"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0832",
+   "id": "stock_8d6df77a1c0a6b13",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "worried"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0833",
+   "id": "stock_66a6fb567e765580",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMZN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losing",
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0834",
+   "id": "stock_04e43cc234e80fcf",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AI",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "crashing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0835",
+   "id": "stock_f5b5b407f792c2e5",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NVDA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0836",
+   "id": "stock_72df23b07fdebc41",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "recover",
+    "surge"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0845",
+   "id": "stock_9fc2885202d4e3d4",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "innovation"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0847",
+   "id": "stock_2a55e371cd60a875",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "QQQ",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high",
+    "lost"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0853",
+   "id": "stock_0ef423a99db6b378",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GOLD",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "falls",
+    "surge"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0855",
+   "id": "stock_e97fdcf3e93fb389",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0859",
+   "id": "stock_2a9e8390d1923710",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BNO",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "rising"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0863",
+   "id": "stock_08bbcd29bf3753b1",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "reduce"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0866",
+   "id": "stock_98ac7b79c0931b40",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profits"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0869",
+   "id": "stock_5fd755291c77a439",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0870",
+   "id": "stock_42bd329d7603368b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0874",
+   "id": "stock_ce4ebf481f807bed",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "GLDM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "inflation"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0875",
+   "id": "stock_41af15951d407619",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "UBER",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "bankrupt"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0878",
+   "id": "stock_9fc34f01e2d2b487",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AAPL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "drop",
+    "recession"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0887",
+   "id": "stock_53f44de2a202c614",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "dropped"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0888",
+   "id": "stock_4d157c9a21394417",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "TSLA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bullish"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0891",
+   "id": "stock_86a96baf7d15ca9d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losses"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0900",
+   "id": "stock_0e58a2ada142301c",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "fall",
+    "high",
+    "terrible"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0907",
+   "id": "stock_73ed52cc112910af",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "QQQ",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "strong"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0911",
+   "id": "stock_16300062d68a0035",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "JPM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "concern",
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0913",
+   "id": "stock_0cac7b4147331d9c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MU",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "rise",
+    "worried"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0918",
+   "id": "stock_07a863ce98009f23",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "MSFT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains",
+    "sell",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0920",
+   "id": "stock_36805f14ca1b16a2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "QQQ",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth",
+    "missing",
+    "solid"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0922",
+   "id": "stock_11c05050512b0fc2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "MU",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "sell",
+    "upside"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0925",
+   "id": "stock_27daa43f6714607b",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risks"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0929",
+   "id": "stock_44116bb34895dd34",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0930",
+   "id": "stock_473729d6fbd51835",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0931",
+   "id": "stock_2469823c673ec854",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABR",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0932",
+   "id": "stock_59af57d60075fb6e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "IBEX",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "concerns",
+    "recover",
+    "recovery"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0934",
+   "id": "stock_cb29256023306d74",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "C",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "win"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0935",
+   "id": "stock_4f7c634be2ef3e93",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "NVDA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "losing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0937",
+   "id": "stock_0bb55f57825044c2",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "debt"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0941",
+   "id": "stock_82426dd764e7fca4",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "MU",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "missing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0942",
+   "id": "stock_1c6ea0cfe7d64dd5",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0946",
+   "id": "stock_b213a6f9cf6434ba",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "best"
+  },
+  {
+   "item": "c2_0948",
+   "id": "stock_b91b2eda686d13a3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "volatility"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0950",
+   "id": "stock_839d43286ef11961",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "TM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "missed"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0953",
+   "id": "stock_bc6d6c4eb6862105",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "news",
+   "ticker": "GS",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "drop",
+    "upside"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0955",
+   "id": "stock_3b88baba6d6d1b1e",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "innovation"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0969",
+   "id": "stock_71705f641f704062",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "RENT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "opportunity"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0977",
+   "id": "stock_49b7aa12631462a3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CRM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy",
+    "overweight"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0980",
+   "id": "stock_48b7df0e87caddb9",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0987",
+   "id": "stock_eafe3ad5c37eb22f",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "NVDA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_0989",
+   "id": "stock_388a7f365fd99b21",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "NFLX",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "profitable"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0992",
+   "id": "stock_27cf8f3901ad33cd",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "COIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0993",
+   "id": "stock_33d701e6b0d58370",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0995",
+   "id": "stock_25fc280c5fe0d4f5",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "dividend"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0996",
+   "id": "stock_1a874d8b8c493ab5",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "AMZN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bear",
+    "bull"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_0998",
+   "id": "stock_bf2240a5adef3f1c",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "question"
+  },
+  {
+   "item": "c2_1004",
+   "id": "stock_93c1163a1b6862f5",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BLK",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1009",
+   "id": "stock_f1ed7fc702d35829",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "ETH",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_1013",
+   "id": "stock_40c66f58f0a9babc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "RENT",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "missing"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1023",
+   "id": "stock_86aa0f007682cd5c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "NFLX",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "debt",
+    "high"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1024",
+   "id": "stock_0292b97fcb6d9883",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "TW",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1029",
+   "id": "stock_b24ae62995843193",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "TSLA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_1031",
+   "id": "stock_efc3db61cc328afc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "MSTR",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "sell"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1033",
+   "id": "stock_efa30d2f7ba88066",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "GME",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "profit",
+    "selling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1042",
+   "id": "stock_5d60b426ee66a9bc",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "HESM",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bull",
+    "high",
+    "success"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1045",
+   "id": "stock_38590cd190bdd166",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "GOOGL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "high",
+    "profit"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1047",
+   "id": "stock_1ac15e4368d26ea3",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "META",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "gains",
+    "lost",
+    "selling",
+    "win"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1055",
+   "id": "stock_0ded7e20a6ee918f",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BABA",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "question"
+  },
+  {
+   "item": "c2_1060",
+   "id": "stock_a5e2aeb31886355c",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMZN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1061",
+   "id": "stock_cd19dd5bc960b254",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "news",
+   "ticker": "ABG",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_1063",
+   "id": "stock_b324d7232d560d2d",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "falls"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1070",
+   "id": "stock_28db118cb2b40456",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "MIN",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "breakout",
+    "falling"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1076",
+   "id": "stock_4b2f756f86ef10aa",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "SPY",
+   "sampling_group": "random",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1077",
+   "id": "stock_f120381207747692",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "BABA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "risk"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1079",
+   "id": "stock_f009952de828e792",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BULL",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "growth"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1082",
+   "id": "stock_2d5fbe3e75293e44",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "lose"
+  },
+  {
+   "item": "c2_1085",
+   "id": "stock_4e8c39b950059d32",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "QQQ",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1089",
+   "id": "stock_d412c6f328480e59",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "ES",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "bear",
+    "high",
+    "rally"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1090",
+   "id": "stock_c73f377e4e483055",
+   "label": "neutral",
+   "low_information": true,
+   "channel": "reddit",
+   "ticker": "BTC",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "buy"
+   ],
+   "loaded_by": "base"
+  },
+  {
+   "item": "c2_1095",
+   "id": "stock_ab41baea1d7f3212",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "COIN",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "highest"
+  },
+  {
+   "item": "c2_1096",
+   "id": "stock_300f2ac99338b154",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "AMD",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": null
+  },
+  {
+   "item": "c2_1097",
+   "id": "stock_f8ff8fe02433c8d7",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "twitter",
+   "ticker": "CMT",
+   "sampling_group": "random",
+   "base_lexicon_hits": [],
+   "loaded_by": "best"
+  },
+  {
+   "item": "c2_1099",
+   "id": "stock_b22737a8f586f919",
+   "label": "neutral",
+   "low_information": false,
+   "channel": "reddit",
+   "ticker": "BABA",
+   "sampling_group": "lexicon_hit",
+   "base_lexicon_hits": [
+    "loss",
+    "volatile",
+    "wins"
+   ],
+   "loaded_by": "base"
+  }
+ ]
+}

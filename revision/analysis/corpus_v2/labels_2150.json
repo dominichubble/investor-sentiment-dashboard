@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a3f-9058-7a11-9c27-7d35d983c9c7, prompt labelling_pipeline/batches/prompt_2150.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "d923c66f8cf402002d0cedee3d251a79f38e456035247ab8fee4da9a3514e84a",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_2150": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expresses conviction in TIVC rising above $5."
+  },
+  "c2_2151": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart commentary anticipates a bullish gold breakout."
+  },
+  "c2_2152": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The reference to higher strikes is too fragmentary to establish an asset view."
+  },
+  "c2_2153": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports trading results without identifying a bullish or bearish asset direction."
+  },
+  "c2_2154": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart scenarios emphasize bullish breakout and reversal patterns."
+  },
+  "c2_2155": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests general brokerage account advice without an investment outlook."
+  },
+  "c2_2156": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks about portfolio allocation without expressing an asset direction."
+  },
+  "c2_2157": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author praises earnings and expects news to drive all-time highs."
+  },
+  "c2_2158": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The watchlist describes a conditional buying setup without a clear directional forecast."
+  },
+  "c2_2159": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post presents bullish catalysts and explicitly predicts upside for OMER."
+  },
+  "c2_2160": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline reports improving relative price strength for AllianceBernstein."
+  },
+  "c2_2161": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author rejects selling advice without stating an asset outlook or price move."
+  },
+  "c2_2162": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The text is a scheduled Ethereum developer event notice."
+  },
+  "c2_2163": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author forecasts lower SPY prices and advocates shorting."
+  },
+  "c2_2164": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports an increased Amazon price target."
+  },
+  "c2_2165": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post describes a strong Nasdaq rally led by Apple approaching all-time highs."
+  },
+  "c2_2166": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author holds a short position and expects a bearish price rejection."
+  },
+  "c2_2167": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author questions the sustainability of BTI's high dividend yield."
+  },
+  "c2_2168": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports gains from buying Astrotech shares before a substantial price rise."
+  },
+  "c2_2169": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The text explicitly predicts an enormous increase in Bitcoin's price."
+  },
+  "c2_2170": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The forecast emphasizes a severe long-term Apple decline and weakening innovation."
+  },
+  "c2_2171": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline links the McRib's return to a bullish historical Bitcoin pattern."
+  },
+  "c2_2172": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The rising wedge at resistance signals a bearish SPY setup."
+  },
+  "c2_2173": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The unexplained farewell and ticker are too fragmentary to establish direction."
+  },
+  "c2_2174": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates tradable altcoin bounces despite limiting their expected upside."
+  },
+  "c2_2175": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes equity losses, stagflation risk, and ineffective monetary support."
+  },
+  "c2_2176": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports option profits without specifying whether the position is bullish or bearish."
+  },
+  "c2_2177": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The congratulatory message identifies no assessable asset development or direction."
+  },
+  "c2_2178": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Every listed analyst action is a downgrade or price-target cut."
+  },
+  "c2_2179": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post describes a rumored AWS disruption and considers betting against Amazon."
+  },
+  "c2_2180": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The commentary forecasts possible lower TLT lows and a downside target."
+  },
+  "c2_2181": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The listed sectors and funds show substantial improvements in relative strength."
+  },
+  "c2_2182": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The reported profits come from bearish SPY put positions."
+  },
+  "c2_2183": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The text implies Friday's market weakness contradicted the preceding resilience claim."
+  },
+  "c2_2184": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports a substantial FGI price increase."
+  },
+  "c2_2185": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline identifies GEO, DDR, and Andeavor as leaders in dividend challenger net gains."
+  },
+  "c2_2186": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports profits from bullish GLD calls."
+  },
+  "c2_2187": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post highlights sharp Accenture price declines and deteriorating momentum."
+  },
+  "c2_2188": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author discloses calls but provides no interpretable forecast without the referenced chart."
+  },
+  "c2_2189": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author emphasizes EWY losses, possible overvaluation, and concerns about further weakness."
+  },
+  "c2_2190": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author identifies bullish reaccumulation and plans to buy OXY."
+  },
+  "c2_2191": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The sweep observation specifies neither option direction nor an asset forecast."
+  },
+  "c2_2192": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline presents a dividend-stock roundup without a clear directional development."
+  },
+  "c2_2193": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author names SMFL a favorite and anticipates a breakout supported by an acquisition catalyst."
+  },
+  "c2_2194": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests general low-cost brokerage advice for ETF investing."
+  },
+  "c2_2195": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports gains on a bullish GOOGL call position."
+  },
+  "c2_2196": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post identifies support without predicting a bounce or breakdown."
+  },
+  "c2_2197": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author portrays Twitter as poorly managed with weak growth and price performance."
+  },
+  "c2_2198": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The commentary describes sideways Bitcoin trading without a clear directional forecast."
+  },
+  "c2_2199": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The NUKE wordplay implies a sharp decline in Nike's share price."
+  }
+ }
+}

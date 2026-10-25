@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169de-a6c2-7ca1-ab28-ba265c206bd1, prompt labelling_pipeline/batches/prompt_0150.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "0ec7e6e286b1907c0b970b6d003e7e29d22a61c7ae2abd8ac4983cd6f6aec962",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0150": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "NVDA broke out above resistance and rose to $250."
+  },
+  "c2_0151": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Weakening demand is expected to push oil toward $65."
+  },
+  "c2_0152": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "HUT surged after announcing a substantial long-term AI lease."
+  },
+  "c2_0153": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author exits COIN because of accusations and ongoing issues."
+  },
+  "c2_0154": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Lemonade beat both earnings and sales estimates."
+  },
+  "c2_0155": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline reports fund purchases without a directional assessment."
+  },
+  "c2_0156": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The text describes the copper supply chain and investment categories without a directional call."
+  },
+  "c2_0157": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "ES appears weak after rejection, with further downside expected."
+  },
+  "c2_0158": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "AAPL shows strength and is expected to test its all-time high."
+  },
+  "c2_0159": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports trading returns without identifying position direction or an asset outlook."
+  },
+  "c2_0160": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Stock futures rise and AMD gains after earnings."
+  },
+  "c2_0161": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The setup emphasizes renewed momentum, higher targets, and a potential call trade."
+  },
+  "c2_0162": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Verizon is praised for continued relative strength and its dividend yield."
+  },
+  "c2_0163": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post celebrates a functioning new Dogecoin transaction-tracking tool."
+  },
+  "c2_0164": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The main chart call is bullish on SQQQ, explicitly expressing bearish Nasdaq exposure."
+  },
+  "c2_0165": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "AMD is presented as poised for a larger upward move above $118."
+  },
+  "c2_0166": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The sarcastic rally prediction underscores a substantial deterioration in Tesla's margins."
+  },
+  "c2_0167": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Costco is described as resilient and approaching an attractive buying level."
+  },
+  "c2_0168": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "PDS Biotechnology reported a smaller loss than analysts expected."
+  },
+  "c2_0169": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The reported profit came from an explicitly bearish call spread."
+  },
+  "c2_0170": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "SMCI crashed following alleged misconduct, and the author fears further damaging news."
+  },
+  "c2_0171": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "META is approaching confirmation of a bearish topping candle despite mitigating caveats."
+  },
+  "c2_0172": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post lists scheduled earnings announcements without a directional outlook."
+  },
+  "c2_0173": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "A break above resistance is expected to send NVDA toward $170."
+  },
+  "c2_0174": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The text frames ATER as a growing problem with a need for shares and heavy short interest."
+  },
+  "c2_0175": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects the stock market to continue rising."
+  },
+  "c2_0176": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline introduces a dividend-income account tracker without an asset-specific outlook."
+  },
+  "c2_0177": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The oil and gas sector is described as beaten down and near annual lows."
+  },
+  "c2_0178": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "FSLR calls are profitable and the author anticipates potential upside gap fills."
+  },
+  "c2_0179": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline reports a substantial loss in SpaceX's market capitalization."
+  },
+  "c2_0180": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Starbucks expects earnings to return to double-digit growth."
+  },
+  "c2_0181": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expresses strong pessimism and expects the stock to fall further."
+  },
+  "c2_0182": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author is adding bids and expresses strong bullish conviction in CCJ."
+  },
+  "c2_0183": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates further upside after gaps are filled."
+  },
+  "c2_0184": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author weighs NVDA's perceived upside against rotating into riskier AI stocks."
+  },
+  "c2_0185": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The large gain came from bullish MU call options."
+  },
+  "c2_0186": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline announces a routine dividend-portfolio account update."
+  },
+  "c2_0187": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post lists option-contract statistics without a clear directional interpretation."
+  },
+  "c2_0188": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "GOOG has a bullish pennant breakout and is testing previous highs."
+  },
+  "c2_0189": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes selling and rotating sectors without a clear asset outlook."
+  },
+  "c2_0190": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The trade idea offers balanced bullish and bearish entry conditions."
+  },
+  "c2_0191": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The question compares trading approaches without expressing an asset-specific direction."
+  },
+  "c2_0192": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The product launch is accompanied by a substantial projected revenue opportunity."
+  },
+  "c2_0193": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item is a bare ticker list and summary header with no substantive content."
+  },
+  "c2_0194": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author is building a bearish SPY position at resistance."
+  },
+  "c2_0195": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author argues AIU is undervalued and predicts a rise above $2."
+  },
+  "c2_0196": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The discussion centers on CRWD's decline of over 10% despite favorable earnings."
+  },
+  "c2_0197": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "American Express is portrayed as revitalized and outperforming competitors and the market."
+  },
+  "c2_0198": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bitcoin's rebound, security progress, and proposed sovereign adoption dominate the mixed fund-flow news."
+  },
+  "c2_0199": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post is a bare watchlist with no substantive assessment."
+  }
+ }
+}

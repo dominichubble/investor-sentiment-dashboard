@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a32-5fc0-7e00-ab72-43a47a94a4c9, prompt labelling_pipeline/batches/prompt_1400.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "15913f9bebcd48a615441732e75a26c94a1ecf0f9594fd6b4f425ea7b7237ab3",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1400": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses a collectible's trade value without an investment direction."
+  },
+  "c2_1401": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The breakout, retest and bounce describe bullish price action."
+  },
+  "c2_1402": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock's 19% rise and revenue expansion prospects are positive."
+  },
+  "c2_1403": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Confidence in a trade deal is balanced by the threat of substantial tariffs."
+  },
+  "c2_1404": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The missing USDT payment raises concerns about transaction reliability."
+  },
+  "c2_1405": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The stock is explicitly described as beaten down to $4."
+  },
+  "c2_1406": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart call anticipates an upside bounce."
+  },
+  "c2_1407": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post highlights a decline exceeding 60% and a poor outlook."
+  },
+  "c2_1408": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The question emphasizes unstaking pressure, profit taking and a potential collapse."
+  },
+  "c2_1409": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "This is a chart-update header and ticker list without substantive analysis."
+  },
+  "c2_1410": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The setup anticipates resistance rejection with little support below."
+  },
+  "c2_1411": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "High selling volume is expected to sustain downward momentum."
+  },
+  "c2_1412": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Profitable premarket trading is balanced by damaging post-open trading conditions."
+  },
+  "c2_1413": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post suggests the current price may mark the day's top."
+  },
+  "c2_1414": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post provides generic trading advice without an asset outlook."
+  },
+  "c2_1415": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author recommends a bearish setup and expects late buyers to suffer."
+  },
+  "c2_1416": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post criticizes erratic USDC-pair pricing that triggers unwanted losses."
+  },
+  "c2_1417": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Supply restrictions support a breakout with substantial potential upside."
+  },
+  "c2_1418": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Buying calls while dismissing negative news expresses a bullish view."
+  },
+  "c2_1419": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline reports a valuation without a comparison or directional assessment."
+  },
+  "c2_1420": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author explicitly expects a move higher and treats a pullback as an entry."
+  },
+  "c2_1421": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Continued buying and explicit confidence in GameStop express a bullish conviction."
+  },
+  "c2_1422": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates a short squeeze and a potential price surge."
+  },
+  "c2_1423": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes another TDOC collapse and criticizes bottom-fishing risk."
+  },
+  "c2_1424": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports cumulative trading profits without specifying an asset direction."
+  },
+  "c2_1425": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The mixed entries, exits and holdings provide no dominant asset direction."
+  },
+  "c2_1426": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests general trading education without an asset outlook."
+  },
+  "c2_1427": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post describes an options-income strategy without a directional asset view."
+  },
+  "c2_1428": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author praises AMD's persistent price gains."
+  },
+  "c2_1429": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The proposed long-term purchase targets a substantial eventual price increase."
+  },
+  "c2_1430": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post highlights Apple's strong week and higher price targets."
+  },
+  "c2_1431": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author names Bitcoin and XRP as preferred crypto investments."
+  },
+  "c2_1432": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Both adjusted earnings and sales miss expectations."
+  },
+  "c2_1433": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Amazon is rising into the top of the author's profit-taking zone."
+  },
+  "c2_1434": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The positions are described as laggards being sold to reduce risk."
+  },
+  "c2_1435": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline highlights an upgrade and improving relative strength."
+  },
+  "c2_1436": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart analysis identifies bearish divergence and possible topping patterns."
+  },
+  "c2_1437": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The quoted analysis predicts further upside after a bullish reversal."
+  },
+  "c2_1438": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profits from POET puts indicate a bearish move in the underlying asset."
+  },
+  "c2_1439": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "A bull-flag breakout and continuation signal upward price movement."
+  },
+  "c2_1440": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Improving box-office results and an asserted recovery support a bullish view."
+  },
+  "c2_1441": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author considers downside more likely and discusses additional shorts."
+  },
+  "c2_1442": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author's explicit expectation is continuation higher after temporary choppiness."
+  },
+  "c2_1443": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Amazon announces a major investment to expand government AI and supercomputing capacity."
+  },
+  "c2_1444": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post seeks allocation advice without a clear directional investment claim."
+  },
+  "c2_1445": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The conditional chart call targets a rise to 2500 following a resistance break."
+  },
+  "c2_1446": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Weakening rents and reduced demand indicate deteriorating property-market conditions."
+  },
+  "c2_1447": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post disparages DJT's creator and urges holders toward another token."
+  },
+  "c2_1448": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports trading profits without identifying a bullish or bearish position."
+  },
+  "c2_1449": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post expresses concern about further upside and urges profit taking before CPI."
+  }
+ }
+}

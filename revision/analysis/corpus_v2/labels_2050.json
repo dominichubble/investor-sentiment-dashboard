@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a3d-f8f6-7fb3-a460-676a111a5fe1, prompt labelling_pipeline/batches/prompt_2050.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "550f8d5c491ce7dc1b378e34afbcb0098abc9740a06b5a88b0e43abcaa33d042",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_2050": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock keeps rising despite bearish selling."
+  },
+  "c2_2051": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Agilent beat both earnings and revenue estimates."
+  },
+  "c2_2052": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expresses strong bullishness toward the copper stocks."
+  },
+  "c2_2053": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The wedge description gives no explicit directional forecast."
+  },
+  "c2_2054": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author predicts gold will bottom here."
+  },
+  "c2_2055": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates sharp gains for China-exposed stocks if a trade deal succeeds."
+  },
+  "c2_2056": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "AbbVie beat earnings and sales estimates."
+  },
+  "c2_2057": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Bitcoin is falling amid political uncertainty."
+  },
+  "c2_2058": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author describes an attractive bullish setup and a potential addition."
+  },
+  "c2_2059": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The question suggests Apple's decline may be just beginning."
+  },
+  "c2_2060": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Firm demand supports the view that Apple's selloff is excessive."
+  },
+  "c2_2061": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The corrupted and truncated headline is too fragmentary to judge."
+  },
+  "c2_2062": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Equity weakness, oil gains, and positive year-to-date performance give mixed signals."
+  },
+  "c2_2063": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Rite Aid is rising after reporting a larger-than-expected vaccine rollout."
+  },
+  "c2_2064": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Baidu has bounced with bullish technical divergence."
+  },
+  "c2_2065": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses a valuation method without a directional asset call."
+  },
+  "c2_2066": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports gains without identifying the position's direction."
+  },
+  "c2_2067": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "AEVA's deal-driven stock surge and improved prospects outweigh the stated risks."
+  },
+  "c2_2068": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post skeptically highlights crypto payments' failure to achieve mainstream adoption."
+  },
+  "c2_2069": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes exiting and awaiting confirmation without a directional forecast."
+  },
+  "c2_2070": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Amazon's substantial decline frames the author's covered-call concerns."
+  },
+  "c2_2071": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Cameco is pushing to new highs."
+  },
+  "c2_2072": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Apple's technical weakness and potential further decline dominate the analysis."
+  },
+  "c2_2073": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SPY has gapped up following a bounce."
+  },
+  "c2_2074": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author recommends buying the named stocks and dividend holdings."
+  },
+  "c2_2075": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The planned call trade gives no explicit asset outlook or reported gain."
+  },
+  "c2_2076": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The probability of GameStop beating earnings has fallen sharply."
+  },
+  "c2_2077": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SPY is rallying with a breakout and continued upside."
+  },
+  "c2_2078": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The two investment styles are moving in opposing directions."
+  },
+  "c2_2079": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SharkNinja beat earnings and sales estimates."
+  },
+  "c2_2080": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post identifies a favorable breakout in GTES."
+  },
+  "c2_2081": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Netflix fell eight percent after its earnings report."
+  },
+  "c2_2082": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The technical analysis frames Apple's rally as overbought and vulnerable."
+  },
+  "c2_2083": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "BlackRock is described as weak and breaking down."
+  },
+  "c2_2084": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The sarcastic warning expresses concern about long exposure to the named stocks."
+  },
+  "c2_2085": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author mocks SpaceX's revenue forecast as implausible and conflicted."
+  },
+  "c2_2086": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author explicitly expresses bullishness toward KTRA."
+  },
+  "c2_2087": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The technical rejection is described as leaving bears in full control."
+  },
+  "c2_2088": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects Expedia to perform well and is buying shares."
+  },
+  "c2_2089": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Nike is breaking resistance with an expected further rise."
+  },
+  "c2_2090": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Overextension concerns balance the favorable outlook and conditional long setup."
+  },
+  "c2_2091": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline announces a routine fund portfolio update."
+  },
+  "c2_2092": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post invites general investment discussion without a directional conclusion."
+  },
+  "c2_2093": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Boston Beer is rising on an earnings beat and strong shipments."
+  },
+  "c2_2094": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Restructuring and bankruptcy concerns dominate the hopeful catalyst discussion."
+  },
+  "c2_2095": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "TRNR has gained over fifty percent alongside a distribution agreement and initial order."
+  },
+  "c2_2096": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Astera Labs is up fifteen percent after hours on earnings commentary."
+  },
+  "c2_2097": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The analysis presents balanced bullish and bearish scenarios at the same trigger area."
+  },
+  "c2_2098": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Microsoft's record-high breakout supports additional bullish purchases."
+  },
+  "c2_2099": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The analyst reiterates a favorable Outperform rating on First Solar."
+  }
+ }
+}

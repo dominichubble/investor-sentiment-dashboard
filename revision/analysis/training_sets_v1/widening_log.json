@@ -1,0 +1,4 @@
+{
+ "order_rule": "LM pos|neg minus base; doc freq over 1,100 texts desc, ties alpha",
+ "terms": []
+}

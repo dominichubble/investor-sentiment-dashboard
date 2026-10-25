@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169e5-b827-7f00-a8dd-380594f41e5c, prompt labelling_pipeline/batches/prompt_0450.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "150340b37f75435f5ec94f731280b4d8ba750f0bec44f7f01c7f3b9899a05e33",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0450": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The loss of forces keeping interest rates low presents an unfavorable macroeconomic outlook."
+  },
+  "c2_0451": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author is accumulating Google shares and expects substantial long-term gains."
+  },
+  "c2_0452": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish chart formations and support above anchored VWAP suggest upside."
+  },
+  "c2_0453": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates an upward breakout into the clouds."
+  },
+  "c2_0454": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes closing positions and changing trading strategy without a clear asset outlook."
+  },
+  "c2_0455": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Call-heavy options activity and predominantly bullish whale positioning favor upside."
+  },
+  "c2_0456": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "TRT is presented as undervalued with asymmetric upside and favorable industry demand."
+  },
+  "c2_0457": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a scheduled question-and-answer event notice ahead of a listing."
+  },
+  "c2_0458": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author has shorted Meta and names lower price targets."
+  },
+  "c2_0459": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The sell alert and proposed trade express a bearish lean despite acknowledged upside risk."
+  },
+  "c2_0460": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks about using a credit-spread indicator without making a market forecast."
+  },
+  "c2_0461": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author expects chop and consolidation without a clear directional call."
+  },
+  "c2_0462": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The market has broken through prior lows and further downside is anticipated."
+  },
+  "c2_0463": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported profits came from riding a rising market."
+  },
+  "c2_0464": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Profitable Nvidia calls and Tesla gains convey favorable price action for both assets."
+  },
+  "c2_0465": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "A rising wedge at resistance is paired with explicit downside breakdown targets."
+  },
+  "c2_0466": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The listed sectors are experiencing substantial increases in relative strength."
+  },
+  "c2_0467": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline reports a falling ASX and a sharp decline in KMD."
+  },
+  "c2_0468": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "IWM closing near a prior intraday high indicates price strength."
+  },
+  "c2_0469": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The April highs are identified as important without predicting a direction."
+  },
+  "c2_0470": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Repeated bearish bars and a stopped-out long position describe downward market movement."
+  },
+  "c2_0471": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Despite a recent decline and uncertainty, the author expects Litecoin to rise soon."
+  },
+  "c2_0472": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The quoted description explicitly indicates Nvidia moving higher."
+  },
+  "c2_0473": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Consolidation above a falling wedge suggests a bullish breakout is holding."
+  },
+  "c2_0474": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Profitable calls moving into the money indicate upward movement in SPY."
+  },
+  "c2_0475": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks about available leveraged global equity funds without a directional view."
+  },
+  "c2_0476": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The author seeks practical guidance on choosing European or US fund structures."
+  },
+  "c2_0477": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The current update reports rejection at resistance despite the earlier bullish setup."
+  },
+  "c2_0478": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author retains puts because another decline in Apple is expected."
+  },
+  "c2_0479": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post celebrates buy signals identifying the October lows."
+  },
+  "c2_0480": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests accounting guidance on capital gains without an asset outlook."
+  },
+  "c2_0481": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates selling pressure diminishing as weak holders exhaust their Bitcoin."
+  },
+  "c2_0482": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "QQQ shows relative strength, a sustained breakout, and a potential bull flag."
+  },
+  "c2_0483": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Progress toward an unspecified target does not establish price direction."
+  },
+  "c2_0484": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The author asks how TCSH distributions affect purchase timing without a directional forecast."
+  },
+  "c2_0485": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Exhausted sellers and a call purchase express an expectation of upside."
+  },
+  "c2_0486": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expects price to decline toward the range low."
+  },
+  "c2_0487": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes market turbulence and doubts traders are making money."
+  },
+  "c2_0488": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports that the anticipated GME breakout occurred."
+  },
+  "c2_0489": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The quoted short setup and regret over exiting convey a bearish asset view."
+  },
+  "c2_0490": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post describes an emerging flag breakout with a bullish lean."
+  },
+  "c2_0491": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post seeks feedback on an apparel concept without expressing an investment outlook."
+  },
+  "c2_0492": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The quoted analysis explicitly supports bullish upside and says the thesis continues to hold."
+  },
+  "c2_0493": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Renewed whale accumulation is framed favorably with more Bitcoin buying expected."
+  },
+  "c2_0494": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author affirms the anticipated short-term bounce in DraftKings."
+  },
+  "c2_0495": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Monthly bullish divergence supports an anticipated upward reversal."
+  },
+  "c2_0496": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author considers risks priced in and describes Unite as an attractive entry opportunity."
+  },
+  "c2_0497": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author questions the sustainability of KOSPI gains and expects a substantial pullback."
+  },
+  "c2_0498": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Accumulation and suggested call purchases anticipate an eventual upward breakout."
+  },
+  "c2_0499": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Square and PayPal are forming bases and advancing to new short-term highs."
+  }
+ }
+}

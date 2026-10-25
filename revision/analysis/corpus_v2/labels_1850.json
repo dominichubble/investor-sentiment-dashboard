@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a3a-1d99-7a40-9d33-90f52123f369, prompt labelling_pipeline/batches/prompt_1850.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "74985f80139824d497de7c1f1ac7a60096ac6605316a68929e0c031b2a114e9b",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1850": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart explicitly identifies a strong bullish setup and upside targets."
+  },
+  "c2_1851": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Breaking relative strength and an expected pullback establish a bearish direction."
+  },
+  "c2_1852": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates an upward breakout toward $45."
+  },
+  "c2_1853": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The bottom formation and rising-chart emoji signal bullish expectations."
+  },
+  "c2_1854": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profits on CAR puts and expectations of a SPY decline indicate bearish asset direction."
+  },
+  "c2_1855": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The question evaluates a credit-card savings strategy without a directional asset view."
+  },
+  "c2_1856": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "QQQ is described as the strongest index with a bullish flag setup."
+  },
+  "c2_1857": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The warning forecasts a substantial Tesla decline amid several business headwinds."
+  },
+  "c2_1858": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author reports deteriorating bullish positions and explicitly expects no reversal."
+  },
+  "c2_1859": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The reported MU decline and regretful risk framing convey a negative outlook."
+  },
+  "c2_1860": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports trading profits without identifying a bullish or bearish position."
+  },
+  "c2_1861": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Tesla is described as attempting to break upward through sell orders at 265."
+  },
+  "c2_1862": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports completion of a measured move tied to an explicitly bullish call."
+  },
+  "c2_1863": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item is a trader mention list without substantive asset commentary."
+  },
+  "c2_1864": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The portfolio inventory and allocation request provide no directional asset assessment."
+  },
+  "c2_1865": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Growing demand and an explicit recommendation to buy stocks convey positive prospects."
+  },
+  "c2_1866": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Amazon is credited with supporting the market in an upbeat trading outlook."
+  },
+  "c2_1867": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The profits came from SPX puts during a sharp market decline."
+  },
+  "c2_1868": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Tesla is described as an obvious short in a persistent downward trend."
+  },
+  "c2_1869": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes BYND's severe decline and bleak prospects."
+  },
+  "c2_1870": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Bitcoin is explicitly reported to be falling despite an expected supportive catalyst."
+  },
+  "c2_1871": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item contains only a ticker and attribution."
+  },
+  "c2_1872": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "McKesson missed both earnings and sales estimates."
+  },
+  "c2_1873": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The stock decline and collapsing free cash flow dominate the revenue growth."
+  },
+  "c2_1874": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expresses increasing conviction in SLS and its buyout prospects."
+  },
+  "c2_1875": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Both proposed chart paths describe downward corrections."
+  },
+  "c2_1876": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Support held and the post identifies a long trigger with further upside targets."
+  },
+  "c2_1877": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes accumulating a long-term position without an explicit asset outlook."
+  },
+  "c2_1878": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The insult and tax debate do not establish a directional assessment of Tesla's value."
+  },
+  "c2_1879": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post rejects a bearish setup and anticipates an upward push if support holds."
+  },
+  "c2_1880": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Strong financial improvements accompany an expectation of an upward price gap."
+  },
+  "c2_1881": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bitcoin's substantial appreciation and outperformance are explicitly highlighted."
+  },
+  "c2_1882": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author's explicit bullish call for AMC and GME rejects the quoted criticism."
+  },
+  "c2_1883": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The question concerns emergency-fund construction without a directional view on CDs."
+  },
+  "c2_1884": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Ethereum is reported to have risen over 20% and outperformed other cryptocurrencies."
+  },
+  "c2_1885": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The stock decline is balanced by strong fundamentals and an open question about overreaction."
+  },
+  "c2_1886": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author highlights improving FLWS fundamentals and presents it as an attractive opportunity."
+  },
+  "c2_1887": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item is a chart-series header and ticker list without substantive analysis."
+  },
+  "c2_1888": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The falling-wedge breakout and inverse head-and-shoulders pattern indicate bullish direction."
+  },
+  "c2_1889": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author describes worsening Meta losses and antitrust concerns."
+  },
+  "c2_1890": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post frames AEHL's low price, crypto initiative, and borrowing constraints as potential upside catalysts."
+  },
+  "c2_1891": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The suspected false breakout and lower potential bounce zone indicate downside."
+  },
+  "c2_1892": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart describes a correction toward lower support and an urgent need to recover the moving average."
+  },
+  "c2_1893": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Strong index breadth is balanced against declines in major technology stocks."
+  },
+  "c2_1894": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Roblox received an analyst upgrade and a higher price target."
+  },
+  "c2_1895": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The dismissal of charges is reported without a stated effect on any asset."
+  },
+  "c2_1896": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The options quote lists contract statistics without a clear directional assessment."
+  },
+  "c2_1897": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Weakening breadth despite an index bounce presents a bearish market signal."
+  },
+  "c2_1898": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post identifies conditional bullish upside if SPY holds support above 390."
+  },
+  "c2_1899": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The rate cut is framed as favorable policy intended to support the economy."
+  }
+ }
+}

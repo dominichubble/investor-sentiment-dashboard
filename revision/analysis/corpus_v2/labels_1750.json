@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a38-3a5f-7d40-ba29-3913d56b8096, prompt labelling_pipeline/batches/prompt_1750.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "2ec48941a14cddc89e5d2f2a01497185135abc50117f7c8e3212c034f4bf63d8",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1750": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The quoted price target lacks a clear upward or downward direction."
+  },
+  "c2_1751": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The cup-and-handle formation signals a potential bullish breakout."
+  },
+  "c2_1752": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post explicitly predicts a substantial gold price decline."
+  },
+  "c2_1753": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post argues that anticipated user demand could exhaust ARC token supply."
+  },
+  "c2_1754": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The bearish put position accompanies an explicit description of market weakness and a sharp decline."
+  },
+  "c2_1755": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The engulfing pattern is mentioned without specifying a bullish or bearish direction."
+  },
+  "c2_1756": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported loss is smaller than both consensus and whisper expectations."
+  },
+  "c2_1757": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The earnings beat and sales miss provide mixed results."
+  },
+  "c2_1758": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author calls the selloff overblown and expects a price recovery."
+  },
+  "c2_1759": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline describes a rebound from lows and strengthening momentum."
+  },
+  "c2_1760": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Despite near-term concerns, the author emphasizes demand, investment support, and strong long-term conviction."
+  },
+  "c2_1761": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Resistance rejection and adverse crash news drive a cautious outlook."
+  },
+  "c2_1762": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The missing visual comparison leaves the chart's direction too fragmentary to judge."
+  },
+  "c2_1763": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post reports a price decline below a moving average."
+  },
+  "c2_1764": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SPY has broken out and invalidated its previous bearish divergence."
+  },
+  "c2_1765": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "ARKK is described as recovering and breaking out of a falling wedge."
+  },
+  "c2_1766": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expresses skepticism about repeated failed rallies and persistent bear-market conditions."
+  },
+  "c2_1767": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reliable support and bullish divergence suggest a potential rebound."
+  },
+  "c2_1768": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author anticipates a bull trap and recommends puts after a reversal."
+  },
+  "c2_1769": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The falling wedge and sustained bullish divergence imply upside potential."
+  },
+  "c2_1770": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reclaiming the stated Bitcoin level is presented as a trigger for further upside."
+  },
+  "c2_1771": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The update confirms the bullish move occurred despite caution about chasing it."
+  },
+  "c2_1772": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline predicts widespread manufacturer bankruptcies caused by memory shortages."
+  },
+  "c2_1773": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable SLV puts indicate a bearish move in the underlying asset."
+  },
+  "c2_1774": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The research target implies more than 250 percent upside for GBS."
+  },
+  "c2_1775": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "IWM is characterized as unusually weak with vulnerable support and difficult resistance."
+  },
+  "c2_1776": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Positive options delta and aggressive bulls indicate bullish positioning."
+  },
+  "c2_1777": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "A large loss on written puts indicates an adverse downward move in SBUX."
+  },
+  "c2_1778": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The watchlist offers both bullish and bearish conditional trades without a dominant direction."
+  },
+  "c2_1779": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks how to purchase crypto without expressing a market outlook."
+  },
+  "c2_1780": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The proposed bullish strategy seeks gains from MSTR and Bitcoin despite acknowledging downside risks."
+  },
+  "c2_1781": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports substantial gains from owning Nvidia shares."
+  },
+  "c2_1782": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Visa's testing of autonomous AI purchases represents a new business initiative."
+  },
+  "c2_1783": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The lawsuit and infringement allegations create legal risk for Corellium."
+  },
+  "c2_1784": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The neckline rejection and failed breakout indicate bearish technical conditions."
+  },
+  "c2_1785": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Government support enables a plant reopening and helps address supply concerns."
+  },
+  "c2_1786": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported increase in call value reflects gains on a bullish position."
+  },
+  "c2_1787": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The publication announcement states no commercial benefit or asset-price direction."
+  },
+  "c2_1788": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates a strong upward move above the stated breakout level."
+  },
+  "c2_1789": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post seeks practical retail-leasing advice without an investment outlook."
+  },
+  "c2_1790": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author rejects bearish claims and expects a recovery and bullish earnings."
+  },
+  "c2_1791": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "A downtrend breakout, improving momentum, and purchased calls support a bullish outlook."
+  },
+  "c2_1792": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post reports another decline and suggests a potential price top."
+  },
+  "c2_1793": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Holding the previous breakout zone is presented as a constructive technical setup."
+  },
+  "c2_1794": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post promotes a brokerage signup incentive and directs readers to a promotional article."
+  },
+  "c2_1795": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The buying question is framed around an expected substantial near-term Bitcoin decline."
+  },
+  "c2_1796": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Both stocks are presented as oversold buying opportunities after excessive declines."
+  },
+  "c2_1797": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports gains without identifying the position or underlying asset direction."
+  },
+  "c2_1798": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The watchlist mixes bearish, bullish, and conflicting signals without a clearly dominant direction."
+  },
+  "c2_1799": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post advertises an insider-trading tracking service using MRNA as an example."
+  }
+ }
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a30-843d-7512-aef4-5731a202f1a6, prompt labelling_pipeline/batches/prompt_1300.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "885d4ec7a4745e931be70f092e3807e4d65dd438624972461ddff54d89081324",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1300": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "TLT is described as bearish and below all key moving averages."
+  },
+  "c2_1301": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "UAA is reported to have risen 3%."
+  },
+  "c2_1302": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The options alert provides contract details without a clear asset outlook."
+  },
+  "c2_1303": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Amazon's expansion is framed as a competitive threat to HIMS."
+  },
+  "c2_1304": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The trial announcement provides no indication whether the results were favorable."
+  },
+  "c2_1305": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "BREW is favored for its growth exposure and defensive characteristics."
+  },
+  "c2_1306": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author recounts a position and gains without expressing an asset outlook."
+  },
+  "c2_1307": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The failed breakout follow-through is explicitly described as concerning."
+  },
+  "c2_1308": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The latest observation emphasizes SPY's rejection near 518."
+  },
+  "c2_1309": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author recommends a short with lower price targets."
+  },
+  "c2_1310": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The comparison emphasizes overcapacity risk and extreme Nvidia expectations."
+  },
+  "c2_1311": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses retirement-account rules without an asset-specific outlook."
+  },
+  "c2_1312": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Declining miner outflows are presented as easing Bitcoin selling pressure."
+  },
+  "c2_1313": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates a strong near-term bull run and favors calls despite longer-term risks."
+  },
+  "c2_1314": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "TROO is presented as pursuing a broader integrated digital ecosystem."
+  },
+  "c2_1315": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "BBWI is portrayed as a solid business trading at an attractive valuation."
+  },
+  "c2_1316": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Dark-pool activity is described as selling SPY and QQQ at the highs."
+  },
+  "c2_1317": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author buys PFIN in anticipation of a breakout above $8."
+  },
+  "c2_1318": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The bullish reversal pattern, upside targets, and calls indicate an upward outlook."
+  },
+  "c2_1319": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author favors buying more NBIS because strengthening fundamentals support substantial upside."
+  },
+  "c2_1320": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post warns of tax burdens and overpriced AI additions hurting index investors."
+  },
+  "c2_1321": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The market discussion is dominated by economic fragility and AI-bubble concerns."
+  },
+  "c2_1322": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Withdrawal restrictions are framed as evidence of broader financial pressure resembling a bank run."
+  },
+  "c2_1323": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes managing an existing short without stating gains or a directional outlook."
+  },
+  "c2_1324": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "A forming bottom pivot is presented as a hopeful reversal signal."
+  },
+  "c2_1325": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Both SPY and SPX are explicitly reported rising."
+  },
+  "c2_1326": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The oil long is supported by supply-disruption arguments and higher spot prices."
+  },
+  "c2_1327": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Potential layoffs and mounting AI costs are balanced by expected efficiency gains."
+  },
+  "c2_1328": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post primarily reports options-flow statistics without a clear price forecast."
+  },
+  "c2_1329": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The question concerns CMBS underwriting mechanics without a directional investment view."
+  },
+  "c2_1330": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks whether AMD remains undervalued without taking a clear side."
+  },
+  "c2_1331": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post frames cryptocurrency wallets as potentially fake and questions their credibility."
+  },
+  "c2_1332": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The quoted article reports Bitcoin reaching an all-time high."
+  },
+  "c2_1333": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "CF is falling as anticipated by the author's bearish short setup."
+  },
+  "c2_1334": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Double-top and negative-divergence warnings dominate the chart assessment."
+  },
+  "c2_1335": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects tariff exclusions to drive Nvidia's price substantially higher."
+  },
+  "c2_1336": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "XRP is described as a failing project whose investors provide exit liquidity."
+  },
+  "c2_1337": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The personal pet memorial supplies no interpretable financial content."
+  },
+  "c2_1338": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author doubts earnings can sustain valuations and expects the market to decline."
+  },
+  "c2_1339": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bitcoin surged to a new all-time high while short positions were liquidated."
+  },
+  "c2_1340": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Super Micro is reported rising 15% following business disclosures."
+  },
+  "c2_1341": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Snowflake's record surge is attributed to strong earnings and AI-driven business growth."
+  },
+  "c2_1342": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post primarily advertises a trading-alert account and solicits followers."
+  },
+  "c2_1343": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The chart describes price within a pattern without an explicit directional call."
+  },
+  "c2_1344": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Apple's broken trend line and poor earnings reaction are described as bearish."
+  },
+  "c2_1345": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post reports a Backpack token allocation and staking mechanics without a value outlook."
+  },
+  "c2_1346": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "SHOP is described as trading sideways while a potential future breakout remains unconfirmed."
+  },
+  "c2_1347": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The possible reversal is mentioned without specifying its direction."
+  },
+  "c2_1348": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The anticipated pullback is expected to lead to new highs later in the week."
+  },
+  "c2_1349": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post encourages shareholder contact with management without a clear asset-value outlook."
+  }
+ }
+}

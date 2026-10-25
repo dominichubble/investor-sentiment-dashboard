@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a2c-d8ab-7922-802b-a2af16d7ae14, prompt labelling_pipeline/batches/prompt_1100.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "39e3752835b72eaba857412ae7eca41f098e8f983d939f999420f4e7af67554b",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1100": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post criticizes Google Finance for lost watchlists and a worse user experience."
+  },
+  "c2_1101": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Gold's bullish advance and potential breakout dominate the caution about short-term resistance."
+  },
+  "c2_1102": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "PALI reached a new high of the day after the author's dip purchases."
+  },
+  "c2_1103": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "TLT reclaimed its 200-day moving average within an ascending triangle."
+  },
+  "c2_1104": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author highlights industry weakness and suggests shorting or limiting MU and NVDA."
+  },
+  "c2_1105": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart explicitly identifies a bearish reversal below key moving averages."
+  },
+  "c2_1106": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Avolon's intended purchase of additional aircraft supports Boeing's business."
+  },
+  "c2_1107": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses a generic dip-buying framework without a directional asset outlook."
+  },
+  "c2_1108": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about retirement prospects without expressing a clear Bitcoin price outlook."
+  },
+  "c2_1109": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests an analytical framework for comparing property strategies without favoring either."
+  },
+  "c2_1110": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post warns that stagflation and recession could end the bull market."
+  },
+  "c2_1111": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post explains a generic VWAP trading technique without a current directional call."
+  },
+  "c2_1112": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author frames oil stocks as late-stage opportunities with XOM and CVX already too expensive."
+  },
+  "c2_1113": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post advertises a proprietary trading algorithm and paid membership benefits."
+  },
+  "c2_1114": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Expiring put exposure and potential headlines are presented as catalysts for a Tesla rally."
+  },
+  "c2_1115": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates upside into earnings if HOOD holds support."
+  },
+  "c2_1116": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart highlights bullish divergence alongside a tightening falling wedge."
+  },
+  "c2_1117": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "BBW's reported earnings exceeded consensus expectations."
+  },
+  "c2_1118": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post describes a sharp cryptocurrency decline and large holders selling Bitcoin."
+  },
+  "c2_1119": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "TLRY is described as primed to bounce from support with a possible double bottom."
+  },
+  "c2_1120": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Micron's earnings beats, strong growth and 14% after-hours rise indicate positive direction."
+  },
+  "c2_1121": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Looser mortgage insurance requirements are presented as reducing homeownership costs."
+  },
+  "c2_1122": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Apple's rebound, reclaimed highs and bullish options flow support an expected move higher."
+  },
+  "c2_1123": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author views discounted assets as attractive buying opportunities."
+  },
+  "c2_1124": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author holds COIN calls and endorses a move toward all-time highs."
+  },
+  "c2_1125": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Stronger consumer sentiment is offset by higher inflation expectations and mixed inventory data."
+  },
+  "c2_1126": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart reports a falling-wedge breakout and a developing bullish reversal pattern."
+  },
+  "c2_1127": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports an 870% gain from owning NVDA shares."
+  },
+  "c2_1128": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author proposes shorting Bumble because of persistent declines and worsening investment conditions."
+  },
+  "c2_1129": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author anticipates resistance ending the bounce and another pullback toward the moving average."
+  },
+  "c2_1130": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author worries that NVDA is confirming a topping candle."
+  },
+  "c2_1131": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author says the expected IREN spike failed and anticipates losses on bullish calls."
+  },
+  "c2_1132": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates an MCD breakout despite uncertainty about its timing."
+  },
+  "c2_1133": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The tightening falling wedge signals a bullish technical setup."
+  },
+  "c2_1134": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bank executives and directors buying their own shares signal confidence in those banks."
+  },
+  "c2_1135": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The analyst list mixes upgrades, a substantial downgrade and rating initiations."
+  },
+  "c2_1136": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post signals buying interest in SPY and S&P futures at current levels."
+  },
+  "c2_1137": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline emphasizes Supermicro's vulnerability to losing Nvidia's support."
+  },
+  "c2_1138": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Tesla's former support has become resistance with thin volume below."
+  },
+  "c2_1139": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The report describes a severe collapse in Iraqi oil production caused by shipping disruption."
+  },
+  "c2_1140": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart warns of substantial further declines if the key support level fails."
+  },
+  "c2_1141": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post identifies an area of interest without predicting a bounce or further decline."
+  },
+  "c2_1142": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Ford's options activity is explicitly described as showing increasing bullish pressure."
+  },
+  "c2_1143": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The end of the SEC investigation reduces regulatory uncertainty surrounding the meme coin."
+  },
+  "c2_1144": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author weighs cryptocurrency risks against potential upside without reaching a directional conclusion."
+  },
+  "c2_1145": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses astrology without expressing an identifiable asset outlook."
+  },
+  "c2_1146": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports substantial gains from holding NVDA as its value increased."
+  },
+  "c2_1147": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post describes falling gold and silver prices and substantial portfolio losses."
+  },
+  "c2_1148": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author buys S based on an attractive chart and anticipated AI-related upside."
+  },
+  "c2_1149": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expects NFLX to fall sharply and discusses entering a short position."
+  }
+ }
+}

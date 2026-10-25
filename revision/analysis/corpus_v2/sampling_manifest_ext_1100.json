@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-10-23T19:10:52.291562+00:00",
+  "seed": 20261023,
+  "first_item": "c2_1100",
+  "n_random": 436,
+  "n_lexicon_hit": 764,
+  "query": "SELECT id, text, ticker, source, data_source, published_at FROM sentiment_records WHERE ticker IS NOT NULL ORDER BY id",
+  "transaction_read_only": true,
+  "filters": {
+    "queried": 159081,
+    "length_removed": 103366,
+    "duplicate_removed": 21706,
+    "benchmark_overlap_removed": 639,
+    "language_proxy_removed": 382,
+    "eligible": 32988,
+    "existing_candidates_removed": 1100,
+    "eligible_after_extension_exclusions": 31888
+  },
+  "eligible_by_channel": {
+    "twitter": 19093,
+    "reddit": 11437,
+    "news": 1358
+  },
+  "eligible_with_lexicon_hit": 13300,
+  "sampled_by_group_and_channel": {
+    "lexicon_hit/reddit": 331,
+    "random/twitter": 269,
+    "lexicon_hit/twitter": 403,
+    "random/reddit": 153,
+    "lexicon_hit/news": 30,
+    "random/news": 14
+  },
+  "benchmark_exclusion": {
+    "original_359_sha256": "22e42d9c32c13f25558af725d14bd8bbe346326524f2568a93fce0de67ce5ee8",
+    "frozen_338_sha256": "f6be08fced2b15be75f0b594e81c28eedd94b2bd12a6e7a61a669b6708d82008",
+    "n_ids": 359
+  },
+  "existing_candidates_sha256": "0b832c2b5b9a2469bab647a587b897376733ab01fca01050db122ff37eab3116",
+  "rule_sha256": "069efc1599e6e51767bf0b4e730e0faa07164cabd11381bb4594eb1968d061d8",
+  "lexicon_source_sha256": "d16cec620fa7664e9d93e8559cc8ab2126e4bfe31e872bd07728d1610429a794",
+  "eligible_frame_sha256": "cb0794a85e378fd6737b0fbce90340f6161ad375a2894507c2d0bee1ac119136",
+  "sampling": "436 unrestricted random first, then 764 lexicon-hit from remaining frame (corpus_rule.sample_candidates, unchanged); 7:4 ratio as in the original 700:400 draw; existing 1,100 candidates removed from the frame first",
+  "verification": "1200 unique ids and normalised texts; zero overlap with 359+338 benchmark and the 1,100 existing candidates by id and normalised text; same sample after reversing frame input",
+  "labelling_status": "not labelled at draw time; no FinBERT or stored database labels queried",
+  "candidates_sha256": "280f9f03817ef1a775643a3a07121b4551325c55654f96082e97a3ef405135e8"
+}

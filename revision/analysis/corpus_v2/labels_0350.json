@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169e3-d2e4-7d92-80ee-89f94413fe8d, prompt labelling_pipeline/batches/prompt_0350.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "2fd811d3542aac96156c0fd9ee0fff51d8d86cd8f0eff50a1a912189cdd5800b",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0350": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author calls ISRG oversold and a great value buy."
+  },
+  "c2_0351": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart call anticipates higher prices following a breakout above 950."
+  },
+  "c2_0352": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported call gains and successful dip buy indicate bullish asset direction."
+  },
+  "c2_0353": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The analyst initiates coverage with an outperform rating."
+  },
+  "c2_0354": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "PYPL is reported down 3% after earnings."
+  },
+  "c2_0355": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author highlights Bitcoin's usefulness for international purchases and plans greater use."
+  },
+  "c2_0356": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The SPX chart signals bearish rejection and continuation of the downward trend."
+  },
+  "c2_0357": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "BlackBerry's transformation is presented as timely for growing secure communications demand."
+  },
+  "c2_0358": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author describes severe disappointment and losses in the previously bullish holding."
+  },
+  "c2_0359": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The substantial gains on AAPL puts reflect a bearish move in Apple."
+  },
+  "c2_0360": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline frames lost monetary independence as a harmful economic risk."
+  },
+  "c2_0361": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The descending channel and emphatic concern about the stock give the post a net negative tone."
+  },
+  "c2_0362": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Semiconductor all-time highs are explicitly described as bullish."
+  },
+  "c2_0363": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates another upward breakout through the moving average."
+  },
+  "c2_0364": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author expresses interest without stating an expected price direction."
+  },
+  "c2_0365": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Strong long-term retention and declining exchange reserves suggest reduced selling supply."
+  },
+  "c2_0366": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart call explicitly expects more upside while support holds."
+  },
+  "c2_0367": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author identifies a bearish weekly OBV breakdown."
+  },
+  "c2_0368": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a practical question about obtaining ETH for transaction fees."
+  },
+  "c2_0369": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Calling SPY's options positioning a hot mess conveys a negative risk assessment."
+  },
+  "c2_0370": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author highlights a clearer setup following an upward breakout."
+  },
+  "c2_0371": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The heart-eyes reaction expresses enthusiasm for NFLX."
+  },
+  "c2_0372": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The earnings beat is balanced by reduced guidance."
+  },
+  "c2_0373": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline highlights a large Bitcoin purchase and the prospect of further buying."
+  },
+  "c2_0374": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post presents bearish rejection and bullish breakout scenarios without favoring either."
+  },
+  "c2_0375": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports personal investing losses without identifying an asset direction."
+  },
+  "c2_0376": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Despite near-term downside concerns, the author presents Bitcoin as a buying opportunity with substantial upside."
+  },
+  "c2_0377": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post highlights potential reversal, revenue growth, expanding margins, and new products."
+  },
+  "c2_0378": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The crypto crash is described as impairing market makers and slowing trading."
+  },
+  "c2_0379": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author favors QQQI and similar income ETFs for satisfactory returns and easy management."
+  },
+  "c2_0380": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart call targets continued gains and considers bullish call positions."
+  },
+  "c2_0381": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Three earnings beats dominate the single earnings miss in the roundup."
+  },
+  "c2_0382": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post explicitly describes AMZN moving higher."
+  },
+  "c2_0383": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item asks about household budgeting without expressing an asset valuation view."
+  },
+  "c2_0384": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported enormous profit on long-held Bitcoin reflects asset appreciation."
+  },
+  "c2_0385": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The text explicitly reports that oil prices were crushed."
+  },
+  "c2_0386": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author describes altcoins as discounted and anticipates renewed trading activity."
+  },
+  "c2_0387": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author identifies a major upward breakout on the monthly chart."
+  },
+  "c2_0388": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes lost support, a breakdown, and a substantial price decline."
+  },
+  "c2_0389": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The chart pattern is named without an explicit breakout or price forecast."
+  },
+  "c2_0390": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock is having a good day and the author anticipates a bullish breakout."
+  },
+  "c2_0391": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author anticipates trading opportunities without specifying bullish or bearish asset direction."
+  },
+  "c2_0392": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects Oracle to benefit from AI and rally through all-time highs."
+  },
+  "c2_0393": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports a realized gain without identifying the position or asset direction."
+  },
+  "c2_0394": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock is presented favorably as approaching a buying opportunity."
+  },
+  "c2_0395": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "QQQ is described as breaking out after a double bottom and reclaiming its moving average."
+  },
+  "c2_0396": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "This is a social follow recommendation without a judgeable financial asset view."
+  },
+  "c2_0397": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author highlights substantial potential returns from a recovery in NFLX."
+  },
+  "c2_0398": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests general investing education resources without an asset view."
+  },
+  "c2_0399": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart explicitly identifies a bullish move and a higher price target."
+  }
+ }
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169f1-4bef-74e1-a8e8-21e5abaa7c89, prompt labelling_pipeline/batches/prompt_1050.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "39b88871eede1411f4db65433113567552c23f05127ac2dbe2680a3889cbdf61",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1050": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author wants APT holdings to rise in value."
+  },
+  "c2_1051": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author explicitly adopts a bullish bias while support holds."
+  },
+  "c2_1052": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post counters dilution fears by linking AMC share issuance to price gains."
+  },
+  "c2_1053": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "LYFT is described as breaking upward from its base."
+  },
+  "c2_1054": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart description identifies a bullish base breakout."
+  },
+  "c2_1055": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses student loan repayment mechanics without an asset outlook."
+  },
+  "c2_1056": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author holds a bullish SQQQ position and anticipates further gains in the inverse fund."
+  },
+  "c2_1057": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post identifies a falling wedge breakout and an explicit bull case."
+  },
+  "c2_1058": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The substantial ETH accumulation is framed as growing institutional adoption."
+  },
+  "c2_1059": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "AMZN is explicitly reported down $10."
+  },
+  "c2_1060": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The wallet availability question expresses no directional investment view."
+  },
+  "c2_1061": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is an earnings call transcript headline without directional information."
+  },
+  "c2_1062": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported gains came from bullish MU call positions."
+  },
+  "c2_1063": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The reported Bitcoin decline is balanced by analysts describing it as underpriced."
+  },
+  "c2_1064": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "META is explicitly praised for its price strength."
+  },
+  "c2_1065": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Oversupply concerns explicitly outweigh Alcoa's short-term gain."
+  },
+  "c2_1066": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports gains in EWY and its major holdings despite questioning their relative performance."
+  },
+  "c2_1067": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author maintains a bearish interpretation and expects a rejection."
+  },
+  "c2_1068": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author confidently predicts a rally and higher CING prices."
+  },
+  "c2_1069": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "AMD announces additional buybacks and its shares climb 8%."
+  },
+  "c2_1070": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks whether a breakout will occur without asserting a directional outcome."
+  },
+  "c2_1071": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart commentary explicitly identifies a bearish reversal."
+  },
+  "c2_1072": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects the shipping disruption to generate gains on bullish DHT calls."
+  },
+  "c2_1073": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author confidently anticipates JMIA reaching a higher price target."
+  },
+  "c2_1074": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "XLV and XLF are described as slipping below previous highs."
+  },
+  "c2_1075": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "NKE shows relative strength and the author anticipates an upward breakout."
+  },
+  "c2_1076": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post recounts past short positions and broker actions without a current asset outlook."
+  },
+  "c2_1077": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes a low-risk trade without identifying its direction."
+  },
+  "c2_1078": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "RIVN has fallen 8.5% and the author sees demand only at a lower level."
+  },
+  "c2_1079": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post provides personal investing background without a directional asset assessment."
+  },
+  "c2_1080": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The prevailing outlook emphasizes lost support, lower lows, and shorting rallies."
+  },
+  "c2_1081": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author is adding to an AMZN short position and plans further bearish exposure."
+  },
+  "c2_1082": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post presents balanced bullish and bearish scenarios around the same moving average."
+  },
+  "c2_1083": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Qualcomm shares surge 20% following earnings and a potential chip deal."
+  },
+  "c2_1084": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post frames its examples as companies with strong prospects for eventual success."
+  },
+  "c2_1085": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The gains come from both calls and puts without an identifiable asset direction."
+  },
+  "c2_1086": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Upgrades and price target increases clearly dominate the analyst list."
+  },
+  "c2_1087": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author plans to accumulate COIN and crypto in anticipation of a rally."
+  },
+  "c2_1088": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The market commentary conveys distress and a predominantly adverse outlook."
+  },
+  "c2_1089": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post offers balanced conditional scenarios for a rally or a return to range lows."
+  },
+  "c2_1090": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks how Bitcoin ETF purchases affect supply without expressing an investment outlook."
+  },
+  "c2_1091": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Starbucks completes a China deal and plans store expansion."
+  },
+  "c2_1092": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author considers bearish puts to hedge anticipated Bitcoin downside."
+  },
+  "c2_1093": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The reported gains arose from repeated bullish SPY call trades."
+  },
+  "c2_1094": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author leans toward pausing purchases in anticipation of a Bitcoin price decline."
+  },
+  "c2_1095": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "High trading volume is reported without a price direction or explicit outlook."
+  },
+  "c2_1096": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports profits without identifying position direction or an asset view."
+  },
+  "c2_1097": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Strong recent and long-term gains are balanced by substantial year-to-date and annual losses."
+  },
+  "c2_1098": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline reports severe price declines in silver and gold."
+  },
+  "c2_1099": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The proposed simultaneous long and short strategy expresses no directional market lean."
+  }
+ }
+}

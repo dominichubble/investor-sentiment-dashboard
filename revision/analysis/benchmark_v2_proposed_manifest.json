@@ -1,0 +1,181 @@
+{
+  "status": "PROPOSAL \u2014 awaiting Checkpoint A approval",
+  "date": "2026-10-21",
+  "inputs_sha256": {
+    "analysis/benchmark_v2_final.json": "22e42d9c32c13f25558af725d14bd8bbe346326524f2568a93fce0de67ce5ee8",
+    "analysis/benchmark_v2_labels_v2.json": "ec01c024d2b2c36e78cf4ba9032d0df57ae2dad9c05a8a0e6eae37d90b3071c7",
+    "analysis/dom_label_check_2_completed.csv": "b18d533e22c5f68681aa0c8b030808964c4014d6c7679bbab3c9b8924bc52f8e"
+  },
+  "labeller": "Claude (claude-opus-5-5), in-context",
+  "rubric": "v2",
+  "label_date": "2026-10-20",
+  "policy": "Remove union of Dom check #2 unjudgeable items and model R7 excludes. Retain check #1 factual filler under approved R6. Retained sentiment labels are unchanged model v2 labels, not human consensus labels.",
+  "original_n": 359,
+  "proposed_n": 338,
+  "human_excludes": 19,
+  "model_excludes": 3,
+  "overlap": 1,
+  "removed_n": 21,
+  "label_counts": {
+    "neutral": 135,
+    "positive": 122,
+    "negative": 81
+  },
+  "channel_counts": {
+    "reddit": 108,
+    "news": 115,
+    "twitter": 115
+  },
+  "low_information_n": 66,
+  "caveat": "Human eligibility screening covers only the 50 reserve items here; remaining items have not all been independently screened by Dom. Sentiment agreement on the reserve set is conditional on the 31 human-classifiable items. This membership proposal uses reserve-set eligibility judgements; it is not rubric tuning or an untouched final validation set.",
+  "excluded": [
+    {
+      "item": "b2_006",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_009",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "twitter"
+    },
+    {
+      "item": "b2_014",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_040",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "positive",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_042",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_089",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_117",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "positive",
+      "channel": "twitter"
+    },
+    {
+      "item": "b2_133",
+      "human_unjudgeable": true,
+      "model_R7_exclude": true,
+      "model_v2_label": "exclude",
+      "channel": "twitter"
+    },
+    {
+      "item": "b2_168",
+      "human_unjudgeable": false,
+      "model_R7_exclude": true,
+      "model_v2_label": "exclude",
+      "channel": "twitter"
+    },
+    {
+      "item": "b2_194",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "positive",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_199",
+      "human_unjudgeable": false,
+      "model_R7_exclude": true,
+      "model_v2_label": "exclude",
+      "channel": "twitter"
+    },
+    {
+      "item": "b2_229",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "positive",
+      "channel": "news"
+    },
+    {
+      "item": "b2_245",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_290",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "positive",
+      "channel": "news"
+    },
+    {
+      "item": "b2_303",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_318",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_322",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_345",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    },
+    {
+      "item": "b2_349",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_360",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "reddit"
+    },
+    {
+      "item": "b2_374",
+      "human_unjudgeable": true,
+      "model_R7_exclude": false,
+      "model_v2_label": "neutral",
+      "channel": "news"
+    }
+  ],
+  "proposal_sha256": "fd8611ad13057c9e5f61a56e141b2076ad37e3b04efc297e35c754a3e2560667"
+}

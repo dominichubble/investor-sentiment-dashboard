@@ -1,0 +1,169 @@
+{
+ "data": {
+  "sentences_allagree": {
+   "n": 2264,
+   "n_unique_text": 2259,
+   "label_counts": {
+    "positive": 570,
+    "negative": 303,
+    "neutral": 1391
+   }
+  },
+  "sentences_50agree": {
+   "n": 4846,
+   "n_unique_text": 4838,
+   "label_counts": {
+    "positive": 1363,
+    "negative": 604,
+    "neutral": 2879
+   }
+  }
+ },
+ "max_length": 128,
+ "models": {
+  "stock": {
+   "sentences_allagree": {
+    "accuracy": 0.9717314487632509,
+    "macro_f1": 0.962503461452302,
+    "pred_counts": {
+     "positive": 588,
+     "negative": 329,
+     "neutral": 1347
+    },
+    "recall": {
+     "positive": 0.9771929824561404,
+     "negative": 0.9834983498349835,
+     "neutral": 0.9669302659956865
+    }
+   },
+   "sentences_50agree": {
+    "accuracy": 0.8895996698307883,
+    "macro_f1": 0.8825330133105712,
+    "pred_counts": {
+     "positive": 1549,
+     "negative": 730,
+     "neutral": 2567
+    },
+    "recall": {
+     "positive": 0.9207630227439472,
+     "negative": 0.9701986754966887,
+     "neutral": 0.8579367836054186
+    }
+   },
+   "wall_seconds": 286.1
+  },
+  "arm_a_seed84": {
+   "selected_by": "best validation macro-F1 over 5 seeds",
+   "seed": 84,
+   "best_epoch": 3,
+   "retrain_reproduces_saved_benchmark_preds": true,
+   "retrain_bench_macro_f1": 0.5978231049084511,
+   "saved_bench_macro_f1": 0.5978231049084511,
+   "sentences_allagree": {
+    "accuracy": 0.9346289752650176,
+    "macro_f1": 0.9202618918421926,
+    "pred_counts": {
+     "positive": 618,
+     "negative": 367,
+     "neutral": 1279
+    },
+    "recall": {
+     "positive": 0.9438596491228071,
+     "negative": 0.9933993399339934,
+     "neutral": 0.9180445722501798
+    }
+   },
+   "sentences_50agree": {
+    "accuracy": 0.8219149814279818,
+    "macro_f1": 0.8195795396207831,
+    "pred_counts": {
+     "positive": 1821,
+     "negative": 834,
+     "neutral": 2191
+    },
+    "recall": {
+     "positive": 0.9222303741746148,
+     "negative": 0.9867549668874173,
+     "neutral": 0.7398402222994095
+    }
+   },
+   "wall_seconds": 1208.1
+  },
+  "arm_b_seed84": {
+   "selected_by": "best validation macro-F1 over 5 seeds",
+   "seed": 84,
+   "best_epoch": 3,
+   "retrain_reproduces_saved_benchmark_preds": true,
+   "retrain_bench_macro_f1": 0.6026240242679931,
+   "saved_bench_macro_f1": 0.6026240242679931,
+   "sentences_allagree": {
+    "accuracy": 0.9487632508833922,
+    "macro_f1": 0.9325533727698497,
+    "pred_counts": {
+     "positive": 585,
+     "negative": 364,
+     "neutral": 1315
+    },
+    "recall": {
+     "positive": 0.9368421052631579,
+     "negative": 0.9933993399339934,
+     "neutral": 0.9439252336448598
+    }
+   },
+   "sentences_50agree": {
+    "accuracy": 0.8549319026000826,
+    "macro_f1": 0.8444038182870077,
+    "pred_counts": {
+     "positive": 1624,
+     "negative": 829,
+     "neutral": 2393
+    },
+    "recall": {
+     "positive": 0.9046221570066031,
+     "negative": 0.9834437086092715,
+     "neutral": 0.8044459881903439
+    }
+   },
+   "wall_seconds": 1270.3
+  },
+  "arm_c_seed21": {
+   "selected_by": "best validation macro-F1 over 5 seeds",
+   "seed": 21,
+   "best_epoch": 2,
+   "retrain_reproduces_saved_benchmark_preds": true,
+   "retrain_bench_macro_f1": 0.4942299709422997,
+   "saved_bench_macro_f1": 0.4942299709422997,
+   "sentences_allagree": {
+    "accuracy": 0.7676678445229682,
+    "macro_f1": 0.7791634517766628,
+    "pred_counts": {
+     "positive": 958,
+     "negative": 410,
+     "neutral": 896
+    },
+    "recall": {
+     "positive": 0.9473684210526315,
+     "negative": 0.9966996699669967,
+     "neutral": 0.6441409058231489
+    }
+   },
+   "sentences_50agree": {
+    "accuracy": 0.6456871646718944,
+    "macro_f1": 0.6704707595707124,
+    "pred_counts": {
+     "positive": 2641,
+     "negative": 961,
+     "neutral": 1244
+    },
+    "recall": {
+     "positive": 0.9493763756419662,
+     "negative": 0.9917218543046358,
+     "neutral": 0.4293157346300799
+    }
+   },
+   "wall_seconds": 1156.9
+  }
+ },
+ "caveat": "ProsusAI/finbert was fine-tuned on Financial PhraseBank; stock results are in-sample and inflated.",
+ "wall_seconds_total_this_invocation": 3921.9
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169ea-739f-7ec0-a515-02853b3f3157, prompt labelling_pipeline/batches/prompt_0700.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "7a7963840f3a7a11c3ae640884de47f7a9dbb440078ced594742240aaaba4173",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0700": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "ETH has fallen 45% and is unfavorably compared to a memecoin."
+  },
+  "c2_0701": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Overhead resistance levels and the 200 EMA frame QQQ cautiously."
+  },
+  "c2_0702": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about entering positions without providing a directional conclusion."
+  },
+  "c2_0703": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Netflix receives a higher price target and a reaffirmed Overweight rating."
+  },
+  "c2_0704": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "McDonald's beats earnings expectations despite a challenging environment."
+  },
+  "c2_0705": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The headline asks whether to buy Asbury without expressing a lean."
+  },
+  "c2_0706": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The technical setup points to a potential upward run above 164."
+  },
+  "c2_0707": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The forecast anticipates a positive 12% index return despite an expected slowdown."
+  },
+  "c2_0708": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports gains on bullish positions during a market rally."
+  },
+  "c2_0709": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author weighs buying AMD against waiting for a pullback without favoring either."
+  },
+  "c2_0710": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The text explicitly describes a market free fall and continuing VOO declines."
+  },
+  "c2_0711": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Oil has lost moving-average support while a possible bullish pattern remains unconfirmed."
+  },
+  "c2_0712": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item lists portfolio allocations and requests general allocation guidance."
+  },
+  "c2_0713": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SPY and QQQ are explicitly reported rising for consecutive days."
+  },
+  "c2_0714": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The conditional trading plan targets puts on a bearish rejection."
+  },
+  "c2_0715": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Keysight reaches a buy zone as investors welcome its 5G-driven growth."
+  },
+  "c2_0716": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "QQQ is described breaking out of a bullish flag."
+  },
+  "c2_0717": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The reported options profits do not identify a bullish or bearish position."
+  },
+  "c2_0718": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The question concerns investment structure and fees rather than asset direction."
+  },
+  "c2_0719": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The App Store company portfolio is described as winning."
+  },
+  "c2_0720": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author mocks bullish enthusiasm at range highs, conveying skepticism."
+  },
+  "c2_0721": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Apple is explicitly reported rising on earnings."
+  },
+  "c2_0722": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Nvidia advances strongly after breaking resistance and holding support."
+  },
+  "c2_0723": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "A selloff has caused leveraged SK Hynix and Samsung bets to unravel."
+  },
+  "c2_0724": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart describes a breakout followed by an ongoing retest."
+  },
+  "c2_0725": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "QQQ falls sharply and the author profits from puts."
+  },
+  "c2_0726": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "An approaching inflection point is noted without an expected direction."
+  },
+  "c2_0727": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author frames lower Bitcoin prices as a gift and increases bullish accumulation."
+  },
+  "c2_0728": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profits on SPY puts reflect a bearish asset direction."
+  },
+  "c2_0729": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The current setup is explicitly framed as a bearish retest."
+  },
+  "c2_0730": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Nvidia is described undergoing a failed-breakout reversal."
+  },
+  "c2_0731": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Google's potential crypto-storage initiative is explicitly called bullish."
+  },
+  "c2_0732": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The question asks about retest timing without stating a directional expectation."
+  },
+  "c2_0733": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item requests general savings advice and describes a CD deposit."
+  },
+  "c2_0734": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author celebrates Apple's innovation and hopes for an all-time high."
+  },
+  "c2_0735": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Revenue growth and semiconductor optimism are balanced by uncertainty about Alphabet's spending."
+  },
+  "c2_0736": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Nvidia breaks above a weekly trendline after finding support."
+  },
+  "c2_0737": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post praises trading profits in both directions without a Bitcoin outlook."
+  },
+  "c2_0738": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Dell wins a substantial government contract."
+  },
+  "c2_0739": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author adds to Amazon shorts amid weakening technical indicators."
+  },
+  "c2_0740": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item asks general questions about stop-loss practices without an asset outlook."
+  },
+  "c2_0741": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The missed trade is described as a 200% gain in bullish call options."
+  },
+  "c2_0742": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Silo rises on drug-development news and is expected to revisit higher levels."
+  },
+  "c2_0743": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Rumble's chart is described forming bullish technical patterns."
+  },
+  "c2_0744": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The double bottom fails and the setup is characterized as a bull trap."
+  },
+  "c2_0745": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "XPeng reports a smaller loss than consensus and whisper expectations."
+  },
+  "c2_0746": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Moody's is characterized as overvalued relative to S&P Global and discounted cash flow."
+  },
+  "c2_0747": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates another upward leg across Bitcoin and equities."
+  },
+  "c2_0748": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author weighs falling prices against a buying opportunity without reaching a conclusion."
+  },
+  "c2_0749": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "SPY is rejected from its highs and remains below a trendline."
+  }
+ }
+}

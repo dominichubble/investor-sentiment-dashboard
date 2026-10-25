@@ -1,0 +1,23 @@
+{
+ "runs": {
+  "stock": {
+   "finished": "2026-10-23T20:42:20+01:00",
+   "wall_seconds": 55.0,
+   "best_epoch": null,
+   "val_macro_f1": null,
+   "bench_macro_f1": 0.4977832624891449,
+   "bench_accuracy": 0.5295857988165681
+  }
+ },
+ "started_or_resumed": "2026-10-23T20:41:25+01:00",
+ "total_finetune_runs": 0,
+ "epochs": 3,
+ "pid": 29257,
+ "updated": "2026-10-23T20:42:20+01:00",
+ "finetune_runs_done": 0,
+ "current": null,
+ "stock_done": true,
+ "mean_run_seconds": null,
+ "eta_seconds": null,
+ "eta_finish": null
+}

@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a2e-cb15-7092-9d14-d3cb8d92977e, prompt labelling_pipeline/batches/prompt_1200.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "d28dbba7d2eba6c799c5f4c874fe07b23afad95c8221aa615afae71ed201f7c9",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1200": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The false breakdown and reversal from demand signal upside."
+  },
+  "c2_1201": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Recovering the moving average and targeting $20 indicate upside."
+  },
+  "c2_1202": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post highlights GME's historical 5000% rally."
+  },
+  "c2_1203": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "This is market-research promotional boilerplate."
+  },
+  "c2_1204": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The assignment question expresses no directional asset view."
+  },
+  "c2_1205": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bridge-free Bitcoin-to-ADA swaps represent a favorable new capability."
+  },
+  "c2_1206": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Both companies missed expectations, with only tentative hope that this is priced in."
+  },
+  "c2_1207": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The tightening falling wedge and golden zone suggest a bullish setup."
+  },
+  "c2_1208": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "COF is reaching 18-month highs and improving relative performance."
+  },
+  "c2_1209": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post emphasizes approaching resistance that rejected two previous advances."
+  },
+  "c2_1210": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The conditional breakout call names higher price targets."
+  },
+  "c2_1211": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports a 60-point rise and profits from the bullish move."
+  },
+  "c2_1212": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The falling-wedge setup anticipates an imminent bullish breakout."
+  },
+  "c2_1213": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Despite selling, the author predicts ETH will surpass its all-time high."
+  },
+  "c2_1214": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post anticipates a parabolic upward move."
+  },
+  "c2_1215": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "HOOD closed at another all-time low."
+  },
+  "c2_1216": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The sarcastic praise underscores a nearly 90% collapse in value."
+  },
+  "c2_1217": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bitcoin holding above $80,000 is explicitly framed as strength."
+  },
+  "c2_1218": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post identifies a bounce opportunity near support."
+  },
+  "c2_1219": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "NVDA is reported down almost 12%."
+  },
+  "c2_1220": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The headline asks about relative performance without stating an answer or lean."
+  },
+  "c2_1221": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Technology's relative performance is described as reaching new highs."
+  },
+  "c2_1222": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The potential bear flag and required invalidation level give the analysis a bearish lean."
+  },
+  "c2_1223": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The substantial gains came from bullish GOOGL calls."
+  },
+  "c2_1224": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author explicitly expects further declines in the underlying holdings."
+  },
+  "c2_1225": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post predicts the beginning of a bear market."
+  },
+  "c2_1226": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports call positions and their timing without an explicit asset outlook."
+  },
+  "c2_1227": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports a loss and asks what to do without expressing a directional view."
+  },
+  "c2_1228": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This check-cashing advice request provides no asset valuation information."
+  },
+  "c2_1229": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock's rally and repeated outperformance dominate the stagnant-warrant commentary."
+  },
+  "c2_1230": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "SNAP gained 20% over two days and made a higher high after breaking out."
+  },
+  "c2_1231": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The poor chart assessment is balanced by support and a potential bounce."
+  },
+  "c2_1232": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The breakdown and conditional put trade indicate further downside."
+  },
+  "c2_1233": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author leans toward waiting because Bitcoin prices are expected to fall."
+  },
+  "c2_1234": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author calls FB underpriced and expects patient investors to benefit."
+  },
+  "c2_1235": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The double bottom and bullish candles support an expected upward move."
+  },
+  "c2_1236": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The comparison with the dotcom bubble frames the AI trade skeptically."
+  },
+  "c2_1237": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Holding support alongside a falling wedge and possible double bottom suggests upside."
+  },
+  "c2_1238": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post describes personal trading outcomes without identifying an asset direction."
+  },
+  "c2_1239": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author explicitly expects a bullish breakout near NVDA's all-time high."
+  },
+  "c2_1240": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author balances upside and downside scenarios while disclaiming a clear read."
+  },
+  "c2_1241": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Bullish sweep activity is betting that demand will hold."
+  },
+  "c2_1242": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The hedging question weighs alternatives without stating a directional asset view."
+  },
+  "c2_1243": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post primarily asks how to interpret chart markings without a directional analysis."
+  },
+  "c2_1244": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Reclaiming the moving average with open space above signals upside potential."
+  },
+  "c2_1245": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart explicitly identifies a bullish flag within a cup-and-handle formation."
+  },
+  "c2_1246": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The portfolio-allocation question expresses no directional outlook for the funds."
+  },
+  "c2_1247": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "MSTR's exceptionally large unrealized loss is unfavorable financial information."
+  },
+  "c2_1248": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post discusses sales into strength without a clear net directional outlook."
+  },
+  "c2_1249": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The gap-fill trade names no explicit upward or downward direction."
+  }
+ }
+}

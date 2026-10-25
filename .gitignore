@@ -92,3 +92,12 @@ Final_Year_Project_Report/**/*.lot
 Final_Year_Project_Report/**/*.out
 Final_Year_Project_Report/**/*.toc
 Final_Year_Project_Report/**/*.synctex.gz
+
+# --- DSFE revision: model checkpoints / weights (never commit) ---
+checkpoints/
+**/checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+revision/analysis/GoogleService-Info.plist

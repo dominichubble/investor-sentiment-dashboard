@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a3b-bd0c-7342-8c0c-de2f5b0a2044, prompt labelling_pipeline/batches/prompt_1950.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "64fb94101e29fc4af22fb9bf924afc89591fd3b55d09771e7b67e3d79258998f",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1950": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Corning shares rise following a deal to supply Amazon AI data centers."
+  },
+  "c2_1951": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Micron's stated 60% surge establishes a positive asset direction."
+  },
+  "c2_1952": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Large accumulation and an intended dip buy convey a bullish outlook."
+  },
+  "c2_1953": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author plans to buy as platinum gains momentum."
+  },
+  "c2_1954": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post primarily reports realized gains without identifying the position direction or an ongoing asset view."
+  },
+  "c2_1955": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about becoming a validator without expressing a directional asset view."
+  },
+  "c2_1956": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author anticipates rejection from the trading range."
+  },
+  "c2_1957": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author predicts Figma will beat earnings expectations and rise above $35."
+  },
+  "c2_1958": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item lists new ETFs and their costs without stating an investment benefit or direction."
+  },
+  "c2_1959": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post is a promotional account shoutout without substantive asset content."
+  },
+  "c2_1960": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart frames holding support as preserving bullish upside after a breakout."
+  },
+  "c2_1961": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The item is a bare discussion-thread header with no substantive content."
+  },
+  "c2_1962": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post lists put-selling trades without a clear forecast for the underlying assets."
+  },
+  "c2_1963": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart identifies a bullish falling-wedge breakout."
+  },
+  "c2_1964": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author explicitly expresses a bullish long-term view on OVV."
+  },
+  "c2_1965": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Paramount reports earnings above expectations."
+  },
+  "c2_1966": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post strongly criticizes UWMC's valuation, leadership, and share dilution."
+  },
+  "c2_1967": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The author lists space holdings and requests additional names without a directional assessment."
+  },
+  "c2_1968": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author says semiconductor growth is exhausted and investors are rotating out."
+  },
+  "c2_1969": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart explicitly identifies bearish confirmation."
+  },
+  "c2_1970": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports trading profits without identifying bullish or bearish positions."
+  },
+  "c2_1971": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart describes QQQ struggling to overcome resistance."
+  },
+  "c2_1972": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Netflix's stated squeeze to $94 provides the dominant price direction."
+  },
+  "c2_1973": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The headline announces a portfolio review without reporting directional results."
+  },
+  "c2_1974": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The market is rising and liquidating short positions."
+  },
+  "c2_1975": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The item combines a bullish Bitcoin forecast with additional purchases by Strategy."
+  },
+  "c2_1976": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author describes a speculative position with explicitly uncertain outcomes and no clear asset forecast."
+  },
+  "c2_1977": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The bearish framing accompanies call credit spreads and a Tesla put purchase."
+  },
+  "c2_1978": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post anticipates another lower high amid tightening, inflation, and job cuts."
+  },
+  "c2_1979": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart warns of support failure and a potential bearish head-and-shoulders pattern."
+  },
+  "c2_1980": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expects demand to break and prices to continue lower."
+  },
+  "c2_1981": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The headline frames oil supply disruptions as a threat to China's oil strategy."
+  },
+  "c2_1982": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects the token to rise further despite acknowledging high risk."
+  },
+  "c2_1983": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post highlights an 800% gain and recommends buying similar beaten-down IPOs."
+  },
+  "c2_1984": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The item reports a dividend schedule and requests feedback without a directional assessment."
+  },
+  "c2_1985": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expresses conviction by planning to reinvest all proceeds in CRCL."
+  },
+  "c2_1986": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The underlying asset spiked upward, causing the bearish call spread to lose money."
+  },
+  "c2_1987": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Praise for the ETF's distribution and recent performance outweighs the tentative risk concern."
+  },
+  "c2_1988": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The assessment is predominantly bearish despite mentioning a conditional recovery level."
+  },
+  "c2_1989": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart identifies double-bottom support and bullish divergence."
+  },
+  "c2_1990": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Doubts about the rally and descriptions of ETC as a dead project create a net-skeptical tone."
+  },
+  "c2_1991": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The rotation report balances inflows into defense against weakening rare-earth and lithium interest."
+  },
+  "c2_1992": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The earnings question expresses no directional lean."
+  },
+  "c2_1993": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart describes an upside breakout targeting previous highs."
+  },
+  "c2_1994": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author expects further crashing after a temporary recovery."
+  },
+  "c2_1995": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Sustained GDP growth is presented as outperforming recession expectations."
+  },
+  "c2_1996": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports gains and missed profits without identifying the contracts' direction."
+  },
+  "c2_1997": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Nike failed to break resistance and the author exited at a loss."
+  },
+  "c2_1998": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports a call position while explicitly balancing positive and negative possible outcomes."
+  },
+  "c2_1999": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Corrective price action and hidden bearish divergence favor a rejection and decline."
+  }
+ }
+}

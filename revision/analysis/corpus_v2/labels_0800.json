@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a169ec-7ee2-7da3-8aad-906f4ef76700, prompt labelling_pipeline/batches/prompt_0800.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "e48f0f41a4ebac0862907751aba3fadac6f1e260afa3688cb3193a3fde0f24a9",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_0800": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Profitable bullish call trades dominate the mixed results."
+  },
+  "c2_0801": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author favors a short-term upward reversal despite the risks."
+  },
+  "c2_0802": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The questions express no directional view on gold or Nasdaq."
+  },
+  "c2_0803": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about investment suitability without predicting asset performance."
+  },
+  "c2_0804": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Holding support and the stated upside targets give the chart a bullish lean."
+  },
+  "c2_0805": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports a speculative position without a clear view on asset direction."
+  },
+  "c2_0806": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The anticipated false breakout leads to a market selloff."
+  },
+  "c2_0807": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author presents the decline as an unjustified buying opportunity."
+  },
+  "c2_0808": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "High transaction costs are framed as a substantial disadvantage of physical gold."
+  },
+  "c2_0809": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "A probe following additional self-driving crashes creates adverse regulatory and safety concerns."
+  },
+  "c2_0810": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The options profits and strategy question provide no directional asset view."
+  },
+  "c2_0811": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The questions express skepticism about ETH value accrual and unresolved value drainage."
+  },
+  "c2_0812": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a scheduled financial-results announcement without directional information."
+  },
+  "c2_0813": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Adding to bullish calls expresses continued confidence in Amazon upside."
+  },
+  "c2_0814": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is an account-mechanics question about an iron condor without an asset outlook."
+  },
+  "c2_0815": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Fraud allegations are adverse to Tesla and investor confidence."
+  },
+  "c2_0816": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The item describes opposing oil-related price moves and asks an open-ended outlook question."
+  },
+  "c2_0817": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Repeated declines and potential delisting or reverse-split risks dominate the discussion."
+  },
+  "c2_0818": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The list announces scheduled earnings releases without predicting results."
+  },
+  "c2_0819": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart explicitly predicts continuation to the upside."
+  },
+  "c2_0820": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Profitable shorts and a losing long reinforce the stated downward market trend."
+  },
+  "c2_0821": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The buyer sees the crash as an opportunity and expects substantial recovery."
+  },
+  "c2_0822": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Privacy coins are explicitly rallying and leading a sector surge."
+  },
+  "c2_0823": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The fragment does not identify a judgeable financial asset or outlook."
+  },
+  "c2_0824": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author identifies a technical setup for a Bitcoin bounce."
+  },
+  "c2_0825": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The put position first rises and then falls below entry, giving mixed directional evidence."
+  },
+  "c2_0826": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is generic trading-psychology guidance without an asset outlook."
+  },
+  "c2_0827": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Five downgrades or target cuts clearly outweigh the single target increase."
+  },
+  "c2_0828": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Removing trading restrictions is explicitly framed as unlocking upside."
+  },
+  "c2_0829": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author praises Mastercard's resilience and moat and considers buying it."
+  },
+  "c2_0830": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The new recognition capability is balanced by reported backlash."
+  },
+  "c2_0831": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author rejects bearish expectations and cites favorable catalysts and ETH buying."
+  },
+  "c2_0832": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a personal billing-verification question without investment implications."
+  },
+  "c2_0833": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "Ending the losing streak is balanced against the substantial preceding decline."
+  },
+  "c2_0834": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports portfolio gains and losses without specifying positions or an asset outlook."
+  },
+  "c2_0835": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "A critical technical level is identified without a bullish or bearish direction."
+  },
+  "c2_0836": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks about a possible surge without endorsing a directional forecast."
+  },
+  "c2_0837": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post explicitly recommends buying Amazon in the identified buy zone."
+  },
+  "c2_0838": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The stock is described as having a strong trading day."
+  },
+  "c2_0839": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Continued Bitcoin accumulation and long-term conviction outweigh the expressed anxiety."
+  },
+  "c2_0840": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The post advertises an indicator through a claimed successful trading signal."
+  },
+  "c2_0841": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Micron shares are rising and the memory-chip rally is described as unstoppable."
+  },
+  "c2_0842": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author's holdings are framed as continuing to decline despite broader market strength."
+  },
+  "c2_0843": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The wordplay is too fragmentary to establish a financial assessment."
+  },
+  "c2_0844": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author anticipates an upward breakout at $8.20."
+  },
+  "c2_0845": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a proposed ETF allocation list without directional performance claims."
+  },
+  "c2_0846": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The account emphasizes unpredictable Tesla trading and warns about meme-stock covered-call risk."
+  },
+  "c2_0847": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The chart presents balanced conditional upside and downside scenarios."
+  },
+  "c2_0848": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Nvidia is explicitly described as the day's bullish winner."
+  },
+  "c2_0849": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart highlights a potential downward gap fill and lower price targets."
+  }
+ }
+}

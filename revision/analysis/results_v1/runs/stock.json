@@ -1,0 +1,6937 @@
+{
+ "condition": "stock",
+ "model": "ProsusAI/finbert",
+ "max_length": 128,
+ "torch_threads": 8,
+ "benchmark_max_length_128": {
+  "metrics": {
+   "n": 338,
+   "accuracy": 0.5295857988165681,
+   "macro_f1": 0.4977832624891449,
+   "per_class": {
+    "positive": {
+     "precision": 0.7291666666666666,
+     "recall": 0.28688524590163933,
+     "f1": 0.4117647058823529,
+     "support": 122
+    },
+    "negative": {
+     "precision": 0.5483870967741935,
+     "recall": 0.41975308641975306,
+     "f1": 0.4755244755244755,
+     "support": 81
+    },
+    "neutral": {
+     "precision": 0.4824561403508772,
+     "recall": 0.8148148148148148,
+     "f1": 0.6060606060606061,
+     "support": 135
+    }
+   },
+   "confusion_matrix": {
+    "labels": [
+     "positive",
+     "negative",
+     "neutral"
+    ],
+    "matrix": [
+     [
+      35,
+      13,
+      74
+     ],
+     [
+      3,
+      34,
+      44
+     ],
+     [
+      10,
+      15,
+      110
+     ]
+    ]
+   },
+   "pred_counts": {
+    "positive": 48,
+    "negative": 62,
+    "neutral": 228
+   }
+  },
+  "predictions": [
+   {
+    "id": "stock_ef250eb61f33646b",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -0.737475,
+     1.762143,
+     -0.943501
+    ]
+   },
+   {
+    "id": "stock_576cc17f3881ad32",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.636347,
+     -1.090708,
+     1.865588
+    ]
+   },
+   {
+    "id": "stock_b4e8e6247d6d4cf4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.500179,
+     -1.498082,
+     2.328134
+    ]
+   },
+   {
+    "id": "stock_832adbdfb6693da9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.199195,
+     -2.187159,
+     2.23241
+    ]
+   },
+   {
+    "id": "stock_1a0e9e983de7ec87",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.052312,
+     -0.551192,
+     2.350478
+    ]
+   },
+   {
+    "id": "stock_f339c8f6b3d21cd3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.651381,
+     1.122832,
+     1.729841
+    ]
+   },
+   {
+    "id": "stock_a3d9699b9ede25f7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.174321,
+     -2.123645,
+     1.884874
+    ]
+   },
+   {
+    "id": "stock_73b4ae9a7ef917c4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.703431,
+     -1.427745,
+     2.561612
+    ]
+   },
+   {
+    "id": "stock_b8fe139a76b7f5cf",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.709631,
+     -0.758821,
+     1.982128
+    ]
+   },
+   {
+    "id": "stock_8e4e539cd914b8f4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.880683,
+     -1.053623,
+     2.374477
+    ]
+   },
+   {
+    "id": "stock_ba60c58194cfcffa",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.880136,
+     -0.704439,
+     2.362594
+    ]
+   },
+   {
+    "id": "stock_82b7ec4f05c70358",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.526436,
+     1.303818,
+     1.360409
+    ]
+   },
+   {
+    "id": "stock_ad033e7be46cbe0d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.610615,
+     -1.64895,
+     2.386013
+    ]
+   },
+   {
+    "id": "stock_85a3f1c1681f5a92",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.541829,
+     -1.600176,
+     2.427943
+    ]
+   },
+   {
+    "id": "stock_4f4404169524462a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.406608,
+     -1.414353,
+     2.052256
+    ]
+   },
+   {
+    "id": "stock_75986c353594801b",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.198342,
+     -0.382323,
+     2.364797
+    ]
+   },
+   {
+    "id": "stock_9c7dd23d1499f0c2",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.330423,
+     -0.190872,
+     2.324272
+    ]
+   },
+   {
+    "id": "stock_209eb9dff37c5111",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.405417,
+     0.130599,
+     2.29216
+    ]
+   },
+   {
+    "id": "stock_70e56915451c2891",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.206149,
+     -1.084746,
+     1.814955
+    ]
+   },
+   {
+    "id": "stock_9e75340342f0efc6",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.157125,
+     -1.578402,
+     2.205297
+    ]
+   },
+   {
+    "id": "stock_4c662717f04f47ac",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.071836,
+     -0.713558,
+     2.385471
+    ]
+   },
+   {
+    "id": "stock_9c83c42919b55843",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.854265,
+     2.559248,
+     -0.031766
+    ]
+   },
+   {
+    "id": "stock_9adc77fda2d6d081",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.246579,
+     -0.508245,
+     2.543126
+    ]
+   },
+   {
+    "id": "stock_2844b36eb97a35d4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.32145,
+     -0.723363,
+     1.147022
+    ]
+   },
+   {
+    "id": "stock_5ec514500eb87bfa",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.332701,
+     -1.486665,
+     1.602552
+    ]
+   },
+   {
+    "id": "stock_4f0be77b0a11cbd4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.065751,
+     -2.425621,
+     -0.924389
+    ]
+   },
+   {
+    "id": "stock_401473e1b4a979b5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.218136,
+     -1.842237,
+     2.068444
+    ]
+   },
+   {
+    "id": "stock_c5ac56b636221182",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.11052,
+     -0.545974,
+     0.737668
+    ]
+   },
+   {
+    "id": "stock_6e6c8e829c923437",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.300446,
+     -1.278987,
+     2.069401
+    ]
+   },
+   {
+    "id": "stock_fba6d83e74509c09",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.272136,
+     -1.89456,
+     2.282521
+    ]
+   },
+   {
+    "id": "stock_2cc7195f3493ad3f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.957161,
+     -2.375687,
+     1.400355
+    ]
+   },
+   {
+    "id": "stock_62ae89e473148891",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.4598,
+     0.416544,
+     1.882502
+    ]
+   },
+   {
+    "id": "stock_ab2f27ca260c1644",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.241454,
+     -0.324776,
+     2.404272
+    ]
+   },
+   {
+    "id": "stock_93e37641a42e1742",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.56435,
+     -1.372042,
+     2.460582
+    ]
+   },
+   {
+    "id": "stock_2edab01076b4f0e1",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.977562,
+     -1.977748,
+     -1.367184
+    ]
+   },
+   {
+    "id": "stock_86da5f770a5a007f",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.732646,
+     -0.586985,
+     1.562161
+    ]
+   },
+   {
+    "id": "stock_ccec9fa1f76952c8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.800934,
+     0.238887,
+     0.527658
+    ]
+   },
+   {
+    "id": "stock_9326540e0a966787",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.215368,
+     -2.013865,
+     1.86788
+    ]
+   },
+   {
+    "id": "stock_9a36f77d4b735613",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.199621,
+     1.290302,
+     0.395121
+    ]
+   },
+   {
+    "id": "stock_23f3c90e3d3cf861",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.789116,
+     -1.25853,
+     0.229117
+    ]
+   },
+   {
+    "id": "stock_25589b74d4010ea1",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.614164,
+     2.453345,
+     -0.090096
+    ]
+   },
+   {
+    "id": "stock_9b87461a48eb2caa",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.738408,
+     2.471641,
+     0.204677
+    ]
+   },
+   {
+    "id": "stock_c0c853a58f1986dc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.337653,
+     -1.584431,
+     2.112308
+    ]
+   },
+   {
+    "id": "stock_e579f2c8000f1d31",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.887805,
+     -0.425094,
+     1.740975
+    ]
+   },
+   {
+    "id": "stock_039525b7d038780c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.774188,
+     -0.799319,
+     2.325503
+    ]
+   },
+   {
+    "id": "stock_acf8af41c0b2ecfb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.776878,
+     -0.524303,
+     1.76052
+    ]
+   },
+   {
+    "id": "stock_3a971cb259504f6e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.935177,
+     0.096553,
+     1.735787
+    ]
+   },
+   {
+    "id": "stock_166e53bf2740d3c7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.920095,
+     -0.813717,
+     2.24373
+    ]
+   },
+   {
+    "id": "stock_75e931d908319ba6",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.107822,
+     -1.913025,
+     2.351128
+    ]
+   },
+   {
+    "id": "stock_4b1e3921b79692d2",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.351548,
+     -0.93181,
+     -1.549469
+    ]
+   },
+   {
+    "id": "stock_2db62a15230901fd",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.602634,
+     1.640622,
+     0.823818
+    ]
+   },
+   {
+    "id": "stock_7aed4aaa17096cc8",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.100864,
+     -1.100135,
+     1.358473
+    ]
+   },
+   {
+    "id": "stock_0b8f262d035d873f",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.245003,
+     -1.974922,
+     0.078879
+    ]
+   },
+   {
+    "id": "stock_4df7104f2af7a146",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.720786,
+     0.021471,
+     1.076728
+    ]
+   },
+   {
+    "id": "stock_577fb3bc741adf7e",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.030539,
+     -1.63465,
+     -1.672216
+    ]
+   },
+   {
+    "id": "stock_83fc2b6ba4beb31f",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.279393,
+     -0.103901,
+     -0.292587
+    ]
+   },
+   {
+    "id": "stock_a9f6c9a8dde40617",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.168917,
+     -1.795591,
+     1.896997
+    ]
+   },
+   {
+    "id": "stock_41265c8d070a6382",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.21267,
+     -1.189271,
+     2.126066
+    ]
+   },
+   {
+    "id": "stock_c75e931b07e76a58",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.369655,
+     2.343047,
+     -0.647159
+    ]
+   },
+   {
+    "id": "stock_401858e3a9b422de",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.768889,
+     -1.726741,
+     0.834029
+    ]
+   },
+   {
+    "id": "stock_8f6cad6c8a80c76e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.667506,
+     1.433691,
+     1.054021
+    ]
+   },
+   {
+    "id": "stock_1f0ef935b6683825",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.917343,
+     -0.421965,
+     2.127182
+    ]
+   },
+   {
+    "id": "stock_581be999e99bcf45",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.364607,
+     -2.007411,
+     1.870748
+    ]
+   },
+   {
+    "id": "stock_701293608bd7b711",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.837269,
+     -2.391846,
+     1.624699
+    ]
+   },
+   {
+    "id": "stock_ef8cc7cb3083b655",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.800831,
+     2.575997,
+     -0.202385
+    ]
+   },
+   {
+    "id": "stock_a84b52e28ac14064",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.213423,
+     0.09397,
+     1.868873
+    ]
+   },
+   {
+    "id": "stock_f8cc831976bf9ce8",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.61561,
+     -1.032331,
+     -1.547374
+    ]
+   },
+   {
+    "id": "stock_f1845e26294f458c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.034176,
+     -1.539676,
+     1.557957
+    ]
+   },
+   {
+    "id": "stock_2c62940fbebb7fbb",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.829675,
+     -1.203986,
+     2.593722
+    ]
+   },
+   {
+    "id": "stock_80b9a2664dce765d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.560838,
+     -0.817999,
+     1.783188
+    ]
+   },
+   {
+    "id": "stock_ad8f46ee6ab48183",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.828638,
+     -1.009544,
+     2.384638
+    ]
+   },
+   {
+    "id": "stock_0b32f062dabddf95",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.560015,
+     -2.144701,
+     1.536091
+    ]
+   },
+   {
+    "id": "stock_019f93ebd5442f63",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     0.473213,
+     0.162722,
+     -1.736471
+    ]
+   },
+   {
+    "id": "stock_97c71eda2beb81fa",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.414619,
+     -1.618548,
+     2.40677
+    ]
+   },
+   {
+    "id": "stock_1004b167d55cead9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.160529,
+     -1.725415,
+     2.16703
+    ]
+   },
+   {
+    "id": "stock_628fd6fa62ada196",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.491405,
+     -2.000548,
+     1.718418
+    ]
+   },
+   {
+    "id": "stock_e2d26eda78937cfc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.309756,
+     0.029426,
+     2.07844
+    ]
+   },
+   {
+    "id": "stock_cdf41fd09f1af65f",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.986194,
+     -0.571995,
+     2.36575
+    ]
+   },
+   {
+    "id": "stock_cebe1b81cf9b2393",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.373991,
+     -1.872155,
+     1.835206
+    ]
+   },
+   {
+    "id": "stock_b18670d6aa640317",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.345049,
+     0.614194,
+     1.97943
+    ]
+   },
+   {
+    "id": "stock_7e96fd759314155a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.473332,
+     -1.312665,
+     1.753711
+    ]
+   },
+   {
+    "id": "stock_6e4aa0ba1fe49457",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.732694,
+     1.634446,
+     1.259033
+    ]
+   },
+   {
+    "id": "stock_32ac81a15e486e1a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.212022,
+     -0.130085,
+     2.057404
+    ]
+   },
+   {
+    "id": "stock_2a5fa99634b09984",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.737481,
+     -2.41059,
+     1.708952
+    ]
+   },
+   {
+    "id": "stock_53678630ed16855b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.854901,
+     2.566868,
+     -1.711299
+    ]
+   },
+   {
+    "id": "stock_ab52bea5f43bdd61",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.15907,
+     -0.331905,
+     0.910236
+    ]
+   },
+   {
+    "id": "stock_0ecb3b81b9cd9d93",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.578152,
+     -1.258309,
+     0.310759
+    ]
+   },
+   {
+    "id": "stock_8757a7eb2b673256",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.792098,
+     -1.092463,
+     2.381885
+    ]
+   },
+   {
+    "id": "stock_370b7c8cb2620bd0",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.715563,
+     2.733101,
+     -0.672038
+    ]
+   },
+   {
+    "id": "stock_62d0256a6d6da36b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.367576,
+     -1.85193,
+     2.428901
+    ]
+   },
+   {
+    "id": "stock_2085cd01169c17fa",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.230768,
+     0.482655,
+     1.857952
+    ]
+   },
+   {
+    "id": "stock_8beccbc6ae43dee4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.979767,
+     -1.749988,
+     0.684352
+    ]
+   },
+   {
+    "id": "stock_04a55f662bf0d54c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.715019,
+     -2.658937,
+     1.838004
+    ]
+   },
+   {
+    "id": "stock_430c4e6296c23735",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.0498,
+     -0.509626,
+     0.982626
+    ]
+   },
+   {
+    "id": "stock_788d971676fbaefb",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.678714,
+     -1.035688,
+     2.054519
+    ]
+   },
+   {
+    "id": "stock_7236e52efc2ebd70",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.050671,
+     0.71838,
+     1.58812
+    ]
+   },
+   {
+    "id": "stock_4ccebab4ebbc2d83",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.35248,
+     -1.373223,
+     2.234206
+    ]
+   },
+   {
+    "id": "stock_ecec5a1a9c63771e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.546446,
+     1.729804,
+     0.61845
+    ]
+   },
+   {
+    "id": "stock_8f8cffd52296b548",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.931262,
+     -0.902755,
+     2.526094
+    ]
+   },
+   {
+    "id": "stock_4f468a1d2fddf956",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.860558,
+     -1.422834,
+     -1.628394
+    ]
+   },
+   {
+    "id": "stock_ddd653fc2e4bd44c",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.465588,
+     -2.074481,
+     -0.332617
+    ]
+   },
+   {
+    "id": "stock_3332235a8b8e0b75",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.962026,
+     0.667438,
+     1.16253
+    ]
+   },
+   {
+    "id": "stock_ffd15e35c5351510",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.981706,
+     -0.783837,
+     2.43258
+    ]
+   },
+   {
+    "id": "stock_37270f3b7f9642b4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.017202,
+     -1.460753,
+     -0.196982
+    ]
+   },
+   {
+    "id": "stock_3e6ec54480c05f43",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.114656,
+     -1.810221,
+     2.007281
+    ]
+   },
+   {
+    "id": "stock_08cf7dd61566c806",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.120042,
+     -1.950322,
+     2.249312
+    ]
+   },
+   {
+    "id": "stock_6dbd647cebdeee54",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.834204,
+     -0.844011,
+     2.340883
+    ]
+   },
+   {
+    "id": "stock_007943e3f719a0e3",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.198308,
+     -2.058414,
+     2.467695
+    ]
+   },
+   {
+    "id": "stock_df81ac692829444a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.681668,
+     -0.573442,
+     1.761246
+    ]
+   },
+   {
+    "id": "stock_e2108bdff6351add",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.511891,
+     1.43373,
+     1.021339
+    ]
+   },
+   {
+    "id": "stock_540add1fdf976864",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.13281,
+     -2.007235,
+     2.232754
+    ]
+   },
+   {
+    "id": "stock_33da5c7b491068ea",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.324866,
+     1.523106,
+     0.690145
+    ]
+   },
+   {
+    "id": "stock_95c5bd9fefc78eaf",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.340698,
+     -1.837626,
+     2.360529
+    ]
+   },
+   {
+    "id": "stock_24e0c6c9347b2db9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.112802,
+     -1.770775,
+     2.14475
+    ]
+   },
+   {
+    "id": "stock_adbfd6eb724d5c9e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.034771,
+     -2.121012,
+     2.121208
+    ]
+   },
+   {
+    "id": "stock_3c7cfaf8e403f7c7",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.556204,
+     -2.744956,
+     0.393847
+    ]
+   },
+   {
+    "id": "stock_afcbe2cabcdda4e8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.286581,
+     -1.539983,
+     2.194426
+    ]
+   },
+   {
+    "id": "stock_dbe94a8350e80261",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.561959,
+     -1.424564,
+     2.254155
+    ]
+   },
+   {
+    "id": "stock_683e2e8b5e7cec85",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.070787,
+     -2.063223,
+     2.15239
+    ]
+   },
+   {
+    "id": "stock_c0b30d1c3305aa9d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.021109,
+     -1.828401,
+     2.242913
+    ]
+   },
+   {
+    "id": "stock_33acdf554e2061fc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.997295,
+     -0.591947,
+     2.027894
+    ]
+   },
+   {
+    "id": "stock_9b0d958ccaa79141",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.037926,
+     -2.036801,
+     2.215626
+    ]
+   },
+   {
+    "id": "stock_9451cf34f65f4737",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.129903,
+     -1.516049,
+     -0.294311
+    ]
+   },
+   {
+    "id": "stock_a6bacfef56c6de8d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.487679,
+     -0.863135,
+     1.419562
+    ]
+   },
+   {
+    "id": "stock_e2aee108e36d99d4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.098642,
+     -0.046164,
+     1.70054
+    ]
+   },
+   {
+    "id": "stock_6ab197ca7b35b6ea",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     0.378668,
+     1.37322,
+     -2.174383
+    ]
+   },
+   {
+    "id": "stock_93616719852727ad",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.431862,
+     -1.514925,
+     2.271325
+    ]
+   },
+   {
+    "id": "stock_f66e5de52f212896",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.153584,
+     -1.709276,
+     1.934331
+    ]
+   },
+   {
+    "id": "stock_c7ae57381154e0f4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.020314,
+     -0.05841,
+     1.697779
+    ]
+   },
+   {
+    "id": "stock_3694b2630d379c1a",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.546216,
+     -1.093536,
+     2.150378
+    ]
+   },
+   {
+    "id": "stock_0279ca3b2eddd521",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.905379,
+     1.091267,
+     -0.310541
+    ]
+   },
+   {
+    "id": "stock_4a28a94a8a002f6b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.014231,
+     -0.549226,
+     2.198308
+    ]
+   },
+   {
+    "id": "stock_47c3df1d86d431c0",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.996417,
+     -0.621938,
+     2.402512
+    ]
+   },
+   {
+    "id": "stock_131d3f37e0bb7f1a",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.097974,
+     -2.010135,
+     2.290926
+    ]
+   },
+   {
+    "id": "stock_4b6585de797f3256",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.004716,
+     1.998184,
+     -0.787847
+    ]
+   },
+   {
+    "id": "stock_924da12f1c1e6e05",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.074193,
+     -0.454236,
+     0.515328
+    ]
+   },
+   {
+    "id": "stock_f9cb8132f798452d",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.115262,
+     -1.805072,
+     -1.594002
+    ]
+   },
+   {
+    "id": "stock_2f75388e93f82c5c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.460426,
+     0.272673,
+     2.189199
+    ]
+   },
+   {
+    "id": "stock_90ed2bb443ed8322",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.299754,
+     -1.817962,
+     2.255002
+    ]
+   },
+   {
+    "id": "stock_077c35cec93ef821",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.741302,
+     -0.848071,
+     1.960013
+    ]
+   },
+   {
+    "id": "stock_04e9e1e8b4c0406f",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.456048,
+     -1.222646,
+     1.120111
+    ]
+   },
+   {
+    "id": "stock_f2011edda79c97d5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.945353,
+     -1.068297,
+     2.564657
+    ]
+   },
+   {
+    "id": "stock_589bc8d6243fbd57",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.635231,
+     2.040714,
+     0.438624
+    ]
+   },
+   {
+    "id": "stock_e9a499ba7b1fc34b",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.633073,
+     2.161163,
+     0.26693
+    ]
+   },
+   {
+    "id": "stock_e8d3100164929ac4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.733124,
+     -1.924323,
+     1.234371
+    ]
+   },
+   {
+    "id": "stock_d40646e25ba1f43f",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.54373,
+     -1.267287,
+     2.167205
+    ]
+   },
+   {
+    "id": "stock_48ec612697be91a6",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.4306,
+     -2.178684,
+     0.056168
+    ]
+   },
+   {
+    "id": "stock_97c9b6d0fcee26f3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.124148,
+     -0.776285,
+     2.513965
+    ]
+   },
+   {
+    "id": "stock_bbd055cdced81967",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.676215,
+     2.9211,
+     -0.955242
+    ]
+   },
+   {
+    "id": "stock_9f46379458ee28a2",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.147612,
+     -0.206989,
+     1.953761
+    ]
+   },
+   {
+    "id": "stock_926abd0e9eeec2ab",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.651011,
+     -1.134654,
+     2.193515
+    ]
+   },
+   {
+    "id": "stock_c607822efd05f41d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.415464,
+     0.970376,
+     1.097919
+    ]
+   },
+   {
+    "id": "stock_aa66434b0b0c5240",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.219272,
+     -2.535919,
+     1.08459
+    ]
+   },
+   {
+    "id": "stock_10715b0f24380ee5",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.153483,
+     0.182675,
+     1.975393
+    ]
+   },
+   {
+    "id": "stock_23d46519243460ff",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.888603,
+     -0.661179,
+     -1.304991
+    ]
+   },
+   {
+    "id": "stock_ee7a2a7dbeedd9f4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.019096,
+     -2.075822,
+     2.118282
+    ]
+   },
+   {
+    "id": "stock_4d0b2ed93d6db83d",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     0.041834,
+     0.464519,
+     -0.384436
+    ]
+   },
+   {
+    "id": "stock_3803aff950b6e19c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.105688,
+     -2.000777,
+     2.009501
+    ]
+   },
+   {
+    "id": "stock_091f07874669678d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.116058,
+     -2.074079,
+     2.168375
+    ]
+   },
+   {
+    "id": "stock_c5cbf66c75263b81",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.502068,
+     1.863921,
+     0.300684
+    ]
+   },
+   {
+    "id": "stock_a00c6db56b650778",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.932008,
+     -1.777911,
+     -1.246285
+    ]
+   },
+   {
+    "id": "stock_cec4769e4070fd8c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.689244,
+     0.146835,
+     1.495752
+    ]
+   },
+   {
+    "id": "stock_bd220468afc8e6a7",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.308238,
+     -1.138186,
+     2.021084
+    ]
+   },
+   {
+    "id": "stock_2d7590f14eb97c06",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.927056,
+     -2.898989,
+     0.35093
+    ]
+   },
+   {
+    "id": "stock_6d27dedc91306d7d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.070469,
+     -0.860646,
+     1.040879
+    ]
+   },
+   {
+    "id": "stock_f98b2d2114e7f93a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.082491,
+     -1.520724,
+     1.56323
+    ]
+   },
+   {
+    "id": "stock_efc4649bc6c513d8",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.394662,
+     1.043047,
+     0.586869
+    ]
+   },
+   {
+    "id": "stock_7626d44a8338d6ba",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     1.106825,
+     -2.5735,
+     1.431426
+    ]
+   },
+   {
+    "id": "stock_4e44950534a89e42",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.108367,
+     -0.676597,
+     2.422422
+    ]
+   },
+   {
+    "id": "stock_e70404423c5ee35b",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.754032,
+     0.187231,
+     1.131441
+    ]
+   },
+   {
+    "id": "stock_739cf4c9fd1ce8a8",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.480342,
+     1.754747,
+     -0.03568
+    ]
+   },
+   {
+    "id": "stock_235bfe6f73963c59",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.485934,
+     -0.540049,
+     1.080693
+    ]
+   },
+   {
+    "id": "stock_f458c28ed26d7385",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     1.660335,
+     -1.727861,
+     -1.0529
+    ]
+   },
+   {
+    "id": "stock_703e9135e50062e9",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.360583,
+     -1.802976,
+     2.279937
+    ]
+   },
+   {
+    "id": "stock_588b29edae50be0b",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.122356,
+     -0.306615,
+     -0.323214
+    ]
+   },
+   {
+    "id": "stock_d620498e4f7f7947",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.121749,
+     2.622195,
+     -1.542534
+    ]
+   },
+   {
+    "id": "stock_fecb1c2d4396d07d",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.425808,
+     -1.420424,
+     2.366586
+    ]
+   },
+   {
+    "id": "stock_7e642de3507e91d3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.324832,
+     0.299032,
+     1.990982
+    ]
+   },
+   {
+    "id": "stock_d2e5ed2f6c9063c0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.500362,
+     -1.879706,
+     1.494738
+    ]
+   },
+   {
+    "id": "stock_9cca1dcc160e8f5e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.443688,
+     0.093932,
+     2.202282
+    ]
+   },
+   {
+    "id": "stock_3c1111c21fa48be9",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.789383,
+     2.685701,
+     -0.566215
+    ]
+   },
+   {
+    "id": "stock_7271ee952062d43c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.498204,
+     -0.357139,
+     0.885105
+    ]
+   },
+   {
+    "id": "stock_eac80eda6bc1a99a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.264163,
+     -1.984438,
+     2.270601
+    ]
+   },
+   {
+    "id": "stock_1db5774fef3d3fcd",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.904227,
+     -0.430718,
+     1.990621
+    ]
+   },
+   {
+    "id": "stock_6137e0fec6e94fe4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.087205,
+     -0.584206,
+     2.418011
+    ]
+   },
+   {
+    "id": "stock_7fa210b7580110a7",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.965182,
+     -0.341019,
+     1.912327
+    ]
+   },
+   {
+    "id": "stock_27a58d75712349e1",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.620429,
+     -0.127171,
+     1.268684
+    ]
+   },
+   {
+    "id": "stock_5111ae46d56b084d",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.717767,
+     -1.728998,
+     -1.048795
+    ]
+   },
+   {
+    "id": "stock_0b1b54edfb02b7eb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.272978,
+     0.817583,
+     1.317824
+    ]
+   },
+   {
+    "id": "stock_228407eaaa850df7",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.035653,
+     -2.169473,
+     -0.588718
+    ]
+   },
+   {
+    "id": "stock_162104bc7ac2f5ff",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.257804,
+     -1.889532,
+     2.295268
+    ]
+   },
+   {
+    "id": "stock_18bde9f8b6e54fc8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.507546,
+     -1.670008,
+     1.109638
+    ]
+   },
+   {
+    "id": "stock_bba6b8e9a04c93c1",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.47667,
+     0.262038,
+     2.042667
+    ]
+   },
+   {
+    "id": "stock_015b84f37e222604",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.244609,
+     1.644399,
+     -0.358773
+    ]
+   },
+   {
+    "id": "stock_70980c55e7f35967",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.588449,
+     -0.905217,
+     1.927597
+    ]
+   },
+   {
+    "id": "stock_5a8d94cee7625947",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.186642,
+     -2.122936,
+     2.125948
+    ]
+   },
+   {
+    "id": "stock_790ea024b107d1a6",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.364382,
+     -1.096711,
+     1.791916
+    ]
+   },
+   {
+    "id": "stock_74a4b3043001da69",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.015639,
+     -1.517445,
+     1.994823
+    ]
+   },
+   {
+    "id": "stock_4108ca264db34871",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.12554,
+     -0.480443,
+     2.420754
+    ]
+   },
+   {
+    "id": "stock_e651d5b5881e2343",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.612428,
+     -2.229638,
+     0.120526
+    ]
+   },
+   {
+    "id": "stock_956ff9aa0af8c7ab",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.641282,
+     -1.910461,
+     1.417472
+    ]
+   },
+   {
+    "id": "stock_814e7ac6daacc8e4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.676684,
+     0.016211,
+     -1.18854
+    ]
+   },
+   {
+    "id": "stock_152bb892bd919bf0",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.714885,
+     -2.422022,
+     0.354192
+    ]
+   },
+   {
+    "id": "stock_db61bffca696dde5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.385237,
+     -1.421822,
+     2.186084
+    ]
+   },
+   {
+    "id": "stock_1c76c5550ae88615",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.390916,
+     0.676756,
+     -0.315087
+    ]
+   },
+   {
+    "id": "stock_15e128d79c1a4bcd",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.958901,
+     -0.259178,
+     1.646173
+    ]
+   },
+   {
+    "id": "stock_9da40882dca31fa5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.536208,
+     -2.608469,
+     2.165709
+    ]
+   },
+   {
+    "id": "stock_3b8862cc505981a1",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.8862,
+     -0.6957,
+     2.35864
+    ]
+   },
+   {
+    "id": "stock_d2a58d01e4afd9a4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.013542,
+     -2.030268,
+     -1.172771
+    ]
+   },
+   {
+    "id": "stock_7dbf3c9ac9d7cc6e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.08631,
+     -2.152988,
+     2.111289
+    ]
+   },
+   {
+    "id": "stock_1ada4da2a4e0f9e1",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.664371,
+     -1.026698,
+     0.008695
+    ]
+   },
+   {
+    "id": "stock_9be18dae243c5215",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.188904,
+     0.504981,
+     1.5884
+    ]
+   },
+   {
+    "id": "stock_9314334dcd2a751d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.945414,
+     -0.127852,
+     1.60959
+    ]
+   },
+   {
+    "id": "stock_3705d5300d5c5c0a",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.59402,
+     -1.432147,
+     0.606106
+    ]
+   },
+   {
+    "id": "stock_616d01428df437ef",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.63358,
+     -2.043996,
+     1.194916
+    ]
+   },
+   {
+    "id": "stock_bd0d8261663c03ad",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.532746,
+     -2.754501,
+     0.71196
+    ]
+   },
+   {
+    "id": "stock_2d89b45008f96238",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.071653,
+     -0.168636,
+     1.515464
+    ]
+   },
+   {
+    "id": "stock_38ae8d5406464035",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.402023,
+     2.465752,
+     -0.907972
+    ]
+   },
+   {
+    "id": "stock_3ac7f4c9c94c5c27",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.51719,
+     -1.751516,
+     -0.890345
+    ]
+   },
+   {
+    "id": "stock_51c0d4dec45cb766",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.373428,
+     -1.432823,
+     2.255668
+    ]
+   },
+   {
+    "id": "stock_3b070ebb741ed220",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.559134,
+     0.903978,
+     -0.206202
+    ]
+   },
+   {
+    "id": "stock_b28a7ac82776ce28",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.028063,
+     0.6052,
+     0.261311
+    ]
+   },
+   {
+    "id": "stock_73c17b12de5ab809",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.417576,
+     0.374997,
+     1.899446
+    ]
+   },
+   {
+    "id": "stock_6b52e81b0df86531",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.202659,
+     -0.001186,
+     2.200237
+    ]
+   },
+   {
+    "id": "stock_e2d7fe1db09b4827",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.533771,
+     -0.694675,
+     1.835626
+    ]
+   },
+   {
+    "id": "stock_7bb5b1ae537519cc",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.254856,
+     0.045865,
+     2.155623
+    ]
+   },
+   {
+    "id": "stock_3ebee8af3216ec69",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.477151,
+     -2.685613,
+     0.837379
+    ]
+   },
+   {
+    "id": "stock_99060408a7063f89",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.329849,
+     -2.471294,
+     0.54819
+    ]
+   },
+   {
+    "id": "stock_6ade34c51a2e39e6",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.040077,
+     -1.974938,
+     2.244935
+    ]
+   },
+   {
+    "id": "stock_643d291668c2f35c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.129457,
+     -1.753782,
+     2.152474
+    ]
+   },
+   {
+    "id": "stock_ab03dcae485f9846",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.209812,
+     -0.286101,
+     2.00032
+    ]
+   },
+   {
+    "id": "stock_2fbd5cf4860e762a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.439036,
+     -0.874287,
+     1.399216
+    ]
+   },
+   {
+    "id": "stock_02f6d383d70c6cbb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.749654,
+     -1.158116,
+     2.236424
+    ]
+   },
+   {
+    "id": "stock_fa191216bf2893e0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.011259,
+     -2.063639,
+     2.246311
+    ]
+   },
+   {
+    "id": "stock_49e4d522d4451efd",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.497713,
+     -1.153889,
+     2.271286
+    ]
+   },
+   {
+    "id": "stock_11eecc2ba90c626e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.914614,
+     -0.88257,
+     2.419926
+    ]
+   },
+   {
+    "id": "stock_7e4c7caee33b8ef7",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.901272,
+     2.809677,
+     -0.406108
+    ]
+   },
+   {
+    "id": "stock_352b27f93925c067",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.130076,
+     1.480415,
+     0.085793
+    ]
+   },
+   {
+    "id": "stock_7e6370efac671065",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.981902,
+     0.863703,
+     1.239039
+    ]
+   },
+   {
+    "id": "stock_0e538bf7a44664e4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.226992,
+     0.515674,
+     1.602869
+    ]
+   },
+   {
+    "id": "stock_52f13ab189f77d41",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.087418,
+     -1.79226,
+     2.06986
+    ]
+   },
+   {
+    "id": "stock_1bfd3917bc366762",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.732191,
+     1.417524,
+     1.64497
+    ]
+   },
+   {
+    "id": "stock_223144d22c9d0b69",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     1.092082,
+     -2.727238,
+     1.69469
+    ]
+   },
+   {
+    "id": "stock_196b677c14cf623e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.62429,
+     -1.263282,
+     2.471767
+    ]
+   },
+   {
+    "id": "stock_987cdb0e912dc16c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.311406,
+     -0.260522,
+     2.390749
+    ]
+   },
+   {
+    "id": "stock_757d0d74be899558",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.799829,
+     -1.276037,
+     2.573984
+    ]
+   },
+   {
+    "id": "stock_53ba89f2379ed717",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.364762,
+     -1.311821,
+     2.085739
+    ]
+   },
+   {
+    "id": "stock_a4296a1c740020ad",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.353596,
+     -0.614647,
+     1.502365
+    ]
+   },
+   {
+    "id": "stock_d7e7c3062ce3a17f",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.865366,
+     2.997145,
+     -0.69181
+    ]
+   },
+   {
+    "id": "stock_09c3e85d831e8feb",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.492239,
+     0.206399,
+     2.042409
+    ]
+   },
+   {
+    "id": "stock_a57633664f3e6e2e",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.837656,
+     2.179582,
+     -1.246543
+    ]
+   },
+   {
+    "id": "stock_372c5799bf83a9b7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.813231,
+     -1.237889,
+     2.505532
+    ]
+   },
+   {
+    "id": "stock_3d678f488557e5b6",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.754223,
+     0.372933,
+     0.819396
+    ]
+   },
+   {
+    "id": "stock_4e17641441f227c0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.62062,
+     -1.274161,
+     2.259872
+    ]
+   },
+   {
+    "id": "stock_1f2598010092d073",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.680716,
+     -2.364897,
+     1.446957
+    ]
+   },
+   {
+    "id": "stock_20ae8e66b4b44102",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.922132,
+     -1.708045,
+     -1.318487
+    ]
+   },
+   {
+    "id": "stock_2a245c0ed565ff20",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.08183,
+     -2.049769,
+     2.177513
+    ]
+   },
+   {
+    "id": "stock_a41d9fd0eb2d57bd",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.909477,
+     -1.991973,
+     -1.005826
+    ]
+   },
+   {
+    "id": "stock_2837384984c05cfa",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.218818,
+     -2.366376,
+     0.98105
+    ]
+   },
+   {
+    "id": "stock_beb47dfd35ebecf8",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.02196,
+     -2.100139,
+     2.240112
+    ]
+   },
+   {
+    "id": "stock_6da45a1707cc9e53",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.735051,
+     -1.995686,
+     1.417102
+    ]
+   },
+   {
+    "id": "stock_5d43f6408ad26967",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.762344,
+     -1.875309,
+     -1.088149
+    ]
+   },
+   {
+    "id": "stock_e110621d03e6e2ec",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     1.057493,
+     -2.534486,
+     1.450859
+    ]
+   },
+   {
+    "id": "stock_ab06588a35956436",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.249409,
+     -1.164017,
+     1.399715
+    ]
+   },
+   {
+    "id": "stock_95b5cc7b87824c9c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.240633,
+     0.3586,
+     1.723894
+    ]
+   },
+   {
+    "id": "stock_dd700b0a169cef3b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.366904,
+     -2.373539,
+     2.064228
+    ]
+   },
+   {
+    "id": "stock_e22910f85e5806a4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.923339,
+     -0.839495,
+     2.057555
+    ]
+   },
+   {
+    "id": "stock_d95c2968463a2a54",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.526462,
+     -2.158374,
+     1.794799
+    ]
+   },
+   {
+    "id": "stock_b618c1f76e088064",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.738379,
+     -2.14839,
+     -0.897885
+    ]
+   },
+   {
+    "id": "stock_5684416eb7a7c0f5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.441766,
+     -0.143941,
+     2.420956
+    ]
+   },
+   {
+    "id": "stock_355ad802d0185972",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.836046,
+     0.306957,
+     0.761574
+    ]
+   },
+   {
+    "id": "stock_67cdd8f438dfec44",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.333934,
+     0.39705,
+     1.985744
+    ]
+   },
+   {
+    "id": "stock_302942dbf7ca8f80",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.228164,
+     -1.956729,
+     2.264242
+    ]
+   },
+   {
+    "id": "stock_3edfd698904d68f8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.61626,
+     -1.941915,
+     1.493746
+    ]
+   },
+   {
+    "id": "stock_b40a95cf7df62fb8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.61784,
+     2.472913,
+     -0.240784
+    ]
+   },
+   {
+    "id": "stock_6829daaff4758852",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.338512,
+     -2.667163,
+     1.079609
+    ]
+   },
+   {
+    "id": "stock_26817b8d05bf23ba",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     0.077632,
+     0.327154,
+     -0.672586
+    ]
+   },
+   {
+    "id": "stock_3c9c442c76bd8e09",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.869112,
+     -0.318904,
+     1.908992
+    ]
+   },
+   {
+    "id": "stock_285901f48f3c5a08",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.576863,
+     -2.079359,
+     0.910312
+    ]
+   },
+   {
+    "id": "stock_4cfcbfc70a311e82",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.20758,
+     2.206535,
+     -0.768668
+    ]
+   },
+   {
+    "id": "stock_4179eba7d4675213",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.472801,
+     2.137348,
+     -0.291263
+    ]
+   },
+   {
+    "id": "stock_c8a6cd10e4ad2e40",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.497827,
+     2.87834,
+     -1.245279
+    ]
+   },
+   {
+    "id": "stock_205f00e051b3a56c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.59474,
+     -1.332637,
+     1.976752
+    ]
+   },
+   {
+    "id": "stock_4ff018111dd96b7f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.358999,
+     -1.07368,
+     1.737729
+    ]
+   },
+   {
+    "id": "stock_d97567fde2a820a8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.926772,
+     1.893296,
+     -1.090634
+    ]
+   },
+   {
+    "id": "stock_0b74c2fc9155f84a",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.29822,
+     0.909155,
+     0.774924
+    ]
+   },
+   {
+    "id": "stock_a40fb10702fe7ad0",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.987356,
+     -0.743083,
+     2.477562
+    ]
+   },
+   {
+    "id": "stock_f33aba10e7063026",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.332872,
+     0.759612,
+     1.550784
+    ]
+   },
+   {
+    "id": "stock_ef63f69a82bfd270",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.306411,
+     0.958225,
+     1.097108
+    ]
+   },
+   {
+    "id": "stock_38e96add91a15073",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.477878,
+     -1.660506,
+     2.30332
+    ]
+   },
+   {
+    "id": "stock_679458aa5985c9a2",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.932432,
+     2.117374,
+     0.289172
+    ]
+   },
+   {
+    "id": "stock_ec6f1b2a3c596792",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.701831,
+     -1.109848,
+     2.443064
+    ]
+   },
+   {
+    "id": "stock_3539e0b08e48c973",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.100658,
+     -1.383213,
+     1.703204
+    ]
+   },
+   {
+    "id": "stock_9edfb0eaa27f98fe",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.045406,
+     -1.027195,
+     0.664898
+    ]
+   },
+   {
+    "id": "stock_406920aa2421e41e",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.577813,
+     0.530171,
+     0.34607
+    ]
+   },
+   {
+    "id": "stock_4fcafe1a3617fce8",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.470547,
+     -1.956625,
+     -0.321977
+    ]
+   },
+   {
+    "id": "stock_efe2ab17d875a299",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.021612,
+     -0.213289,
+     0.479009
+    ]
+   },
+   {
+    "id": "stock_5c5e9d31c708d0e4",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.47138,
+     2.02168,
+     0.101766
+    ]
+   },
+   {
+    "id": "stock_a0dc6be01a6e2a82",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     0.374517,
+     -0.430551,
+     -0.290416
+    ]
+   },
+   {
+    "id": "stock_3fb2836b0735c8f3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.462395,
+     -1.187123,
+     1.981142
+    ]
+   },
+   {
+    "id": "stock_1ab8a584db903041",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.696524,
+     1.962548,
+     0.981382
+    ]
+   },
+   {
+    "id": "stock_7486d923b952ab2b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.641275,
+     2.717823,
+     -0.785659
+    ]
+   },
+   {
+    "id": "stock_0ee427c0ad75b694",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.488037,
+     -1.138605,
+     -1.367844
+    ]
+   },
+   {
+    "id": "stock_8fe16e28721c3d3a",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.547403,
+     2.470307,
+     -0.56303
+    ]
+   },
+   {
+    "id": "stock_9a39a5ab0218761c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.034555,
+     0.802337,
+     0.994909
+    ]
+   },
+   {
+    "id": "stock_21743bea84972b33",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.607907,
+     2.783471,
+     -0.758192
+    ]
+   },
+   {
+    "id": "stock_3d20a1f087000d5e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.508102,
+     1.287864,
+     1.211458
+    ]
+   },
+   {
+    "id": "stock_3d2f054f77a6352b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.433332,
+     1.472518,
+     0.504712
+    ]
+   },
+   {
+    "id": "stock_92f5f45c85db26a7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.681004,
+     -1.245062,
+     2.305597
+    ]
+   },
+   {
+    "id": "stock_772457d968245e79",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.930637,
+     -2.497539,
+     1.47132
+    ]
+   },
+   {
+    "id": "stock_65b90d5239073411",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.824833,
+     -0.270242,
+     1.582794
+    ]
+   },
+   {
+    "id": "stock_2a665d9d844d0ea4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.491193,
+     -0.985989,
+     1.622404
+    ]
+   },
+   {
+    "id": "stock_8c8955c35a24720b",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.109295,
+     -0.742262,
+     -1.046014
+    ]
+   },
+   {
+    "id": "stock_18034386455da415",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.124261,
+     -0.347998,
+     2.171935
+    ]
+   },
+   {
+    "id": "stock_08dbe0b5f45aeda0",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.192555,
+     -0.23795,
+     2.237811
+    ]
+   },
+   {
+    "id": "stock_e3e75d1789225e5c",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.078705,
+     -0.044102,
+     -0.919496
+    ]
+   },
+   {
+    "id": "stock_a4b7897cab817e1c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.700747,
+     -2.338795,
+     1.710867
+    ]
+   },
+   {
+    "id": "stock_5a4ec8391f9fe867",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.213658,
+     -1.724826,
+     2.077926
+    ]
+   },
+   {
+    "id": "stock_c88ed4fa830e04b9",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.472796,
+     1.759163,
+     -1.586911
+    ]
+   },
+   {
+    "id": "stock_83b35380f2404427",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.022136,
+     -1.069526,
+     1.609282
+    ]
+   },
+   {
+    "id": "stock_9f5f6f41a38df3c7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.76855,
+     -1.025005,
+     2.240997
+    ]
+   },
+   {
+    "id": "stock_76297972438f1c7d",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.236589,
+     1.11547,
+     0.650398
+    ]
+   },
+   {
+    "id": "stock_28677b7aca7ef8fc",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.086343,
+     0.779611,
+     1.505745
+    ]
+   },
+   {
+    "id": "stock_06cfcf4f1628d309",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.379899,
+     2.565808,
+     -1.032776
+    ]
+   },
+   {
+    "id": "stock_559014d5b440cb0a",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.296755,
+     -1.611408,
+     -0.489359
+    ]
+   },
+   {
+    "id": "stock_b081f0340a12e670",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.945333,
+     -0.727551,
+     2.264077
+    ]
+   },
+   {
+    "id": "stock_5fbff48f72399885",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.704404,
+     -1.290565,
+     2.476325
+    ]
+   },
+   {
+    "id": "stock_ed18fdeb69968be8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.399942,
+     1.721189,
+     0.34044
+    ]
+   },
+   {
+    "id": "stock_f9d0517c39d1e898",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     0.404161,
+     0.782873,
+     -1.876003
+    ]
+   },
+   {
+    "id": "stock_e34575e5e29c9515",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.268063,
+     -2.290977,
+     2.110215
+    ]
+   },
+   {
+    "id": "stock_3c78c8c68a994d1f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.712315,
+     0.767255,
+     2.061371
+    ]
+   },
+   {
+    "id": "stock_5be8fdbba2885381",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.725951,
+     -0.438608,
+     -0.83996
+    ]
+   },
+   {
+    "id": "stock_2c0316ef09c93772",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.029056,
+     -1.676712,
+     2.187644
+    ]
+   },
+   {
+    "id": "stock_b88ec1ea0cf73f3d",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.42183,
+     2.667172,
+     -0.954413
+    ]
+   },
+   {
+    "id": "stock_fe1a3f4ebe2e5e60",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.678085,
+     2.822255,
+     -0.800154
+    ]
+   },
+   {
+    "id": "stock_e9b564f998e40365",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.897254,
+     1.009219,
+     0.659261
+    ]
+   },
+   {
+    "id": "stock_3fd67f46486ac96b",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.148052,
+     0.960107,
+     0.371995
+    ]
+   },
+   {
+    "id": "stock_4c653da9566c7b7f",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.289568,
+     0.473608,
+     -0.380241
+    ]
+   }
+  ]
+ },
+ "benchmark_max_length_512": {
+  "metrics": {
+   "n": 338,
+   "accuracy": 0.5325443786982249,
+   "macro_f1": 0.499871922948846,
+   "per_class": {
+    "positive": {
+     "precision": 0.7446808510638298,
+     "recall": 0.28688524590163933,
+     "f1": 0.41420118343195267,
+     "support": 122
+    },
+    "negative": {
+     "precision": 0.5483870967741935,
+     "recall": 0.41975308641975306,
+     "f1": 0.4755244755244755,
+     "support": 81
+    },
+    "neutral": {
+     "precision": 0.4847161572052402,
+     "recall": 0.8222222222222222,
+     "f1": 0.6098901098901099,
+     "support": 135
+    }
+   },
+   "confusion_matrix": {
+    "labels": [
+     "positive",
+     "negative",
+     "neutral"
+    ],
+    "matrix": [
+     [
+      35,
+      13,
+      74
+     ],
+     [
+      3,
+      34,
+      44
+     ],
+     [
+      9,
+      15,
+      111
+     ]
+    ]
+   },
+   "pred_counts": {
+    "positive": 47,
+    "negative": 62,
+    "neutral": 229
+   }
+  },
+  "predictions": [
+   {
+    "id": "stock_ef250eb61f33646b",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -0.737475,
+     1.762143,
+     -0.943501
+    ]
+   },
+   {
+    "id": "stock_576cc17f3881ad32",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.636347,
+     -1.090708,
+     1.865588
+    ]
+   },
+   {
+    "id": "stock_b4e8e6247d6d4cf4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.500179,
+     -1.498082,
+     2.328134
+    ]
+   },
+   {
+    "id": "stock_832adbdfb6693da9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.199195,
+     -2.187159,
+     2.23241
+    ]
+   },
+   {
+    "id": "stock_1a0e9e983de7ec87",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.052312,
+     -0.551192,
+     2.350478
+    ]
+   },
+   {
+    "id": "stock_f339c8f6b3d21cd3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.651381,
+     1.122832,
+     1.729841
+    ]
+   },
+   {
+    "id": "stock_a3d9699b9ede25f7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.174321,
+     -2.123645,
+     1.884874
+    ]
+   },
+   {
+    "id": "stock_73b4ae9a7ef917c4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.703431,
+     -1.427745,
+     2.561612
+    ]
+   },
+   {
+    "id": "stock_b8fe139a76b7f5cf",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.709631,
+     -0.758821,
+     1.982128
+    ]
+   },
+   {
+    "id": "stock_8e4e539cd914b8f4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.880683,
+     -1.053623,
+     2.374477
+    ]
+   },
+   {
+    "id": "stock_ba60c58194cfcffa",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.880136,
+     -0.704439,
+     2.362594
+    ]
+   },
+   {
+    "id": "stock_82b7ec4f05c70358",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.526436,
+     1.303818,
+     1.360409
+    ]
+   },
+   {
+    "id": "stock_ad033e7be46cbe0d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.610615,
+     -1.64895,
+     2.386013
+    ]
+   },
+   {
+    "id": "stock_85a3f1c1681f5a92",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.541829,
+     -1.600176,
+     2.427943
+    ]
+   },
+   {
+    "id": "stock_4f4404169524462a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.406608,
+     -1.414353,
+     2.052256
+    ]
+   },
+   {
+    "id": "stock_75986c353594801b",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.198342,
+     -0.382323,
+     2.364797
+    ]
+   },
+   {
+    "id": "stock_9c7dd23d1499f0c2",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.330423,
+     -0.190872,
+     2.324272
+    ]
+   },
+   {
+    "id": "stock_209eb9dff37c5111",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.405417,
+     0.130599,
+     2.29216
+    ]
+   },
+   {
+    "id": "stock_70e56915451c2891",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.206149,
+     -1.084746,
+     1.814955
+    ]
+   },
+   {
+    "id": "stock_9e75340342f0efc6",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.157125,
+     -1.578402,
+     2.205297
+    ]
+   },
+   {
+    "id": "stock_4c662717f04f47ac",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.071836,
+     -0.713558,
+     2.385471
+    ]
+   },
+   {
+    "id": "stock_9c83c42919b55843",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.854265,
+     2.559248,
+     -0.031766
+    ]
+   },
+   {
+    "id": "stock_9adc77fda2d6d081",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.246579,
+     -0.508245,
+     2.543126
+    ]
+   },
+   {
+    "id": "stock_2844b36eb97a35d4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.32145,
+     -0.723363,
+     1.147022
+    ]
+   },
+   {
+    "id": "stock_5ec514500eb87bfa",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.332701,
+     -1.486665,
+     1.602552
+    ]
+   },
+   {
+    "id": "stock_4f0be77b0a11cbd4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.065751,
+     -2.425621,
+     -0.924389
+    ]
+   },
+   {
+    "id": "stock_401473e1b4a979b5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.218136,
+     -1.842237,
+     2.068444
+    ]
+   },
+   {
+    "id": "stock_c5ac56b636221182",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.11052,
+     -0.545974,
+     0.737668
+    ]
+   },
+   {
+    "id": "stock_6e6c8e829c923437",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.300446,
+     -1.278987,
+     2.069401
+    ]
+   },
+   {
+    "id": "stock_fba6d83e74509c09",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.272136,
+     -1.89456,
+     2.282521
+    ]
+   },
+   {
+    "id": "stock_2cc7195f3493ad3f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.957161,
+     -2.375687,
+     1.400355
+    ]
+   },
+   {
+    "id": "stock_62ae89e473148891",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.4598,
+     0.416544,
+     1.882502
+    ]
+   },
+   {
+    "id": "stock_ab2f27ca260c1644",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.241454,
+     -0.324776,
+     2.404272
+    ]
+   },
+   {
+    "id": "stock_93e37641a42e1742",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.56435,
+     -1.372042,
+     2.460582
+    ]
+   },
+   {
+    "id": "stock_2edab01076b4f0e1",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.977562,
+     -1.977748,
+     -1.367184
+    ]
+   },
+   {
+    "id": "stock_86da5f770a5a007f",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.732646,
+     -0.586985,
+     1.562161
+    ]
+   },
+   {
+    "id": "stock_ccec9fa1f76952c8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.800934,
+     0.238887,
+     0.527658
+    ]
+   },
+   {
+    "id": "stock_9326540e0a966787",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.215368,
+     -2.013865,
+     1.86788
+    ]
+   },
+   {
+    "id": "stock_9a36f77d4b735613",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.199621,
+     1.290302,
+     0.395121
+    ]
+   },
+   {
+    "id": "stock_23f3c90e3d3cf861",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.436686,
+     -1.12705,
+     0.534695
+    ]
+   },
+   {
+    "id": "stock_25589b74d4010ea1",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.614164,
+     2.453345,
+     -0.090096
+    ]
+   },
+   {
+    "id": "stock_9b87461a48eb2caa",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.738408,
+     2.471641,
+     0.204677
+    ]
+   },
+   {
+    "id": "stock_c0c853a58f1986dc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.337653,
+     -1.584431,
+     2.112308
+    ]
+   },
+   {
+    "id": "stock_e579f2c8000f1d31",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.887805,
+     -0.425094,
+     1.740975
+    ]
+   },
+   {
+    "id": "stock_039525b7d038780c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.774188,
+     -0.799319,
+     2.325503
+    ]
+   },
+   {
+    "id": "stock_acf8af41c0b2ecfb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.776878,
+     -0.524303,
+     1.76052
+    ]
+   },
+   {
+    "id": "stock_3a971cb259504f6e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.935177,
+     0.096553,
+     1.735787
+    ]
+   },
+   {
+    "id": "stock_166e53bf2740d3c7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.920095,
+     -0.813717,
+     2.24373
+    ]
+   },
+   {
+    "id": "stock_75e931d908319ba6",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.107822,
+     -1.913025,
+     2.351128
+    ]
+   },
+   {
+    "id": "stock_4b1e3921b79692d2",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.351548,
+     -0.93181,
+     -1.549469
+    ]
+   },
+   {
+    "id": "stock_2db62a15230901fd",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.602634,
+     1.640622,
+     0.823818
+    ]
+   },
+   {
+    "id": "stock_7aed4aaa17096cc8",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.100864,
+     -1.100135,
+     1.358473
+    ]
+   },
+   {
+    "id": "stock_0b8f262d035d873f",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.245003,
+     -1.974922,
+     0.078879
+    ]
+   },
+   {
+    "id": "stock_4df7104f2af7a146",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.720786,
+     0.021471,
+     1.076728
+    ]
+   },
+   {
+    "id": "stock_577fb3bc741adf7e",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.030539,
+     -1.63465,
+     -1.672216
+    ]
+   },
+   {
+    "id": "stock_83fc2b6ba4beb31f",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.279393,
+     -0.103901,
+     -0.292587
+    ]
+   },
+   {
+    "id": "stock_a9f6c9a8dde40617",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.168917,
+     -1.795591,
+     1.896997
+    ]
+   },
+   {
+    "id": "stock_41265c8d070a6382",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.21267,
+     -1.189271,
+     2.126066
+    ]
+   },
+   {
+    "id": "stock_c75e931b07e76a58",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.369655,
+     2.343047,
+     -0.647159
+    ]
+   },
+   {
+    "id": "stock_401858e3a9b422de",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.768889,
+     -1.726741,
+     0.834029
+    ]
+   },
+   {
+    "id": "stock_8f6cad6c8a80c76e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.667506,
+     1.433691,
+     1.054021
+    ]
+   },
+   {
+    "id": "stock_1f0ef935b6683825",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.917343,
+     -0.421965,
+     2.127182
+    ]
+   },
+   {
+    "id": "stock_581be999e99bcf45",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.364607,
+     -2.007411,
+     1.870748
+    ]
+   },
+   {
+    "id": "stock_701293608bd7b711",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.837269,
+     -2.391846,
+     1.624699
+    ]
+   },
+   {
+    "id": "stock_ef8cc7cb3083b655",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.800831,
+     2.575997,
+     -0.202385
+    ]
+   },
+   {
+    "id": "stock_a84b52e28ac14064",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.213423,
+     0.09397,
+     1.868873
+    ]
+   },
+   {
+    "id": "stock_f8cc831976bf9ce8",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.61561,
+     -1.032331,
+     -1.547374
+    ]
+   },
+   {
+    "id": "stock_f1845e26294f458c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.034176,
+     -1.539676,
+     1.557957
+    ]
+   },
+   {
+    "id": "stock_2c62940fbebb7fbb",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.829675,
+     -1.203986,
+     2.593722
+    ]
+   },
+   {
+    "id": "stock_80b9a2664dce765d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.560838,
+     -0.817999,
+     1.783188
+    ]
+   },
+   {
+    "id": "stock_ad8f46ee6ab48183",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.828638,
+     -1.009544,
+     2.384638
+    ]
+   },
+   {
+    "id": "stock_0b32f062dabddf95",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.560015,
+     -2.144701,
+     1.536091
+    ]
+   },
+   {
+    "id": "stock_019f93ebd5442f63",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     0.473213,
+     0.162722,
+     -1.736471
+    ]
+   },
+   {
+    "id": "stock_97c71eda2beb81fa",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.414619,
+     -1.618548,
+     2.40677
+    ]
+   },
+   {
+    "id": "stock_1004b167d55cead9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.160529,
+     -1.725415,
+     2.16703
+    ]
+   },
+   {
+    "id": "stock_628fd6fa62ada196",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.491405,
+     -2.000548,
+     1.718418
+    ]
+   },
+   {
+    "id": "stock_e2d26eda78937cfc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.309756,
+     0.029426,
+     2.07844
+    ]
+   },
+   {
+    "id": "stock_cdf41fd09f1af65f",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.986194,
+     -0.571995,
+     2.36575
+    ]
+   },
+   {
+    "id": "stock_cebe1b81cf9b2393",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.373991,
+     -1.872155,
+     1.835206
+    ]
+   },
+   {
+    "id": "stock_b18670d6aa640317",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.345049,
+     0.614194,
+     1.97943
+    ]
+   },
+   {
+    "id": "stock_7e96fd759314155a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.473332,
+     -1.312665,
+     1.753711
+    ]
+   },
+   {
+    "id": "stock_6e4aa0ba1fe49457",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.732694,
+     1.634446,
+     1.259033
+    ]
+   },
+   {
+    "id": "stock_32ac81a15e486e1a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.212022,
+     -0.130085,
+     2.057404
+    ]
+   },
+   {
+    "id": "stock_2a5fa99634b09984",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.737481,
+     -2.41059,
+     1.708952
+    ]
+   },
+   {
+    "id": "stock_53678630ed16855b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.854901,
+     2.566868,
+     -1.711299
+    ]
+   },
+   {
+    "id": "stock_ab52bea5f43bdd61",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.15907,
+     -0.331905,
+     0.910236
+    ]
+   },
+   {
+    "id": "stock_0ecb3b81b9cd9d93",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.578152,
+     -1.258309,
+     0.310759
+    ]
+   },
+   {
+    "id": "stock_8757a7eb2b673256",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.792098,
+     -1.092463,
+     2.381885
+    ]
+   },
+   {
+    "id": "stock_370b7c8cb2620bd0",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.715563,
+     2.733101,
+     -0.672038
+    ]
+   },
+   {
+    "id": "stock_62d0256a6d6da36b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.367576,
+     -1.85193,
+     2.428901
+    ]
+   },
+   {
+    "id": "stock_2085cd01169c17fa",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.230768,
+     0.482655,
+     1.857952
+    ]
+   },
+   {
+    "id": "stock_8beccbc6ae43dee4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.979767,
+     -1.749988,
+     0.684352
+    ]
+   },
+   {
+    "id": "stock_04a55f662bf0d54c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.715019,
+     -2.658937,
+     1.838004
+    ]
+   },
+   {
+    "id": "stock_430c4e6296c23735",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.0498,
+     -0.509626,
+     0.982626
+    ]
+   },
+   {
+    "id": "stock_788d971676fbaefb",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.678714,
+     -1.035688,
+     2.054519
+    ]
+   },
+   {
+    "id": "stock_7236e52efc2ebd70",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.050671,
+     0.71838,
+     1.58812
+    ]
+   },
+   {
+    "id": "stock_4ccebab4ebbc2d83",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.35248,
+     -1.373223,
+     2.234206
+    ]
+   },
+   {
+    "id": "stock_ecec5a1a9c63771e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.546446,
+     1.729804,
+     0.61845
+    ]
+   },
+   {
+    "id": "stock_8f8cffd52296b548",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.931262,
+     -0.902755,
+     2.526094
+    ]
+   },
+   {
+    "id": "stock_4f468a1d2fddf956",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.860558,
+     -1.422834,
+     -1.628394
+    ]
+   },
+   {
+    "id": "stock_ddd653fc2e4bd44c",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.465588,
+     -2.074481,
+     -0.332617
+    ]
+   },
+   {
+    "id": "stock_3332235a8b8e0b75",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.962026,
+     0.667438,
+     1.16253
+    ]
+   },
+   {
+    "id": "stock_ffd15e35c5351510",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.981706,
+     -0.783837,
+     2.43258
+    ]
+   },
+   {
+    "id": "stock_37270f3b7f9642b4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.017202,
+     -1.460753,
+     -0.196982
+    ]
+   },
+   {
+    "id": "stock_3e6ec54480c05f43",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.114656,
+     -1.810221,
+     2.007281
+    ]
+   },
+   {
+    "id": "stock_08cf7dd61566c806",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.120042,
+     -1.950322,
+     2.249312
+    ]
+   },
+   {
+    "id": "stock_6dbd647cebdeee54",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.834204,
+     -0.844011,
+     2.340883
+    ]
+   },
+   {
+    "id": "stock_007943e3f719a0e3",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.198308,
+     -2.058414,
+     2.467695
+    ]
+   },
+   {
+    "id": "stock_df81ac692829444a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.681668,
+     -0.573442,
+     1.761246
+    ]
+   },
+   {
+    "id": "stock_e2108bdff6351add",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.511891,
+     1.43373,
+     1.021339
+    ]
+   },
+   {
+    "id": "stock_540add1fdf976864",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.13281,
+     -2.007235,
+     2.232754
+    ]
+   },
+   {
+    "id": "stock_33da5c7b491068ea",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.324866,
+     1.523106,
+     0.690145
+    ]
+   },
+   {
+    "id": "stock_95c5bd9fefc78eaf",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.340698,
+     -1.837626,
+     2.360529
+    ]
+   },
+   {
+    "id": "stock_24e0c6c9347b2db9",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.112802,
+     -1.770775,
+     2.14475
+    ]
+   },
+   {
+    "id": "stock_adbfd6eb724d5c9e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.034771,
+     -2.121012,
+     2.121208
+    ]
+   },
+   {
+    "id": "stock_3c7cfaf8e403f7c7",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.556204,
+     -2.744956,
+     0.393847
+    ]
+   },
+   {
+    "id": "stock_afcbe2cabcdda4e8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.286581,
+     -1.539983,
+     2.194426
+    ]
+   },
+   {
+    "id": "stock_dbe94a8350e80261",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.561959,
+     -1.424564,
+     2.254155
+    ]
+   },
+   {
+    "id": "stock_683e2e8b5e7cec85",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.070787,
+     -2.063223,
+     2.15239
+    ]
+   },
+   {
+    "id": "stock_c0b30d1c3305aa9d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.021109,
+     -1.828401,
+     2.242913
+    ]
+   },
+   {
+    "id": "stock_33acdf554e2061fc",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.997295,
+     -0.591947,
+     2.027894
+    ]
+   },
+   {
+    "id": "stock_9b0d958ccaa79141",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.037926,
+     -2.036801,
+     2.215626
+    ]
+   },
+   {
+    "id": "stock_9451cf34f65f4737",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.129903,
+     -1.516049,
+     -0.294311
+    ]
+   },
+   {
+    "id": "stock_a6bacfef56c6de8d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.487679,
+     -0.863135,
+     1.419562
+    ]
+   },
+   {
+    "id": "stock_e2aee108e36d99d4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.098642,
+     -0.046164,
+     1.70054
+    ]
+   },
+   {
+    "id": "stock_6ab197ca7b35b6ea",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     0.378668,
+     1.37322,
+     -2.174383
+    ]
+   },
+   {
+    "id": "stock_93616719852727ad",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.431862,
+     -1.514925,
+     2.271325
+    ]
+   },
+   {
+    "id": "stock_f66e5de52f212896",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     0.153584,
+     -1.709276,
+     1.934331
+    ]
+   },
+   {
+    "id": "stock_c7ae57381154e0f4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.020314,
+     -0.05841,
+     1.697779
+    ]
+   },
+   {
+    "id": "stock_3694b2630d379c1a",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.546216,
+     -1.093536,
+     2.150378
+    ]
+   },
+   {
+    "id": "stock_0279ca3b2eddd521",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.905379,
+     1.091267,
+     -0.310541
+    ]
+   },
+   {
+    "id": "stock_4a28a94a8a002f6b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.014231,
+     -0.549226,
+     2.198308
+    ]
+   },
+   {
+    "id": "stock_47c3df1d86d431c0",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.996417,
+     -0.621938,
+     2.402512
+    ]
+   },
+   {
+    "id": "stock_131d3f37e0bb7f1a",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.097974,
+     -2.010135,
+     2.290926
+    ]
+   },
+   {
+    "id": "stock_4b6585de797f3256",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.004716,
+     1.998184,
+     -0.787847
+    ]
+   },
+   {
+    "id": "stock_924da12f1c1e6e05",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.074193,
+     -0.454236,
+     0.515328
+    ]
+   },
+   {
+    "id": "stock_f9cb8132f798452d",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.115262,
+     -1.805072,
+     -1.594002
+    ]
+   },
+   {
+    "id": "stock_2f75388e93f82c5c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.460426,
+     0.272673,
+     2.189199
+    ]
+   },
+   {
+    "id": "stock_90ed2bb443ed8322",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.299754,
+     -1.817962,
+     2.255002
+    ]
+   },
+   {
+    "id": "stock_077c35cec93ef821",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.741302,
+     -0.848071,
+     1.960013
+    ]
+   },
+   {
+    "id": "stock_04e9e1e8b4c0406f",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.253239,
+     -1.014888,
+     1.922194
+    ]
+   },
+   {
+    "id": "stock_f2011edda79c97d5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.945353,
+     -1.068297,
+     2.564657
+    ]
+   },
+   {
+    "id": "stock_589bc8d6243fbd57",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.635231,
+     2.040714,
+     0.438624
+    ]
+   },
+   {
+    "id": "stock_e9a499ba7b1fc34b",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.633073,
+     2.161163,
+     0.26693
+    ]
+   },
+   {
+    "id": "stock_e8d3100164929ac4",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.733124,
+     -1.924323,
+     1.234371
+    ]
+   },
+   {
+    "id": "stock_d40646e25ba1f43f",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.54373,
+     -1.267287,
+     2.167205
+    ]
+   },
+   {
+    "id": "stock_48ec612697be91a6",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.4306,
+     -2.178684,
+     0.056168
+    ]
+   },
+   {
+    "id": "stock_97c9b6d0fcee26f3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.124148,
+     -0.776285,
+     2.513965
+    ]
+   },
+   {
+    "id": "stock_bbd055cdced81967",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.676215,
+     2.9211,
+     -0.955242
+    ]
+   },
+   {
+    "id": "stock_9f46379458ee28a2",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.147612,
+     -0.206989,
+     1.953761
+    ]
+   },
+   {
+    "id": "stock_926abd0e9eeec2ab",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.651011,
+     -1.134654,
+     2.193515
+    ]
+   },
+   {
+    "id": "stock_c607822efd05f41d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.415464,
+     0.970376,
+     1.097919
+    ]
+   },
+   {
+    "id": "stock_aa66434b0b0c5240",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.219272,
+     -2.535919,
+     1.08459
+    ]
+   },
+   {
+    "id": "stock_10715b0f24380ee5",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.153483,
+     0.182675,
+     1.975393
+    ]
+   },
+   {
+    "id": "stock_23d46519243460ff",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.888603,
+     -0.661179,
+     -1.304991
+    ]
+   },
+   {
+    "id": "stock_ee7a2a7dbeedd9f4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.019096,
+     -2.075822,
+     2.118282
+    ]
+   },
+   {
+    "id": "stock_4d0b2ed93d6db83d",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     0.041834,
+     0.464519,
+     -0.384436
+    ]
+   },
+   {
+    "id": "stock_3803aff950b6e19c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.105688,
+     -2.000777,
+     2.009501
+    ]
+   },
+   {
+    "id": "stock_091f07874669678d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.116058,
+     -2.074079,
+     2.168375
+    ]
+   },
+   {
+    "id": "stock_c5cbf66c75263b81",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.502068,
+     1.863921,
+     0.300684
+    ]
+   },
+   {
+    "id": "stock_a00c6db56b650778",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.932008,
+     -1.777911,
+     -1.246285
+    ]
+   },
+   {
+    "id": "stock_cec4769e4070fd8c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.689244,
+     0.146835,
+     1.495752
+    ]
+   },
+   {
+    "id": "stock_bd220468afc8e6a7",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.308238,
+     -1.138186,
+     2.021084
+    ]
+   },
+   {
+    "id": "stock_2d7590f14eb97c06",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.927056,
+     -2.898989,
+     0.35093
+    ]
+   },
+   {
+    "id": "stock_6d27dedc91306d7d",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.070469,
+     -0.860646,
+     1.040879
+    ]
+   },
+   {
+    "id": "stock_f98b2d2114e7f93a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.082491,
+     -1.520724,
+     1.56323
+    ]
+   },
+   {
+    "id": "stock_efc4649bc6c513d8",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.394662,
+     1.043047,
+     0.586869
+    ]
+   },
+   {
+    "id": "stock_7626d44a8338d6ba",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     1.106825,
+     -2.5735,
+     1.431426
+    ]
+   },
+   {
+    "id": "stock_4e44950534a89e42",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.108367,
+     -0.676597,
+     2.422422
+    ]
+   },
+   {
+    "id": "stock_e70404423c5ee35b",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.754032,
+     0.187231,
+     1.131441
+    ]
+   },
+   {
+    "id": "stock_739cf4c9fd1ce8a8",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.480342,
+     1.754747,
+     -0.03568
+    ]
+   },
+   {
+    "id": "stock_235bfe6f73963c59",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.485934,
+     -0.540049,
+     1.080693
+    ]
+   },
+   {
+    "id": "stock_f458c28ed26d7385",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     1.660335,
+     -1.727861,
+     -1.0529
+    ]
+   },
+   {
+    "id": "stock_703e9135e50062e9",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.360583,
+     -1.802976,
+     2.279937
+    ]
+   },
+   {
+    "id": "stock_588b29edae50be0b",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.122356,
+     -0.306615,
+     -0.323214
+    ]
+   },
+   {
+    "id": "stock_d620498e4f7f7947",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.121749,
+     2.622195,
+     -1.542534
+    ]
+   },
+   {
+    "id": "stock_fecb1c2d4396d07d",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.425808,
+     -1.420424,
+     2.366586
+    ]
+   },
+   {
+    "id": "stock_7e642de3507e91d3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.324832,
+     0.299032,
+     1.990982
+    ]
+   },
+   {
+    "id": "stock_d2e5ed2f6c9063c0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.500362,
+     -1.879706,
+     1.494738
+    ]
+   },
+   {
+    "id": "stock_9cca1dcc160e8f5e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.443688,
+     0.093932,
+     2.202282
+    ]
+   },
+   {
+    "id": "stock_3c1111c21fa48be9",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.789383,
+     2.685701,
+     -0.566215
+    ]
+   },
+   {
+    "id": "stock_7271ee952062d43c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.498204,
+     -0.357139,
+     0.885105
+    ]
+   },
+   {
+    "id": "stock_eac80eda6bc1a99a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.264163,
+     -1.984438,
+     2.270601
+    ]
+   },
+   {
+    "id": "stock_1db5774fef3d3fcd",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.904227,
+     -0.430718,
+     1.990621
+    ]
+   },
+   {
+    "id": "stock_6137e0fec6e94fe4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.087205,
+     -0.584206,
+     2.418011
+    ]
+   },
+   {
+    "id": "stock_7fa210b7580110a7",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.965182,
+     -0.341019,
+     1.912327
+    ]
+   },
+   {
+    "id": "stock_27a58d75712349e1",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.620429,
+     -0.127171,
+     1.268684
+    ]
+   },
+   {
+    "id": "stock_5111ae46d56b084d",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.717767,
+     -1.728998,
+     -1.048795
+    ]
+   },
+   {
+    "id": "stock_0b1b54edfb02b7eb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.272978,
+     0.817583,
+     1.317824
+    ]
+   },
+   {
+    "id": "stock_228407eaaa850df7",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.035653,
+     -2.169473,
+     -0.588718
+    ]
+   },
+   {
+    "id": "stock_162104bc7ac2f5ff",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.257804,
+     -1.889532,
+     2.295268
+    ]
+   },
+   {
+    "id": "stock_18bde9f8b6e54fc8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.507546,
+     -1.670008,
+     1.109638
+    ]
+   },
+   {
+    "id": "stock_bba6b8e9a04c93c1",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.47667,
+     0.262038,
+     2.042667
+    ]
+   },
+   {
+    "id": "stock_015b84f37e222604",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.244609,
+     1.644399,
+     -0.358773
+    ]
+   },
+   {
+    "id": "stock_70980c55e7f35967",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.588449,
+     -0.905217,
+     1.927597
+    ]
+   },
+   {
+    "id": "stock_5a8d94cee7625947",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.186642,
+     -2.122936,
+     2.125948
+    ]
+   },
+   {
+    "id": "stock_790ea024b107d1a6",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.364382,
+     -1.096711,
+     1.791916
+    ]
+   },
+   {
+    "id": "stock_74a4b3043001da69",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.015639,
+     -1.517445,
+     1.994823
+    ]
+   },
+   {
+    "id": "stock_4108ca264db34871",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.12554,
+     -0.480443,
+     2.420754
+    ]
+   },
+   {
+    "id": "stock_e651d5b5881e2343",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.612428,
+     -2.229638,
+     0.120526
+    ]
+   },
+   {
+    "id": "stock_956ff9aa0af8c7ab",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.641282,
+     -1.910461,
+     1.417472
+    ]
+   },
+   {
+    "id": "stock_814e7ac6daacc8e4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.676684,
+     0.016211,
+     -1.18854
+    ]
+   },
+   {
+    "id": "stock_152bb892bd919bf0",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.714885,
+     -2.422022,
+     0.354192
+    ]
+   },
+   {
+    "id": "stock_db61bffca696dde5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.385237,
+     -1.421822,
+     2.186084
+    ]
+   },
+   {
+    "id": "stock_1c76c5550ae88615",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.390916,
+     0.676756,
+     -0.315087
+    ]
+   },
+   {
+    "id": "stock_15e128d79c1a4bcd",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.958901,
+     -0.259178,
+     1.646173
+    ]
+   },
+   {
+    "id": "stock_9da40882dca31fa5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.536208,
+     -2.608469,
+     2.165709
+    ]
+   },
+   {
+    "id": "stock_3b8862cc505981a1",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.8862,
+     -0.6957,
+     2.35864
+    ]
+   },
+   {
+    "id": "stock_d2a58d01e4afd9a4",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     2.013542,
+     -2.030268,
+     -1.172771
+    ]
+   },
+   {
+    "id": "stock_7dbf3c9ac9d7cc6e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.08631,
+     -2.152988,
+     2.111289
+    ]
+   },
+   {
+    "id": "stock_1ada4da2a4e0f9e1",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.664371,
+     -1.026698,
+     0.008695
+    ]
+   },
+   {
+    "id": "stock_9be18dae243c5215",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.188904,
+     0.504981,
+     1.5884
+    ]
+   },
+   {
+    "id": "stock_9314334dcd2a751d",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.945414,
+     -0.127852,
+     1.60959
+    ]
+   },
+   {
+    "id": "stock_3705d5300d5c5c0a",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.59402,
+     -1.432147,
+     0.606106
+    ]
+   },
+   {
+    "id": "stock_616d01428df437ef",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.63358,
+     -2.043996,
+     1.194916
+    ]
+   },
+   {
+    "id": "stock_bd0d8261663c03ad",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.532746,
+     -2.754501,
+     0.71196
+    ]
+   },
+   {
+    "id": "stock_2d89b45008f96238",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.071653,
+     -0.168636,
+     1.515464
+    ]
+   },
+   {
+    "id": "stock_38ae8d5406464035",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.402023,
+     2.465752,
+     -0.907972
+    ]
+   },
+   {
+    "id": "stock_3ac7f4c9c94c5c27",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.51719,
+     -1.751516,
+     -0.890345
+    ]
+   },
+   {
+    "id": "stock_51c0d4dec45cb766",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.373428,
+     -1.432823,
+     2.255668
+    ]
+   },
+   {
+    "id": "stock_3b070ebb741ed220",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.559134,
+     0.903978,
+     -0.206202
+    ]
+   },
+   {
+    "id": "stock_b28a7ac82776ce28",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.028063,
+     0.6052,
+     0.261311
+    ]
+   },
+   {
+    "id": "stock_73c17b12de5ab809",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.417576,
+     0.374997,
+     1.899446
+    ]
+   },
+   {
+    "id": "stock_6b52e81b0df86531",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.202659,
+     -0.001186,
+     2.200237
+    ]
+   },
+   {
+    "id": "stock_e2d7fe1db09b4827",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.533771,
+     -0.694675,
+     1.835626
+    ]
+   },
+   {
+    "id": "stock_7bb5b1ae537519cc",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.254856,
+     0.045865,
+     2.155623
+    ]
+   },
+   {
+    "id": "stock_3ebee8af3216ec69",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.477151,
+     -2.685613,
+     0.837379
+    ]
+   },
+   {
+    "id": "stock_99060408a7063f89",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.329849,
+     -2.471294,
+     0.54819
+    ]
+   },
+   {
+    "id": "stock_6ade34c51a2e39e6",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.040077,
+     -1.974938,
+     2.244935
+    ]
+   },
+   {
+    "id": "stock_643d291668c2f35c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.129457,
+     -1.753782,
+     2.152474
+    ]
+   },
+   {
+    "id": "stock_ab03dcae485f9846",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.209812,
+     -0.286101,
+     2.00032
+    ]
+   },
+   {
+    "id": "stock_2fbd5cf4860e762a",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.439036,
+     -0.874287,
+     1.399216
+    ]
+   },
+   {
+    "id": "stock_02f6d383d70c6cbb",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.749654,
+     -1.158116,
+     2.236424
+    ]
+   },
+   {
+    "id": "stock_fa191216bf2893e0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.011259,
+     -2.063639,
+     2.246311
+    ]
+   },
+   {
+    "id": "stock_49e4d522d4451efd",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.497713,
+     -1.153889,
+     2.271286
+    ]
+   },
+   {
+    "id": "stock_11eecc2ba90c626e",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.914614,
+     -0.88257,
+     2.419926
+    ]
+   },
+   {
+    "id": "stock_7e4c7caee33b8ef7",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.901272,
+     2.809677,
+     -0.406108
+    ]
+   },
+   {
+    "id": "stock_352b27f93925c067",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.130076,
+     1.480415,
+     0.085793
+    ]
+   },
+   {
+    "id": "stock_7e6370efac671065",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.981902,
+     0.863703,
+     1.239039
+    ]
+   },
+   {
+    "id": "stock_0e538bf7a44664e4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.226992,
+     0.515674,
+     1.602869
+    ]
+   },
+   {
+    "id": "stock_52f13ab189f77d41",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.087418,
+     -1.79226,
+     2.06986
+    ]
+   },
+   {
+    "id": "stock_1bfd3917bc366762",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.732191,
+     1.417524,
+     1.64497
+    ]
+   },
+   {
+    "id": "stock_223144d22c9d0b69",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     1.092082,
+     -2.727238,
+     1.69469
+    ]
+   },
+   {
+    "id": "stock_196b677c14cf623e",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.62429,
+     -1.263282,
+     2.471767
+    ]
+   },
+   {
+    "id": "stock_987cdb0e912dc16c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.311406,
+     -0.260522,
+     2.390749
+    ]
+   },
+   {
+    "id": "stock_757d0d74be899558",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.799829,
+     -1.276037,
+     2.573984
+    ]
+   },
+   {
+    "id": "stock_53ba89f2379ed717",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.364762,
+     -1.311821,
+     2.085739
+    ]
+   },
+   {
+    "id": "stock_a4296a1c740020ad",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.353596,
+     -0.614647,
+     1.502365
+    ]
+   },
+   {
+    "id": "stock_d7e7c3062ce3a17f",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.865366,
+     2.997145,
+     -0.69181
+    ]
+   },
+   {
+    "id": "stock_09c3e85d831e8feb",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.492239,
+     0.206399,
+     2.042409
+    ]
+   },
+   {
+    "id": "stock_a57633664f3e6e2e",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.837656,
+     2.179582,
+     -1.246543
+    ]
+   },
+   {
+    "id": "stock_372c5799bf83a9b7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.813231,
+     -1.237889,
+     2.505532
+    ]
+   },
+   {
+    "id": "stock_3d678f488557e5b6",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.754223,
+     0.372933,
+     0.819396
+    ]
+   },
+   {
+    "id": "stock_4e17641441f227c0",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.62062,
+     -1.274161,
+     2.259872
+    ]
+   },
+   {
+    "id": "stock_1f2598010092d073",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.680716,
+     -2.364897,
+     1.446957
+    ]
+   },
+   {
+    "id": "stock_20ae8e66b4b44102",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.922132,
+     -1.708045,
+     -1.318487
+    ]
+   },
+   {
+    "id": "stock_2a245c0ed565ff20",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.08183,
+     -2.049769,
+     2.177513
+    ]
+   },
+   {
+    "id": "stock_a41d9fd0eb2d57bd",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.909477,
+     -1.991973,
+     -1.005826
+    ]
+   },
+   {
+    "id": "stock_2837384984c05cfa",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.218818,
+     -2.366376,
+     0.98105
+    ]
+   },
+   {
+    "id": "stock_beb47dfd35ebecf8",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.02196,
+     -2.100139,
+     2.240112
+    ]
+   },
+   {
+    "id": "stock_6da45a1707cc9e53",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.735051,
+     -1.995686,
+     1.417102
+    ]
+   },
+   {
+    "id": "stock_5d43f6408ad26967",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.762344,
+     -1.875309,
+     -1.088149
+    ]
+   },
+   {
+    "id": "stock_e110621d03e6e2ec",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     1.057493,
+     -2.534486,
+     1.450859
+    ]
+   },
+   {
+    "id": "stock_ab06588a35956436",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.399768,
+     -1.052508,
+     2.051959
+    ]
+   },
+   {
+    "id": "stock_95b5cc7b87824c9c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -1.240633,
+     0.3586,
+     1.723894
+    ]
+   },
+   {
+    "id": "stock_dd700b0a169cef3b",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.366904,
+     -2.373539,
+     2.064228
+    ]
+   },
+   {
+    "id": "stock_e22910f85e5806a4",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.923339,
+     -0.839495,
+     2.057555
+    ]
+   },
+   {
+    "id": "stock_d95c2968463a2a54",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.526462,
+     -2.158374,
+     1.794799
+    ]
+   },
+   {
+    "id": "stock_b618c1f76e088064",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.738379,
+     -2.14839,
+     -0.897885
+    ]
+   },
+   {
+    "id": "stock_5684416eb7a7c0f5",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.441766,
+     -0.143941,
+     2.420956
+    ]
+   },
+   {
+    "id": "stock_355ad802d0185972",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.836046,
+     0.306957,
+     0.761574
+    ]
+   },
+   {
+    "id": "stock_67cdd8f438dfec44",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.333934,
+     0.39705,
+     1.985744
+    ]
+   },
+   {
+    "id": "stock_302942dbf7ca8f80",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.228164,
+     -1.956729,
+     2.264242
+    ]
+   },
+   {
+    "id": "stock_3edfd698904d68f8",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.61626,
+     -1.941915,
+     1.493746
+    ]
+   },
+   {
+    "id": "stock_b40a95cf7df62fb8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.61784,
+     2.472913,
+     -0.240784
+    ]
+   },
+   {
+    "id": "stock_6829daaff4758852",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.338512,
+     -2.667163,
+     1.079609
+    ]
+   },
+   {
+    "id": "stock_26817b8d05bf23ba",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     0.077632,
+     0.327154,
+     -0.672586
+    ]
+   },
+   {
+    "id": "stock_3c9c442c76bd8e09",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.869112,
+     -0.318904,
+     1.908992
+    ]
+   },
+   {
+    "id": "stock_285901f48f3c5a08",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.576863,
+     -2.079359,
+     0.910312
+    ]
+   },
+   {
+    "id": "stock_4cfcbfc70a311e82",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.20758,
+     2.206535,
+     -0.768668
+    ]
+   },
+   {
+    "id": "stock_4179eba7d4675213",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.472801,
+     2.137348,
+     -0.291263
+    ]
+   },
+   {
+    "id": "stock_c8a6cd10e4ad2e40",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.497827,
+     2.87834,
+     -1.245279
+    ]
+   },
+   {
+    "id": "stock_205f00e051b3a56c",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.59474,
+     -1.332637,
+     1.976752
+    ]
+   },
+   {
+    "id": "stock_4ff018111dd96b7f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.358999,
+     -1.07368,
+     1.737729
+    ]
+   },
+   {
+    "id": "stock_d97567fde2a820a8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.926772,
+     1.893296,
+     -1.090634
+    ]
+   },
+   {
+    "id": "stock_0b74c2fc9155f84a",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.29822,
+     0.909155,
+     0.774924
+    ]
+   },
+   {
+    "id": "stock_a40fb10702fe7ad0",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.987356,
+     -0.743083,
+     2.477562
+    ]
+   },
+   {
+    "id": "stock_f33aba10e7063026",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.332872,
+     0.759612,
+     1.550784
+    ]
+   },
+   {
+    "id": "stock_ef63f69a82bfd270",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.306411,
+     0.958225,
+     1.097108
+    ]
+   },
+   {
+    "id": "stock_38e96add91a15073",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.477878,
+     -1.660506,
+     2.30332
+    ]
+   },
+   {
+    "id": "stock_679458aa5985c9a2",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.932432,
+     2.117374,
+     0.289172
+    ]
+   },
+   {
+    "id": "stock_ec6f1b2a3c596792",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.701831,
+     -1.109848,
+     2.443064
+    ]
+   },
+   {
+    "id": "stock_3539e0b08e48c973",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.436357,
+     -1.16325,
+     2.094062
+    ]
+   },
+   {
+    "id": "stock_9edfb0eaa27f98fe",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.045406,
+     -1.027195,
+     0.664898
+    ]
+   },
+   {
+    "id": "stock_406920aa2421e41e",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.577813,
+     0.530171,
+     0.34607
+    ]
+   },
+   {
+    "id": "stock_4fcafe1a3617fce8",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     1.470547,
+     -1.956625,
+     -0.321977
+    ]
+   },
+   {
+    "id": "stock_efe2ab17d875a299",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.021612,
+     -0.213289,
+     0.479009
+    ]
+   },
+   {
+    "id": "stock_5c5e9d31c708d0e4",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.47138,
+     2.02168,
+     0.101766
+    ]
+   },
+   {
+    "id": "stock_a0dc6be01a6e2a82",
+    "gold": "negative",
+    "pred": "positive",
+    "logits": [
+     0.374517,
+     -0.430551,
+     -0.290416
+    ]
+   },
+   {
+    "id": "stock_3fb2836b0735c8f3",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.462395,
+     -1.187123,
+     1.981142
+    ]
+   },
+   {
+    "id": "stock_1ab8a584db903041",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.696524,
+     1.962548,
+     0.981382
+    ]
+   },
+   {
+    "id": "stock_7486d923b952ab2b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.641275,
+     2.717823,
+     -0.785659
+    ]
+   },
+   {
+    "id": "stock_0ee427c0ad75b694",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.488037,
+     -1.138605,
+     -1.367844
+    ]
+   },
+   {
+    "id": "stock_8fe16e28721c3d3a",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.547403,
+     2.470307,
+     -0.56303
+    ]
+   },
+   {
+    "id": "stock_9a39a5ab0218761c",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.034555,
+     0.802337,
+     0.994909
+    ]
+   },
+   {
+    "id": "stock_21743bea84972b33",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.607907,
+     2.783471,
+     -0.758192
+    ]
+   },
+   {
+    "id": "stock_3d20a1f087000d5e",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     -1.508102,
+     1.287864,
+     1.211458
+    ]
+   },
+   {
+    "id": "stock_3d2f054f77a6352b",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.433332,
+     1.472518,
+     0.504712
+    ]
+   },
+   {
+    "id": "stock_92f5f45c85db26a7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.681004,
+     -1.245062,
+     2.305597
+    ]
+   },
+   {
+    "id": "stock_772457d968245e79",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.930637,
+     -2.497539,
+     1.47132
+    ]
+   },
+   {
+    "id": "stock_65b90d5239073411",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.824833,
+     -0.270242,
+     1.582794
+    ]
+   },
+   {
+    "id": "stock_2a665d9d844d0ea4",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -0.491193,
+     -0.985989,
+     1.622404
+    ]
+   },
+   {
+    "id": "stock_8c8955c35a24720b",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.109295,
+     -0.742262,
+     -1.046014
+    ]
+   },
+   {
+    "id": "stock_18034386455da415",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.124261,
+     -0.347998,
+     2.171935
+    ]
+   },
+   {
+    "id": "stock_08dbe0b5f45aeda0",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -1.192555,
+     -0.23795,
+     2.237811
+    ]
+   },
+   {
+    "id": "stock_e3e75d1789225e5c",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     0.078705,
+     -0.044102,
+     -0.919496
+    ]
+   },
+   {
+    "id": "stock_a4b7897cab817e1c",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     0.700747,
+     -2.338795,
+     1.710867
+    ]
+   },
+   {
+    "id": "stock_5a4ec8391f9fe867",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.213658,
+     -1.724826,
+     2.077926
+    ]
+   },
+   {
+    "id": "stock_c88ed4fa830e04b9",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -0.472796,
+     1.759163,
+     -1.586911
+    ]
+   },
+   {
+    "id": "stock_83b35380f2404427",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.022136,
+     -1.069526,
+     1.609282
+    ]
+   },
+   {
+    "id": "stock_9f5f6f41a38df3c7",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.76855,
+     -1.025005,
+     2.240997
+    ]
+   },
+   {
+    "id": "stock_76297972438f1c7d",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.236589,
+     1.11547,
+     0.650398
+    ]
+   },
+   {
+    "id": "stock_28677b7aca7ef8fc",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.086343,
+     0.779611,
+     1.505745
+    ]
+   },
+   {
+    "id": "stock_06cfcf4f1628d309",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.379899,
+     2.565808,
+     -1.032776
+    ]
+   },
+   {
+    "id": "stock_559014d5b440cb0a",
+    "gold": "positive",
+    "pred": "positive",
+    "logits": [
+     1.296755,
+     -1.611408,
+     -0.489359
+    ]
+   },
+   {
+    "id": "stock_b081f0340a12e670",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.945333,
+     -0.727551,
+     2.264077
+    ]
+   },
+   {
+    "id": "stock_5fbff48f72399885",
+    "gold": "positive",
+    "pred": "neutral",
+    "logits": [
+     -0.704404,
+     -1.290565,
+     2.476325
+    ]
+   },
+   {
+    "id": "stock_ed18fdeb69968be8",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.399942,
+     1.721189,
+     0.34044
+    ]
+   },
+   {
+    "id": "stock_f9d0517c39d1e898",
+    "gold": "neutral",
+    "pred": "negative",
+    "logits": [
+     0.404161,
+     0.782873,
+     -1.876003
+    ]
+   },
+   {
+    "id": "stock_e34575e5e29c9515",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     0.268063,
+     -2.290977,
+     2.110215
+    ]
+   },
+   {
+    "id": "stock_3c78c8c68a994d1f",
+    "gold": "negative",
+    "pred": "neutral",
+    "logits": [
+     -1.712315,
+     0.767255,
+     2.061371
+    ]
+   },
+   {
+    "id": "stock_5be8fdbba2885381",
+    "gold": "neutral",
+    "pred": "positive",
+    "logits": [
+     0.725951,
+     -0.438608,
+     -0.83996
+    ]
+   },
+   {
+    "id": "stock_2c0316ef09c93772",
+    "gold": "neutral",
+    "pred": "neutral",
+    "logits": [
+     -0.029056,
+     -1.676712,
+     2.187644
+    ]
+   },
+   {
+    "id": "stock_b88ec1ea0cf73f3d",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.42183,
+     2.667172,
+     -0.954413
+    ]
+   },
+   {
+    "id": "stock_fe1a3f4ebe2e5e60",
+    "gold": "negative",
+    "pred": "negative",
+    "logits": [
+     -1.678085,
+     2.822255,
+     -0.800154
+    ]
+   },
+   {
+    "id": "stock_e9b564f998e40365",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.897254,
+     1.009219,
+     0.659261
+    ]
+   },
+   {
+    "id": "stock_3fd67f46486ac96b",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -1.148052,
+     0.960107,
+     0.371995
+    ]
+   },
+   {
+    "id": "stock_4c653da9566c7b7f",
+    "gold": "positive",
+    "pred": "negative",
+    "logits": [
+     -0.289568,
+     0.473608,
+     -0.380241
+    ]
+   }
+  ]
+ },
+ "benchmark": {
+  "n": 338,
+  "accuracy": 0.5295857988165681,
+  "macro_f1": 0.4977832624891449,
+  "per_class": {
+   "positive": {
+    "precision": 0.7291666666666666,
+    "recall": 0.28688524590163933,
+    "f1": 0.4117647058823529,
+    "support": 122
+   },
+   "negative": {
+    "precision": 0.5483870967741935,
+    "recall": 0.41975308641975306,
+    "f1": 0.4755244755244755,
+    "support": 81
+   },
+   "neutral": {
+    "precision": 0.4824561403508772,
+    "recall": 0.8148148148148148,
+    "f1": 0.6060606060606061,
+    "support": 135
+   }
+  },
+  "confusion_matrix": {
+   "labels": [
+    "positive",
+    "negative",
+    "neutral"
+   ],
+   "matrix": [
+    [
+     35,
+     13,
+     74
+    ],
+    [
+     3,
+     34,
+     44
+    ],
+    [
+     10,
+     15,
+     110
+    ]
+   ]
+  },
+  "pred_counts": {
+   "positive": 48,
+   "negative": 62,
+   "neutral": 228
+  }
+ },
+ "wall_seconds": 55.0
+}

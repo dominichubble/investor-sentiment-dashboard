@@ -1,0 +1,8126 @@
+{
+ "arm": "b",
+ "n": 900,
+ "seed_v2": 20261024,
+ "row_order_seed": 20261122,
+ "label_counts": {
+  "positive": 300,
+  "negative": 300,
+  "neutral": 300
+ },
+ "arm_specific_label_counts": {
+  "neutral": 300
+ },
+ "low_information": 105,
+ "per_channel": {
+  "reddit": 371,
+  "twitter": 487,
+  "news": 42
+ },
+ "v1_source": "training_sets_v1/arm_b.json",
+ "v1_sha256": "c8d1531ec63f3cc3ce81802da247b458c85046ebac942961ef122754f49a2cf4",
+ "data_file": "arm_b.json",
+ "data_sha256": "1d5c0b7ea83ff90fc98b18e026a75ae699239c1569b88fe353d07e501369cdf3",
+ "rows": [
+  {
+   "item": "c2_0259",
+   "id": "stock_7f407290a20817d3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1857",
+   "id": "stock_5004ec5bc774dc5d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0610",
+   "id": "stock_256137aa4f5435cd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1941",
+   "id": "stock_ab125bc28d5eebd6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0729",
+   "id": "stock_c2e64000ea8ee1e3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0536",
+   "id": "stock_e41ca7f2b556b402",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1755",
+   "id": "stock_6d11178bed34cf53",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1320",
+   "id": "stock_1668548dd2342003",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0542",
+   "id": "stock_04b032e7649eec95",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1439",
+   "id": "stock_741b73dcbbd88a90",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0772",
+   "id": "stock_1bcd2fb0e8799ad7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1311",
+   "id": "stock_2ce2829a1a53f7e9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1625",
+   "id": "stock_084d32f6193676fd",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1297",
+   "id": "stock_5c3b5fc4a960cae4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0428",
+   "id": "stock_c9492ca6f0bf47ef",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0670",
+   "id": "stock_0628c49742b85cde",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2257",
+   "id": "stock_ea17a0bed807775c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2070",
+   "id": "stock_eb68edc1ce85d390",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1763",
+   "id": "stock_08ae060054b7ec54",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0644",
+   "id": "stock_0a75eece603a46f1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0246",
+   "id": "stock_92d27be3db977d6e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2229",
+   "id": "stock_20b7091930da35d5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1210",
+   "id": "stock_bb44a9eafb57f100",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1782",
+   "id": "stock_fa1bd5a9da698ed2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0724",
+   "id": "stock_a8b155aefed422c9",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1994",
+   "id": "stock_366ee4d33ee45cce",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1417",
+   "id": "stock_e8b04f14eb6cd83f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1811",
+   "id": "stock_c8ee5842aca904f2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1790",
+   "id": "stock_087668c78d249753",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0954",
+   "id": "stock_6173f58d3243a721",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1309",
+   "id": "stock_662f9d410fce1d44",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0665",
+   "id": "stock_33fc0363978bb020",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1095",
+   "id": "stock_ab41baea1d7f3212",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1492",
+   "id": "stock_ee4acd97de9b9356",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1773",
+   "id": "stock_6b0c52e7a985eefb",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0769",
+   "id": "stock_540e5d8dce0f33ef",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2087",
+   "id": "stock_a0b06373966f69f5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0925",
+   "id": "stock_27daa43f6714607b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0242",
+   "id": "stock_5d7e8ef2ff065743",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0231",
+   "id": "stock_596b310cd1afd3f8",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0265",
+   "id": "stock_023750b7a3bddea7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0901",
+   "id": "stock_3ff59232da8feb30",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1921",
+   "id": "stock_ac452fd81b1b02c9",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0999",
+   "id": "stock_562155f8153f297a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0509",
+   "id": "stock_6a858c817e38a918",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1155",
+   "id": "stock_c9850a92d526b0dc",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2216",
+   "id": "stock_fc54f325466437ac",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2024",
+   "id": "stock_00e789913b9b14ac",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0635",
+   "id": "stock_b528f6d09e5d7669",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0874",
+   "id": "stock_ce4ebf481f807bed",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0247",
+   "id": "stock_04bd94028b653c55",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1243",
+   "id": "stock_a08aea73cb39a9e6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1274",
+   "id": "stock_de6fcc8c8fb372ac",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0023",
+   "id": "stock_c540790a0e7134be",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0661",
+   "id": "stock_d8449f889759e294",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1038",
+   "id": "stock_46d9d17dc7403b8f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2187",
+   "id": "stock_bb427d083937a414",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1526",
+   "id": "stock_d37024ef534e3474",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1596",
+   "id": "stock_84dcd434c70978f1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0902",
+   "id": "stock_169e8189082d303b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1969",
+   "id": "stock_37a89beaf49e0b95",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1667",
+   "id": "stock_97747a1cf894db9f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0549",
+   "id": "stock_851e1bb7b6da0807",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0555",
+   "id": "stock_5c710c13bc1dd067",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1602",
+   "id": "stock_53d6c730ab650434",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1350",
+   "id": "stock_d19a0fec0f0ad9d7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2211",
+   "id": "stock_96d3e54c26de5657",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0830",
+   "id": "stock_dd008b05cabf2604",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1837",
+   "id": "stock_0b50e852e307d431",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1255",
+   "id": "stock_5714e3fa9625a1ef",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1843",
+   "id": "stock_92837965cf10c021",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0079",
+   "id": "stock_130b8b5575cc9907",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0546",
+   "id": "stock_c10c0cbedebffbea",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1030",
+   "id": "stock_f8528dd4cb238d5d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2084",
+   "id": "stock_1be8a873f181bbdf",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2201",
+   "id": "stock_309937b3a949ae62",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1001",
+   "id": "stock_c460f827221bc5b7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2277",
+   "id": "stock_ecdfe1bc31dd588f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0826",
+   "id": "stock_056d4a756563aefd",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0917",
+   "id": "stock_010ea7bb960090c0",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0495",
+   "id": "stock_b78f4c97195c9a18",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0243",
+   "id": "stock_33f389711d3627f4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0368",
+   "id": "stock_ae4332dba745ddc7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0000",
+   "id": "stock_57ed2677ec5d18b0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0257",
+   "id": "stock_1a8916cd70df7c60",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0281",
+   "id": "stock_789040fe690040b2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1850",
+   "id": "stock_f6b3a9c1cd532270",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0499",
+   "id": "stock_4c543768f6e725d8",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2034",
+   "id": "stock_0e1337e963d171f5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0782",
+   "id": "stock_5acdcd867d440f56",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1360",
+   "id": "stock_3d63f43bfaac474e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0972",
+   "id": "stock_bd9174c4d606087c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0820",
+   "id": "stock_2e2a5528b9fb6505",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0076",
+   "id": "stock_27930d945e5fc80f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1318",
+   "id": "stock_8cb457182684a8d2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1893",
+   "id": "stock_036f677064a5da59",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0071",
+   "id": "stock_92373e5eaa85e7a9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1513",
+   "id": "stock_255ce08bb520fa20",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2230",
+   "id": "stock_18398cd0acdfcf1e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0100",
+   "id": "stock_231bcaca160163fe",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0504",
+   "id": "stock_40ef3cd5615e284c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1728",
+   "id": "stock_f75ae0f36be79d78",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1082",
+   "id": "stock_2d5fbe3e75293e44",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1832",
+   "id": "stock_dacc04025e8e6ae2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1247",
+   "id": "stock_c72a57d02e4e1a19",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1709",
+   "id": "stock_73a07e5a2c46b9bc",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0992",
+   "id": "stock_27cf8f3901ad33cd",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0844",
+   "id": "stock_e3b70ed83a2e4d72",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0025",
+   "id": "stock_70911c36672f2aea",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0719",
+   "id": "stock_95f586a572865f6f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0988",
+   "id": "stock_7b2c22c5d08ea386",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0941",
+   "id": "stock_82426dd764e7fca4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0654",
+   "id": "stock_cb3e67a79ffe6ba0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0150",
+   "id": "stock_0c09f2060bf23759",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1693",
+   "id": "stock_3d0dcfce1c4c8448",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2248",
+   "id": "stock_36f6e7b808404f94",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0066",
+   "id": "stock_40e65eb46abc4ebe",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1856",
+   "id": "stock_2b4b94ef6c621660",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0173",
+   "id": "stock_58ae361a561fcdf2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1184",
+   "id": "stock_0320c81a25fe1200",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0162",
+   "id": "stock_c1b571be9b082526",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1882",
+   "id": "stock_1a862b8419210dcd",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0668",
+   "id": "stock_2aec423490ebd9c0",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0764",
+   "id": "stock_f9b8c869ee0d97e3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1389",
+   "id": "stock_6e6272ec9422bc7a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0778",
+   "id": "stock_e73b119709bcf4d3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0617",
+   "id": "stock_5a79844c0b5ec3fd",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1966",
+   "id": "stock_f33c4863fdb8fec1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2103",
+   "id": "stock_7f2e3b7fd177eb09",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1800",
+   "id": "stock_db280c6e41389387",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0531",
+   "id": "stock_750e38c531b989fd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1496",
+   "id": "stock_22ecafed5d681d26",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1559",
+   "id": "stock_f46c0952599629e3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0511",
+   "id": "stock_2cc01faa6a8269da",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1668",
+   "id": "stock_f4f39bec7b35b1f4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0908",
+   "id": "stock_796f128e1119589f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0316",
+   "id": "stock_12613d0b584d944f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1199",
+   "id": "stock_a0e65eaf3a556681",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0928",
+   "id": "stock_44436b8d29d56f9d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0449",
+   "id": "stock_465297e49f76f736",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0030",
+   "id": "stock_24874ce2d289b1db",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0998",
+   "id": "stock_bf2240a5adef3f1c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0262",
+   "id": "stock_cbc61122ca86ee0d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0389",
+   "id": "stock_c6cffe4cbdcb2e5d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1323",
+   "id": "stock_f215d2e1cff7a9b4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0911",
+   "id": "stock_16300062d68a0035",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0331",
+   "id": "stock_0b5309c4fa667641",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0474",
+   "id": "stock_c92f12343aaf602a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0417",
+   "id": "stock_10e173ac0649b2ad",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1566",
+   "id": "stock_0d3ed0705b465f80",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1222",
+   "id": "stock_1397348600283b77",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0545",
+   "id": "stock_e6be4ad77202af4b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1008",
+   "id": "stock_c9d471f1ad73877c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0345",
+   "id": "stock_105175e5b7cfe6ea",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1065",
+   "id": "stock_db0c84b2379dcda2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1428",
+   "id": "stock_6a00d890abb3b797",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0937",
+   "id": "stock_0bb55f57825044c2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0153",
+   "id": "stock_de38f7080d050c22",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1105",
+   "id": "stock_bfa0acf2a24fde7b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0118",
+   "id": "stock_ed30cdafb66ae4aa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0871",
+   "id": "stock_affa43e0e80691ee",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1721",
+   "id": "stock_03c07852d9a6b364",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0194",
+   "id": "stock_1ea00bc97cb462b4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0056",
+   "id": "stock_d233ba2ea3e8526e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2243",
+   "id": "stock_480e5a7c01e5b0d9",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1979",
+   "id": "stock_50985113389b4c5b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1079",
+   "id": "stock_f009952de828e792",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1743",
+   "id": "stock_e1072abb7aa7eda1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1673",
+   "id": "stock_82078f4ef0e6763f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1657",
+   "id": "stock_ec6558a27eb77ba7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2240",
+   "id": "stock_678a9cf271907ce6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0128",
+   "id": "stock_1fa82632b48e69e5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2107",
+   "id": "stock_0a029dfbc4387be1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0783",
+   "id": "stock_3ab852477e14e69b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0040",
+   "id": "stock_a8a128adce898215",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0574",
+   "id": "stock_14d2eb83097f0d4d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0421",
+   "id": "stock_fff83a2d93a376df",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1141",
+   "id": "stock_cb2ce31b5125fd8d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2001",
+   "id": "stock_3bbfb97af59d42b2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1720",
+   "id": "stock_7e3650ee44df50d2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1741",
+   "id": "stock_512759cb2e2ae2a7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2163",
+   "id": "stock_395d2c757cce9ad6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1519",
+   "id": "stock_0de714076dfe47b6",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0189",
+   "id": "stock_7a53bc58cffdb720",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0533",
+   "id": "stock_745b915797967ef3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1022",
+   "id": "stock_efe141c1148cfd2b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0395",
+   "id": "stock_38273f9950ffa31d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0133",
+   "id": "stock_e9fbbb5bce5fb584",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0655",
+   "id": "stock_98cdd6b952ced774",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1977",
+   "id": "stock_d6e79145cdf71509",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0798",
+   "id": "stock_69420c3e1d059921",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1733",
+   "id": "stock_348e8d11bac78b76",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2059",
+   "id": "stock_647dffe25a78f425",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0817",
+   "id": "stock_8193cbd52c6a2699",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1701",
+   "id": "stock_1a4fad7056b16dfe",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0676",
+   "id": "stock_5fd9907a1dc563bf",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1870",
+   "id": "stock_30a5dad66f7344c4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1918",
+   "id": "stock_860a051486083fd1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0437",
+   "id": "stock_1fc0437a91f9da7c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0763",
+   "id": "stock_72030ecaded956c8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0788",
+   "id": "stock_24dfffb85fe214c0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1973",
+   "id": "stock_06915343b04bab6c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2000",
+   "id": "stock_213126cfac50b9a4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2106",
+   "id": "stock_11e469ec2091641f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0632",
+   "id": "stock_e13df7e34b723a98",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2263",
+   "id": "stock_00633adabd3910a2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0459",
+   "id": "stock_1e2de6524ca941c1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1872",
+   "id": "stock_6b8a909ec07b2eb1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0448",
+   "id": "stock_92e34991643670d7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0400",
+   "id": "stock_29a88c8efee8d271",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1353",
+   "id": "stock_24f4eeeafe8eb4b3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1600",
+   "id": "stock_180956170e9219c7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0897",
+   "id": "stock_45ce59353f6e3492",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0824",
+   "id": "stock_5021002bbda6f8aa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0720",
+   "id": "stock_66390853e7c45acb",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2055",
+   "id": "stock_40641fd2541124ef",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1368",
+   "id": "stock_a6b4a29829a8590d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2075",
+   "id": "stock_49f3071502538c7b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0131",
+   "id": "stock_1da7791d90cc1397",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1263",
+   "id": "stock_d86e8cfb8a4fe259",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0207",
+   "id": "stock_d024006f360db0eb",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0021",
+   "id": "stock_bffaca6029ab3b47",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1098",
+   "id": "stock_c28effe53dff7cc1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0445",
+   "id": "stock_337f4037df39d214",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0646",
+   "id": "stock_83ff0d01748d0592",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1483",
+   "id": "stock_a4f32346f26b3aa6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1569",
+   "id": "stock_409616e5fd3519d9",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1968",
+   "id": "stock_0d43b517c27a2f7d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1241",
+   "id": "stock_6a59068f85d18bb0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2066",
+   "id": "stock_6467d2ef15183d1f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2130",
+   "id": "stock_2b0feada6c4154fa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1951",
+   "id": "stock_27bd290ced09e16c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0302",
+   "id": "stock_3b176a5b3cb968ec",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2127",
+   "id": "stock_4d7736b7f3c6770d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1070",
+   "id": "stock_28db118cb2b40456",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1304",
+   "id": "stock_71e3b17eca9b22ce",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1044",
+   "id": "stock_445b70c8afd2aaf5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1029",
+   "id": "stock_b24ae62995843193",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0856",
+   "id": "stock_7531f17f9ee9da27",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1706",
+   "id": "stock_cd00ee9fb0ad6806",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1025",
+   "id": "stock_5f578e34b05d927e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1474",
+   "id": "stock_6078d1f569b1cf5b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0877",
+   "id": "stock_8ff27fe756b96e3e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1341",
+   "id": "stock_b8a389161a26bf36",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0656",
+   "id": "stock_775fc0e0c1bc2b64",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0583",
+   "id": "stock_2fa631cf3c4993d5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1937",
+   "id": "stock_7620ee2d2b24ec2d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1429",
+   "id": "stock_c6013aff161469be",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1446",
+   "id": "stock_bb0736b7cce711f6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1881",
+   "id": "stock_23d1d71b3c0c8c01",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1150",
+   "id": "stock_48212c72f83cc1df",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1158",
+   "id": "stock_39c6ecf11f7fae6a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1478",
+   "id": "stock_87cc0d1d45653689",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0540",
+   "id": "stock_ea8f9461c75ccf84",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1555",
+   "id": "stock_7b77dc661b156c94",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0452",
+   "id": "stock_b0cc266598e76db5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0102",
+   "id": "stock_93f785a72d739170",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1816",
+   "id": "stock_f3cdaf56d597a30d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1032",
+   "id": "stock_a4535b4feb961102",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1724",
+   "id": "stock_288585c5664b7d25",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1306",
+   "id": "stock_f5e0b4c42d57af10",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1859",
+   "id": "stock_af8aeb928c50dabd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0642",
+   "id": "stock_34b29d51634f6c8e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0907",
+   "id": "stock_73ed52cc112910af",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0261",
+   "id": "stock_1523f0ce5d108376",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2050",
+   "id": "stock_613e85243619eeb2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0002",
+   "id": "stock_23ce1d71aa4cfd1a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1999",
+   "id": "stock_ddd18f290d24d83a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1290",
+   "id": "stock_4112dd9c09b77ee9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1454",
+   "id": "stock_0e4ed83d81f05b8a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0776",
+   "id": "stock_98023a4b130b18e2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1787",
+   "id": "stock_34d52753cac90d02",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2033",
+   "id": "stock_44f4928a7a55e74c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0166",
+   "id": "stock_71c022399041b06b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0819",
+   "id": "stock_1919c064ffa3076f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0409",
+   "id": "stock_2cbcda2bf138fa23",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2155",
+   "id": "stock_9116926269aff9cb",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0750",
+   "id": "stock_d3fe1d983ea8c47e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0163",
+   "id": "stock_e78919f3b3355318",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0218",
+   "id": "stock_cf2cb02288356845",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0872",
+   "id": "stock_209ac0c98c279b24",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2167",
+   "id": "stock_2334ecd7246ca102",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0419",
+   "id": "stock_3bd1416b63585994",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2078",
+   "id": "stock_2e3768c2fd775ede",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0045",
+   "id": "stock_8b7c96666ee81c9d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0571",
+   "id": "stock_b1b14968a7c29956",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0726",
+   "id": "stock_77c1a2a80299d114",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1505",
+   "id": "stock_084b2653ac2b315c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0906",
+   "id": "stock_2792761112f7dc18",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2085",
+   "id": "stock_ef23d7d5b5b0b1a3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1374",
+   "id": "stock_c463122678dc481e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1568",
+   "id": "stock_f1674e1dcd7109d7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1609",
+   "id": "stock_cbce0695c06d9c4e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0492",
+   "id": "stock_f8142cd3c4b80240",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0291",
+   "id": "stock_7a5eb069df871fca",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0722",
+   "id": "stock_b914b3669b544271",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0838",
+   "id": "stock_6cb57e835ec039b8",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2057",
+   "id": "stock_28feabd9c066d34f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1873",
+   "id": "stock_dd7bf6f4b3ac4413",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1458",
+   "id": "stock_6145bc2204434be6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2238",
+   "id": "stock_62c2a615c89ea156",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0250",
+   "id": "stock_fb2e0712ef2a5a6b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0845",
+   "id": "stock_9fc2885202d4e3d4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1942",
+   "id": "stock_a034dda2cfa7c53c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2271",
+   "id": "stock_f7379694f519b988",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2119",
+   "id": "stock_3495df7b265dbb03",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0589",
+   "id": "stock_cf9499dedb223cd1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0781",
+   "id": "stock_22499a6255c3a4af",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1372",
+   "id": "stock_534b1bc7a90ed61b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1750",
+   "id": "stock_df38defc42c0e432",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0320",
+   "id": "stock_43d7cdb54b92cfb1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0637",
+   "id": "stock_30f633c325135862",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1501",
+   "id": "stock_37151d5c7b752c6f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1120",
+   "id": "stock_8fda847e82a72885",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0931",
+   "id": "stock_2469823c673ec854",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0198",
+   "id": "stock_6269a9f9ca5c0334",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0348",
+   "id": "stock_12f794c5b77a8e64",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1055",
+   "id": "stock_0ded7e20a6ee918f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1746",
+   "id": "stock_faba4b4216df8faa",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0161",
+   "id": "stock_391ad07e92d84e1d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2172",
+   "id": "stock_05df397da9807ed5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1681",
+   "id": "stock_27ab740fabc00181",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2158",
+   "id": "stock_37ac03c087c41e90",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1988",
+   "id": "stock_d0601424e9db0230",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0612",
+   "id": "stock_9d0e309a5ab052b7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0353",
+   "id": "stock_8915809fcd89373e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1293",
+   "id": "stock_7137271f2a60d537",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0465",
+   "id": "stock_fd2a251cc534d0c9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0439",
+   "id": "stock_0a9b0b16d63ae5ef",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2044",
+   "id": "stock_9011908d194ae5af",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1771",
+   "id": "stock_d4cd0034a8d5a77d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1425",
+   "id": "stock_121942eaced327c7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1419",
+   "id": "stock_f428eb2120bdd5a5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0235",
+   "id": "stock_a6ae22b6cb67baf9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0835",
+   "id": "stock_f5b5b407f792c2e5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0406",
+   "id": "stock_3697244d8ea31e5a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1855",
+   "id": "stock_6bff1f9e4f3bca1c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2269",
+   "id": "stock_b76ac45c41a670f9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1663",
+   "id": "stock_221213eb210893ca",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0915",
+   "id": "stock_7852080dce3a19ae",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0601",
+   "id": "stock_e51e1f8822f58a90",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0955",
+   "id": "stock_3b88baba6d6d1b1e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0208",
+   "id": "stock_7d1baba4dac08bb8",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1220",
+   "id": "stock_0c51b66dd72b48e8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0387",
+   "id": "stock_f37f7392776dacc4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0629",
+   "id": "stock_2c475e9b22a02e8f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1704",
+   "id": "stock_6bcce2231ba98c84",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0889",
+   "id": "stock_3aace95684152ce6",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1412",
+   "id": "stock_b83d9bb68b8215f1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0939",
+   "id": "stock_372b96ba442d8436",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1086",
+   "id": "stock_24a2e4fcf3baebd7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0454",
+   "id": "stock_681afdb958255b7c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1493",
+   "id": "stock_bb558f41aee37f79",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1883",
+   "id": "stock_ab358d66a6e58447",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0109",
+   "id": "stock_e43eb3a861cdfbc2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1775",
+   "id": "stock_6aeb304fd6189152",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0333",
+   "id": "stock_05b3623571d0a1a8",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1732",
+   "id": "stock_d500698fcda0bbe7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2233",
+   "id": "stock_7f543af74831d8b0",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0393",
+   "id": "stock_168d7767eb1bd340",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0516",
+   "id": "stock_6a0b956e5f0c3c58",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2204",
+   "id": "stock_5f74dfe6302c3f1b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0391",
+   "id": "stock_b1093011f70723f9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0095",
+   "id": "stock_5c07404465f30fcc",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1801",
+   "id": "stock_0e27f43d873103e4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1940",
+   "id": "stock_bae338357c462bd2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1394",
+   "id": "stock_31711318ce06cc6f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1081",
+   "id": "stock_8f2686d559f8648b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0989",
+   "id": "stock_388a7f365fd99b21",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0596",
+   "id": "stock_1d62218bd5198794",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0364",
+   "id": "stock_da6c58af3e3ea040",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0187",
+   "id": "stock_2c6fd63d0173498e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1914",
+   "id": "stock_1c5cc45aedc75a87",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0731",
+   "id": "stock_f3c9440ddf55ee50",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0229",
+   "id": "stock_482a0ef4cc3e498f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1826",
+   "id": "stock_2c191dd60e449f61",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0648",
+   "id": "stock_8c73e1d88fbf4a98",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1172",
+   "id": "stock_4e30ec5ccbe268d5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0707",
+   "id": "stock_e9be7cc6322ee410",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0418",
+   "id": "stock_f7c0a81401e38e18",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0022",
+   "id": "stock_0942132deede8820",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1885",
+   "id": "stock_688a65fb38dc08d6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1546",
+   "id": "stock_b107134c9b3c14bc",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0922",
+   "id": "stock_11c05050512b0fc2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0930",
+   "id": "stock_473729d6fbd51835",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0946",
+   "id": "stock_b213a6f9cf6434ba",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1664",
+   "id": "stock_70974c140a9cc0bb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0568",
+   "id": "stock_e900170af0fdd015",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0089",
+   "id": "stock_217e02dfc4183b75",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1480",
+   "id": "stock_56c58434496e7c28",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0272",
+   "id": "stock_611b9986be53ba20",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1176",
+   "id": "stock_47f1b250c2e0fab3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1962",
+   "id": "stock_361ca8639d550f3e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2081",
+   "id": "stock_d371873819798233",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1028",
+   "id": "stock_1922acde01e48e03",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1575",
+   "id": "stock_54a95dc078421283",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0940",
+   "id": "stock_6745a01543ec944a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1343",
+   "id": "stock_3b27251f8dd93f86",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1690",
+   "id": "stock_3dfcfef6c85b7591",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0255",
+   "id": "stock_3e7b7282ad2ccd12",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0088",
+   "id": "stock_01ee9ba3ceb685e4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2178",
+   "id": "stock_34ccbdc0322e83fc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1367",
+   "id": "stock_1c3991600b7d5baa",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1450",
+   "id": "stock_26bf3f3abddd2843",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0223",
+   "id": "stock_8d54ec0d22e553c8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0190",
+   "id": "stock_390155fffc1837f0",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2144",
+   "id": "stock_62de2889e1d0077b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1817",
+   "id": "stock_f45795a91a9524f3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0966",
+   "id": "stock_d29d4d40598fbab0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2236",
+   "id": "stock_ad60956c9371c7cc",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2225",
+   "id": "stock_dc3ec1d3b900bcee",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1451",
+   "id": "stock_1cb1d33698292f4f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1364",
+   "id": "stock_d0e2e90547cba0e9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1758",
+   "id": "stock_140b6cfd607eab70",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2088",
+   "id": "stock_9d4c92ced1dd936e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2121",
+   "id": "stock_49f13d220a9f9676",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2279",
+   "id": "stock_938f6ee8e4434a2a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1472",
+   "id": "stock_b232cd7307952141",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0116",
+   "id": "stock_1ac6fc1f8639686d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0008",
+   "id": "stock_ec3fa3e5a8f019fd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0234",
+   "id": "stock_81fbf239a45ff717",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0157",
+   "id": "stock_551bbd1cc6b64b5a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1109",
+   "id": "stock_4c9dbf3cb9ca9cc6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1145",
+   "id": "stock_6336431a09f9df0e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1525",
+   "id": "stock_a71847c657ea06f9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0084",
+   "id": "stock_2c792cac3f2ea6cc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0943",
+   "id": "stock_2f03ee099a5629b0",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0774",
+   "id": "stock_43ca4efded0a284b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0473",
+   "id": "stock_ad4746fa0f8172bd",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0956",
+   "id": "stock_36faec45501b9206",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0520",
+   "id": "stock_a41a864ce11194bd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0249",
+   "id": "stock_bdfbd2c082811dcd",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1892",
+   "id": "stock_e82f8c2349cedadb",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0382",
+   "id": "stock_52399fcaf5990cb5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0006",
+   "id": "stock_5a205330d21e1f70",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1689",
+   "id": "stock_5489f70e80056974",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0401",
+   "id": "stock_35a88c959235c908",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0119",
+   "id": "stock_dd842bd84b771757",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1687",
+   "id": "stock_496e9234b653f248",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0683",
+   "id": "stock_2fd0744792bdfcbc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0328",
+   "id": "stock_0d6b7d950d366181",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1461",
+   "id": "stock_0465e9e43e143301",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0524",
+   "id": "stock_04ee2a4e5a246dd7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0480",
+   "id": "stock_477f653d885bf2d7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0598",
+   "id": "stock_cfeefebcce8044a3",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1711",
+   "id": "stock_96282b3626701093",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0149",
+   "id": "stock_24773b8125a9e3bc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2156",
+   "id": "stock_94cbaf9292055b59",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1645",
+   "id": "stock_a922836bc9591018",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2293",
+   "id": "stock_3d0dcbcb540f8e0e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0038",
+   "id": "stock_308b6a9760624c2f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1346",
+   "id": "stock_4236ad8807a308e5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1927",
+   "id": "stock_1fe52090c9b021cf",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0693",
+   "id": "stock_cf4e9c193bb442cf",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0975",
+   "id": "stock_6ebb103bb7f1d313",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2146",
+   "id": "stock_c5a36a3ada94f30f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0951",
+   "id": "stock_c91b5ed3ca666efc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1106",
+   "id": "stock_9989286e9c9f6628",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0325",
+   "id": "stock_cbdc12edba4a92ed",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0029",
+   "id": "stock_91cba6241f9b75da",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1858",
+   "id": "stock_132e5b8a16ff3530",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1833",
+   "id": "stock_7217b3938ae0b85f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1506",
+   "id": "stock_1d019d6dc8d7eac9",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1489",
+   "id": "stock_1c81db563a2ef91b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0660",
+   "id": "stock_0223e35de1efbc01",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0447",
+   "id": "stock_389da1a99b1f59c1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1655",
+   "id": "stock_35e909d69b5dc377",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1066",
+   "id": "stock_17ce9a0329fe858c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1116",
+   "id": "stock_60794cc4bd1bd65a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1361",
+   "id": "stock_a759bbd2e16c1eb6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1823",
+   "id": "stock_91775730b2c197f5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0884",
+   "id": "stock_fd04dc8107315884",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1539",
+   "id": "stock_7afbcaedfe606dcc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1059",
+   "id": "stock_f0127ba99ecf5459",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0853",
+   "id": "stock_0ef423a99db6b378",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1960",
+   "id": "stock_0bba3109bc09071f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2143",
+   "id": "stock_342e3ba8f596fef5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0470",
+   "id": "stock_cfcd34f4829e50b5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0984",
+   "id": "stock_4e3be8455f180758",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2180",
+   "id": "stock_38672714725da973",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1416",
+   "id": "stock_6d3270b5be775c8c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2091",
+   "id": "stock_efe64244906c655a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0026",
+   "id": "stock_b4b1336bff6bba31",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1391",
+   "id": "stock_1badb2a5a0055a12",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1692",
+   "id": "stock_072b7a9b3f5d597b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0145",
+   "id": "stock_0d1ea7749d10d822",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1108",
+   "id": "stock_876f1d6debe5f138",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0017",
+   "id": "stock_84151f9619879a2d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1891",
+   "id": "stock_0240c7c384637ce5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0126",
+   "id": "stock_4ed63f695610bf19",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0304",
+   "id": "stock_712660062b958a2b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1896",
+   "id": "stock_557db0b2068fcc7c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0336",
+   "id": "stock_c0719ff2452f9872",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2122",
+   "id": "stock_e3ae83238bca7334",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2045",
+   "id": "stock_96157f44a2361e38",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1626",
+   "id": "stock_0890815c1d0dc971",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1387",
+   "id": "stock_846c4078812d1e2c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0675",
+   "id": "stock_09df5a3630fdf0a4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1432",
+   "id": "stock_0f8ffa27d85819de",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1163",
+   "id": "stock_1992c7e1fb2384f0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1187",
+   "id": "stock_1cc8415745d058b1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0408",
+   "id": "stock_1022784d3b48b8d8",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1386",
+   "id": "stock_aa9d58edc63fa556",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0083",
+   "id": "stock_095daba8c51eb715",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2113",
+   "id": "stock_28e5dcf4e4f8e7c6",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0607",
+   "id": "stock_2e65514961f74a72",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1100",
+   "id": "stock_8f039d143d39ac2c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0645",
+   "id": "stock_f68bb66562d80a83",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0518",
+   "id": "stock_03ab0c23bf2e12ea",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1470",
+   "id": "stock_6ebe8c46ce1d2341",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1202",
+   "id": "stock_8099dbbd8d5cd3d3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1955",
+   "id": "stock_317f3c44b783f6f9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0891",
+   "id": "stock_86a96baf7d15ca9d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1751",
+   "id": "stock_d17095215f09f545",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0896",
+   "id": "stock_578ec2b016230cc2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0435",
+   "id": "stock_2a3cd9d9111084be",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0164",
+   "id": "stock_3c91ed1ffcdd8d39",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1614",
+   "id": "stock_b70a675c0ad6e09e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1348",
+   "id": "stock_00e8b571780f2efb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1173",
+   "id": "stock_9d1f161cffed24bd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1498",
+   "id": "stock_8402d195c8778a77",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1107",
+   "id": "stock_ddc5fabb311d8c72",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0358",
+   "id": "stock_80ad71a937bb25d8",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0214",
+   "id": "stock_43854a24e222672e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0165",
+   "id": "stock_e3da73bfb9dcf9d4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1944",
+   "id": "stock_13940e752c933a49",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1760",
+   "id": "stock_e6f25795a95319c0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1077",
+   "id": "stock_f120381207747692",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1233",
+   "id": "stock_d2f48a96fae6fa5c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0732",
+   "id": "stock_a6dfdd24924df07b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1256",
+   "id": "stock_2bd1fe4df1369ed0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0178",
+   "id": "stock_93a00ea67b3a6487",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0373",
+   "id": "stock_d958c167cb35e898",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2161",
+   "id": "stock_98639e6b2c5bdb6e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0211",
+   "id": "stock_dd86c8e906338d07",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0455",
+   "id": "stock_f2f8f9c3c104f4e1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1013",
+   "id": "stock_40c66f58f0a9babc",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0903",
+   "id": "stock_7d379a4d1e6feda1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1282",
+   "id": "stock_7a3c77f2317dba52",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2049",
+   "id": "stock_fa570c6c06955653",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1401",
+   "id": "stock_4113e711857fa943",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2010",
+   "id": "stock_c7b76b8122213e14",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1324",
+   "id": "stock_22115c2460218fb7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1430",
+   "id": "stock_d54c49f5aba53bc7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1889",
+   "id": "stock_8c3ed4b2cbb15d70",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1298",
+   "id": "stock_dfd3261380fcf15e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0651",
+   "id": "stock_372d73fb02160c08",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1164",
+   "id": "stock_51ad467436b9dcf5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2026",
+   "id": "stock_fb2d68ed6ed75280",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1606",
+   "id": "stock_6ca44979b89ec857",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0383",
+   "id": "stock_b6746f019283ff30",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0553",
+   "id": "stock_429cc4950b315e28",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0366",
+   "id": "stock_4c11de25db2d6903",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0442",
+   "id": "stock_0fc65dca132022c7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0377",
+   "id": "stock_3a49a35d12029314",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1925",
+   "id": "stock_46739dc31e0adc75",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1656",
+   "id": "stock_155895c6baab0a11",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2299",
+   "id": "stock_2f1702fadfb9a225",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1895",
+   "id": "stock_c4f4dc68b16080ec",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1631",
+   "id": "stock_e04ad08661f9fe56",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1894",
+   "id": "stock_e75c9e2533206b9e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0847",
+   "id": "stock_2a55e371cd60a875",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0146",
+   "id": "stock_1d805d9fd5f8d0aa",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0613",
+   "id": "stock_030b8c82f4368985",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1708",
+   "id": "stock_498d9b3aecf4e021",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1231",
+   "id": "stock_c9442f5cc5d52c30",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1738",
+   "id": "stock_306b7535207000f5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0483",
+   "id": "stock_c36ae001fffbdfaf",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1331",
+   "id": "stock_59106fe5dbe20630",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0696",
+   "id": "stock_6f623b44e1dbfc1e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0784",
+   "id": "stock_9432041811ff798f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1104",
+   "id": "stock_0677be965148f303",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1149",
+   "id": "stock_45aab149d527b977",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1528",
+   "id": "stock_0bdcc4e572fa03f3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0627",
+   "id": "stock_688a95cb6906efcf",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0464",
+   "id": "stock_20c32fd040d2fd6a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0125",
+   "id": "stock_761c67b44e6bae69",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1269",
+   "id": "stock_2bdcf421eb87b5a2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1825",
+   "id": "stock_6f550bf5399c641a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0692",
+   "id": "stock_c57ccaa7f4da7c8b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2196",
+   "id": "stock_906ec2bd17cfbd84",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0768",
+   "id": "stock_be861dfaa8b0a69e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0964",
+   "id": "stock_3ac6149d327babee",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1509",
+   "id": "stock_471ee225b664484e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1408",
+   "id": "stock_23961f28687d81ef",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1313",
+   "id": "stock_0e2ded58d46a0487",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1335",
+   "id": "stock_cfa87da8d58a3abb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2282",
+   "id": "stock_3dcfe8f500678c5c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2056",
+   "id": "stock_a295b132a841b046",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0350",
+   "id": "stock_2e53f3f8064a2d8b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2005",
+   "id": "stock_584651b61816cfe8",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1622",
+   "id": "stock_14a6423c2391223e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0591",
+   "id": "stock_8541812122b1396b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2166",
+   "id": "stock_2a5fc6927ee92325",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0064",
+   "id": "stock_cb1f543127ecb938",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1731",
+   "id": "stock_b682495c6d92fd0c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0883",
+   "id": "stock_371eb5b3247396aa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0196",
+   "id": "stock_11e3be3783ce94b5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1813",
+   "id": "stock_758e4cf4a0838545",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0044",
+   "id": "stock_059def73234704ba",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0534",
+   "id": "stock_65daa994cc55c85a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0461",
+   "id": "stock_8a7178e01c6fcdaf",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0725",
+   "id": "stock_cc9adb8b37c9bc39",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0379",
+   "id": "stock_91b15d616960d9fc",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1388",
+   "id": "stock_5d6231287c8c324e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1132",
+   "id": "stock_328f7cbb6e99cf8e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2141",
+   "id": "stock_591ca790470952b2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1700",
+   "id": "stock_252d087fdae3ca48",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1810",
+   "id": "stock_09a8eead91983a98",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0800",
+   "id": "stock_27c67e253d59eb5f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0535",
+   "id": "stock_9107abe8b43d17ae",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0510",
+   "id": "stock_cf6766bcadf47bc0",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2276",
+   "id": "stock_811161cf308d1196",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1725",
+   "id": "stock_b96a80ad5a376875",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0633",
+   "id": "stock_3aff8d3670e629d6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0278",
+   "id": "stock_14729514f6cbe248",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0327",
+   "id": "stock_3859de8d6b8f0f93",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0301",
+   "id": "stock_ca2ec5832c752517",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2244",
+   "id": "stock_c53541bd5cd393da",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1678",
+   "id": "stock_cf7af61c1c1e6c6d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1168",
+   "id": "stock_b853d83f1222945e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2123",
+   "id": "stock_0e7e03205087c426",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0055",
+   "id": "stock_167fc820410e3bcf",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0649",
+   "id": "stock_734071b46874c345",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1308",
+   "id": "stock_4978a32094100f17",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1115",
+   "id": "stock_a9aefbf914bd341a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0584",
+   "id": "stock_feb108ea9acab055",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1395",
+   "id": "stock_52dcbaf539075ff1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1897",
+   "id": "stock_2a00d14484a41651",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1061",
+   "id": "stock_cd19dd5bc960b254",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1314",
+   "id": "stock_80609550030f867f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0405",
+   "id": "stock_cdcdbd7ba5b8e2f9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1507",
+   "id": "stock_9c932c50a95a17b0",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0239",
+   "id": "stock_23ed138f573cece4",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1464",
+   "id": "stock_abbc109bd74d98f3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1694",
+   "id": "stock_f6ec08220332a1ec",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0191",
+   "id": "stock_5684d70920ed7fd1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1366",
+   "id": "stock_336fbd5c4a59d359",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0597",
+   "id": "stock_2753d4a8f1462575",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2169",
+   "id": "stock_6d9edfed2a2d8def",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1072",
+   "id": "stock_e29ab3621c7c42e1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1685",
+   "id": "stock_966341d578c6690d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0024",
+   "id": "stock_195b8641041c1745",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0306",
+   "id": "stock_2f2d416997e5ee0e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0942",
+   "id": "stock_1c6ea0cfe7d64dd5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0274",
+   "id": "stock_842dcdfcb1cfec85",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1226",
+   "id": "stock_7605190b669c65d6",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0672",
+   "id": "stock_cd74a755112f1b50",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2296",
+   "id": "stock_be5bd5cde1e40107",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1578",
+   "id": "stock_cc82d50670bf1767",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1953",
+   "id": "stock_1d40bd41abcc1602",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1007",
+   "id": "stock_56bd14e9da7dfc41",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1604",
+   "id": "stock_848380774f324365",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0786",
+   "id": "stock_16c7890deba3d719",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0758",
+   "id": "stock_3138f90e0b01079a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0721",
+   "id": "stock_60de3a914960159d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2072",
+   "id": "stock_448e635baeca070d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0792",
+   "id": "stock_a7701810632719de",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0801",
+   "id": "stock_7f135e93631d1c52",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2002",
+   "id": "stock_286b0942841d3907",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0252",
+   "id": "stock_5f7f6317d1bcad66",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1637",
+   "id": "stock_bb56e27d3ad9c954",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2028",
+   "id": "stock_ac9b7c192b82be92",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0114",
+   "id": "stock_c49fbf94cd0fdf3b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0270",
+   "id": "stock_07844fb6366b1fdc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0538",
+   "id": "stock_95bf53502b4be794",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0868",
+   "id": "stock_2ebede485000cbe1",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1234",
+   "id": "stock_51f763fe29f0076d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0007",
+   "id": "stock_1f243c38ad8c9d07",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1554",
+   "id": "stock_37b6fdd3317b32af",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2132",
+   "id": "stock_07132641f8ffaad3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0594",
+   "id": "stock_b209cf5d8351cdc4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1436",
+   "id": "stock_324a0d731aa78659",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1441",
+   "id": "stock_363280a36425bdae",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1192",
+   "id": "stock_b43c27255dd2bb13",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0588",
+   "id": "stock_e480ffe1b4fbd00b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1209",
+   "id": "stock_7278cb82391916b7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0124",
+   "id": "stock_26d9b97f71666564",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2019",
+   "id": "stock_4d63067f8fa7c97c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1216",
+   "id": "stock_7b057d34fd590e0c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0728",
+   "id": "stock_813546f6f33e9a10",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1156",
+   "id": "stock_62611d6d9169ea7d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2043",
+   "id": "stock_5a548329cf60dddb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0151",
+   "id": "stock_cbbc5370e2646436",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1400",
+   "id": "stock_2c3169a53c0e7a05",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0982",
+   "id": "stock_d18094fb30964858",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0978",
+   "id": "stock_27c85708258c2de4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1906",
+   "id": "stock_22a4fa57f2f133d8",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1736",
+   "id": "stock_b202bc4e4e9d136e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1633",
+   "id": "stock_a3d9e26040a27b28",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0893",
+   "id": "stock_8c44895e42a53ebd",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2067",
+   "id": "stock_33dd5188691b28d3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1151",
+   "id": "stock_9f3cd9a50b7b7954",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2191",
+   "id": "stock_dab8fc1f2a08ec8e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0515",
+   "id": "stock_8a8a0fcb196574cb",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0015",
+   "id": "stock_192f751b09bf35a5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1983",
+   "id": "stock_b2f03cac517f1b5b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1225",
+   "id": "stock_08c62b3ebb59455e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2210",
+   "id": "stock_02152632eeba5426",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0685",
+   "id": "stock_93769489b95f5d9c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0818",
+   "id": "stock_00c0be48481768f8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0020",
+   "id": "stock_ba624bba6acc5062",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0733",
+   "id": "stock_577da4d50eee6f1e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0526",
+   "id": "stock_dfcb297ebc3d028d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2131",
+   "id": "stock_fb6c95dd29b00003",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2003",
+   "id": "stock_554c029c136fa87e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2037",
+   "id": "stock_6f6a0cd306f10448",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0144",
+   "id": "stock_48a736509712eec8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0141",
+   "id": "stock_912c51778694f349",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0737",
+   "id": "stock_f50cf6bc70e7ae4c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0068",
+   "id": "stock_8cc1a14cf44e516a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0072",
+   "id": "stock_5668809d82e335df",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1867",
+   "id": "stock_718d7c031c0133d7",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1527",
+   "id": "stock_1dab7379177fd433",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2014",
+   "id": "stock_c06abeb73584957c",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1448",
+   "id": "stock_8327d80ecee48da2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1345",
+   "id": "stock_c2baa3f327d0459f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2083",
+   "id": "stock_a5ed8813be32f136",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2290",
+   "id": "stock_f403e4221793c1a6",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0099",
+   "id": "stock_1db0361aaceed843",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1531",
+   "id": "stock_0c67c5d079435c8d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1503",
+   "id": "stock_1abb7af663007fe0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1445",
+   "id": "stock_dcab1de439228de4",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1015",
+   "id": "stock_1b89dde1aaa641f4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0603",
+   "id": "stock_92c8401171dbedd0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1051",
+   "id": "stock_a684a3b785dd15ea",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1396",
+   "id": "stock_ead50c7955a9edbc",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1375",
+   "id": "stock_bc17ab9cb1a6da78",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0543",
+   "id": "stock_0ea728209707fcab",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0037",
+   "id": "stock_92d8d5306395633d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1147",
+   "id": "stock_dff7d51d64495573",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1916",
+   "id": "stock_64f0d0765d80fdeb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0831",
+   "id": "stock_91a211bfbacfe5ba",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0624",
+   "id": "stock_291802620bf92887",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1180",
+   "id": "stock_270f18e7d37d0e63",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2262",
+   "id": "stock_e41c69f3ecd4b33f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0695",
+   "id": "stock_7b0766f4f3afc977",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1824",
+   "id": "stock_119c40e156cadd53",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1075",
+   "id": "stock_771f61f1b5ff08fd",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1680",
+   "id": "stock_370b3f1dde4b83cb",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2214",
+   "id": "stock_236b8ccb56128175",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1583",
+   "id": "stock_6f0b72cd67da0822",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0172",
+   "id": "stock_3886ba6c51f41c32",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1695",
+   "id": "stock_05468f368bf73d7e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0785",
+   "id": "stock_38570a2ac803e187",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1223",
+   "id": "stock_0e74f81bfc293436",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0590",
+   "id": "stock_2714f7633bb19100",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0147",
+   "id": "stock_d07e84ee8c87b7f1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1672",
+   "id": "stock_10437e9cb50f12ad",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1822",
+   "id": "stock_4e12aa0d4bfb512c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1019",
+   "id": "stock_eb9204c9a010a8c6",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1742",
+   "id": "stock_4cd6d90c40a10fe4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1912",
+   "id": "stock_50edca309e7b8f31",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1661",
+   "id": "stock_4b0dcfc82dc86b65",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0441",
+   "id": "stock_092ad4d9597cafd5",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1557",
+   "id": "stock_61bdcef72a2ddeea",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1688",
+   "id": "stock_e398246410cd8c89",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0890",
+   "id": "stock_0d80f47e229fedc1",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1793",
+   "id": "stock_20ade1bb1ccd3686",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0556",
+   "id": "stock_ada60ad17c5cdda3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1160",
+   "id": "stock_7e107b604b85c147",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1500",
+   "id": "stock_f1282eb255fc4fa4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0554",
+   "id": "stock_27238b20bc340ebd",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0618",
+   "id": "stock_eda31cb30386a681",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0983",
+   "id": "stock_8451d3a3cf6e5c1f",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0308",
+   "id": "stock_dd5a13577784cbe0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0221",
+   "id": "stock_93925d5884e7fba5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0723",
+   "id": "stock_14e93d304f8ee5d5",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0579",
+   "id": "stock_52f3f3a8722e4502",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0197",
+   "id": "stock_a19c5220aa67aa65",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0709",
+   "id": "stock_fd2069474848d281",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1078",
+   "id": "stock_1c55219e108d898c",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1587",
+   "id": "stock_3363af0fe662f740",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1698",
+   "id": "stock_1fdc4c077a95d0ac",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0305",
+   "id": "stock_3e330d2af948321c",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0204",
+   "id": "stock_500425241221603b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0802",
+   "id": "stock_cbc0a2fb69047fe1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1702",
+   "id": "stock_3977da0f83a2d3b3",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1215",
+   "id": "stock_7e33b8af06a15422",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2048",
+   "id": "stock_79e1aaadc7d3dd79",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2198",
+   "id": "stock_3e1c9c2f44171d7a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1992",
+   "id": "stock_0354486a7a6ca49d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0410",
+   "id": "stock_72eb2625d46a846e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1009",
+   "id": "stock_f1ed7fc702d35829",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1917",
+   "id": "stock_2d318fffba486d78",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2261",
+   "id": "stock_1c15acbc2fbbd7fc",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2295",
+   "id": "stock_69bf54165320116f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1803",
+   "id": "stock_a8bcfcdaa489daa4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1171",
+   "id": "stock_649e48fa2a5ea1e4",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0544",
+   "id": "stock_78d80b45a15cec17",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0715",
+   "id": "stock_2bc35c65722eb9aa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1238",
+   "id": "stock_713416d7e6ebed4b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0478",
+   "id": "stock_a7a47f935dc1490d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0958",
+   "id": "stock_8cf67f26644f6445",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0323",
+   "id": "stock_c7a0c5bfa515e672",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1650",
+   "id": "stock_066206ea04feb61f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1974",
+   "id": "stock_435a679b426723ba",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0713",
+   "id": "stock_15703c8bae0a3b98",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0244",
+   "id": "stock_014e2cadbd4bdcd9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1063",
+   "id": "stock_b324d7232d560d2d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0706",
+   "id": "stock_8bc3eb56aebd59fa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0372",
+   "id": "stock_f7ba654fe23892e0",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0434",
+   "id": "stock_594c3468aa7ed940",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1740",
+   "id": "stock_8864dda6aa452257",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1090",
+   "id": "stock_c73f377e4e483055",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2148",
+   "id": "stock_2187fce33efac8a2",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1006",
+   "id": "stock_03cd825e7e8e4f51",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0035",
+   "id": "stock_f2e2fc067d655951",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1037",
+   "id": "stock_7fbf718277a45632",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2188",
+   "id": "stock_c3771a98755dce34",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1829",
+   "id": "stock_facc9eb7d2f93539",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0920",
+   "id": "stock_36805f14ca1b16a2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1444",
+   "id": "stock_8ed15bc8be3a1f2d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1522",
+   "id": "stock_1840a8f44cdb6ac3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1154",
+   "id": "stock_339fa65a5ec45501",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1805",
+   "id": "stock_1ef3984966fdf35a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0360",
+   "id": "stock_650b5078ce5be98d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1017",
+   "id": "stock_79bae32cf92eed05",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0812",
+   "id": "stock_0aefd1b2e3f4a1ec",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0869",
+   "id": "stock_5fd755291c77a439",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1460",
+   "id": "stock_cb4288eb9bd20295",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0209",
+   "id": "stock_75a45d4757aea19f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1140",
+   "id": "stock_8cde32a17c9cccb3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0563",
+   "id": "stock_87088808d70ab989",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1463",
+   "id": "stock_4d0bf315e082e83d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1067",
+   "id": "stock_47920661df68ee80",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1875",
+   "id": "stock_31bedc5a901e1d60",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0338",
+   "id": "stock_590cfd3e7231261b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1449",
+   "id": "stock_4867c6472162648f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1382",
+   "id": "stock_3c70d3dfee2f4795",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0479",
+   "id": "stock_56c457167d84d50e",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0662",
+   "id": "stock_18538d4709541be7",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0991",
+   "id": "stock_4fe21c0922ab364a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1722",
+   "id": "stock_c264c5c4c521e12a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1956",
+   "id": "stock_713aedc62ba5c07d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0735",
+   "id": "stock_599ea810d9e68e0a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1420",
+   "id": "stock_4701b05582857636",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0476",
+   "id": "stock_553a24a0929c51f8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0485",
+   "id": "stock_dc02031b7a525cc5",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1152",
+   "id": "stock_00c22b14ebaac0fe",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0880",
+   "id": "stock_cd0f84679317e647",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_2192",
+   "id": "stock_22cc305e20aa3c9b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1134",
+   "id": "stock_03865028d9934b33",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0254",
+   "id": "stock_c1bee1043611ed45",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0155",
+   "id": "stock_82da2fd713693fb1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1714",
+   "id": "stock_38c92baf84eecfbd",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0659",
+   "id": "stock_2a36fd5589fbee96",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1012",
+   "id": "stock_63d1c31e5dfd0861",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1549",
+   "id": "stock_bf9e71fad392368d",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1976",
+   "id": "stock_dd28701ce91f29a1",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0548",
+   "id": "stock_1df035544f8ccf29",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1265",
+   "id": "stock_31aab25c142739e2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0565",
+   "id": "stock_a9f847248f64c3c2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1486",
+   "id": "stock_3a6c3992b630ccb6",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0700",
+   "id": "stock_3dfb31d48ba68ef9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1421",
+   "id": "stock_e237a3cba766b999",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1632",
+   "id": "stock_bbfb3db11e9ea558",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1990",
+   "id": "stock_8eb7c038d984d965",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0582",
+   "id": "stock_fdf8132c9531291d",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1523",
+   "id": "stock_ef30fc2f45cef72b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1096",
+   "id": "stock_300f2ac99338b154",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2218",
+   "id": "stock_2292ddd2357d62e0",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1540",
+   "id": "stock_b66d270eb2d7563a",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0932",
+   "id": "stock_59af57d60075fb6e",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1332",
+   "id": "stock_4021cdc0f8cbc374",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1947",
+   "id": "stock_461a3fce2d341fdc",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0987",
+   "id": "stock_eafe3ad5c37eb22f",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0367",
+   "id": "stock_7158aaeaddabcd95",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0854",
+   "id": "stock_9e0692cc146d506d",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0714",
+   "id": "stock_0eeb738ae3160b5a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1181",
+   "id": "stock_b191a5f29ee3a3b3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1328",
+   "id": "stock_7e475fe41f690ce2",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2076",
+   "id": "stock_2031605e261cba6b",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1807",
+   "id": "stock_44deef2cdcaf241a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1769",
+   "id": "stock_ce5f5124c47ceb38",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0657",
+   "id": "stock_d9efb39b13fc8c1b",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1358",
+   "id": "stock_3f5e7760eb99874f",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1005",
+   "id": "stock_e75aa81aa571c75a",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0746",
+   "id": "stock_012f75fc1a54e070",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0919",
+   "id": "stock_31bcadbd0c29d116",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1627",
+   "id": "stock_d148a79d6837468e",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0587",
+   "id": "stock_64803539b0da03a2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "news",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1249",
+   "id": "stock_f5faaf463afe1ec8",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1840",
+   "id": "stock_c29a17b1dbb296aa",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1268",
+   "id": "stock_d26ec2a75dca43a2",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1097",
+   "id": "stock_f8ff8fe02433c8d7",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0450",
+   "id": "stock_d1712b24afbf53ae",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0036",
+   "id": "stock_abecae28cf840ded",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_2073",
+   "id": "stock_b42fcb7abf3a6eed",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0980",
+   "id": "stock_48b7df0e87caddb9",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1623",
+   "id": "stock_028aae9126a543f0",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0159",
+   "id": "stock_4c1042aad9b2208b",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_0096",
+   "id": "stock_8e85a96e2130ffa9",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "lexicon_hit"
+  },
+  {
+   "item": "c2_1579",
+   "id": "stock_be5fd42381078dd3",
+   "label": "negative",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1713",
+   "id": "stock_ab4b03b443465e61",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "news",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0974",
+   "id": "stock_33ffbada18ab7adb",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1619",
+   "id": "stock_0958347a3f0f1a57",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "reddit",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_0604",
+   "id": "stock_7582e393db0dcd27",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1302",
+   "id": "stock_8e5ef3e5c4108575",
+   "label": "neutral",
+   "component": "arm_specific",
+   "low_information": true,
+   "channel": "twitter",
+   "sampling_group": "random"
+  },
+  {
+   "item": "c2_1453",
+   "id": "stock_e9b4d0bba17c8a5a",
+   "label": "positive",
+   "component": "base",
+   "low_information": false,
+   "channel": "twitter",
+   "sampling_group": "random"
+  }
+ ]
+}

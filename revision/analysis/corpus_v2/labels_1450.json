@@ -1,0 +1,270 @@
+{
+ "meta": {
+  "labeller": "OpenAI GPT-6 Astra (gpt-6-astra)",
+  "reasoning_effort": "high",
+  "method": "in-context model judgement of each full text; codex exec 0.163.0-alpha.11 (read-only sandbox, no tools used), session 01a16a33-2bb6-7f63-8540-893fa9b5cb40, prompt labelling_pipeline/batches/prompt_1450.md",
+  "rubric": "v2",
+  "rubric_sha256": "610ca38a19cd1e4249b452d285f3c8c62bcdd8ca92cd5bd4269b908afe2906df",
+  "date": "2026-10-23",
+  "input_sha256": "385edcb158f996c37eb201ad996a45b9c03032551ffb8fb8e2e2646bad4c45a3",
+  "fields_shown": [
+   "item",
+   "text",
+   "ticker",
+   "channel"
+  ],
+  "blindness": "No candidate human labels, database sentiment predictions, FinBERT outputs, sampling group or lexicon-hit metadata shown."
+ },
+ "labels": {
+  "c2_1450": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The investment question expresses no clear directional view."
+  },
+  "c2_1451": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The analyst list mixes upgrades, initiation, and target increases with target cuts."
+  },
+  "c2_1452": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects stronger operating performance and an upward earnings breakout."
+  },
+  "c2_1453": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart describes a bullish breakout and retest setup."
+  },
+  "c2_1454": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports successful trades without identifying their asset direction."
+  },
+  "c2_1455": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The proposed macroeconomic scenario is explicitly bullish for Bitcoin."
+  },
+  "c2_1456": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The headline suggests data supports a developing long-term ETH bull run."
+  },
+  "c2_1457": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post identifies a bottom and a bullish reversal signal."
+  },
+  "c2_1458": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "This is a mailing-list workflow question with a spurious ticker match."
+  },
+  "c2_1459": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author highlights relative strength and an upside price target."
+  },
+  "c2_1460": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Despite event-related selling, the author anticipates further upside and favors calls."
+  },
+  "c2_1461": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The profitable trade follows a stated upward breakout."
+  },
+  "c2_1462": {
+   "label": "exclude",
+   "low_information": false,
+   "rationale": "The text is a bare shout-out list of accounts."
+  },
+  "c2_1463": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author maintains a bullish bias and expects higher gaps to fill."
+  },
+  "c2_1464": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Both adjusted earnings and sales beat estimates."
+  },
+  "c2_1465": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author emphasizes substantial dilution and distrust of management's commitment."
+  },
+  "c2_1466": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author concludes Brown-Forman is undervalued and considers buying despite industry challenges."
+  },
+  "c2_1467": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Strong earnings and a large bullish options purchase support the author's call position."
+  },
+  "c2_1468": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author predicts a resistance breakout and bullish trend reversal."
+  },
+  "c2_1469": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post asks how to calculate options profits and losses without an asset view."
+  },
+  "c2_1470": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The analysis explicitly presents bearish price action and a downside case."
+  },
+  "c2_1471": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author weighs brokerage benefits and commitment requirements without a clear investment lean."
+  },
+  "c2_1472": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post reports trading profits without specifying a bullish or bearish position."
+  },
+  "c2_1473": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author reports a personal loss and asks about recovery without stating a directional forecast."
+  },
+  "c2_1474": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post lists capital expenditures and asks factual questions without a directional conclusion."
+  },
+  "c2_1475": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author describes a favorable weekly chart and seeks an upside breakout."
+  },
+  "c2_1476": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author rejects the bearish interpretation and emphasizes the chart's recovery."
+  },
+  "c2_1477": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post requests broker and fee guidance without a Bitcoin price view."
+  },
+  "c2_1478": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "Failed breakouts are explicitly characterized as not bullish."
+  },
+  "c2_1479": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author favorably interprets technical scan signals for Tesla and Amazon."
+  },
+  "c2_1480": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author reports gains from accumulating a long AMD position."
+  },
+  "c2_1481": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author supports a bullish Apple call position with investment and tariff-exemption expectations."
+  },
+  "c2_1482": {
+   "label": "neutral",
+   "low_information": true,
+   "rationale": "The post discusses a trading-indicator filter rather than the matched asset."
+  },
+  "c2_1483": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The chart reports an 80-point decline and frames further downside as the relevant scenario."
+  },
+  "c2_1484": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The author asks whether rebalancing will cause gains, losses, or no movement without favoring one."
+  },
+  "c2_1485": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author endorses a bearish Tesla outlook through put options and confidence in Burry."
+  },
+  "c2_1486": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The analyst reaffirms a Buy recommendation on Roku."
+  },
+  "c2_1487": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author highlights a bearish breakdown and questions the stock's valuation above 100."
+  },
+  "c2_1488": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "ARKK is described as breaking upward out of a falling wedge."
+  },
+  "c2_1489": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "Coinbase has gained 18%, attracted volume, and remains a favored purchase."
+  },
+  "c2_1490": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The chart analysis explicitly identifies bullish divergences for Palo Alto Networks."
+  },
+  "c2_1491": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The author favors a bearish retest and shorts the market for further downside."
+  },
+  "c2_1492": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The post reports active bullish options buying in Nvidia."
+  },
+  "c2_1493": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author buys LUNR after its decline and emphasizes a developing recovery."
+  },
+  "c2_1494": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author calls FI a strong project and predicts substantial gains."
+  },
+  "c2_1495": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The latest chart commentary anticipates a potential bounce near the moving average."
+  },
+  "c2_1496": {
+   "label": "positive",
+   "low_information": false,
+   "rationale": "The author expects AWS profits to support a new Amazon all-time high."
+  },
+  "c2_1497": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The forecast prioritizes a decline to 3400 before a possible bear-market rally."
+  },
+  "c2_1498": {
+   "label": "negative",
+   "low_information": false,
+   "rationale": "The post predicts continued downside after a volume-backed breakdown."
+  },
+  "c2_1499": {
+   "label": "neutral",
+   "low_information": false,
+   "rationale": "The post celebrates a personal investment outcome without stating an asset direction."
+  }
+ }
+}
