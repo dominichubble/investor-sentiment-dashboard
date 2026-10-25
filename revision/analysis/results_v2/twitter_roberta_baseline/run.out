@@ -1,0 +1,105 @@
+{
+ "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+ "n_items": 338,
+ "macro_f1": 0.5681064369498618,
+ "accuracy": 0.591715976331361,
+ "per_class": {
+  "positive": {
+   "precision": 0.7746478873239436,
+   "recall": 0.45081967213114754,
+   "f1": 0.5699481865284973,
+   "predicted": 71,
+   "support": 122
+  },
+  "negative": {
+   "precision": 0.6226415094339622,
+   "recall": 0.4074074074074074,
+   "f1": 0.49253731343283585,
+   "predicted": 53,
+   "support": 81
+  },
+  "neutral": {
+   "precision": 0.5233644859813084,
+   "recall": 0.8296296296296296,
+   "f1": 0.6418338108882521,
+   "predicted": 214,
+   "support": 135
+  }
+ },
+ "confusion_rows_true_cols_pred": [
+  [
+   55,
+   6,
+   61
+  ],
+  [
+   7,
+   33,
+   41
+  ],
+  [
+   9,
+   14,
+   112
+  ]
+ ],
+ "label_order": [
+  "positive",
+  "negative",
+  "neutral"
+ ],
+ "bootstrap": [
+  {
+   "comparison": "twitter_roberta vs stock",
+   "observed_diff": 0.07032317446071695,
+   "ci95": [
+    0.0009511990443320191,
+    0.14041213184340856
+   ],
+   "p_two_sided": 0.0474,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.1896
+  },
+  {
+   "comparison": "twitter_roberta vs arm_a",
+   "observed_diff": -0.02317055448066041,
+   "ci95": [
+    -0.08840131159363344,
+    0.042118203624666284
+   ],
+   "p_two_sided": 0.493,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  },
+  {
+   "comparison": "twitter_roberta vs arm_b",
+   "observed_diff": -0.03933858938110257,
+   "ci95": [
+    -0.10137433103239264,
+    0.0229478317568406
+   ],
+   "p_two_sided": 0.224,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  },
+  {
+   "comparison": "twitter_roberta vs arm_c",
+   "observed_diff": 0.034222051743302395,
+   "ci95": [
+    -0.03189398641943905,
+    0.10095970699192307
+   ],
+   "p_two_sided": 0.306,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  }
+ ],
+ "settings": {
+  "B": 10000,
+  "seed": 20261024,
+  "holm_family": "4 comparisons (vs stock, arm_a, arm_b, arm_c)",
+  "max_length": 512,
+  "device": "cpu",
+  "torch": "2.2.2"
+ }
+}

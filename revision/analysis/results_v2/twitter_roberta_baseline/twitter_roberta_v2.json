@@ -1,0 +1,3487 @@
+{
+ "model": "cardiffnlp/twitter-roberta-base-sentiment-latest",
+ "n_items": 338,
+ "macro_f1": 0.5681064369498618,
+ "accuracy": 0.591715976331361,
+ "per_class": {
+  "positive": {
+   "precision": 0.7746478873239436,
+   "recall": 0.45081967213114754,
+   "f1": 0.5699481865284973,
+   "predicted": 71,
+   "support": 122
+  },
+  "negative": {
+   "precision": 0.6226415094339622,
+   "recall": 0.4074074074074074,
+   "f1": 0.49253731343283585,
+   "predicted": 53,
+   "support": 81
+  },
+  "neutral": {
+   "precision": 0.5233644859813084,
+   "recall": 0.8296296296296296,
+   "f1": 0.6418338108882521,
+   "predicted": 214,
+   "support": 135
+  }
+ },
+ "confusion_rows_true_cols_pred": [
+  [
+   55,
+   6,
+   61
+  ],
+  [
+   7,
+   33,
+   41
+  ],
+  [
+   9,
+   14,
+   112
+  ]
+ ],
+ "label_order": [
+  "positive",
+  "negative",
+  "neutral"
+ ],
+ "bootstrap": [
+  {
+   "comparison": "twitter_roberta vs stock",
+   "observed_diff": 0.07032317446071695,
+   "ci95": [
+    0.0009511990443320191,
+    0.14041213184340856
+   ],
+   "p_two_sided": 0.0474,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.1896
+  },
+  {
+   "comparison": "twitter_roberta vs arm_a",
+   "observed_diff": -0.02317055448066041,
+   "ci95": [
+    -0.08840131159363344,
+    0.042118203624666284
+   ],
+   "p_two_sided": 0.493,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  },
+  {
+   "comparison": "twitter_roberta vs arm_b",
+   "observed_diff": -0.03933858938110257,
+   "ci95": [
+    -0.10137433103239264,
+    0.0229478317568406
+   ],
+   "p_two_sided": 0.224,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  },
+  {
+   "comparison": "twitter_roberta vs arm_c",
+   "observed_diff": 0.034222051743302395,
+   "ci95": [
+    -0.03189398641943905,
+    0.10095970699192307
+   ],
+   "p_two_sided": 0.306,
+   "p_floor": 0.0001,
+   "p_holm_4": 0.672
+  }
+ ],
+ "settings": {
+  "B": 10000,
+  "seed": 20261024,
+  "holm_family": "4 comparisons (vs stock, arm_a, arm_b, arm_c)",
+  "max_length": 512,
+  "device": "cpu",
+  "torch": "2.2.2"
+ },
+ "predictions": [
+  {
+   "id": "stock_ef250eb61f33646b",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6867421865463257,
+    "neutral": 0.30497145652770996,
+    "positive": 0.008286306634545326
+   }
+  },
+  {
+   "id": "stock_576cc17f3881ad32",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.12385109066963196,
+    "neutral": 0.7860102653503418,
+    "positive": 0.09013868868350983
+   }
+  },
+  {
+   "id": "stock_b4e8e6247d6d4cf4",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.013696412555873394,
+    "neutral": 0.8903404474258423,
+    "positive": 0.09596310555934906
+   }
+  },
+  {
+   "id": "stock_832adbdfb6693da9",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004879281390458345,
+    "neutral": 0.5747395157814026,
+    "positive": 0.42038121819496155
+   }
+  },
+  {
+   "id": "stock_1a0e9e983de7ec87",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011903191916644573,
+    "neutral": 0.922234296798706,
+    "positive": 0.06586253643035889
+   }
+  },
+  {
+   "id": "stock_f339c8f6b3d21cd3",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5728883147239685,
+    "neutral": 0.4101029932498932,
+    "positive": 0.017008695751428604
+   }
+  },
+  {
+   "id": "stock_a3d9699b9ede25f7",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.005850565619766712,
+    "neutral": 0.30467212200164795,
+    "positive": 0.689477264881134
+   }
+  },
+  {
+   "id": "stock_73b4ae9a7ef917c4",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006269359495490789,
+    "neutral": 0.33988523483276367,
+    "positive": 0.6538454294204712
+   }
+  },
+  {
+   "id": "stock_b8fe139a76b7f5cf",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.42706918716430664,
+    "neutral": 0.5407131910324097,
+    "positive": 0.032217614352703094
+   }
+  },
+  {
+   "id": "stock_8e4e539cd914b8f4",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5148505568504333,
+    "neutral": 0.4409863352775574,
+    "positive": 0.04416317865252495
+   }
+  },
+  {
+   "id": "stock_ba60c58194cfcffa",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7011210322380066,
+    "neutral": 0.25878459215164185,
+    "positive": 0.04009443148970604
+   }
+  },
+  {
+   "id": "stock_82b7ec4f05c70358",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9327157139778137,
+    "neutral": 0.05911310017108917,
+    "positive": 0.00817122496664524
+   }
+  },
+  {
+   "id": "stock_ad033e7be46cbe0d",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.027458827942609787,
+    "neutral": 0.9116250872612,
+    "positive": 0.06091606989502907
+   }
+  },
+  {
+   "id": "stock_85a3f1c1681f5a92",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012916267849504948,
+    "neutral": 0.864707887172699,
+    "positive": 0.12237587571144104
+   }
+  },
+  {
+   "id": "stock_4f4404169524462a",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5361154675483704,
+    "neutral": 0.38471388816833496,
+    "positive": 0.07917065918445587
+   }
+  },
+  {
+   "id": "stock_75986c353594801b",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006737801246345043,
+    "neutral": 0.872087299823761,
+    "positive": 0.12117485702037811
+   }
+  },
+  {
+   "id": "stock_9c7dd23d1499f0c2",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.31418874859809875,
+    "neutral": 0.6281690001487732,
+    "positive": 0.057642240077257156
+   }
+  },
+  {
+   "id": "stock_209eb9dff37c5111",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6971619725227356,
+    "neutral": 0.28654244542121887,
+    "positive": 0.01629563234746456
+   }
+  },
+  {
+   "id": "stock_70e56915451c2891",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7280727028846741,
+    "neutral": 0.25154855847358704,
+    "positive": 0.020378760993480682
+   }
+  },
+  {
+   "id": "stock_9e75340342f0efc6",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0026100350078195333,
+    "neutral": 0.026937343180179596,
+    "positive": 0.970452606678009
+   }
+  },
+  {
+   "id": "stock_4c662717f04f47ac",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.005827723536640406,
+    "neutral": 0.7441833019256592,
+    "positive": 0.24998904764652252
+   }
+  },
+  {
+   "id": "stock_9c83c42919b55843",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7805050015449524,
+    "neutral": 0.2036791741847992,
+    "positive": 0.015815766528248787
+   }
+  },
+  {
+   "id": "stock_9adc77fda2d6d081",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0030598246958106756,
+    "neutral": 0.5315155386924744,
+    "positive": 0.46542471647262573
+   }
+  },
+  {
+   "id": "stock_2844b36eb97a35d4",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004209786653518677,
+    "neutral": 0.11729680001735687,
+    "positive": 0.8784934282302856
+   }
+  },
+  {
+   "id": "stock_5ec514500eb87bfa",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.01565917395055294,
+    "neutral": 0.40582478046417236,
+    "positive": 0.5785160660743713
+   }
+  },
+  {
+   "id": "stock_4f0be77b0a11cbd4",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0058382414281368256,
+    "neutral": 0.7805196046829224,
+    "positive": 0.2136421501636505
+   }
+  },
+  {
+   "id": "stock_401473e1b4a979b5",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.055602964013814926,
+    "neutral": 0.825314998626709,
+    "positive": 0.11908198148012161
+   }
+  },
+  {
+   "id": "stock_c5ac56b636221182",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.048436325043439865,
+    "neutral": 0.6013837456703186,
+    "positive": 0.3501799404621124
+   }
+  },
+  {
+   "id": "stock_6e6c8e829c923437",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.22677023708820343,
+    "neutral": 0.4201555550098419,
+    "positive": 0.35307419300079346
+   }
+  },
+  {
+   "id": "stock_fba6d83e74509c09",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011382927186787128,
+    "neutral": 0.9165745973587036,
+    "positive": 0.07204246520996094
+   }
+  },
+  {
+   "id": "stock_2cc7195f3493ad3f",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.03821148723363876,
+    "neutral": 0.5790961384773254,
+    "positive": 0.3826923370361328
+   }
+  },
+  {
+   "id": "stock_62ae89e473148891",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7134791612625122,
+    "neutral": 0.2761485278606415,
+    "positive": 0.010372262448072433
+   }
+  },
+  {
+   "id": "stock_ab2f27ca260c1644",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012166372500360012,
+    "neutral": 0.7205461263656616,
+    "positive": 0.26728755235671997
+   }
+  },
+  {
+   "id": "stock_93e37641a42e1742",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01853898912668228,
+    "neutral": 0.8219393491744995,
+    "positive": 0.15952154994010925
+   }
+  },
+  {
+   "id": "stock_2edab01076b4f0e1",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.005205618683248758,
+    "neutral": 0.20272350311279297,
+    "positive": 0.7920708656311035
+   }
+  },
+  {
+   "id": "stock_86da5f770a5a007f",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0221065916121006,
+    "neutral": 0.8921331763267517,
+    "positive": 0.08576022833585739
+   }
+  },
+  {
+   "id": "stock_ccec9fa1f76952c8",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.10895440727472305,
+    "neutral": 0.8065893054008484,
+    "positive": 0.08445630222558975
+   }
+  },
+  {
+   "id": "stock_9326540e0a966787",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002109094988554716,
+    "neutral": 0.01828490011394024,
+    "positive": 0.9796059727668762
+   }
+  },
+  {
+   "id": "stock_9a36f77d4b735613",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.18153150379657745,
+    "neutral": 0.7072238326072693,
+    "positive": 0.11124473810195923
+   }
+  },
+  {
+   "id": "stock_23f3c90e3d3cf861",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.005447807721793652,
+    "neutral": 0.7327507138252258,
+    "positive": 0.26180148124694824
+   }
+  },
+  {
+   "id": "stock_25589b74d4010ea1",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6466535925865173,
+    "neutral": 0.34085991978645325,
+    "positive": 0.012486450374126434
+   }
+  },
+  {
+   "id": "stock_9b87461a48eb2caa",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.22785751521587372,
+    "neutral": 0.7484034895896912,
+    "positive": 0.02373896911740303
+   }
+  },
+  {
+   "id": "stock_c0c853a58f1986dc",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.07014980912208557,
+    "neutral": 0.8817418217658997,
+    "positive": 0.04810834303498268
+   }
+  },
+  {
+   "id": "stock_e579f2c8000f1d31",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5548157691955566,
+    "neutral": 0.3660975694656372,
+    "positive": 0.07908666878938675
+   }
+  },
+  {
+   "id": "stock_039525b7d038780c",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.643871545791626,
+    "neutral": 0.31792476773262024,
+    "positive": 0.03820376470685005
+   }
+  },
+  {
+   "id": "stock_acf8af41c0b2ecfb",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6325637102127075,
+    "neutral": 0.3467288315296173,
+    "positive": 0.020707478746771812
+   }
+  },
+  {
+   "id": "stock_3a971cb259504f6e",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004030452575534582,
+    "neutral": 0.059999994933605194,
+    "positive": 0.9359695315361023
+   }
+  },
+  {
+   "id": "stock_166e53bf2740d3c7",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.06723415851593018,
+    "neutral": 0.9102423787117004,
+    "positive": 0.02252352610230446
+   }
+  },
+  {
+   "id": "stock_75e931d908319ba6",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002636836376041174,
+    "neutral": 0.04500589892268181,
+    "positive": 0.9523572325706482
+   }
+  },
+  {
+   "id": "stock_4b1e3921b79692d2",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.009295684285461903,
+    "neutral": 0.6398784518241882,
+    "positive": 0.35082581639289856
+   }
+  },
+  {
+   "id": "stock_2db62a15230901fd",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.48497721552848816,
+    "neutral": 0.48378926515579224,
+    "positive": 0.03123350627720356
+   }
+  },
+  {
+   "id": "stock_7aed4aaa17096cc8",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004668192472308874,
+    "neutral": 0.6078376770019531,
+    "positive": 0.38749414682388306
+   }
+  },
+  {
+   "id": "stock_0b8f262d035d873f",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.008489502593874931,
+    "neutral": 0.048369575291872025,
+    "positive": 0.943140983581543
+   }
+  },
+  {
+   "id": "stock_4df7104f2af7a146",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.28742244839668274,
+    "neutral": 0.6631627082824707,
+    "positive": 0.04941485449671745
+   }
+  },
+  {
+   "id": "stock_577fb3bc741adf7e",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00533284991979599,
+    "neutral": 0.19473765790462494,
+    "positive": 0.7999294996261597
+   }
+  },
+  {
+   "id": "stock_83fc2b6ba4beb31f",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.009455885738134384,
+    "neutral": 0.6450605392456055,
+    "positive": 0.34548354148864746
+   }
+  },
+  {
+   "id": "stock_a9f6c9a8dde40617",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.4349023103713989,
+    "neutral": 0.5478383302688599,
+    "positive": 0.017259396612644196
+   }
+  },
+  {
+   "id": "stock_41265c8d070a6382",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004810492508113384,
+    "neutral": 0.8000993728637695,
+    "positive": 0.19509023427963257
+   }
+  },
+  {
+   "id": "stock_c75e931b07e76a58",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5436738729476929,
+    "neutral": 0.44002795219421387,
+    "positive": 0.016298219561576843
+   }
+  },
+  {
+   "id": "stock_401858e3a9b422de",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.03397058695554733,
+    "neutral": 0.5733823180198669,
+    "positive": 0.3926470875740051
+   }
+  },
+  {
+   "id": "stock_8f6cad6c8a80c76e",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.38503026962280273,
+    "neutral": 0.5917251110076904,
+    "positive": 0.023244675248861313
+   }
+  },
+  {
+   "id": "stock_1f0ef935b6683825",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.39888569712638855,
+    "neutral": 0.5589783787727356,
+    "positive": 0.04213588312268257
+   }
+  },
+  {
+   "id": "stock_581be999e99bcf45",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0020923104602843523,
+    "neutral": 0.026575593277812004,
+    "positive": 0.9713321328163147
+   }
+  },
+  {
+   "id": "stock_701293608bd7b711",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.019283322617411613,
+    "neutral": 0.9449164271354675,
+    "positive": 0.03580022603273392
+   }
+  },
+  {
+   "id": "stock_ef8cc7cb3083b655",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7367928624153137,
+    "neutral": 0.2527971863746643,
+    "positive": 0.010409928858280182
+   }
+  },
+  {
+   "id": "stock_a84b52e28ac14064",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004093353636562824,
+    "neutral": 0.5540235638618469,
+    "positive": 0.4418831765651703
+   }
+  },
+  {
+   "id": "stock_f8cc831976bf9ce8",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.008808769285678864,
+    "neutral": 0.543714165687561,
+    "positive": 0.44747698307037354
+   }
+  },
+  {
+   "id": "stock_f1845e26294f458c",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006463914643973112,
+    "neutral": 0.4144316017627716,
+    "positive": 0.579104483127594
+   }
+  },
+  {
+   "id": "stock_2c62940fbebb7fbb",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.026994314044713974,
+    "neutral": 0.9487302899360657,
+    "positive": 0.024275347590446472
+   }
+  },
+  {
+   "id": "stock_80b9a2664dce765d",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.2117009162902832,
+    "neutral": 0.6571744680404663,
+    "positive": 0.1311245858669281
+   }
+  },
+  {
+   "id": "stock_ad8f46ee6ab48183",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006719398777931929,
+    "neutral": 0.8844271898269653,
+    "positive": 0.10885336250066757
+   }
+  },
+  {
+   "id": "stock_0b32f062dabddf95",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.30588072538375854,
+    "neutral": 0.6298834085464478,
+    "positive": 0.06423592567443848
+   }
+  },
+  {
+   "id": "stock_019f93ebd5442f63",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3152809739112854,
+    "neutral": 0.5930739045143127,
+    "positive": 0.09164514392614365
+   }
+  },
+  {
+   "id": "stock_97c71eda2beb81fa",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014776311814785004,
+    "neutral": 0.6856145858764648,
+    "positive": 0.29960909485816956
+   }
+  },
+  {
+   "id": "stock_1004b167d55cead9",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.03610701858997345,
+    "neutral": 0.40572836995124817,
+    "positive": 0.5581645965576172
+   }
+  },
+  {
+   "id": "stock_628fd6fa62ada196",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.17365173995494843,
+    "neutral": 0.6213974952697754,
+    "positive": 0.2049507200717926
+   }
+  },
+  {
+   "id": "stock_e2d26eda78937cfc",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.013666338287293911,
+    "neutral": 0.8795691132545471,
+    "positive": 0.10676455497741699
+   }
+  },
+  {
+   "id": "stock_cdf41fd09f1af65f",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0036957801785320044,
+    "neutral": 0.2324838787317276,
+    "positive": 0.7638203501701355
+   }
+  },
+  {
+   "id": "stock_cebe1b81cf9b2393",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.08104874193668365,
+    "neutral": 0.8514033555984497,
+    "positive": 0.06754789501428604
+   }
+  },
+  {
+   "id": "stock_b18670d6aa640317",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.2308192402124405,
+    "neutral": 0.7411225438117981,
+    "positive": 0.02805824764072895
+   }
+  },
+  {
+   "id": "stock_7e96fd759314155a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.32441040873527527,
+    "neutral": 0.6200854182243347,
+    "positive": 0.055504217743873596
+   }
+  },
+  {
+   "id": "stock_6e4aa0ba1fe49457",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9224231243133545,
+    "neutral": 0.07057582587003708,
+    "positive": 0.007001034449785948
+   }
+  },
+  {
+   "id": "stock_32ac81a15e486e1a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.46199363470077515,
+    "neutral": 0.5147296786308289,
+    "positive": 0.023276671767234802
+   }
+  },
+  {
+   "id": "stock_2a5fa99634b09984",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006740003824234009,
+    "neutral": 0.8931494355201721,
+    "positive": 0.10011061280965805
+   }
+  },
+  {
+   "id": "stock_53678630ed16855b",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5075386166572571,
+    "neutral": 0.4383885860443115,
+    "positive": 0.0540727935731411
+   }
+  },
+  {
+   "id": "stock_ab52bea5f43bdd61",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004407757427543402,
+    "neutral": 0.184083953499794,
+    "positive": 0.8115082383155823
+   }
+  },
+  {
+   "id": "stock_0ecb3b81b9cd9d93",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.009851774200797081,
+    "neutral": 0.875914990901947,
+    "positive": 0.11423328518867493
+   }
+  },
+  {
+   "id": "stock_8757a7eb2b673256",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.008518940769135952,
+    "neutral": 0.902701735496521,
+    "positive": 0.08877921849489212
+   }
+  },
+  {
+   "id": "stock_370b7c8cb2620bd0",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5120536684989929,
+    "neutral": 0.469528466463089,
+    "positive": 0.01841791346669197
+   }
+  },
+  {
+   "id": "stock_62d0256a6d6da36b",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.015837209299206734,
+    "neutral": 0.9257345795631409,
+    "positive": 0.05842820927500725
+   }
+  },
+  {
+   "id": "stock_2085cd01169c17fa",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7059258818626404,
+    "neutral": 0.2733486294746399,
+    "positive": 0.0207255519926548
+   }
+  },
+  {
+   "id": "stock_8beccbc6ae43dee4",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.011806434951722622,
+    "neutral": 0.13545437157154083,
+    "positive": 0.8527392148971558
+   }
+  },
+  {
+   "id": "stock_04a55f662bf0d54c",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006123704835772514,
+    "neutral": 0.7441806197166443,
+    "positive": 0.24969570338726044
+   }
+  },
+  {
+   "id": "stock_430c4e6296c23735",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.008040650747716427,
+    "neutral": 0.7020273208618164,
+    "positive": 0.289931982755661
+   }
+  },
+  {
+   "id": "stock_788d971676fbaefb",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.15099969506263733,
+    "neutral": 0.71575528383255,
+    "positive": 0.13324503600597382
+   }
+  },
+  {
+   "id": "stock_7236e52efc2ebd70",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7246911525726318,
+    "neutral": 0.22135910391807556,
+    "positive": 0.053949736058712006
+   }
+  },
+  {
+   "id": "stock_4ccebab4ebbc2d83",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.007432854268699884,
+    "neutral": 0.8607736229896545,
+    "positive": 0.1317935585975647
+   }
+  },
+  {
+   "id": "stock_ecec5a1a9c63771e",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.03792186453938484,
+    "neutral": 0.5652053952217102,
+    "positive": 0.3968726694583893
+   }
+  },
+  {
+   "id": "stock_8f8cffd52296b548",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02063065394759178,
+    "neutral": 0.9301561713218689,
+    "positive": 0.04921319708228111
+   }
+  },
+  {
+   "id": "stock_4f468a1d2fddf956",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014893222600221634,
+    "neutral": 0.6243101954460144,
+    "positive": 0.3607965111732483
+   }
+  },
+  {
+   "id": "stock_ddd653fc2e4bd44c",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0024882396683096886,
+    "neutral": 0.029530324041843414,
+    "positive": 0.9679813981056213
+   }
+  },
+  {
+   "id": "stock_3332235a8b8e0b75",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.019223326817154884,
+    "neutral": 0.9331963062286377,
+    "positive": 0.0475803017616272
+   }
+  },
+  {
+   "id": "stock_ffd15e35c5351510",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.04673072323203087,
+    "neutral": 0.8968769907951355,
+    "positive": 0.05639221891760826
+   }
+  },
+  {
+   "id": "stock_37270f3b7f9642b4",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.003617936046794057,
+    "neutral": 0.11137492954730988,
+    "positive": 0.8850070834159851
+   }
+  },
+  {
+   "id": "stock_3e6ec54480c05f43",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.17760567367076874,
+    "neutral": 0.768593966960907,
+    "positive": 0.05380041152238846
+   }
+  },
+  {
+   "id": "stock_08cf7dd61566c806",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02286764420568943,
+    "neutral": 0.9230256080627441,
+    "positive": 0.05410677567124367
+   }
+  },
+  {
+   "id": "stock_6dbd647cebdeee54",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01691749505698681,
+    "neutral": 0.9175194501876831,
+    "positive": 0.06556297093629837
+   }
+  },
+  {
+   "id": "stock_007943e3f719a0e3",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006263681221753359,
+    "neutral": 0.6970459818840027,
+    "positive": 0.2966904044151306
+   }
+  },
+  {
+   "id": "stock_df81ac692829444a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.471626877784729,
+    "neutral": 0.5017399191856384,
+    "positive": 0.026633255183696747
+   }
+  },
+  {
+   "id": "stock_e2108bdff6351add",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6795037388801575,
+    "neutral": 0.30837634205818176,
+    "positive": 0.012119905091822147
+   }
+  },
+  {
+   "id": "stock_540add1fdf976864",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01582178846001625,
+    "neutral": 0.9385898113250732,
+    "positive": 0.04558833688497543
+   }
+  },
+  {
+   "id": "stock_33da5c7b491068ea",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.777782142162323,
+    "neutral": 0.2148846834897995,
+    "positive": 0.007333232089877129
+   }
+  },
+  {
+   "id": "stock_95c5bd9fefc78eaf",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02106771618127823,
+    "neutral": 0.9266023635864258,
+    "positive": 0.05232994630932808
+   }
+  },
+  {
+   "id": "stock_24e0c6c9347b2db9",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010819166898727417,
+    "neutral": 0.7372632622718811,
+    "positive": 0.2519175708293915
+   }
+  },
+  {
+   "id": "stock_adbfd6eb724d5c9e",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02794836275279522,
+    "neutral": 0.9141099452972412,
+    "positive": 0.05794159695506096
+   }
+  },
+  {
+   "id": "stock_3c7cfaf8e403f7c7",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.005558851640671492,
+    "neutral": 0.7656148672103882,
+    "positive": 0.22882622480392456
+   }
+  },
+  {
+   "id": "stock_afcbe2cabcdda4e8",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0037666051648557186,
+    "neutral": 0.11410852521657944,
+    "positive": 0.8821249008178711
+   }
+  },
+  {
+   "id": "stock_dbe94a8350e80261",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.013973578810691833,
+    "neutral": 0.6746425032615662,
+    "positive": 0.3113839328289032
+   }
+  },
+  {
+   "id": "stock_683e2e8b5e7cec85",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.015975261107087135,
+    "neutral": 0.8376261591911316,
+    "positive": 0.1463986188173294
+   }
+  },
+  {
+   "id": "stock_c0b30d1c3305aa9d",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002336682751774788,
+    "neutral": 0.14345934987068176,
+    "positive": 0.854203999042511
+   }
+  },
+  {
+   "id": "stock_33acdf554e2061fc",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.09813220053911209,
+    "neutral": 0.8627429008483887,
+    "positive": 0.03912496194243431
+   }
+  },
+  {
+   "id": "stock_9b0d958ccaa79141",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011842099018394947,
+    "neutral": 0.9044224619865417,
+    "positive": 0.08373535424470901
+   }
+  },
+  {
+   "id": "stock_9451cf34f65f4737",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01402653381228447,
+    "neutral": 0.8071966767311096,
+    "positive": 0.17877674102783203
+   }
+  },
+  {
+   "id": "stock_a6bacfef56c6de8d",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.4676443934440613,
+    "neutral": 0.48492875695228577,
+    "positive": 0.04742687940597534
+   }
+  },
+  {
+   "id": "stock_e2aee108e36d99d4",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.07706794887781143,
+    "neutral": 0.7982801198959351,
+    "positive": 0.12465186417102814
+   }
+  },
+  {
+   "id": "stock_6ab197ca7b35b6ea",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.09469229727983475,
+    "neutral": 0.732143223285675,
+    "positive": 0.17316442728042603
+   }
+  },
+  {
+   "id": "stock_93616719852727ad",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.37190255522727966,
+    "neutral": 0.5021923184394836,
+    "positive": 0.12590515613555908
+   }
+  },
+  {
+   "id": "stock_f66e5de52f212896",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.003967569209635258,
+    "neutral": 0.13807940483093262,
+    "positive": 0.8579530119895935
+   }
+  },
+  {
+   "id": "stock_c7ae57381154e0f4",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.564471960067749,
+    "neutral": 0.40370428562164307,
+    "positive": 0.03182371333241463
+   }
+  },
+  {
+   "id": "stock_3694b2630d379c1a",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.031875431537628174,
+    "neutral": 0.8264243006706238,
+    "positive": 0.1417003571987152
+   }
+  },
+  {
+   "id": "stock_0279ca3b2eddd521",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.07731229811906815,
+    "neutral": 0.30983075499534607,
+    "positive": 0.612856924533844
+   }
+  },
+  {
+   "id": "stock_4a28a94a8a002f6b",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01541850995272398,
+    "neutral": 0.8792821764945984,
+    "positive": 0.10529933869838715
+   }
+  },
+  {
+   "id": "stock_47c3df1d86d431c0",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.021159255877137184,
+    "neutral": 0.8620763421058655,
+    "positive": 0.11676441878080368
+   }
+  },
+  {
+   "id": "stock_131d3f37e0bb7f1a",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.056130409240722656,
+    "neutral": 0.713568925857544,
+    "positive": 0.2303006500005722
+   }
+  },
+  {
+   "id": "stock_4b6585de797f3256",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6355897188186646,
+    "neutral": 0.3549257218837738,
+    "positive": 0.009484579786658287
+   }
+  },
+  {
+   "id": "stock_924da12f1c1e6e05",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.022721372544765472,
+    "neutral": 0.9331558346748352,
+    "positive": 0.044122762978076935
+   }
+  },
+  {
+   "id": "stock_f9cb8132f798452d",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00785189587622881,
+    "neutral": 0.33322519063949585,
+    "positive": 0.6589229106903076
+   }
+  },
+  {
+   "id": "stock_2f75388e93f82c5c",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010113940574228764,
+    "neutral": 0.9485053420066833,
+    "positive": 0.04138074815273285
+   }
+  },
+  {
+   "id": "stock_90ed2bb443ed8322",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01814490370452404,
+    "neutral": 0.6352621912956238,
+    "positive": 0.34659287333488464
+   }
+  },
+  {
+   "id": "stock_077c35cec93ef821",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.15720674395561218,
+    "neutral": 0.5880481600761414,
+    "positive": 0.25474509596824646
+   }
+  },
+  {
+   "id": "stock_04e9e1e8b4c0406f",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014338052831590176,
+    "neutral": 0.9142400622367859,
+    "positive": 0.0714217871427536
+   }
+  },
+  {
+   "id": "stock_f2011edda79c97d5",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010909668169915676,
+    "neutral": 0.6957434415817261,
+    "positive": 0.2933468818664551
+   }
+  },
+  {
+   "id": "stock_589bc8d6243fbd57",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02115170657634735,
+    "neutral": 0.9084322452545166,
+    "positive": 0.07041608542203903
+   }
+  },
+  {
+   "id": "stock_e9a499ba7b1fc34b",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9289043545722961,
+    "neutral": 0.06201697885990143,
+    "positive": 0.00907864049077034
+   }
+  },
+  {
+   "id": "stock_e8d3100164929ac4",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.003261735662817955,
+    "neutral": 0.05898742750287056,
+    "positive": 0.9377508759498596
+   }
+  },
+  {
+   "id": "stock_d40646e25ba1f43f",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.009323468431830406,
+    "neutral": 0.6869481205940247,
+    "positive": 0.3037283420562744
+   }
+  },
+  {
+   "id": "stock_48ec612697be91a6",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006347365211695433,
+    "neutral": 0.09550654888153076,
+    "positive": 0.8981460928916931
+   }
+  },
+  {
+   "id": "stock_97c9b6d0fcee26f3",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011079001240432262,
+    "neutral": 0.9055280089378357,
+    "positive": 0.08339302241802216
+   }
+  },
+  {
+   "id": "stock_bbd055cdced81967",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.936677873134613,
+    "neutral": 0.05660456046462059,
+    "positive": 0.006717547308653593
+   }
+  },
+  {
+   "id": "stock_9f46379458ee28a2",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.029919158667325974,
+    "neutral": 0.9132236838340759,
+    "positive": 0.05685713142156601
+   }
+  },
+  {
+   "id": "stock_926abd0e9eeec2ab",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004852821584790945,
+    "neutral": 0.26213914155960083,
+    "positive": 0.7330079674720764
+   }
+  },
+  {
+   "id": "stock_c607822efd05f41d",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7847045660018921,
+    "neutral": 0.2065742015838623,
+    "positive": 0.008721183985471725
+   }
+  },
+  {
+   "id": "stock_aa66434b0b0c5240",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.007304904516786337,
+    "neutral": 0.8261169791221619,
+    "positive": 0.16657818853855133
+   }
+  },
+  {
+   "id": "stock_10715b0f24380ee5",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.04907596856355667,
+    "neutral": 0.6518503427505493,
+    "positive": 0.29907363653182983
+   }
+  },
+  {
+   "id": "stock_23d46519243460ff",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.029974887147545815,
+    "neutral": 0.33299949765205383,
+    "positive": 0.6370255947113037
+   }
+  },
+  {
+   "id": "stock_ee7a2a7dbeedd9f4",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012382686138153076,
+    "neutral": 0.9188851118087769,
+    "positive": 0.06873220950365067
+   }
+  },
+  {
+   "id": "stock_4d0b2ed93d6db83d",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02668575569987297,
+    "neutral": 0.5983386039733887,
+    "positive": 0.3749755918979645
+   }
+  },
+  {
+   "id": "stock_3803aff950b6e19c",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.09778309613466263,
+    "neutral": 0.4358740746974945,
+    "positive": 0.4663429260253906
+   }
+  },
+  {
+   "id": "stock_091f07874669678d",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.06555669009685516,
+    "neutral": 0.351559579372406,
+    "positive": 0.5828837156295776
+   }
+  },
+  {
+   "id": "stock_c5cbf66c75263b81",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.12061988562345505,
+    "neutral": 0.4106002449989319,
+    "positive": 0.4687798321247101
+   }
+  },
+  {
+   "id": "stock_a00c6db56b650778",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004966188687831163,
+    "neutral": 0.3630518913269043,
+    "positive": 0.6319819688796997
+   }
+  },
+  {
+   "id": "stock_cec4769e4070fd8c",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.24026161432266235,
+    "neutral": 0.6979825496673584,
+    "positive": 0.06175583228468895
+   }
+  },
+  {
+   "id": "stock_bd220468afc8e6a7",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.059763193130493164,
+    "neutral": 0.657574474811554,
+    "positive": 0.2826623320579529
+   }
+  },
+  {
+   "id": "stock_2d7590f14eb97c06",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.003857353935018182,
+    "neutral": 0.07052114605903625,
+    "positive": 0.925621509552002
+   }
+  },
+  {
+   "id": "stock_6d27dedc91306d7d",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.061252959072589874,
+    "neutral": 0.7956211566925049,
+    "positive": 0.14312578737735748
+   }
+  },
+  {
+   "id": "stock_f98b2d2114e7f93a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.15794533491134644,
+    "neutral": 0.7853932976722717,
+    "positive": 0.05666148662567139
+   }
+  },
+  {
+   "id": "stock_efc4649bc6c513d8",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.04405171051621437,
+    "neutral": 0.5758799314498901,
+    "positive": 0.3800683915615082
+   }
+  },
+  {
+   "id": "stock_7626d44a8338d6ba",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.007145244162529707,
+    "neutral": 0.4193299412727356,
+    "positive": 0.5735247135162354
+   }
+  },
+  {
+   "id": "stock_4e44950534a89e42",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.009184165857732296,
+    "neutral": 0.946749210357666,
+    "positive": 0.04406663402915001
+   }
+  },
+  {
+   "id": "stock_e70404423c5ee35b",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.012215178459882736,
+    "neutral": 0.44653162360191345,
+    "positive": 0.5412532687187195
+   }
+  },
+  {
+   "id": "stock_739cf4c9fd1ce8a8",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.105953648686409,
+    "neutral": 0.8576068878173828,
+    "positive": 0.03643956780433655
+   }
+  },
+  {
+   "id": "stock_235bfe6f73963c59",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3971048891544342,
+    "neutral": 0.5220287442207336,
+    "positive": 0.08086639642715454
+   }
+  },
+  {
+   "id": "stock_f458c28ed26d7385",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014542404562234879,
+    "neutral": 0.5296691060066223,
+    "positive": 0.4557884931564331
+   }
+  },
+  {
+   "id": "stock_703e9135e50062e9",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.005092104431241751,
+    "neutral": 0.7336194515228271,
+    "positive": 0.26128846406936646
+   }
+  },
+  {
+   "id": "stock_588b29edae50be0b",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004731348250061274,
+    "neutral": 0.48607978224754333,
+    "positive": 0.5091888904571533
+   }
+  },
+  {
+   "id": "stock_d620498e4f7f7947",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7376606464385986,
+    "neutral": 0.2503184974193573,
+    "positive": 0.01202093530446291
+   }
+  },
+  {
+   "id": "stock_fecb1c2d4396d07d",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.014885079115629196,
+    "neutral": 0.48979663848876953,
+    "positive": 0.49531832337379456
+   }
+  },
+  {
+   "id": "stock_7e642de3507e91d3",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9152708053588867,
+    "neutral": 0.07712288200855255,
+    "positive": 0.0076063284650444984
+   }
+  },
+  {
+   "id": "stock_d2e5ed2f6c9063c0",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.009730677120387554,
+    "neutral": 0.43872231245040894,
+    "positive": 0.5515470504760742
+   }
+  },
+  {
+   "id": "stock_9cca1dcc160e8f5e",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.010051250457763672,
+    "neutral": 0.1186864823102951,
+    "positive": 0.87126225233078
+   }
+  },
+  {
+   "id": "stock_3c1111c21fa48be9",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.538752555847168,
+    "neutral": 0.4365079700946808,
+    "positive": 0.02473955601453781
+   }
+  },
+  {
+   "id": "stock_7271ee952062d43c",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6833970546722412,
+    "neutral": 0.2988203763961792,
+    "positive": 0.017782559618353844
+   }
+  },
+  {
+   "id": "stock_eac80eda6bc1a99a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01912824623286724,
+    "neutral": 0.9243854284286499,
+    "positive": 0.05648636817932129
+   }
+  },
+  {
+   "id": "stock_1db5774fef3d3fcd",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.674094021320343,
+    "neutral": 0.3074706792831421,
+    "positive": 0.01843533106148243
+   }
+  },
+  {
+   "id": "stock_6137e0fec6e94fe4",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.46474123001098633,
+    "neutral": 0.5172474980354309,
+    "positive": 0.018011268228292465
+   }
+  },
+  {
+   "id": "stock_7fa210b7580110a7",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.03348932042717934,
+    "neutral": 0.14660382270812988,
+    "positive": 0.8199068307876587
+   }
+  },
+  {
+   "id": "stock_27a58d75712349e1",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.24040204286575317,
+    "neutral": 0.697192907333374,
+    "positive": 0.06240503489971161
+   }
+  },
+  {
+   "id": "stock_5111ae46d56b084d",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004492835141718388,
+    "neutral": 0.2101498395204544,
+    "positive": 0.7853572964668274
+   }
+  },
+  {
+   "id": "stock_0b1b54edfb02b7eb",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7606066465377808,
+    "neutral": 0.2128312736749649,
+    "positive": 0.02656211145222187
+   }
+  },
+  {
+   "id": "stock_228407eaaa850df7",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010717070661485195,
+    "neutral": 0.8211106061935425,
+    "positive": 0.16817237436771393
+   }
+  },
+  {
+   "id": "stock_162104bc7ac2f5ff",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012861100025475025,
+    "neutral": 0.9233413934707642,
+    "positive": 0.0637974664568901
+   }
+  },
+  {
+   "id": "stock_18bde9f8b6e54fc8",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006021691486239433,
+    "neutral": 0.2995705306529999,
+    "positive": 0.6944077610969543
+   }
+  },
+  {
+   "id": "stock_bba6b8e9a04c93c1",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004815719090402126,
+    "neutral": 0.6083672642707825,
+    "positive": 0.38681697845458984
+   }
+  },
+  {
+   "id": "stock_015b84f37e222604",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.05027558282017708,
+    "neutral": 0.8962820172309875,
+    "positive": 0.05344239994883537
+   }
+  },
+  {
+   "id": "stock_70980c55e7f35967",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004776645451784134,
+    "neutral": 0.5866287350654602,
+    "positive": 0.4085945785045624
+   }
+  },
+  {
+   "id": "stock_5a8d94cee7625947",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.003646533703431487,
+    "neutral": 0.20421023666858673,
+    "positive": 0.7921432256698608
+   }
+  },
+  {
+   "id": "stock_790ea024b107d1a6",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.027224848046898842,
+    "neutral": 0.9162079691886902,
+    "positive": 0.05656718462705612
+   }
+  },
+  {
+   "id": "stock_74a4b3043001da69",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.007287300657480955,
+    "neutral": 0.7788528800010681,
+    "positive": 0.21385975182056427
+   }
+  },
+  {
+   "id": "stock_4108ca264db34871",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.015019308775663376,
+    "neutral": 0.8987190127372742,
+    "positive": 0.08626163750886917
+   }
+  },
+  {
+   "id": "stock_e651d5b5881e2343",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006398267578333616,
+    "neutral": 0.8284527659416199,
+    "positive": 0.16514889895915985
+   }
+  },
+  {
+   "id": "stock_956ff9aa0af8c7ab",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00845795962959528,
+    "neutral": 0.3019830584526062,
+    "positive": 0.6895589232444763
+   }
+  },
+  {
+   "id": "stock_814e7ac6daacc8e4",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.10377195477485657,
+    "neutral": 0.8539474010467529,
+    "positive": 0.04228069633245468
+   }
+  },
+  {
+   "id": "stock_152bb892bd919bf0",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0032769180834293365,
+    "neutral": 0.028047550469636917,
+    "positive": 0.9686755537986755
+   }
+  },
+  {
+   "id": "stock_db61bffca696dde5",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.06561548262834549,
+    "neutral": 0.8484014272689819,
+    "positive": 0.08598309755325317
+   }
+  },
+  {
+   "id": "stock_1c76c5550ae88615",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.21827395260334015,
+    "neutral": 0.659917950630188,
+    "positive": 0.12180806696414948
+   }
+  },
+  {
+   "id": "stock_15e128d79c1a4bcd",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5342075228691101,
+    "neutral": 0.439730167388916,
+    "positive": 0.0260622538626194
+   }
+  },
+  {
+   "id": "stock_9da40882dca31fa5",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011070293374359608,
+    "neutral": 0.8676496148109436,
+    "positive": 0.12128012627363205
+   }
+  },
+  {
+   "id": "stock_3b8862cc505981a1",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004563621710985899,
+    "neutral": 0.16253793239593506,
+    "positive": 0.8328984379768372
+   }
+  },
+  {
+   "id": "stock_d2a58d01e4afd9a4",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.007068550679832697,
+    "neutral": 0.3072846829891205,
+    "positive": 0.6856467127799988
+   }
+  },
+  {
+   "id": "stock_7dbf3c9ac9d7cc6e",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010609335266053677,
+    "neutral": 0.918506920337677,
+    "positive": 0.07088369876146317
+   }
+  },
+  {
+   "id": "stock_1ada4da2a4e0f9e1",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0032274143304675817,
+    "neutral": 0.4760102927684784,
+    "positive": 0.5207623243331909
+   }
+  },
+  {
+   "id": "stock_9be18dae243c5215",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0407709926366806,
+    "neutral": 0.49894365668296814,
+    "positive": 0.4602852761745453
+   }
+  },
+  {
+   "id": "stock_9314334dcd2a751d",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0346355102956295,
+    "neutral": 0.9035557508468628,
+    "positive": 0.06180867552757263
+   }
+  },
+  {
+   "id": "stock_3705d5300d5c5c0a",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.2379692941904068,
+    "neutral": 0.6366755962371826,
+    "positive": 0.1253550499677658
+   }
+  },
+  {
+   "id": "stock_616d01428df437ef",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.017153197899460793,
+    "neutral": 0.891333818435669,
+    "positive": 0.09151297807693481
+   }
+  },
+  {
+   "id": "stock_bd0d8261663c03ad",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012385927140712738,
+    "neutral": 0.8347845673561096,
+    "positive": 0.15282955765724182
+   }
+  },
+  {
+   "id": "stock_2d89b45008f96238",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.013401086442172527,
+    "neutral": 0.37263524532318115,
+    "positive": 0.6139636635780334
+   }
+  },
+  {
+   "id": "stock_38ae8d5406464035",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.06995176523923874,
+    "neutral": 0.8731938004493713,
+    "positive": 0.0568544939160347
+   }
+  },
+  {
+   "id": "stock_3ac7f4c9c94c5c27",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002738485811278224,
+    "neutral": 0.06736499071121216,
+    "positive": 0.9298965334892273
+   }
+  },
+  {
+   "id": "stock_51c0d4dec45cb766",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.02438472956418991,
+    "neutral": 0.3774910271167755,
+    "positive": 0.5981242656707764
+   }
+  },
+  {
+   "id": "stock_3b070ebb741ed220",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.16441510617733002,
+    "neutral": 0.7321063876152039,
+    "positive": 0.10347855091094971
+   }
+  },
+  {
+   "id": "stock_b28a7ac82776ce28",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.4758093059062958,
+    "neutral": 0.503017783164978,
+    "positive": 0.021172963082790375
+   }
+  },
+  {
+   "id": "stock_73c17b12de5ab809",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.017679445445537567,
+    "neutral": 0.8702016472816467,
+    "positive": 0.1121189072728157
+   }
+  },
+  {
+   "id": "stock_6b52e81b0df86531",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.001702808542177081,
+    "neutral": 0.07926306128501892,
+    "positive": 0.9190341234207153
+   }
+  },
+  {
+   "id": "stock_e2d7fe1db09b4827",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.034230779856443405,
+    "neutral": 0.936056911945343,
+    "positive": 0.02971232868731022
+   }
+  },
+  {
+   "id": "stock_7bb5b1ae537519cc",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006026784889400005,
+    "neutral": 0.35053032636642456,
+    "positive": 0.6434428095817566
+   }
+  },
+  {
+   "id": "stock_3ebee8af3216ec69",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.027400890365242958,
+    "neutral": 0.7869083881378174,
+    "positive": 0.1856907457113266
+   }
+  },
+  {
+   "id": "stock_99060408a7063f89",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004777441266924143,
+    "neutral": 0.17524805665016174,
+    "positive": 0.8199744820594788
+   }
+  },
+  {
+   "id": "stock_6ade34c51a2e39e6",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.016794918105006218,
+    "neutral": 0.8767469525337219,
+    "positive": 0.10645803809165955
+   }
+  },
+  {
+   "id": "stock_643d291668c2f35c",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002040725899860263,
+    "neutral": 0.022936632856726646,
+    "positive": 0.9750226140022278
+   }
+  },
+  {
+   "id": "stock_ab03dcae485f9846",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.82880038022995,
+    "neutral": 0.16374386847019196,
+    "positive": 0.007455725222826004
+   }
+  },
+  {
+   "id": "stock_2fbd5cf4860e762a",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7695422768592834,
+    "neutral": 0.21241354942321777,
+    "positive": 0.018044235184788704
+   }
+  },
+  {
+   "id": "stock_02f6d383d70c6cbb",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.21955804526805878,
+    "neutral": 0.7241091132164001,
+    "positive": 0.056332893669605255
+   }
+  },
+  {
+   "id": "stock_fa191216bf2893e0",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02141796424984932,
+    "neutral": 0.9444900155067444,
+    "positive": 0.03409211337566376
+   }
+  },
+  {
+   "id": "stock_49e4d522d4451efd",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.18082605302333832,
+    "neutral": 0.745100736618042,
+    "positive": 0.07407321035861969
+   }
+  },
+  {
+   "id": "stock_11eecc2ba90c626e",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006841346155852079,
+    "neutral": 0.9160672426223755,
+    "positive": 0.07709139585494995
+   }
+  },
+  {
+   "id": "stock_7e4c7caee33b8ef7",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.255367249250412,
+    "neutral": 0.7175657749176025,
+    "positive": 0.027066975831985474
+   }
+  },
+  {
+   "id": "stock_352b27f93925c067",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.056155771017074585,
+    "neutral": 0.5626879334449768,
+    "positive": 0.381156325340271
+   }
+  },
+  {
+   "id": "stock_7e6370efac671065",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.09529801458120346,
+    "neutral": 0.8552281856536865,
+    "positive": 0.049473848193883896
+   }
+  },
+  {
+   "id": "stock_0e538bf7a44664e4",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9377632141113281,
+    "neutral": 0.05681823566555977,
+    "positive": 0.005418616812676191
+   }
+  },
+  {
+   "id": "stock_52f13ab189f77d41",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.004004275426268578,
+    "neutral": 0.6002070307731628,
+    "positive": 0.39578866958618164
+   }
+  },
+  {
+   "id": "stock_1bfd3917bc366762",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.17043253779411316,
+    "neutral": 0.7861436009407043,
+    "positive": 0.0434238538146019
+   }
+  },
+  {
+   "id": "stock_223144d22c9d0b69",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0095131890848279,
+    "neutral": 0.5403518080711365,
+    "positive": 0.4501350522041321
+   }
+  },
+  {
+   "id": "stock_196b677c14cf623e",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.018161175772547722,
+    "neutral": 0.8325350284576416,
+    "positive": 0.14930377900600433
+   }
+  },
+  {
+   "id": "stock_987cdb0e912dc16c",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3116668462753296,
+    "neutral": 0.6317518353462219,
+    "positive": 0.05658132582902908
+   }
+  },
+  {
+   "id": "stock_757d0d74be899558",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.017801813781261444,
+    "neutral": 0.9552590250968933,
+    "positive": 0.02693910151720047
+   }
+  },
+  {
+   "id": "stock_53ba89f2379ed717",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.22150230407714844,
+    "neutral": 0.49644234776496887,
+    "positive": 0.2820553481578827
+   }
+  },
+  {
+   "id": "stock_a4296a1c740020ad",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.006131397560238838,
+    "neutral": 0.2757039964199066,
+    "positive": 0.7181646227836609
+   }
+  },
+  {
+   "id": "stock_d7e7c3062ce3a17f",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.8099963665008545,
+    "neutral": 0.17797769606113434,
+    "positive": 0.012025933712720871
+   }
+  },
+  {
+   "id": "stock_09c3e85d831e8feb",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002019902691245079,
+    "neutral": 0.037391018122434616,
+    "positive": 0.9605890512466431
+   }
+  },
+  {
+   "id": "stock_a57633664f3e6e2e",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.022218866273760796,
+    "neutral": 0.17075249552726746,
+    "positive": 0.8070287108421326
+   }
+  },
+  {
+   "id": "stock_372c5799bf83a9b7",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010257793590426445,
+    "neutral": 0.8796183466911316,
+    "positive": 0.11012384295463562
+   }
+  },
+  {
+   "id": "stock_3d678f488557e5b6",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.10754912346601486,
+    "neutral": 0.8128200173377991,
+    "positive": 0.07963088154792786
+   }
+  },
+  {
+   "id": "stock_4e17641441f227c0",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.002918897196650505,
+    "neutral": 0.029513593763113022,
+    "positive": 0.967567503452301
+   }
+  },
+  {
+   "id": "stock_1f2598010092d073",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.00896294042468071,
+    "neutral": 0.9006485342979431,
+    "positive": 0.09038858115673065
+   }
+  },
+  {
+   "id": "stock_20ae8e66b4b44102",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.005228640511631966,
+    "neutral": 0.570441722869873,
+    "positive": 0.42432957887649536
+   }
+  },
+  {
+   "id": "stock_2a245c0ed565ff20",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01976090669631958,
+    "neutral": 0.9400292634963989,
+    "positive": 0.040209777653217316
+   }
+  },
+  {
+   "id": "stock_a41d9fd0eb2d57bd",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00803880300372839,
+    "neutral": 0.24731014668941498,
+    "positive": 0.7446510195732117
+   }
+  },
+  {
+   "id": "stock_2837384984c05cfa",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.007796994410455227,
+    "neutral": 0.8489814400672913,
+    "positive": 0.1432216763496399
+   }
+  },
+  {
+   "id": "stock_beb47dfd35ebecf8",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01282711885869503,
+    "neutral": 0.9505313038825989,
+    "positive": 0.03664149343967438
+   }
+  },
+  {
+   "id": "stock_6da45a1707cc9e53",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01726594753563404,
+    "neutral": 0.833095133304596,
+    "positive": 0.14963902533054352
+   }
+  },
+  {
+   "id": "stock_5d43f6408ad26967",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.0032766738440841436,
+    "neutral": 0.31383833289146423,
+    "positive": 0.682884931564331
+   }
+  },
+  {
+   "id": "stock_e110621d03e6e2ec",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01010268647223711,
+    "neutral": 0.9346065521240234,
+    "positive": 0.05529072880744934
+   }
+  },
+  {
+   "id": "stock_ab06588a35956436",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.009494569152593613,
+    "neutral": 0.2135862410068512,
+    "positive": 0.7769191861152649
+   }
+  },
+  {
+   "id": "stock_95b5cc7b87824c9c",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.41187846660614014,
+    "neutral": 0.5221438407897949,
+    "positive": 0.06597775220870972
+   }
+  },
+  {
+   "id": "stock_dd700b0a169cef3b",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.019490549340844154,
+    "neutral": 0.855684757232666,
+    "positive": 0.12482470273971558
+   }
+  },
+  {
+   "id": "stock_e22910f85e5806a4",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.18725621700286865,
+    "neutral": 0.7479415535926819,
+    "positive": 0.06480222940444946
+   }
+  },
+  {
+   "id": "stock_d95c2968463a2a54",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.004122601822018623,
+    "neutral": 0.0679512768983841,
+    "positive": 0.9279261231422424
+   }
+  },
+  {
+   "id": "stock_b618c1f76e088064",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.008799165487289429,
+    "neutral": 0.9239739775657654,
+    "positive": 0.06722691655158997
+   }
+  },
+  {
+   "id": "stock_5684416eb7a7c0f5",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.021375276148319244,
+    "neutral": 0.9564311504364014,
+    "positive": 0.02219356968998909
+   }
+  },
+  {
+   "id": "stock_355ad802d0185972",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.18241629004478455,
+    "neutral": 0.7671184539794922,
+    "positive": 0.05046529322862625
+   }
+  },
+  {
+   "id": "stock_67cdd8f438dfec44",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.33968132734298706,
+    "neutral": 0.6205368041992188,
+    "positive": 0.039781924337148666
+   }
+  },
+  {
+   "id": "stock_302942dbf7ca8f80",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.018807994201779366,
+    "neutral": 0.9350093007087708,
+    "positive": 0.04618276283144951
+   }
+  },
+  {
+   "id": "stock_3edfd698904d68f8",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01040620170533657,
+    "neutral": 0.5111013650894165,
+    "positive": 0.4784923791885376
+   }
+  },
+  {
+   "id": "stock_b40a95cf7df62fb8",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.05184966325759888,
+    "neutral": 0.9218918085098267,
+    "positive": 0.02625846303999424
+   }
+  },
+  {
+   "id": "stock_6829daaff4758852",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.04836448282003403,
+    "neutral": 0.8336837291717529,
+    "positive": 0.11795182526111603
+   }
+  },
+  {
+   "id": "stock_26817b8d05bf23ba",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.1900087594985962,
+    "neutral": 0.7204450964927673,
+    "positive": 0.0895460769534111
+   }
+  },
+  {
+   "id": "stock_3c9c442c76bd8e09",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.1863967627286911,
+    "neutral": 0.7579573392868042,
+    "positive": 0.055645909160375595
+   }
+  },
+  {
+   "id": "stock_285901f48f3c5a08",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00491582415997982,
+    "neutral": 0.19374078512191772,
+    "positive": 0.8013433218002319
+   }
+  },
+  {
+   "id": "stock_4cfcbfc70a311e82",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.005399367306381464,
+    "neutral": 0.07722318172454834,
+    "positive": 0.9173774719238281
+   }
+  },
+  {
+   "id": "stock_4179eba7d4675213",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0470784492790699,
+    "neutral": 0.7864162921905518,
+    "positive": 0.16650526225566864
+   }
+  },
+  {
+   "id": "stock_c8a6cd10e4ad2e40",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.51786208152771,
+    "neutral": 0.4582441449165344,
+    "positive": 0.023893801495432854
+   }
+  },
+  {
+   "id": "stock_205f00e051b3a56c",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3725951611995697,
+    "neutral": 0.6013814210891724,
+    "positive": 0.026023393496870995
+   }
+  },
+  {
+   "id": "stock_4ff018111dd96b7f",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.07904913276433945,
+    "neutral": 0.8073071241378784,
+    "positive": 0.11364369094371796
+   }
+  },
+  {
+   "id": "stock_d97567fde2a820a8",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5686330199241638,
+    "neutral": 0.4170137643814087,
+    "positive": 0.014353198930621147
+   }
+  },
+  {
+   "id": "stock_0b74c2fc9155f84a",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3086029887199402,
+    "neutral": 0.6589623093605042,
+    "positive": 0.03243470937013626
+   }
+  },
+  {
+   "id": "stock_a40fb10702fe7ad0",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3839675188064575,
+    "neutral": 0.5935894250869751,
+    "positive": 0.022443080320954323
+   }
+  },
+  {
+   "id": "stock_f33aba10e7063026",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.011528185568749905,
+    "neutral": 0.9389216899871826,
+    "positive": 0.04955010488629341
+   }
+  },
+  {
+   "id": "stock_ef63f69a82bfd270",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.12477078288793564,
+    "neutral": 0.829108476638794,
+    "positive": 0.04612073302268982
+   }
+  },
+  {
+   "id": "stock_38e96add91a15073",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014204079285264015,
+    "neutral": 0.8182821273803711,
+    "positive": 0.16751371324062347
+   }
+  },
+  {
+   "id": "stock_679458aa5985c9a2",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3051488697528839,
+    "neutral": 0.6754559278488159,
+    "positive": 0.019395258277654648
+   }
+  },
+  {
+   "id": "stock_ec6f1b2a3c596792",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014188338071107864,
+    "neutral": 0.8190549612045288,
+    "positive": 0.16675670444965363
+   }
+  },
+  {
+   "id": "stock_3539e0b08e48c973",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.4135661721229553,
+    "neutral": 0.5417382121086121,
+    "positive": 0.0446956604719162
+   }
+  },
+  {
+   "id": "stock_9edfb0eaa27f98fe",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.19537396728992462,
+    "neutral": 0.7200579643249512,
+    "positive": 0.08456813544034958
+   }
+  },
+  {
+   "id": "stock_406920aa2421e41e",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0119777275249362,
+    "neutral": 0.869985044002533,
+    "positive": 0.11803723871707916
+   }
+  },
+  {
+   "id": "stock_4fcafe1a3617fce8",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.010780075564980507,
+    "neutral": 0.7664863467216492,
+    "positive": 0.22273357212543488
+   }
+  },
+  {
+   "id": "stock_efe2ab17d875a299",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.0532018281519413,
+    "neutral": 0.8627824783325195,
+    "positive": 0.08401568979024887
+   }
+  },
+  {
+   "id": "stock_5c5e9d31c708d0e4",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6890913844108582,
+    "neutral": 0.27899038791656494,
+    "positive": 0.031918156892061234
+   }
+  },
+  {
+   "id": "stock_a0dc6be01a6e2a82",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.19063107669353485,
+    "neutral": 0.713476836681366,
+    "positive": 0.09589217603206635
+   }
+  },
+  {
+   "id": "stock_3fb2836b0735c8f3",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.030956771224737167,
+    "neutral": 0.28133031725883484,
+    "positive": 0.6877129077911377
+   }
+  },
+  {
+   "id": "stock_1ab8a584db903041",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.2189594954252243,
+    "neutral": 0.7214827537536621,
+    "positive": 0.05955779179930687
+   }
+  },
+  {
+   "id": "stock_7486d923b952ab2b",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5322141647338867,
+    "neutral": 0.45437169075012207,
+    "positive": 0.013414137065410614
+   }
+  },
+  {
+   "id": "stock_0ee427c0ad75b694",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.020369049161672592,
+    "neutral": 0.4484204947948456,
+    "positive": 0.5312104821205139
+   }
+  },
+  {
+   "id": "stock_8fe16e28721c3d3a",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9472988843917847,
+    "neutral": 0.0463128499686718,
+    "positive": 0.006388281472027302
+   }
+  },
+  {
+   "id": "stock_9a39a5ab0218761c",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00461299903690815,
+    "neutral": 0.04225753992795944,
+    "positive": 0.9531294703483582
+   }
+  },
+  {
+   "id": "stock_21743bea84972b33",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.25023236870765686,
+    "neutral": 0.39595696330070496,
+    "positive": 0.35381069779396057
+   }
+  },
+  {
+   "id": "stock_3d20a1f087000d5e",
+   "gold": "neutral",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.9286684989929199,
+    "neutral": 0.062284231185913086,
+    "positive": 0.009047172963619232
+   }
+  },
+  {
+   "id": "stock_3d2f054f77a6352b",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7142903208732605,
+    "neutral": 0.27573859691619873,
+    "positive": 0.009971107356250286
+   }
+  },
+  {
+   "id": "stock_92f5f45c85db26a7",
+   "gold": "neutral",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.023107321932911873,
+    "neutral": 0.18784266710281372,
+    "positive": 0.7890500426292419
+   }
+  },
+  {
+   "id": "stock_772457d968245e79",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.008735579438507557,
+    "neutral": 0.9247528910636902,
+    "positive": 0.0665115937590599
+   }
+  },
+  {
+   "id": "stock_65b90d5239073411",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7331226468086243,
+    "neutral": 0.2556524872779846,
+    "positive": 0.011224860325455666
+   }
+  },
+  {
+   "id": "stock_2a665d9d844d0ea4",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.01707431860268116,
+    "neutral": 0.6232231259346008,
+    "positive": 0.35970261693000793
+   }
+  },
+  {
+   "id": "stock_8c8955c35a24720b",
+   "gold": "positive",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.011073609814047813,
+    "neutral": 0.29350003600120544,
+    "positive": 0.695426344871521
+   }
+  },
+  {
+   "id": "stock_18034386455da415",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.014253194443881512,
+    "neutral": 0.6556904315948486,
+    "positive": 0.3300563395023346
+   }
+  },
+  {
+   "id": "stock_08dbe0b5f45aeda0",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.02964079938828945,
+    "neutral": 0.9263527989387512,
+    "positive": 0.04400638863444328
+   }
+  },
+  {
+   "id": "stock_e3e75d1789225e5c",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.5794352293014526,
+    "neutral": 0.3929813802242279,
+    "positive": 0.027583345770835876
+   }
+  },
+  {
+   "id": "stock_a4b7897cab817e1c",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.007998723536729813,
+    "neutral": 0.5446770191192627,
+    "positive": 0.44732430577278137
+   }
+  },
+  {
+   "id": "stock_5a4ec8391f9fe867",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.09022892266511917,
+    "neutral": 0.7165235280990601,
+    "positive": 0.19324754178524017
+   }
+  },
+  {
+   "id": "stock_c88ed4fa830e04b9",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.3277284801006317,
+    "neutral": 0.6485119462013245,
+    "positive": 0.023759547621011734
+   }
+  },
+  {
+   "id": "stock_83b35380f2404427",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012628039345145226,
+    "neutral": 0.8519668579101562,
+    "positive": 0.135405033826828
+   }
+  },
+  {
+   "id": "stock_9f5f6f41a38df3c7",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.45286086201667786,
+    "neutral": 0.5140902996063232,
+    "positive": 0.033048808574676514
+   }
+  },
+  {
+   "id": "stock_76297972438f1c7d",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.8675326704978943,
+    "neutral": 0.12324649840593338,
+    "positive": 0.00922082643955946
+   }
+  },
+  {
+   "id": "stock_28677b7aca7ef8fc",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.7580326795578003,
+    "neutral": 0.23268522322177887,
+    "positive": 0.00928203109651804
+   }
+  },
+  {
+   "id": "stock_06cfcf4f1628d309",
+   "gold": "negative",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6270692944526672,
+    "neutral": 0.3512883484363556,
+    "positive": 0.021642344072461128
+   }
+  },
+  {
+   "id": "stock_559014d5b440cb0a",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.016628531739115715,
+    "neutral": 0.5085586905479431,
+    "positive": 0.4748128652572632
+   }
+  },
+  {
+   "id": "stock_b081f0340a12e670",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.1956462860107422,
+    "neutral": 0.46765926480293274,
+    "positive": 0.33669447898864746
+   }
+  },
+  {
+   "id": "stock_5fbff48f72399885",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.006383886095136404,
+    "neutral": 0.912278413772583,
+    "positive": 0.08133772760629654
+   }
+  },
+  {
+   "id": "stock_ed18fdeb69968be8",
+   "gold": "negative",
+   "pred": "positive",
+   "probs": {
+    "negative": 0.00893805455416441,
+    "neutral": 0.19212760031223297,
+    "positive": 0.7989344000816345
+   }
+  },
+  {
+   "id": "stock_f9d0517c39d1e898",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.09214938431978226,
+    "neutral": 0.8174518346786499,
+    "positive": 0.09039872884750366
+   }
+  },
+  {
+   "id": "stock_e34575e5e29c9515",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.012524242512881756,
+    "neutral": 0.9445458650588989,
+    "positive": 0.04292996972799301
+   }
+  },
+  {
+   "id": "stock_3c78c8c68a994d1f",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.2713347375392914,
+    "neutral": 0.693939745426178,
+    "positive": 0.034725505858659744
+   }
+  },
+  {
+   "id": "stock_5be8fdbba2885381",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.08838330954313278,
+    "neutral": 0.6961838006973267,
+    "positive": 0.21543289721012115
+   }
+  },
+  {
+   "id": "stock_2c0316ef09c93772",
+   "gold": "neutral",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.023483578115701675,
+    "neutral": 0.8862155675888062,
+    "positive": 0.09030090272426605
+   }
+  },
+  {
+   "id": "stock_b88ec1ea0cf73f3d",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.04540394991636276,
+    "neutral": 0.7074264883995056,
+    "positive": 0.2471696436405182
+   }
+  },
+  {
+   "id": "stock_fe1a3f4ebe2e5e60",
+   "gold": "negative",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.22303010523319244,
+    "neutral": 0.7523747086524963,
+    "positive": 0.02459518238902092
+   }
+  },
+  {
+   "id": "stock_e9b564f998e40365",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.13210529088974,
+    "neutral": 0.841020941734314,
+    "positive": 0.026873720809817314
+   }
+  },
+  {
+   "id": "stock_3fd67f46486ac96b",
+   "gold": "positive",
+   "pred": "negative",
+   "probs": {
+    "negative": 0.6907916069030762,
+    "neutral": 0.29892367124557495,
+    "positive": 0.010284718126058578
+   }
+  },
+  {
+   "id": "stock_4c653da9566c7b7f",
+   "gold": "positive",
+   "pred": "neutral",
+   "probs": {
+    "negative": 0.1141945868730545,
+    "neutral": 0.846128523349762,
+    "positive": 0.039676934480667114
+   }
+  }
+ ]
+}

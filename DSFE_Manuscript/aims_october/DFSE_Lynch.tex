@@ -259,6 +259,11 @@ removal of 21 items judged unjudgeable or out of scope, the frozen benchmark
 contains 338 items (135 neutral, 122 positive, 81 negative; 108 Reddit, 115 news,
 115 Twitter), of which 66 are flagged as low-information factual filler and retained
 as neutral under the labelling rubric.
+Post timestamps (the stored publication time, present for all 338 items) span
+24 August 2017 to 13 August 2026: news items from 24 August 2017 to 15 July 2026,
+Reddit items from 8 February 2021 to 13 August 2026, and Twitter items from 3 January
+2022 to 6 April 2026. The class mix and ticker coverage per channel are reported in
+Table~\ref{tab:source}.
 
 Labels were assigned by model-assisted labelling under a written rubric (rubric
 v2), with human audit by one author (D.H.). The rubric defines sentiment as the
@@ -451,6 +456,13 @@ accuracy and 46.7\% macro-F1. Its macro-F1 is 3.1 points below stock FinBERT, bu
 item-level paired bootstrap does not distinguish the two (95\% CI $[-9.6, +3.4]$,
 $p = 0.36$), so we make no claim that FinBERT outperforms the baseline on this
 benchmark.
+As a stronger general-purpose baseline we also ran Twitter-RoBERTa
+(\texttt{cardiffnlp/twitter-roberta-base-sentiment-latest}), without fine-tuning and
+with the model card's preprocessing (user mentions and links replaced), on the same
+338 items. It reaches 56.8\% macro-F1 and 59.2\% accuracy, with positive, negative and
+neutral recall of 45.1\%, 40.7\% and 83.0\% (Table~\ref{tab:armres}). Its 7.0-point
+macro-F1 advantage over stock FinBERT is nominally significant (95\% CI $[+0.1, +14.0]$,
+unadjusted $p = 0.047$) but not after Holm correction ($p = 0.19$; Table~\ref{tab:boot}).
 
 \begin{table}[ht]
 \centering
@@ -487,15 +499,24 @@ True neutral  & 10 & 15 & \textbf{110} \\
 \end{table}
 
 \subsection{Explainability as hypothesis generation}
-LIME is used here to illustrate, not to establish, a candidate mechanism. Applied
-to unambiguous sentences, LIME assigns the highest weights to semantically
-appropriate tokens (``surged'', ``raised'', ``guidance'' for a positive prediction
-at 95\% confidence, Figure~\ref{fig:lime_pos}; ``decline'', ``sharp'', ``missing''
-for a negative prediction at 97.6\%, Figure~\ref{fig:lime_neg}). For the neutral
-sentence \emph{``The Federal Reserve kept interest rates unchanged, maintaining its
-cautious outlook on inflation.''}, FinBERT predicts \emph{negative} (55.9\%
-confidence), and LIME attributes this mainly to ``cautious'' and ``inflation'', words
-that signal risk in isolation but are contextually neutral here. These examples
+LIME is used here to illustrate, not to establish, a candidate mechanism. The
+positive and negative examples are drawn verbatim from the labelled evaluation set
+of the deployed system (\texttt{labeled\_dataset.py}); the neutral example is a
+variant of a neutral sentence in that set. Explanations use stock FinBERT with
+5{,}000 perturbation samples, whitespace tokens and a fixed random state, and show
+the eight highest-weighted tokens. Applied to unambiguous sentences, LIME assigns the
+highest weights to semantically appropriate tokens: ``surged'',
+``significantly'' and ``raised'' for a positive prediction at 95.0\% confidence
+(Figure~\ref{fig:lime_pos}), and ``layoffs'' and ``loss'' for a negative prediction
+at 96.9\% confidence (Figure~\ref{fig:lime_neg}). For the neutral sentence
+\emph{``The Federal Reserve kept interest rates unchanged, maintaining its cautious
+outlook on inflation.''}, FinBERT predicts \emph{negative} (55.9\% confidence,
+against 27.5\% for neutral), and LIME attributes this mainly to ``cautious'' and
+``inflation'', followed by ``outlook'' and ``unchanged'', words that signal risk in
+isolation but are contextually neutral here (Figure~\ref{fig:lime_neu}). This is the
+misclassified neutral example requested by Reviewer~2, and it shows the failure mode
+directly: risk-laden vocabulary pulls a factual policy statement away from neutral.
+These examples
 suggested the hypothesis that exposure to neutral text containing sentiment-loaded
 vocabulary would help more than exposure to neutral text in general. They are
 single, hand-chosen explanations, and the hypothesis is tested directly by the
@@ -506,17 +527,30 @@ comparison of arms (a) and (b) below.
 \includegraphics[width=\textwidth]{lime_positive.pdf}
 \caption{LIME token weights for a positive financial sentence (illustrative). Green
 bars indicate tokens supporting the \emph{positive} prediction; red bars indicate
-tokens pushing against it. FinBERT predicted \emph{positive} at 95\% confidence.}
+tokens pushing against it. Stock FinBERT predicted \emph{positive} at 95.0\%
+confidence; \emph{surged}, \emph{significantly} and \emph{raised} carry the largest
+weights.}
 \label{fig:lime_pos}
 \end{figure}
 
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{lime_negative.pdf}
-\caption{LIME token weights for a negative financial sentence (illustrative).
-FinBERT predicted \emph{negative} at 97.6\% confidence; \emph{decline},
-\emph{sharp} and \emph{missing} are the principal drivers.}
+\caption{LIME token weights for a negative financial sentence (illustrative):
+\emph{``Intel reported a massive quarterly loss of \$7 billion and announced 15,000
+layoffs.''} Stock FinBERT predicted \emph{negative} at 96.9\% confidence;
+\emph{layoffs} and \emph{loss} are the principal drivers.}
 \label{fig:lime_neg}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{lime_neutral.pdf}
+\caption{LIME token weights for a gold-neutral financial sentence that stock FinBERT
+misclassifies (illustrative). Stock FinBERT assigned 55.9\% probability to
+\emph{negative} against 27.5\% to \emph{neutral}; \emph{cautious} and
+\emph{inflation} are the top drivers towards the negative prediction.}
+\label{fig:lime_neu}
 \end{figure}
 
 \subsection{Fine-tuning arms on the benchmark}
@@ -529,12 +563,19 @@ negative recall and lowers neutral recall from the stock 81.5\%, to 47.7\% (a), 
 76.8\% respectively. The arms predict neutral for 102.6 (a), 128.0 (b) and 46.8 (c)
 items on average, against 135 gold neutral items and 228 for stock FinBERT. Arm (c)
 is also the least stable across seeds (macro-F1 standard deviation 3.7 points).
+The off-the-shelf Twitter-RoBERTa baseline (56.8\%) does not beat the two best
+fine-tuned arms: it is 2.3 points below arm (a) and 3.9 points below arm (b), and 3.4
+points above arm (c), but none of these differences is statistically distinguishable
+(95\% CIs $[-8.8, +4.2]$, $[-10.1, +2.3]$ and $[-3.2, +10.1]$; Holm $p = 0.67$ for each;
+Table~\ref{tab:boot}). Domain fine-tuning of FinBERT therefore matches, but is not
+shown to exceed, a general social-media sentiment model.
 
 \begin{table}[ht]
 \centering
 \caption{Fine-tuned FinBERT on the 338-item benchmark: mean $\pm$ standard deviation
 over five seeds, with 95\% $t$-intervals for macro-F1 and accuracy. Stock FinBERT
-shown for reference.}
+shown for reference, with the off-the-shelf Twitter-RoBERTa baseline (single
+deterministic run).}
 \label{tab:armres}
 \small
 \begin{tabular}{lccccc}
@@ -542,6 +583,7 @@ shown for reference.}
 \textbf{Model} & \textbf{Macro-F1} & \textbf{Accuracy} & \textbf{Rec.\ pos.} & \textbf{Rec.\ neg.} & \textbf{Rec.\ neu.} \\
 \midrule
 Stock & 49.8\% & 53.0\% & 28.7\% & 42.0\% & 81.5\% \\
+Twitter-RoBERTa & 56.8\% & 59.2\% & 45.1\% & 40.7\% & 83.0\% \\
 (a) Lexicon-loaded & $59.1 \pm 0.9$ [58.0, 60.3] & $58.9 \pm 0.9$ [57.9, 60.0] & $63.3 \pm 2.3$ & $71.1 \pm 2.4$ & $47.7 \pm 4.0$ \\
 (b) Random-neutral & $60.7 \pm 1.5$ [58.9, 62.6] & $60.8 \pm 1.5$ [59.0, 62.6] & $53.1 \pm 5.4$ & $72.8 \pm 1.5$ & $60.6 \pm 1.7$ \\
 (c) Mixed & $53.4 \pm 3.7$ [48.8, 58.0] & $55.0 \pm 2.8$ [51.5, 58.5] & $68.4 \pm 7.2$ & $82.2 \pm 2.4$ & $26.5 \pm 9.0$ \\
@@ -570,7 +612,8 @@ are thus clearer when seeds are pooled than for any individual run.
 \centering
 \caption{Item-level paired bootstrap of seed-averaged macro-F1 on the benchmark
 ($B = 10{,}000$; differences in percentage points; Holm correction over the six
-comparisons).}
+comparisons in the upper block; the Twitter-RoBERTa comparisons in the lower block
+form a separate family of four).}
 \label{tab:boot}
 \begin{tabular}{lccc}
 \toprule
@@ -582,6 +625,77 @@ comparisons).}
 (a) vs (b) & $-1.6$ & $[-5.0, +1.7]$ & 0.514 \\
 (a) vs (c) & $+5.7$ & $[+2.0, +9.6]$ & 0.012 \\
 (b) vs (c) & $+7.4$ & $[+3.5, +11.4]$ & 0.004 \\
+\midrule
+Twitter-RoBERTa vs stock & $+7.0$ & $[+0.1, +14.0]$ & 0.190 \\
+Twitter-RoBERTa vs (a) & $-2.3$ & $[-8.8, +4.2]$ & 0.672 \\
+Twitter-RoBERTa vs (b) & $-3.9$ & $[-10.1, +2.3]$ & 0.672 \\
+Twitter-RoBERTa vs (c) & $+3.4$ & $[-3.2, +10.1]$ & 0.672 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:source} breaks the benchmark down by channel. The channels differ
+in class mix (news is 57\% neutral, Twitter 24\%) and in ticker concentration (the
+five most frequent tickers cover 48\% of news items but 24\% of Twitter items).
+Stock FinBERT and the keyword baseline are strongest on news and weakest on Twitter,
+and the fine-tuning gains are concentrated on Twitter, where arms (a) and (b) reach
+63.5\% and 63.3\% macro-F1 against 39.9\% for stock; on news only arm (b) exceeds
+stock, and on Reddit no system exceeds 52\%. Each channel has only 108--115 items,
+with 17 to 29 items in the smallest class, so these per-channel figures are
+descriptive and were not tested for significance.
+
+\begin{table}[ht]
+\centering
+\caption{Benchmark composition and macro-F1 (\%) by channel. Arms are means over five
+seeds. Tickers are the stored ticker tag; every item has one. Per-channel macro-F1 is
+descriptive only (small $n$, no significance tests).}
+\label{tab:source}
+\small
+\begin{tabular}{lcccc}
+\toprule
+ & \textbf{News} & \textbf{Reddit} & \textbf{Twitter} & \textbf{All} \\
+\midrule
+Items (pos / neg / neu) & 32 / 17 / 66 & 38 / 29 / 41 & 52 / 35 / 28 & 122 / 81 / 135 \\
+Post dates & 2017-08 -- 2026-07 & 2021-02 -- 2026-08 & 2022-01 -- 2026-04 & 2017-08 -- 2026-08 \\
+Distinct tickers & 49 & 47 & 79 & 152 \\
+Top-5 ticker share & 47.8\% & 38.0\% & 24.3\% & 20.1\% \\
+\midrule
+Stock FinBERT & 67.7 & 42.4 & 39.9 & 49.8 \\
+(a) Lexicon-loaded & 60.8 & 48.6 & 63.5 & 59.1 \\
+(b) Random-neutral & 70.7 & 43.8 & 63.3 & 60.7 \\
+(c) Mixed & 57.0 & 46.2 & 48.1 & 53.4 \\
+Twitter-RoBERTa & 62.4 & 51.7 & 51.4 & 56.8 \\
+Keyword baseline & 64.3 & 40.2 & 35.5 & 46.7 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:neuerr} aggregates the errors that involve the neutral class.
+Stock FinBERT and Twitter-RoBERTa err mainly by absorbing polar items into neutral
+(118 and 102 such errors), and their few errors on gold-neutral items lean slightly
+negative (15 vs 10 and 14 vs 9). Fine-tuning reverses the direction: errors into
+neutral fall to 38.2 (a), 46.2 (b) and 11.0 (c), while gold-neutral items are pushed
+out of neutral, mostly towards positive for arms (a) and (c) (45.4 and 59.6 items)
+and about equally in both directions for arm (b) (27.0 negative, 26.2 positive).
+
+\begin{table}[ht]
+\centering
+\caption{Neutral-related error counts on the benchmark (135 gold-neutral, 122
+positive, 81 negative items). Arms are means over five seeds.}
+\label{tab:neuerr}
+\small
+\begin{tabular}{lcccccc}
+\toprule
+ & \multicolumn{3}{c}{\textbf{Gold neutral predicted as}} & \multicolumn{2}{c}{\textbf{Into neutral}} & \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-6}
+\textbf{Model} & \textbf{neu} & \textbf{neg} & \textbf{pos} & \textbf{pos$\to$neu} & \textbf{neg$\to$neu} & \textbf{pos$\leftrightarrow$neg} \\
+\midrule
+Stock FinBERT & 110 & 15 & 10 & 74 & 44 & 16 \\
+(a) Lexicon-loaded & 64.4 & 25.2 & 45.4 & 24.0 & 14.2 & 30.0 \\
+(b) Random-neutral & 81.8 & 27.0 & 26.2 & 32.2 & 14.0 & 33.0 \\
+(c) Mixed & 35.8 & 39.6 & 59.6 & 8.0 & 3.0 & 42.0 \\
+Twitter-RoBERTa & 112 & 14 & 9 & 61 & 41 & 13 \\
+Keyword baseline & 91 & 25 & 19 & 64 & 34 & 31 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -652,15 +766,19 @@ as an honest null or modest result rather than selecting favourable windows.
 Because no public benchmark annotates financial text at this emotion granularity, an
 accuracy evaluation is not possible; we instead ran a component-contribution
 ablation measuring how often removing a component flips the dominant emotion label on
-the original 200-item development benchmark. The domain lexicon is load-bearing (16.0\% of labels change
-when it is removed; all samples collapse to ``mixed''), whereas zeroing the entropy
-term flips no labels, an honest negative finding indicating the entropy component
-requires re-tuning. The enrichment layer is therefore reported as deployed but only
+the frozen 338-item benchmark, with FinBERT class probabilities supplied to the
+taxonomy. Zeroing the entropy term changes 36.1\% of labels (122/338), whereas
+removing the domain lexicon changes 2.1\% (7/338). Under the full configuration the
+labels are dominated by ``uncertainty'' (250/338). An earlier version of this ablation
+did not pass the class probabilities to the taxonomy; this has been corrected. Because no
+emotion ground truth is available, these figures measure each component's influence,
+not its accuracy, and the enrichment layer is therefore reported as deployed but only
 partially validated.
 
 \paragraph{System performance.}
-FinBERT batch inference required 2.15~s for the 200 items of the original development benchmark ($\approx$11~ms per text);
-the keyword baseline was effectively instantaneous; LIME explanations took 15 to
+FinBERT batch inference required 7.7~s for the 338 benchmark items ($\approx$23~ms per
+text; median of five runs, batch size 32, 8-thread CPU, no GPU);
+the keyword baseline was effectively instantaneous ($<$5~ms for all 338 items); LIME explanations took 15 to
 40~s, consistent with an on-demand rather than bulk feature.
 
 % =====================================================================
@@ -701,7 +819,7 @@ reported together with out-of-domain checks.
 \subsection{Threats to validity and limitations}
 We state limitations plainly. (i)~\emph{Label provenance.} Benchmark and training
 labels were produced by model-assisted labelling under a written rubric, with human
-audit by one author. Audit agreement was substantial ($\kappa = 0.807$ on 31
+audit by one author. Audit agreement was substantial \citep{landis1977} ($\kappa = 0.807$ on 31
 held-out reserve items) and neutral precision in the training pool was 23/29 on a 30-item blind
 check, but these audits are small and the labels are not a multi-annotator
 consensus. Systematic labelling conventions are shared by the benchmark and the
@@ -767,15 +885,15 @@ against matched controls and reporting paired significance tests.
 Future work follows directly from the limitations. The most valuable next steps are
 (i)~independent multi-annotator labelling of the benchmark and training data;
 (ii)~multi-seed out-of-domain evaluation and adaptation methods that limit
-out-of-domain loss; (iii)~re-running the keyword baseline and extending the
-comparison to current financial LLMs \citep{wu2023,fatouros2023}; (iv)~constructing
+out-of-domain loss; (iii)~extending the baseline comparison beyond the
+keyword lexicon and Twitter-RoBERTa to current financial LLMs \citep{wu2023,fatouros2023}; (iv)~constructing
 an annotated financial-emotion corpus to evaluate the enrichment layer formally; and
 (v)~feeding the resulting multi-source sentiment signal into hybrid temporal graph
 models for price prediction \citep{lynch2025}.
 
 \paragraph{Reproducibility.}\label{sec:reprod}
-The analysis code accompanies this submission (see the Data availability
-statement). It comprises the benchmark sampling scripts and the frozen 338-item
+The analysis code is available from the authors on reasonable request (see the Data
+availability statement). It comprises the benchmark sampling scripts and the frozen 338-item
 benchmark with its labels; the build script and manifests for the three 900-item
 training arms; the fine-tuning runner and batch driver used for the 15 runs (three
 arms $\times$ five seeds, 13, 21, 42, 84 and 168), whose per-run outputs record the
@@ -787,7 +905,11 @@ News evaluation scripts and outputs; the keyword-baseline run on the benchmark; 
 locked list of CPU package versions. Model checkpoints are saved for the three
 retrained models used in the out-of-domain evaluations (arms (a) and (b), seed 84;
 arm (c), seed 21), which reproduced their original benchmark predictions exactly;
-checkpoints for the remaining runs were not retained.
+checkpoints for the remaining runs were not retained. Also included are the
+Twitter-RoBERTa baseline (\texttt{results\_v2/twitter\_roberta\_baseline/run\_twitter\_roberta.py}),
+the LIME rerun (\texttt{results\_v2/lime\_v2/run\_lime\_v2.py}), the per-source and
+neutral-error analyses (\texttt{results\_v2/partial\_items/run\_partial\_items.py}) and the
+enrichment ablation and timing rerun (\texttt{results\_v2/enrichment\_timing\_v2/run\_enrichment\_timing\_v2.py}).
 
 % =====================================================================
 %  DECLARATIONS
@@ -799,22 +921,28 @@ supervision, validation, writing -- review and editing. Both authors have read a
 approved the final version of the manuscript.
 
 \section*{Use of Generative-AI tools declaration}
-The authors used a generative AI assistant (Anthropic Claude) in two ways. First,
-as part of the research method, the model was used as an independent second
-annotator to cross-validate the labels of the 200-sample evaluation benchmark
-(Section~\ref{sec:benchmark}); it received only the raw texts and the labelling
-rubric, with no access to the authors' own labels. Second, in preparing this
-manuscript, the authors used the same assistant to help edit and tighten their own
-drafts. The authors designed the study, produced and verified all data, results,
-analyses and conclusions, reviewed all generated text, and take full
-responsibility for the content. No AI tool is listed as an author. The Assistive-AI
-language tools noted in the journal's instructions (grammar and spelling checkers)
-are not generative tools and are not within the scope of this declaration.
+Generative AI models were used as part of the research method, to assign sentiment
+labels under the written rubric v2 (Section~\ref{sec:benchmark}). The labels of the
+338-item evaluation benchmark were produced by Anthropic Claude (claude-opus-5-5).
+The labels of the 2{,}300-item fine-tuning candidate pool (Section~\ref{sec:ftcorpus})
+were produced by OpenAI GPT-6 Astra (gpt-6-astra, high reasoning effort), except one
+batch of 50 items, which was produced by OpenAI gpt-6.1-sol (high reasoning effort).
+In both cases the models were not shown FinBERT outputs or any human labels. One author (D.H.) audited the labels. For the benchmark, he
+reviewed labels during rubric development and labelled a held-out reserve set,
+with Cohen's $\kappa = 0.807$ (87.1\% agreement) on its 31 classifiable items; items
+he judged unjudgeable were removed. For the fine-tuning pool, he blind-relabelled
+30 model-neutral items (23/30 agreement; neutral precision 0.793). No item-level
+label overrides were recorded, so all retained labels are the model labels. The
+authors also used AI assistants to help write analysis scripts and to edit the
+manuscript text; all code, outputs and text were checked by the authors. The
+authors designed the study, verified all results and conclusions, and take full
+responsibility for the content. No AI tool is listed as an author. Assistive-AI
+language tools (grammar and spelling checkers) are not generative tools and are not
+within the scope of this declaration.
 
 \section*{Acknowledgments}
 The authors thank the finance and technology practitioners who provided
-requirements input, and the volunteer annotator who contributed to benchmark
-validation. This research did not receive any specific grant
+requirements input. This research did not receive any specific grant
 from funding agencies in the public, commercial, or not-for-profit sectors. The
 Article Processing Charge is covered by Guangzhou University.
 
@@ -827,10 +955,7 @@ ethical framework, this use of secondary, publicly available data did not requir
 formal ethical review. The wider project, including its human-participant component,
 received a favourable ethical opinion from the Loughborough University Ethics Review
 Sub-Committee through the University's ethical review system, with one of the
-authors (S.L.) as the named responsible investigator. The volunteer who provided
-independent annotations for
-benchmark validation took part with informed consent and contributed only sentiment
-labels; no personal data were collected from that individual.
+authors (S.L.) as the named responsible investigator.
 
 \section*{Conflict of interest}
 All authors declare no conflicts of interest in this paper.
@@ -930,11 +1055,6 @@ algorithms.
 \newblock Transforming sentiment analysis in the financial domain with
   {ChatGPT}.
 \newblock {\em Machine Learning with Applications} 14 (2023), 100508. \doilink{https://doi.org/10.1016/j.mlwa.2023.100508}
-
-\bibitem[Fleiss(1971)]{fleiss1971}
-\newblock Fleiss JL (1971)
-\newblock Measuring nominal scale agreement among many raters.
-\newblock {\em Psychological Bulletin} 76: 378--382. \doilink{https://doi.org/10.1037/h0031619}
 
 \bibitem[Garcia(2013)]{garcia2013}
 \newblock Garcia D (2013)

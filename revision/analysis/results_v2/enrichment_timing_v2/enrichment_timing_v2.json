@@ -1,0 +1,91 @@
+{
+  "ablation": {
+    "corrected": {
+      "n": 338,
+      "distribution": {
+        "full": {
+          "fear": 35,
+          "uncertainty": 250,
+          "optimism": 26,
+          "mixed": 27
+        },
+        "no_entropy": {
+          "fear": 74,
+          "mixed": 40,
+          "uncertainty": 153,
+          "optimism": 71
+        },
+        "no_lexicon": {
+          "fear": 35,
+          "uncertainty": 251,
+          "optimism": 26,
+          "mixed": 26
+        }
+      },
+      "change_fraction_vs_full": {
+        "no_entropy": 0.3609467455621302,
+        "no_lexicon": 0.020710059171597635
+      },
+      "change_count_vs_full": {
+        "no_entropy": 122,
+        "no_lexicon": 7
+      }
+    },
+    "as_coded": {
+      "n": 338,
+      "distribution": {
+        "full": {
+          "mixed": 277,
+          "optimism": 28,
+          "fear": 19,
+          "uncertainty": 8,
+          "confidence": 6
+        },
+        "no_entropy": {
+          "mixed": 277,
+          "optimism": 28,
+          "fear": 19,
+          "uncertainty": 8,
+          "confidence": 6
+        },
+        "no_lexicon": {
+          "mixed": 338
+        }
+      },
+      "change_fraction_vs_full": {
+        "no_entropy": 0.0,
+        "no_lexicon": 0.1804733727810651
+      },
+      "change_count_vs_full": {
+        "no_entropy": 0,
+        "no_lexicon": 61
+      }
+    }
+  },
+  "timing": {
+    "n": 338,
+    "finbert_runs_s": [
+      7.897243976593018,
+      7.902065992355347,
+      7.373577833175659,
+      7.720457553863525,
+      7.73410701751709
+    ],
+    "finbert_median_s": 7.73410701751709,
+    "finbert_ms_per_text": 22.881973424606773,
+    "keyword_runs_s": [
+      0.004120588302612305,
+      0.003085613250732422,
+      0.0024535655975341797,
+      0.0024907588958740234,
+      0.002454519271850586
+    ],
+    "keyword_median_s": 0.0024907588958740234,
+    "hardware": {
+      "platform": "Linux-6.12.94+-x86_64-with-glibc2.41",
+      "cpu_threads": 8,
+      "device": "cpu",
+      "torch": "2.14.1+cpu"
+    }
+  }
+}

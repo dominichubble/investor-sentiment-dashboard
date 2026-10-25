@@ -1,0 +1,240 @@
+{
+ "settings": {
+  "model": "ProsusAI/finbert",
+  "num_samples": 5000,
+  "num_features": 8,
+  "random_state": 42,
+  "split_expression": "\\s+",
+  "bow": false,
+  "class_order": [
+   "positive",
+   "negative",
+   "neutral"
+  ],
+  "lime_version": "0.2.0.1",
+  "torch": "2.2.2"
+ },
+ "stock": {
+  "positive": {
+   "text": "NVIDIA shares surged 12% after the company raised its full-year guidance significantly.",
+   "probs": {
+    "positive": 0.9496434330940247,
+    "negative": 0.0235658697783947,
+    "neutral": 0.026790764182806015
+   },
+   "pred": "positive",
+   "confidence": 0.9496434330940247,
+   "weights": [
+    [
+     "surged",
+     0.30393502988885074
+    ],
+    [
+     "significantly.",
+     0.27706236651988203
+    ],
+    [
+     "raised",
+     0.13407997633843077
+    ],
+    [
+     "12%",
+     0.10382728138240795
+    ],
+    [
+     "full-year",
+     0.05390838454533789
+    ],
+    [
+     "its",
+     0.045040119009902096
+    ],
+    [
+     "shares",
+     0.039550820013078636
+    ],
+    [
+     "guidance",
+     0.03712925034501545
+    ]
+   ]
+  },
+  "negative": {
+   "text": "Intel reported a massive quarterly loss of $7 billion and announced 15,000 layoffs.",
+   "probs": {
+    "positive": 0.006806233432143927,
+    "negative": 0.9687281250953674,
+    "neutral": 0.024465709924697876
+   },
+   "pred": "negative",
+   "confidence": 0.9687281250953674,
+   "weights": [
+    [
+     "layoffs.",
+     0.39653809881824015
+    ],
+    [
+     "loss",
+     0.26521925157660325
+    ],
+    [
+     "quarterly",
+     0.05943157462296403
+    ],
+    [
+     "reported",
+     0.029950634396830694
+    ],
+    [
+     "massive",
+     0.01976249506308209
+    ],
+    [
+     "of",
+     0.019024442325281686
+    ],
+    [
+     "Intel",
+     0.015693786422278762
+    ],
+    [
+     "15,000",
+     0.015636897634209466
+    ]
+   ]
+  },
+  "neutral": {
+   "text": "The Federal Reserve kept interest rates unchanged, maintaining its cautious outlook on inflation.",
+   "probs": {
+    "positive": 0.165867418050766,
+    "negative": 0.5590300559997559,
+    "neutral": 0.27510252594947815
+   },
+   "pred": "negative",
+   "confidence": 0.5590300559997559,
+   "weights": [
+    [
+     "cautious",
+     0.17430827849815062
+    ],
+    [
+     "inflation.",
+     0.1431674875491489
+    ],
+    [
+     "outlook",
+     0.09970429904486738
+    ],
+    [
+     "unchanged,",
+     0.09369129705425382
+    ],
+    [
+     "maintaining",
+     -0.08150285555072163
+    ],
+    [
+     "rates",
+     0.06511299006473224
+    ],
+    [
+     "Reserve",
+     0.05325423471120832
+    ],
+    [
+     "Federal",
+     0.03260325507259898
+    ]
+   ]
+  }
+ },
+ "checkpoints": {
+  "arm_a_seed84": {
+   "positive": {
+    "probs": {
+     "positive": 0.9480761289596558,
+     "negative": 0.01899460144340992,
+     "neutral": 0.03292923420667648
+    },
+    "pred": "positive",
+    "confidence": 0.9480761289596558
+   },
+   "negative": {
+    "probs": {
+     "positive": 0.007474861107766628,
+     "negative": 0.9486992955207825,
+     "neutral": 0.043825916945934296
+    },
+    "pred": "negative",
+    "confidence": 0.9486992955207825
+   },
+   "neutral": {
+    "probs": {
+     "positive": 0.18897274136543274,
+     "negative": 0.4481813311576843,
+     "neutral": 0.3628459870815277
+    },
+    "pred": "negative",
+    "confidence": 0.4481813311576843
+   }
+  },
+  "arm_b_seed84": {
+   "positive": {
+    "probs": {
+     "positive": 0.9466922879219055,
+     "negative": 0.023091642186045647,
+     "neutral": 0.030216073617339134
+    },
+    "pred": "positive",
+    "confidence": 0.9466922879219055
+   },
+   "negative": {
+    "probs": {
+     "positive": 0.007239010185003281,
+     "negative": 0.9448124170303345,
+     "neutral": 0.04794851318001747
+    },
+    "pred": "negative",
+    "confidence": 0.9448124170303345
+   },
+   "neutral": {
+    "probs": {
+     "positive": 0.0879325270652771,
+     "negative": 0.76085364818573,
+     "neutral": 0.15121380984783173
+    },
+    "pred": "negative",
+    "confidence": 0.76085364818573
+   }
+  },
+  "arm_c_seed21": {
+   "positive": {
+    "probs": {
+     "positive": 0.9321982860565186,
+     "negative": 0.033836767077445984,
+     "neutral": 0.03396497666835785
+    },
+    "pred": "positive",
+    "confidence": 0.9321982860565186
+   },
+   "negative": {
+    "probs": {
+     "positive": 0.0070776198990643024,
+     "negative": 0.9655222296714783,
+     "neutral": 0.02740013599395752
+    },
+    "pred": "negative",
+    "confidence": 0.9655222296714783
+   },
+   "neutral": {
+    "probs": {
+     "positive": 0.13863936066627502,
+     "negative": 0.7992029190063477,
+     "neutral": 0.06215772405266762
+    },
+    "pred": "negative",
+    "confidence": 0.7992029190063477
+   }
+  }
+ }
+}

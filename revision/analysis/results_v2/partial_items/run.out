@@ -1,0 +1,617 @@
+{
+ "note": "'source' grouped by 'channel' (3 values); 39 fine-grained 'source' values listed under sub_sources. Timestamps are 'published_at' as stored.",
+ "models_included": [
+  "stock",
+  "arm_a",
+  "arm_b",
+  "arm_c",
+  "twitter_roberta",
+  "keyword"
+ ],
+ "keyword_item_predictions_available": true,
+ "description": {
+  "all": {
+   "n": 338,
+   "labels": {
+    "positive": 122,
+    "negative": 81,
+    "neutral": 135
+   },
+   "ts_min": "2017-08-24 00:00:00",
+   "ts_max": "2026-08-13 22:20:09",
+   "n_missing_ts": 0,
+   "n_distinct_tickers": 152,
+   "share_no_ticker": 0.0,
+   "top5_tickers": [
+    [
+     "SPY",
+     17
+    ],
+    [
+     "A",
+     15
+    ],
+    [
+     "COIN",
+     14
+    ],
+    [
+     "AAP",
+     12
+    ],
+    [
+     "NVDA",
+     10
+    ]
+   ],
+   "share_top5": 0.20118343195266272,
+   "share_top1": 0.05029585798816568,
+   "sub_sources": [
+    [
+     "hf_financial_tweets",
+     115
+    ],
+    [
+     "seeking alpha",
+     35
+    ],
+    [
+     "zacks",
+     34
+    ],
+    [
+     "gurufocus",
+     27
+    ],
+    [
+     "wallstreetbets",
+     26
+    ],
+    [
+     "bitcoin",
+     9
+    ],
+    [
+     "cryptocurrency",
+     9
+    ],
+    [
+     "investor's business daily",
+     6
+    ],
+    [
+     "options",
+     6
+    ],
+    [
+     "stocks",
+     6
+    ],
+    [
+     "cryptomarkets",
+     5
+    ],
+    [
+     "investing",
+     5
+    ],
+    [
+     "fortune",
+     5
+    ],
+    [
+     "stockmarket",
+     5
+    ],
+    [
+     "coveredcalls",
+     5
+    ],
+    [
+     "business insider",
+     4
+    ],
+    [
+     "forex",
+     3
+    ],
+    [
+     "superstonk",
+     3
+    ],
+    [
+     "daytrading",
+     3
+    ],
+    [
+     "shortsqueeze",
+     2
+    ],
+    [
+     "indianstreetbets",
+     2
+    ],
+    [
+     "dividends",
+     2
+    ],
+    [
+     "swingtrading",
+     2
+    ],
+    [
+     "investmentclub",
+     2
+    ],
+    [
+     "talkmarkets",
+     2
+    ],
+    [
+     "thetagang",
+     2
+    ],
+    [
+     "economics",
+     1
+    ],
+    [
+     "finance",
+     1
+    ],
+    [
+     "mutualfunds",
+     1
+    ],
+    [
+     "leaps",
+     1
+    ],
+    [
+     "canadianinvestor",
+     1
+    ],
+    [
+     "finance.yahoo.com",
+     1
+    ],
+    [
+     "etfs",
+     1
+    ],
+    [
+     "gme",
+     1
+    ],
+    [
+     "ausfinance",
+     1
+    ],
+    [
+     "ethereum",
+     1
+    ],
+    [
+     "commercialrealestate",
+     1
+    ],
+    [
+     "bloomberg",
+     1
+    ],
+    [
+     "amcstock",
+     1
+    ]
+   ],
+   "low_information": 66
+  },
+  "news": {
+   "n": 115,
+   "labels": {
+    "positive": 32,
+    "negative": 17,
+    "neutral": 66
+   },
+   "ts_min": "2017-08-24 00:00:00",
+   "ts_max": "2026-07-15 19:08:55",
+   "n_missing_ts": 0,
+   "n_distinct_tickers": 49,
+   "share_no_ticker": 0.0,
+   "top5_tickers": [
+    [
+     "A",
+     15
+    ],
+    [
+     "AAP",
+     12
+    ],
+    [
+     "AA",
+     10
+    ],
+    [
+     "ABR",
+     10
+    ],
+    [
+     "ABBV",
+     8
+    ]
+   ],
+   "share_top5": 0.4782608695652174,
+   "share_top1": 0.13043478260869565,
+   "sub_sources": [
+    [
+     "seeking alpha",
+     35
+    ],
+    [
+     "zacks",
+     34
+    ],
+    [
+     "gurufocus",
+     27
+    ],
+    [
+     "investor's business daily",
+     6
+    ],
+    [
+     "fortune",
+     5
+    ],
+    [
+     "business insider",
+     4
+    ],
+    [
+     "talkmarkets",
+     2
+    ],
+    [
+     "finance.yahoo.com",
+     1
+    ],
+    [
+     "bloomberg",
+     1
+    ]
+   ],
+   "low_information": 53
+  },
+  "reddit": {
+   "n": 108,
+   "labels": {
+    "positive": 38,
+    "negative": 29,
+    "neutral": 41
+   },
+   "ts_min": "2021-02-08 22:49:17",
+   "ts_max": "2026-08-13 22:20:09",
+   "n_missing_ts": 0,
+   "n_distinct_tickers": 47,
+   "share_no_ticker": 0.0,
+   "top5_tickers": [
+    [
+     "COIN",
+     11
+    ],
+    [
+     "ETH",
+     10
+    ],
+    [
+     "NVDA",
+     9
+    ],
+    [
+     "BTC",
+     6
+    ],
+    [
+     "GOLD",
+     5
+    ]
+   ],
+   "share_top5": 0.37962962962962965,
+   "share_top1": 0.10185185185185185,
+   "sub_sources": [
+    [
+     "wallstreetbets",
+     26
+    ],
+    [
+     "bitcoin",
+     9
+    ],
+    [
+     "cryptocurrency",
+     9
+    ],
+    [
+     "options",
+     6
+    ],
+    [
+     "stocks",
+     6
+    ],
+    [
+     "cryptomarkets",
+     5
+    ],
+    [
+     "investing",
+     5
+    ],
+    [
+     "stockmarket",
+     5
+    ],
+    [
+     "coveredcalls",
+     5
+    ],
+    [
+     "forex",
+     3
+    ],
+    [
+     "superstonk",
+     3
+    ],
+    [
+     "daytrading",
+     3
+    ],
+    [
+     "shortsqueeze",
+     2
+    ],
+    [
+     "indianstreetbets",
+     2
+    ],
+    [
+     "dividends",
+     2
+    ],
+    [
+     "swingtrading",
+     2
+    ],
+    [
+     "investmentclub",
+     2
+    ],
+    [
+     "thetagang",
+     2
+    ],
+    [
+     "economics",
+     1
+    ],
+    [
+     "finance",
+     1
+    ],
+    [
+     "mutualfunds",
+     1
+    ],
+    [
+     "leaps",
+     1
+    ],
+    [
+     "canadianinvestor",
+     1
+    ],
+    [
+     "etfs",
+     1
+    ],
+    [
+     "gme",
+     1
+    ],
+    [
+     "ausfinance",
+     1
+    ],
+    [
+     "ethereum",
+     1
+    ],
+    [
+     "commercialrealestate",
+     1
+    ],
+    [
+     "amcstock",
+     1
+    ]
+   ],
+   "low_information": 7
+  },
+  "twitter": {
+   "n": 115,
+   "labels": {
+    "positive": 52,
+    "negative": 35,
+    "neutral": 28
+   },
+   "ts_min": "2022-01-03 23:45:57.442000",
+   "ts_max": "2026-04-06 15:30:27.467696",
+   "n_missing_ts": 0,
+   "n_distinct_tickers": 79,
+   "share_no_ticker": 0.0,
+   "top5_tickers": [
+    [
+     "SPY",
+     12
+    ],
+    [
+     "ES",
+     6
+    ],
+    [
+     "QQQ",
+     4
+    ],
+    [
+     "COIN",
+     3
+    ],
+    [
+     "TSLA",
+     3
+    ]
+   ],
+   "share_top5": 0.24347826086956523,
+   "share_top1": 0.10434782608695652,
+   "sub_sources": [
+    [
+     "hf_financial_tweets",
+     115
+    ]
+   ],
+   "low_information": 6
+  }
+ },
+ "macro_f1_by_channel": {
+  "stock": {
+   "all": 0.4977832624891449,
+   "news": 0.6770037421209146,
+   "reddit": 0.42371479354662284,
+   "twitter": 0.39903493236826576
+  },
+  "arm_a": {
+   "all": 0.5912769914305223,
+   "news": 0.6076715183129554,
+   "reddit": 0.48612409783604543,
+   "twitter": 0.6346954049163402
+  },
+  "arm_b": {
+   "all": 0.6074450263309644,
+   "news": 0.7073213179946872,
+   "reddit": 0.4377825016133855,
+   "twitter": 0.6328381734241599
+  },
+  "arm_c": {
+   "all": 0.5338843852065595,
+   "news": 0.5696146045041957,
+   "reddit": 0.4616934385695407,
+   "twitter": 0.4814061020989218
+  },
+  "twitter_roberta": {
+   "all": 0.5681064369498618,
+   "news": 0.6241899221977824,
+   "reddit": 0.5166142297289839,
+   "twitter": 0.5137344619842904
+  },
+  "keyword": {
+   "all": 0.46654104396794455,
+   "news": 0.6427926884424882,
+   "reddit": 0.4021270631440123,
+   "twitter": 0.3553876971598491
+  }
+ },
+ "macro_f1_sd_over_seeds": {
+  "stock": {
+   "all": null,
+   "news": null,
+   "reddit": null,
+   "twitter": null
+  },
+  "arm_a": {
+   "all": 0.009045202003965306,
+   "news": 0.01730610822767427,
+   "reddit": 0.028387939057447145,
+   "twitter": 0.007601592039082464
+  },
+  "arm_b": {
+   "all": 0.014967965457349956,
+   "news": 0.017052291275813303,
+   "reddit": 0.019932595111434397,
+   "twitter": 0.03163491252088126
+  },
+  "arm_c": {
+   "all": 0.03724644451885868,
+   "news": 0.07526645243166628,
+   "reddit": 0.019777158087367658,
+   "twitter": 0.013695387653673235
+  },
+  "twitter_roberta": {
+   "all": null,
+   "news": null,
+   "reddit": null,
+   "twitter": null
+  },
+  "keyword": {
+   "all": null,
+   "news": null,
+   "reddit": null,
+   "twitter": null
+  }
+ },
+ "error_flows_counts": {
+  "stock": {
+   "positive->neutral": 74.0,
+   "negative->neutral": 44.0,
+   "neutral->positive": 10.0,
+   "neutral->negative": 15.0,
+   "neutral_correct": 110.0,
+   "pos<->neg": 16.0
+  },
+  "arm_a": {
+   "positive->neutral": 24.0,
+   "negative->neutral": 14.2,
+   "neutral->positive": 45.4,
+   "neutral->negative": 25.2,
+   "neutral_correct": 64.4,
+   "pos<->neg": 30.0
+  },
+  "arm_b": {
+   "positive->neutral": 32.2,
+   "negative->neutral": 14.0,
+   "neutral->positive": 26.2,
+   "neutral->negative": 27.0,
+   "neutral_correct": 81.8,
+   "pos<->neg": 33.0
+  },
+  "arm_c": {
+   "positive->neutral": 8.0,
+   "negative->neutral": 3.0,
+   "neutral->positive": 59.6,
+   "neutral->negative": 39.6,
+   "neutral_correct": 35.8,
+   "pos<->neg": 42.0
+  },
+  "twitter_roberta": {
+   "positive->neutral": 61.0,
+   "negative->neutral": 41.0,
+   "neutral->positive": 9.0,
+   "neutral->negative": 14.0,
+   "neutral_correct": 112.0,
+   "pos<->neg": 13.0
+  },
+  "keyword": {
+   "positive->neutral": 64.0,
+   "negative->neutral": 34.0,
+   "neutral->positive": 19.0,
+   "neutral->negative": 25.0,
+   "neutral_correct": 91.0,
+   "pos<->neg": 31.0
+  }
+ },
+ "gold_counts": {
+  "positive": 122,
+  "negative": 81,
+  "neutral": 135
+ }
+}

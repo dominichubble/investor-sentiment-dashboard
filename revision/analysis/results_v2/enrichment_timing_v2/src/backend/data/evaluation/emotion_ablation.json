@@ -1,0 +1,2839 @@
+{
+  "summary": {
+    "n": 200,
+    "distribution": {
+      "full": {
+        "mixed": 168,
+        "optimism": 17,
+        "fear": 10,
+        "confidence": 1,
+        "uncertainty": 4
+      },
+      "no_entropy": {
+        "mixed": 168,
+        "optimism": 17,
+        "fear": 10,
+        "confidence": 1,
+        "uncertainty": 4
+      },
+      "no_lexicon": {
+        "mixed": 200
+      },
+      "no_aspects": {
+        "mixed": 168,
+        "optimism": 17,
+        "fear": 10,
+        "confidence": 1,
+        "uncertainty": 4
+      }
+    },
+    "change_fraction_vs_full": {
+      "no_entropy": 0.0,
+      "no_lexicon": 0.16,
+      "no_aspects": 0.0
+    },
+    "note": "change_fraction_vs_full is the proportion of the 200 samples where removing the named component changes the dominant emotion label. It is a structural measure of the component's influence on the taxonomy; labelled emotion ground truth was not available, so this is not an accuracy ablation."
+  },
+  "per_sample": [
+    {
+      "text": "Apple reported record quarterly revenue of $124 billion, beating analyst expectations by a wide margin.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "NVIDIA shares surged 12% after the company raised its full-year guidance significantly.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Tesla delivered 500,000 vehicles in Q4, setting a new all-time delivery record.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Amazon Web Services revenue grew 37% year-over-year, accelerating from last quarter.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Microsoft earnings crushed estimates with cloud revenue up 46% and strong margins.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The Federal Reserve signaled it may cut interest rates sooner than expected, boosting markets.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Goldman Sachs upgraded the stock to buy with a price target of $250, citing strong fundamentals.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Pfizer's new drug received FDA approval, opening a $10 billion market opportunity.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The company announced a $50 billion share buyback program and increased its dividend by 15%.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Retail sales jumped 1.7% in December, well above the 0.4% economists had forecast.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Netflix added 13 million subscribers in Q4, far exceeding the 8.7 million expected.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The S&P 500 hit a new all-time high as tech stocks rallied on strong earnings.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "JPMorgan posted record annual profit of $49.6 billion, driven by higher interest rates.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "AMD gained market share from Intel in both server and desktop processor segments.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The unemployment rate fell to 3.4%, the lowest level in 53 years.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Shopify beat revenue estimates and reported its first full year of profitability.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Boeing received a massive order for 200 aircraft from IndiGo, worth $26 billion.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Strong consumer spending drove GDP growth to 3.3%, above the 2.0% consensus.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Google's advertising revenue rebounded strongly, up 11% year-over-year.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's profit margins expanded to 28%, the highest in five years.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Visa reported 10% growth in cross-border transaction volumes, signaling strong travel demand.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "CrowdStrike raised its annual revenue forecast for the third consecutive quarter.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Eli Lilly's weight loss drug Mounjaro showed remarkable results in clinical trials.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "The housing market showed signs of recovery with permits rising 7% month over month.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Meta's Reality Labs losses narrowed while ad revenue growth accelerated to 25%.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Costco reported same-store sales growth of 9.1%, well ahead of expectations.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The company successfully refinanced its debt at lower rates, saving $200M annually.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Palantir won a major $480M government contract, its largest deal ever.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Broadcom completed its $69 billion acquisition of VMware, creating a software giant.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock rallied 8% on news of a breakthrough partnership with a major tech firm.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Walmart's e-commerce sales surged 24%, driving total revenue ahead of estimates.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's free cash flow improved 40% year-over-year, enabling debt reduction.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "confidence",
+      "no_entropy": "confidence",
+      "no_lexicon": "mixed",
+      "no_aspects": "confidence"
+    },
+    {
+      "text": "Caterpillar reported record revenue as infrastructure spending boosted equipment demand.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Disney+ gained 7 million subscribers and moved closer to profitability.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The biotech company announced positive Phase 3 trial results for its cancer treatment.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Morgan Stanley beat earnings expectations with strong wealth management revenue.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Home Depot's comparable sales rose for the first time in a year, surprising analysts.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The Fed's preferred inflation gauge fell to 2.6%, moving closer to the 2% target.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "UnitedHealth raised its 2025 earnings guidance, citing strong enrollment growth.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Salesforce reported record operating margins of 33% as efficiency initiatives paid off.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's new product launch exceeded expectations with $1B in first-week sales.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "TSMC reported record quarterly revenue driven by AI chip demand.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Starbucks same-store sales turned positive in its key China market.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The manufacturing PMI expanded for the first time in 16 months, signaling recovery.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Qualcomm signed a long-term chip supply deal with Samsung worth billions.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company announced a strategic review that could unlock significant shareholder value.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "PayPal's transaction volume grew 15% and active accounts increased sequentially.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Oracle's cloud infrastructure revenue doubled year-over-year to $1.8 billion.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Investors cheered the strong jobs report, sending the Dow up 400 points.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's backlog reached an all-time high of $170 billion.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "ServiceNow raised its subscription revenue guidance after a strong Q3.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Block reported record gross profit growth of 22% across its Cash App platform.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Uber achieved profitability for the full year for the first time in its history.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Lululemon beat expectations with strong international growth of 48% year-over-year.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The IPO priced above its expected range, reflecting strong investor demand.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Chevron announced a $75 billion buyback, the largest in the oil industry's history.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Datadog's annual recurring revenue crossed $2 billion ahead of schedule.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Consumer confidence surged to its highest level in two years.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's AI product saw 300% growth in enterprise adoption this quarter.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Moderna received emergency approval for its next-generation vaccine in 30 countries.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The merger is expected to create $3 billion in annual cost synergies.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Deere & Company beat earnings by 20% on strong agricultural equipment demand.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The company's debt-to-equity ratio improved to 0.3, the healthiest in its sector.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Snap's daily active users grew 10% to 414 million, a new record.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Adobe reported record digital media revenue driven by AI-powered creative tools.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The semiconductor index hit a 52-week high on AI infrastructure spending optimism.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Rivian beat delivery expectations and narrowed its net loss significantly.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company guided for 25% revenue growth next year, above consensus of 18%.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "ConocoPhillips raised its dividend for the 8th consecutive year.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Airbnb reported record nights booked and expanded its average daily rate.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock plunged 20% after the company issued a profit warning for the full year.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "Intel reported a massive quarterly loss of $7 billion and announced 15,000 layoffs.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "China's real estate crisis deepened as Evergrande filed for bankruptcy protection.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "The company missed revenue estimates by 10% and withdrew its full-year guidance.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Rising bond yields triggered a sharp selloff in technology stocks.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "Moody's downgraded the company's credit rating to junk status citing rising debt.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The FDA rejected the company's drug application, sending shares down 35%.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Inflation surged to 9.1%, the highest in 40 years, rattling financial markets.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company announced it would lay off 12,000 employees to cut costs.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Regional banks continued to face deposit outflows following the SVB collapse.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The SEC filed fraud charges against the company and its CEO.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Tesla's margins fell sharply as price cuts eroded profitability.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Supply chain disruptions caused the company to slash its production forecast by 25%.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock fell 15% after the CFO unexpectedly resigned amid an accounting probe.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Consumer spending declined for the second consecutive month, raising recession fears.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "The company's largest customer terminated its contract, representing 30% of revenue.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Hedge funds increased their short positions on the stock to the highest level this year.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company disclosed a major data breach affecting 100 million customer records.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Oil prices crashed 8% on fears of weakening global demand.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company burned through $2 billion in cash last quarter and may need to raise capital.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Boeing's 737 MAX grounding was extended after new safety issues were discovered.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The trade war escalated as both countries imposed additional tariffs.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Disney reported a significant decline in theme park attendance and streaming losses widened.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The cryptocurrency exchange halted withdrawals amid liquidity concerns.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's debt load reached $45 billion, raising default risk concerns.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Analysts slashed their price targets following the disappointing earnings report.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company lost its key patent case, exposing it to billions in potential damages.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Manufacturing activity contracted for the 18th consecutive month.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock entered bear market territory, down 25% from its 52-week high.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The CEO was fired after an internal investigation revealed misconduct.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "The company's market share dropped from 35% to 22% over the past year.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Goldman Sachs downgraded the stock to sell, citing deteriorating fundamentals.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The real estate firm defaulted on $1.5 billion in commercial mortgage debt.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Earnings per share missed consensus by 30%, the worst miss in company history.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "The company's guidance for next quarter was well below Wall Street expectations.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Workers went on strike, halting production at three major manufacturing plants.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company warned that tariffs could reduce annual profit by $400 million.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The biotech's lead drug candidate failed its primary endpoint in Phase 3 trials.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company recalled 2 million vehicles due to a critical safety defect.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Retail foot traffic declined 15% during the holiday season, the worst in a decade.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's revenue declined for the fourth consecutive quarter.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Credit card delinquencies rose to their highest level since the 2008 financial crisis.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company was forced to write down $5 billion in goodwill from its failed acquisition.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Short sellers published a damaging report alleging the company inflated its revenues.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock crashed 30% in after-hours trading on the weak earnings report.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The bank tightened lending standards, making it harder for businesses to borrow.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company suspended its dividend for the first time in 30 years.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Rising interest rates pushed mortgage applications to their lowest level in 28 years.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company faces a class-action lawsuit over misleading investors about its financial health.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "Gross margins compressed 500 basis points due to input cost inflation.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The SPAC merger fell apart, leaving investors with significant losses.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The Federal Reserve raised rates by 75 basis points, the largest hike in decades.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's subscriber growth stalled, missing expectations by 1 million users.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "Copper prices tumbled 12% on weak Chinese manufacturing data.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's auditor issued a going concern warning about its ability to continue operations.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "fear",
+      "no_entropy": "fear",
+      "no_lexicon": "mixed",
+      "no_aspects": "fear"
+    },
+    {
+      "text": "Insider selling accelerated with the CEO dumping $50 million in shares last month.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company lost a major government contract to a competitor.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Operating expenses ballooned 40% while revenue remained flat.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's restructuring plan failed to restore investor confidence.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Natural gas prices collapsed 60% from their peak, hammering energy stocks.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's customer churn rate increased to 15%, the highest in its history.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Regulatory authorities fined the bank $2 billion for money laundering violations.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company withdrew its IPO plans citing unfavorable market conditions.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Auto sales fell 8% year-over-year as high prices pushed buyers to the sidelines.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's new product launch was a disaster, with returns exceeding 30%.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Shipping rates plummeted 75% as global trade volumes weakened.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company disclosed material weakness in its internal financial controls.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Net income fell 45% as the company struggled with increased competition.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock hit a 52-week low after management lowered its outlook for the third time.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Inventories swelled to record levels, forcing the company to offer steep discounts.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company reported quarterly revenue in line with analyst expectations.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Apple will hold its annual product launch event next Tuesday at 10 AM Pacific.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The Federal Reserve kept interest rates unchanged at its latest policy meeting.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company appointed a new Chief Financial Officer effective next month.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Trading volume on the NYSE averaged 4.2 billion shares today.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company announced it would split its stock 4-for-1 effective August 25.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The S&P 500 finished the day relatively flat, up just 0.1%.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Berkshire Hathaway's annual shareholder meeting will be held in Omaha this weekend.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company filed its 10-K annual report with the Securities and Exchange Commission.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Oil prices settled at $78.50 per barrel, roughly unchanged from yesterday.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The board of directors authorized a regular quarterly dividend of $0.82 per share.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company completed the previously announced acquisition of a smaller competitor.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Analysts have a consensus price target of $150, implying 5% upside from current levels.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The company will release its Q3 earnings results after market close on Thursday.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Goldman Sachs maintained its hold rating on the stock with an unchanged price target.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The ten-year Treasury yield held steady at 4.25% ahead of Friday's jobs report.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company transferred its stock listing from the NASDAQ to the NYSE.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Bitcoin traded around $43,000, within its recent trading range.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company announced a management restructuring to better align its business units.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Quarterly revenue was $12.3 billion compared to $12.1 billion a year ago.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company expanded its board of directors from 9 to 11 members.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The index rebalancing will add three new stocks and remove two next Friday.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company signed a multi-year agreement with a technology vendor for cloud migration.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Shares traded in a narrow range between $145 and $148 throughout the session.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's market capitalization stood at approximately $2.5 trillion.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The EU antitrust regulator opened a routine review of the proposed merger.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company maintained its full-year revenue guidance of $50 to $52 billion.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Options expiration on Friday is expected to increase short-term volatility.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "uncertainty",
+      "no_entropy": "uncertainty",
+      "no_lexicon": "mixed",
+      "no_aspects": "uncertainty"
+    },
+    {
+      "text": "The company renewed its revolving credit facility for another five years.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Q2 GDP growth came in at 2.1%, matching the preliminary estimate.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The semiconductor company will present at the Morgan Stanley Technology Conference next week.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's CEO will testify before the Senate Commerce Committee on Tuesday.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Analysts are split on the stock, with 12 buys, 10 holds, and 3 sells.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The fund rebalanced its holdings, increasing its position in healthcare and reducing energy.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company opened a new distribution center in its ongoing logistics expansion.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Earnings per share came in at $1.52, matching the consensus estimate exactly.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company will host an investor day on March 15 to discuss its long-term strategy.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Mixed signals from economic data left the market largely unchanged today.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "uncertainty",
+      "no_entropy": "uncertainty",
+      "no_lexicon": "mixed",
+      "no_aspects": "uncertainty"
+    },
+    {
+      "text": "The company extended its partnership with a major retailer for three more years.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company's annual report showed total assets of $320 billion at year-end.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock is trading at 18x forward earnings, roughly in line with its 5-year average.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Management reiterated guidance during the conference call with no new details.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company issued $2 billion in bonds to refinance existing debt at similar rates.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Sector rotation continued as investors moved between growth and value names.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "optimism",
+      "no_entropy": "optimism",
+      "no_lexicon": "mixed",
+      "no_aspects": "optimism"
+    },
+    {
+      "text": "The company's workforce remained stable at approximately 150,000 employees.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The non-farm payrolls report showed 180,000 jobs added, in line with expectations.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company migrated its primary data center to a new co-location facility.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Two board members announced they would not stand for re-election at the annual meeting.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The stock's implied volatility is around 30%, typical for this time of year.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "uncertainty",
+      "no_entropy": "uncertainty",
+      "no_lexicon": "mixed",
+      "no_aspects": "uncertainty"
+    },
+    {
+      "text": "The company published its annual sustainability report covering ESG metrics.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Trading in the stock was halted briefly during the market-wide circuit breaker.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company will begin reporting under the new accounting standard next quarter.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Foreign exchange headwinds reduced reported revenue by 2 percentage points.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company completed a secondary offering of 10 million shares at $85 each.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The economic calendar is light next week with few major data releases scheduled.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company is evaluating strategic alternatives for its underperforming division.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Total returns for the portfolio were 8.2% for the year, matching the benchmark index.",
+      "finbert_label": "positive",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The central bank left its forward guidance unchanged, maintaining a data-dependent stance.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "The company participated in a consortium to develop industry standards for AI safety.",
+      "finbert_label": "neutral",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "mixed",
+      "no_entropy": "mixed",
+      "no_lexicon": "mixed",
+      "no_aspects": "mixed"
+    },
+    {
+      "text": "Market breadth was mixed with advancers and decliners roughly evenly split.",
+      "finbert_label": "negative",
+      "finbert_probs": {
+        "positive": 0.0,
+        "negative": 0.0,
+        "neutral": 0.0
+      },
+      "entropy": 0.0,
+      "full": "uncertainty",
+      "no_entropy": "uncertainty",
+      "no_lexicon": "mixed",
+      "no_aspects": "uncertainty"
+    }
+  ]
+}
